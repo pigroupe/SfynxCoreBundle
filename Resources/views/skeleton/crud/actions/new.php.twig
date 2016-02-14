@@ -1,0 +1,32 @@
+
+    /**
+     * Displays a form to create a new {{ entity }} entity.
+     *
+     * @PreAuthorize("hasRole('ROLE_EDITOR') or (hasRole('ROLE_ADMIN') and hasRole('ROLE_SUPER_ADMIN'))")
+     * @return Response
+     * @access public
+     */
+    public function newAction()
+    {
+        $em       = $this->getDoctrine()->getManager();
+        // we get params
+        $NoLayout = $this->container->get('request')->query->get('NoLayout');
+        // we create the entity 
+        $entity   = new {{ entity_class }}();
+        // we generate the form  
+        $form     = $this->createForm(new {{ entity_class }}Type($em, $this->container), $entity, array('show_legend' => false));
+            
+{% if 'annotation' == format %}
+        return array(
+            'entity'   => $entity,
+            'form'     => $form->createView(),
+            'NoLayout' => $NoLayout,
+        );
+{% else %}
+        return $this->render("{{ bundle }}:{{ entity|replace({'\\': '/'}) }}:new.html.twig", array(
+            'entity'   => $entity,
+            'form'     => $form->createView(),
+            'NoLayout' => $NoLayout,
+        ));
+{% endif %}
+    }

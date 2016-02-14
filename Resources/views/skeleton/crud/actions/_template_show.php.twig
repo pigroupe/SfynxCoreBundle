@@ -1,0 +1,30 @@
+
+
+    /**
+     * Template : Finds and displays a {{ entity }} entity.
+     * 
+     * @Cache(maxage="86400")
+     * @return Response
+     * @access public
+     */
+    public function _template_showAction($id, $template = '_tmp_show.html.twig', $lang = "")
+    {
+        $em       = $this->getDoctrine()->getManager();
+        // we get language value
+        if (empty($lang)) {
+            $lang = $this->container->get('request')->getLocale();
+        }
+        // we get entity
+        $entity = $em->getRepository("{{ bundle }}:{{ entity }}")->findOneByEntity($lang, $id, 'object', false);
+        if (!$entity) {
+            throw ControllerException::NotFoundEntity('{{ entity }}');
+        }
+        // we set the result to the $lang language value
+        $entity->setTranslatableLocale(lang);
+        $em->refresh($entity);
+    
+        return $this->render("{{ bundle }}:{{ entity }}:$template", array(
+                'entity'    => $entity,
+                'locale'    => $lang,
+        ));
+    }

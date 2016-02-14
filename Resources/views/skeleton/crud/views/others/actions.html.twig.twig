@@ -1,0 +1,7 @@
+                {%- for action in record_actions %}                	
+                	{%- if action == 'show' -%}
+                	<a href="{{ "{{ path('"~ route_name_prefix ~"_"~ action ~"', { 'id': entity.id, 'NoLayout':NoLayout }) }}" }}" title="{{ "{{ 'pi.grid.action.show'|trans }}" }}" data-ui-icon="ui-icon-show" class="button-ui-icon-show info-tooltip">{{ "{{ 'pi.grid.action.show'|trans }}" }}</a>
+                	{% else %}
+                	<a href="{{ "{{ path('"~ route_name_prefix ~"_"~ action ~"', { 'id': entity.id, 'NoLayout':NoLayout }) }}" }}" title="{{ "{{ 'pi.grid.action.edit'|trans }}" }}" data-ui-icon="ui-icon-edit" class="button-ui-icon-edit info-tooltip">{{ "{{ 'pi.grid.action.edit'|trans }}" }}</a>
+                	{% endif %}                    
+                {%- endfor %}

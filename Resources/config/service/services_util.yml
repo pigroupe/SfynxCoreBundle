@@ -1,0 +1,20 @@
+parameters:
+    sfynx.core.manager.jquery.gridtable.class: Sfynx\CoreBundle\Util\PiJquery\PiGridTableManager
+    sfynx.core.manager.jquery.formsimple.class: Sfynx\CoreBundle\Util\PiJquery\PiFormSimpleManager
+    sfynx.core.manager.jquery.prototypebytabs.class: Sfynx\CoreBundle\Util\PiJquery\PiPrototypeByTabsManager
+
+services:
+    #
+    # configuration of the JQUERY Util classes
+    #
+    sfynx.core.jquery_manager.gridtable:
+        class: %sfynx.core.manager.jquery.gridtable.class%
+        arguments: ['@service_container']                             
+            
+    sfynx.core.jquery_manager.formsimple:
+        class: %sfynx.core.manager.jquery.formsimple.class%
+        arguments: ['@service_container']
+        
+    sfynx.core.jquery_manager.prototypebytabs:
+        class: %sfynx.core.manager.jquery.prototypebytabs.class%
+        arguments: ['@service_container']
