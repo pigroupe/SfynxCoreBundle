@@ -1,22 +1,23 @@
-The MIT License (MIT)
+The GNU General Public License
 
-Copyright (c) 2016 pigroupe
+Copyright © 20011-2016, contact@pi-groupe.fr <http://pigroupe.github.io/cmf-sfynx/>
 
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
+This programme is free software; you may distribute it and/or make changes to it in accordance
+ with the terms of the GNU General Public License, as published by the Free Software Foundation;
+version 2 of that license, or (your choice) any subsequent version.
 
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
+This programme is distributed in the hope that it will be useful, but WITHOUT ANY GUARANTEE,
+without even the IMPLIED WARRANTIES OF MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+See the GNU General Public License for details.
 
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
+A copy of the GNU General Public License must always be distributed together with the programme.
+If this is not the case, write to: Free Software Foundation Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 
+This programme can be downloaded from the website: github.com/pigroupe/cmf-sfynx,
+where you will also find instructions for use and further information.
+
+In French law SFYNX Is governed by the terms of the code of intellectual property (CPI).
+The core of SFYNX is the cooperative work of several authors designated above (article L 113-1 of the CPI).
+The overall SFYNX project is a collective work in the meaning of articles L 113-2 and L 113-5 of the CPI.
+The authors make this work available for anyone, according to the rights
+and obligations set out in the GNU General Public License.
