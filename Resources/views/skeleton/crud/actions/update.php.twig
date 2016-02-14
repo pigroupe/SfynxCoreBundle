@@ -1,0 +1,53 @@
+
+    /**
+     * Edits an existing {{ entity }} entity.
+     * 
+     * @param integer $id Id value
+     *
+     * @PreAuthorize("hasRole('ROLE_EDITOR') or (hasRole('ROLE_ADMIN') and hasRole('ROLE_SUPER_ADMIN'))")
+     * @return Response
+     * @access public
+     */
+    public function updateAction($id)
+    {
+        $em       = $this->getDoctrine()->getManager();
+        $request  = $this->getRequest();
+        $locale   = $request->getLocale();
+        // we get params
+        $NoLayout = $this->container->get('request')->query->get('NoLayout');
+        // we get the entity
+        $entity   = $em->getRepository("{{ bundle }}:{{ entity }}")->findOneByEntity($locale, $id, "object"); 
+        if (!$entity) {
+            $entity = $em->getRepository("{{ bundle }}:{{ entity }}")->find($id);
+        }
+        $editForm   = $this->createForm(new {{ entity_class }}Type($em, $this->container), $entity, array('show_legend' => false));
+        $deleteForm = $this->createDeleteForm($id);
+        $editForm->bind($request, $entity);
+        if ($editForm->isValid()) {
+            $entity->setTranslatableLocale($locale);
+            $em->persist($entity);
+            $em->flush();
+            // to delete cache list query
+            $this->deleteAllCacheQuery('hash_{{ route_name_prefix }}');
+
+            return $this->redirect($this->generateUrl('{{ route_name_prefix }}_edit', array('id' => $id, 'NoLayout' => $NoLayout)));
+        } else {
+            $this->setFlashErrorMessages($editForm);
+        }
+
+{% if 'annotation' == format %}
+        return array(
+            'entity'      => $entity,
+            'edit_form'   => $editForm->createView(),
+            'delete_form' => $deleteForm->createView(),
+            'NoLayout'    => $NoLayout,
+        );
+{% else %}
+        return $this->render("{{ bundle }}:{{ entity|replace({'\\': '/'}) }}:edit.html.twig", array(
+            'entity'      => $entity,
+            'edit_form'   => $editForm->createView(),
+            'delete_form' => $deleteForm->createView(),
+            'NoLayout'    => $NoLayout,
+        ));
+{% endif %}
+    }

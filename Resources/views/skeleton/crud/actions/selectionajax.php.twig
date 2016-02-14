@@ -1,0 +1,50 @@
+
+
+    /**
+     * Enabled {{ entity }} entities.
+     *
+     * @Route("/admin/gedmo/{{ entity|lower|replace({"\\": ''}) }}/select", name="admin_gedmo_{{ entity|lower|replace({"\\": '_'}) }}_selectentity_ajax")
+     * @PreAuthorize("hasRole('ROLE_EDITOR') or (hasRole('ROLE_ADMIN') and hasRole('ROLE_SUPER_ADMIN'))")
+     * @return Response
+     * @access public
+     */
+    public function selectajaxAction()
+    {
+        $em	 = $this->getDoctrine()->getManager();
+        $request = $this->container->get('request');
+        $locale  = $request->getLocale();
+    	if ($request->isXmlHttpRequest()) {
+            $pagination = $request->get('pagination', null);
+            $keyword    = $request->get('keyword', '');
+            $MaxResults = $request->get('max', 10);
+            // we set query    
+            $query  = $em->getRepository("{{ bundle }}:{{ entity }}")
+            ->getAllByCategory('', null, '', '', false);
+            $query
+            ->leftJoin('a.translations', 'trans');
+                // we set params
+                $keyword = array(
+                    0 => array(
+                        'field_name' => 'title',
+                        'field_value' => $keyword,
+                        'field_trans' => true,
+                        'field_trans_name' => 'trans',
+                    ),
+                );
+
+            return $this->selectajaxQuery(
+                $pagination, 
+                $MaxResults, 
+                $keyword, 
+                $query, 
+                $locale, 
+                true,
+                array(
+                    'time'      => 3600,  
+                    'namespace' => 'hash_{{ route_name_prefix }}'
+                )
+            ); 
+        } else {
+            throw ControllerException::callAjaxOnlySupported('selectajax');
+    	}   	
+    }  

@@ -1,0 +1,45 @@
+
+
+    /**
+     * Template : Finds and displays an archive of {{ entity }} entity.
+     * 
+     * @Cache(maxage="86400")
+     * @return Response
+     * @access public
+     */
+    public function _template_archiveAction($MaxResults = null, $template = '_tmp_archive.html.twig', $order = 'DESC', $lang = "")
+    {
+        $em = $this->getDoctrine()->getManager();
+        if (empty($lang)) {
+            $lang = $this->container->get('request')->getLocale();
+        }
+        if (isset($_GET['page']) 
+            && !empty($_GET['page'])
+        ) {
+            $page = $_GET['page'];
+        } else {
+            $page = 1;
+        }
+        // we instanciate the paginator         
+        $paginator  = $this->container->get('knp_paginator');
+        $query      = $em->getRepository("{{ bundle }}:{{ entity }}")->getAllByCategory('', null, $order);
+        $pagination = $paginator->paginate(
+            $query,
+            $page,      /*page number*/
+            $MaxResults /*limit per page*/
+        );
+        $query->setFirstResult(($page-1)*$MaxResults);
+        $query->setMaxResults($MaxResults);
+        // we return query in cache
+        $query    = $em->getRepository("{{ bundle }}:{{ entity }}")
+            ->cacheQuery($query->getQuery(), 3600, 3 /* \Doctrine\ORM\Cache::MODE_NORMAL */, true, 'hash_{{ route_name_prefix }}');
+        // we load all translations with all translatable fields from the given entity
+        $entities = $em->getRepository("{{ bundle }}:{{ entity }}")
+            ->findTranslationsByQuery($lang, $query, 'object', false);
+         
+        return $this->render("{{ bundle }}:{{ entity }}:$template", array(
+            'entities'   => $entities,
+            'pagination' => $pagination,
+            'lang'       => $lang,
+        ));        
+    } 
