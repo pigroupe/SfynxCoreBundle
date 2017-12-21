@@ -13,11 +13,11 @@
             $this->checkCsrf('{{ route_name_prefix }}_csrf');
         }
         //
-        $request  = $this->container->get('request');
+        $request  = $this->container->get('request_stack')->getCurrentRequest();
     	$em       = $this->getDoctrine()->getManager();
-    	$locale   = $this->container->get('request')->getLocale();
-        $category = $this->container->get('request')->query->get('category');
-        $NoLayout = $this->container->get('request')->query->get('NoLayout');
+    	$locale   = $this->container->get('request_stack')->getCurrentRequest()->getLocale();
+        $category = $this->container->get('request_stack')->getCurrentRequest()->query->get('category');
+        $NoLayout = $this->container->get('request_stack')->getCurrentRequest()->query->get('NoLayout');
         // we define the type Ajax or not
         $is_Server_side = false;
         if ( ($request->isXmlHttpRequest() && $is_Server_side) ||  !$is_Server_side) {
@@ -41,7 +41,7 @@
                 2 => array('column'=>'a.published_at', 'format'=>'Y-m-d', 'idMin'=>'minp', 'idMax'=>'maxp'),
                 3 => array('column'=>'a.archive_at', 'format'=>'Y-m-d', 'idMin'=>'mina', 'idMax'=>'maxa')
            ), array(
-                'time'      => 3600,  
+                'time'      => 3600,
                 'namespace' => 'hash_{{ route_name_prefix }}'
            ));
            $total = $this->createAjaxQuery('count',$aColumns, $q2, 'a', null, array(
@@ -50,9 +50,9 @@
                 2 =>array('column'=>'a.published_at', 'format'=>'Y-m-d', 'idMin'=>'minp', 'idMax'=>'maxp'),
                 3 =>array('column'=>'a.archive_at', 'format'=>'Y-m-d', 'idMin'=>'mina', 'idMax'=>'maxa')
            ), array(
-                'time'      => 3600,  
+                'time'      => 3600,
                 'namespace' => 'hash_{{ route_name_prefix }}'
-           ));           
+           ));
            $output = array(
                 "sEcho" => intval($request->get('sEcho')),
                 "iTotalRecords" => intval($total),
@@ -63,18 +63,18 @@
            foreach ($result as $e) {
               $row = array();
               $row[] = (string) $e->getId() . '_row_' . $e->getId();
-              $row[] = (string) $e->getId();             
-              //              
+              $row[] = (string) $e->getId();
+              //
               if (is_object($e->getCreatedAt())) {
               	  $row[] = (string) $e->getCreatedAt()->format('Y-m-d');
               } else {
               	  $row[] = "";
-              }              
+              }
               if (is_object($e->getUpdatedAt())) {
                   $row[] = (string) $e->getUpdatedAt()->format('Y-m-d');
               } else {
                   $row[] = "";
-              }              
+              }
               if (is_object($e->getPublishedAt())) {
                   $row[] = (string) $e->getPublishedAt()->format('Y-m-d');
               } else {
@@ -84,31 +84,31 @@
               	  $row[] = (string) $e->getArchiveAt()->format('Y-m-d');
               } else {
               	  $row[] = "";
-              }             
+              }
               // create enabled/disabled buttons
-              $Urlenabled  = $this->container->get('templating.helper.assets')->getUrl($this->container->getParameter('sfynx.auth.theme.layout.admin.grid.img')."enabled.png");
-              $Urldisabled = $this->container->get('templating.helper.assets')->getUrl($this->container->getParameter('sfynx.auth.theme.layout.admin.grid.img')."disabled.png");
+              $Urlenabled  = $this->container->get('templating.helper.assets')->getUrl($this->container->getParameter('sfynx.template.theme.layout.admin.grid.img')."enabled.png");
+              $Urldisabled = $this->container->get('templating.helper.assets')->getUrl($this->container->getParameter('sfynx.template.theme.layout.admin.grid.img')."disabled.png");
               if ($e->getEnabled()) {
                   $row[] = '<img width="17px" src="'.$Urlenabled.'">';
               } else {
                   $row[] = '<img width="17px" src="'.$Urldisabled.'">';
               }
               // create action links
-              $route_path_show = $this->container->get('sfynx.tool.twig.extension.route')->getUrlByRouteFunction('admin_gedmo_media_show', array('id'=>$e->getId(), 'NoLayout'=>$NoLayout, 'category'=>$category, 'status'=>$e->getStatus()));
-              $route_path_edit = $this->container->get('sfynx.tool.twig.extension.route')->getUrlByRouteFunction('admin_gedmo_media_edit', array('id'=>$e->getId(), 'NoLayout'=>$NoLayout, 'category'=>$category, 'status'=>$e->getStatus()));
+              $route_path_show = $this->container->get('sfynx.tool.twig.extension.route')->getUrlByRouteFunction('sfynx_media_mediatheque_show', array('id'=>$e->getId(), 'NoLayout'=>$NoLayout, 'category'=>$category, 'status'=>$e->getStatus()));
+              $route_path_edit = $this->container->get('sfynx.tool.twig.extension.route')->getUrlByRouteFunction('sfynx_media_mediatheque_edit', array('id'=>$e->getId(), 'NoLayout'=>$NoLayout, 'category'=>$category, 'status'=>$e->getStatus()));
               $actions  = '<a href="'.$route_path_show.'" title="'.$this->container->get('translator')->trans('pi.grid.action.show').'" data-ui-icon="ui-icon-show" class="button-ui-icon-show info-tooltip" >'.$this->container->get('translator')->trans('pi.grid.action.show').'</a>'; //actions
               $actions .= '<a href="'.$route_path_edit.'" title="'.$this->container->get('translator')->trans('pi.grid.action.edit').'" data-ui-icon="ui-icon-edit" class="button-ui-icon-edit info-tooltip" >'.$this->container->get('translator')->trans('pi.grid.action.edit').'</a>'; //actions
               $row[] = (string) $actions;
-                            
+
               $output['aaData'][] = $row ;
             }
             $response = new Response(json_encode( $output ));
             $response->headers->set('Content-Type', 'application/json');
-            
+
             return $response;
         }
         if (!$is_Server_side) {
-            if ($this->container->get('security.context')->isGranted('ROLE_ADMIN')) {
+            if ($this->container->get('security.authorization_checker')->isGranted('ROLE_ADMIN')) {
             } else {
                 $query    = $em->getRepository("{{ bundle }}:{{ entity }}")
                 ->setContainer($this->container)
@@ -120,7 +120,7 @@
                 ->findTranslationsByQuery($locale, $query, 'object', false, true);
         } else {
             $entities = null;
-        }    	
+        }
 
 {% if 'annotation' == format %}
         return array(

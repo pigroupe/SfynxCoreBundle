@@ -3,9 +3,9 @@ services:
             
     # KernelRequest listener
     extension.listener:
-        class: Sfynx\CoreBundle\EventListener\DoctrineExtensionListener
+        class: Sfynx\CoreBundle\Layers\Infrastructure\EventListener\DoctrineExtensionListener
         calls:
-            - [ setContainer, [ @service_container ] ]
+            - [ setContainer, [ '@service_container' ] ]
         tags:
             # translatable sets locale after router processing
             - { name: kernel.event_listener, event: kernel.request, method: onLateKernelRequest, priority: -10 }
@@ -20,7 +20,7 @@ services:
             # ODM MongoDb subscriber, where **default** is manager name
             - { name: doctrine.odm.mongodb.default_event_subscriber }            
         calls:
-            - [ setAnnotationReader, [ @annotation_reader ] ]
+            - [ setAnnotationReader, [ '@annotation_reader' ] ]
             
     gedmo.listener.translatable:
         class: Gedmo\Translatable\TranslatableListener
@@ -29,7 +29,7 @@ services:
             # ODM MongoDb subscriber, where **default** is manager name
             - { name: doctrine.odm.mongodb.default_event_subscriber }            
         calls:
-            - [ setAnnotationReader, [ @annotation_reader ] ]
+            - [ setAnnotationReader, [ '@annotation_reader' ] ]
             - [ setDefaultLocale, [ %locale% ] ]
             - [ setTranslationFallback, [ true ] ]
     
@@ -40,7 +40,7 @@ services:
             # ODM MongoDb subscriber, where **default** is manager name
             - { name: doctrine.odm.mongodb.default_event_subscriber }            
         calls:
-            - [ setAnnotationReader, [ @annotation_reader ] ]
+            - [ setAnnotationReader, [ '@annotation_reader' ] ]
     
     gedmo.listener.sluggable:
         class: Gedmo\Sluggable\SluggableListener
@@ -49,7 +49,7 @@ services:
             # ODM MongoDb subscriber, where **default** is manager name
             - { name: doctrine.odm.mongodb.default_event_subscriber }            
         calls:
-            - [ setAnnotationReader, [ @annotation_reader ] ]
+            - [ setAnnotationReader, [ '@annotation_reader' ] ]
     
 #    gedmo.listener.sortable:
 #        class: Gedmo\Sortable\SortableListener
@@ -58,7 +58,7 @@ services:
 #            # ODM MongoDb subscriber, where **default** is manager name
 #            - { name: doctrine.odm.mongodb.default_event_subscriber }            
 #        calls:
-#            - [ setAnnotationReader, [ @annotation_reader ] ]
+#            - [ setAnnotationReader, [ '@annotation_reader' ] ]
     
     gedmo.listener.loggable:
         class: Gedmo\Loggable\LoggableListener
@@ -67,5 +67,5 @@ services:
             # ODM MongoDb subscriber, where **default** is manager name
             - { name: doctrine.odm.mongodb.default_event_subscriber }            
         calls:
-            - [ setAnnotationReader, [ @annotation_reader ] ]
+            - [ setAnnotationReader, [ '@annotation_reader' ] ]
  

@@ -1,15 +1,15 @@
 ##
 ## SfynxCoreBundle configuration
-##       
-#sfynx_core:  
+##
+#sfynx_core:
 #    cache_dir:
-#        media: "%kernel.root_dir%/cachesfynx/Media/"     
+#        media: "%kernel.root_dir%/cachesfynx/Media/"
 #    cookies:
 #        date_expire: true
 #        date_interval:  %pi_cookie_lifetime% # 604800 PT4H  604800
-#        application_id: sfynx  
+#        application_id: sfynx
 #    translation:
-#        defaultlocale_setting: false        
+#        defaultlocale_setting: false
 #    permission:
 #        restriction_by_roles: false
 #        authorization:
@@ -77,13 +77,13 @@
 #                decimal:    SonataAdminBundle:CRUD:base_show_field.html.twig
 
 
-##               
+##
 ## Doctrine Configuration
 ##
 #doctrine:
 #    dbal:
 #        types:
-#            json: Sonata\Doctrine\Types\JsonType    
+#            json: Sfynx\CoreBundle\Layers\Application\Validation\Type\JsonType
 #        default_connection:       default
 #        connections:
 #            default:
@@ -114,8 +114,7 @@
 #            #    dir:                  ~
 #            #    alias:                ~
 #            #    prefix:               ~
-#            #    is_bundle:            ~     
-#            FOSUserBundle: ~
+#            #    is_bundle:            ~
 #            StofDoctrineExtensionsBundle: ~
 #            SonataMediaBundle: ~
 #            OrAppOrAdminBundle: ~
@@ -124,11 +123,11 @@
 #            #SfynxAuthBundle:
 #            #    type: xml
 #            #    dir: "%kernel.root_dir%/../src/OrApp/OrUserBundle/Resources/config/doctrine/mapping"
-#            #    prefix: Sfynx\AuthBundle\Entity
+#            #    prefix: Sfynx\AuthBundle\Domain\Entity
 #            #    alias: SfynxAuthBundle
-#            #    is_bundle: false             
+#            #    is_bundle: false
 #            SfynxTranslatorBundle: ~
-#            SfynxMediaBundle: ~        
+#            SfynxMediaBundle: ~
 #            SfynxCmfBundle: ~
 #            PiAppGedmoBundle: ~
 #            translatable:
@@ -154,16 +153,16 @@
 ##            host: localhost
 ##            port: 11211
 ##            class: Doctrine\Common\Cache\MemcacheCache
-##            instance_class: Memcache         
-##        query_cache_driver: 
+##            instance_class: Memcache
+##        query_cache_driver:
 ##            type: memcache
 ##            host: localhost
 ##            port: 11211
 ##            class: Doctrine\Common\Cache\MemcacheCache
-##            instance_class: Memcache          
+##            instance_class: Memcache
 ##        result_cache_driver:
 ##            type: memcache
 ##            host: localhost
 ##            port: 11211
 ##            class: Doctrine\Common\Cache\MemcacheCache
-##            instance_class: Memcache  
+##            instance_class: Memcache

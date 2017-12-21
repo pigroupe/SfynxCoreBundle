@@ -1,0 +1,17 @@
+parameters:
+    sfynx.core.request.strategy.class: Sfynx\CoreBundle\Layers\Domain\Service\Request\RequestStrategy
+    sfynx.core.request.strategy.client.symfony.class: Sfynx\CoreBundle\Layers\Domain\Service\Request\Handler\SymfonyHandler
+
+services:
+    #
+    # request in strategy
+    #
+    sfynx.core.request.strategy.client.symfony:
+        class: '%sfynx.core.request.strategy.client.symfony.class%'
+        arguments:
+            - '@request_stack'
+
+    sfynx.core.request.strategy:
+        class: '%sfynx.core.request.strategy.class%'
+        arguments:
+            - '@sfynx.core.request.strategy.client.symfony'

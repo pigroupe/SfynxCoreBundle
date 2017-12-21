@@ -1,0 +1,92 @@
+{% extends 'WebProfilerBundle:Profiler:layout.html.twig' %}
+
+{% block toolbar %}
+    {% if collector.statistics %}
+        {% set icon %}
+            <img width="20" height="28" alt="mysqlnd" style="border-width: 0; vertical-align: middle; margin-right: 5px;" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAcCAYAAABh2p9gAAAAAXNSR0IArs4c6QAAAAZiS0dEAP8A/wD/oL2nkwAAAAlwSFlzAAALEwAACxMBAJqcGAAAAAd0SU1FB9sKAgoBDqegD/YAAAEVSURBVEjH7ZOxSgNBFEXvisVqFVJFsTFlqmh+QfyAFBZbpraztBQr8QMCmyJgJVuFwSK4Cgs2C5NCWAMhjGAxEYRRRAa7ayfRrMhuAmn2dG/gHd67vAEKCpaPM12IgeHteAjAxflBw8kjXJ0ualsunj9KaNZrqPQlh5NP7G64ONzPJwcA+DeKfCfDB0MAkMrSawvmFmpjGcR6RuB15pAe95KZZqUtjy7Df6UraY/N+jbuRj+nrG6uO3BL0MZmn9SPktQmY7h3ciWZecJXrAEAfmdZLjvXjy9v2TMUA8Mg1tw5vUjN0msLSpVx9VY3pHyy/Gt9ca94Fiku7IsFsWKrK1NPLBdeR3wf/8Lwo4RBrIiCgvn4Aogkh81eljaPAAAAAElFTkSuQmCC"/>
+        {% endset %}
+        {% set text %}
+            mysqlnd
+        {% endset %}
+        {% include 'WebProfilerBundle:Profiler:toolbar_item.html.twig' with { 'link': profiler_url } %}
+    {% endif %}
+{% endblock %}
+
+
+{% block menu %}
+    <span class="label">
+    <span class="icon"><img src="{{ asset('bundles/jsmysqlnd/images/mysqlnd.png') }}" alt="" /></span>
+    <strong>mysqlnd</strong>
+</span>
+{% endblock %}
+
+{% block panel %}
+    <div id="JSMysqlndStatistics">
+        <h2>mysqlnd Statistics</h2>
+
+        {% if collector.statistics %}
+            {% set show_all = app.request.query.get('show_all', 0) %}
+
+            {% for key, value in collector.analytics %}
+                {% if show_all or value.matched %}
+                    <ul class="alt">
+                        {% if value.matched %}
+                        <li class="{{ value.severity }}">
+                            {% else %}
+                        <li class="even">
+                            {%endif %}
+                            {{ value.name }}</li>
+                        <li>{{ value.guidance }}</li>
+                        <li>Failed test: <span title="{{ value.leftValue }}">{{ value.leftFormula }}</span> {{ value.operator }} <span title="{{ value.rightValue }}">{{ value.rightFormula }}</span></li>
+                    </ul>
+                {%endif %}
+            {% endfor %}
+
+            <table>
+                <thead>
+                <tr>
+                    <th scope="col">Key</th>
+                    <th scope="col">Value</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for key, value in collector.statistics %}
+                    <tr><th>{{ key }}</th><td>{{ value }}</td></tr>
+                {% endfor %}
+                </tbody>
+            </table>
+            <p>Documentation on the individual statistics can be found on <a href="http://php.net/mysqlnd.stats">http://php.net/mysqlnd.stats</a>.</p>
+        {% else %}
+            <strong>No statistics collected for this request.</strong>
+            <p>For collecting data PHP requires the mysqli extension and must use mysqlnd as Client API Library.</p>
+            {{ collector.mysqlInfo|raw }}
+        {%endif %}
+    </div>
+
+    <div id="JSMysqlndQC">
+        <h2>mysqlnd_qc Query Tracing</h2>
+
+        {% if collector.MysqlndQCTrace %}
+            <table>
+                <thead>
+                <tr><th>No.</th><th>Run time</th><th>Store Time</th><th>Cachable</th></tr>
+                </thead>
+                <tbody>
+                {% for key, value in collector.MysqlndQCTrace %}
+                    <tr><td colspan="5"><strong>{{ value['query'] }}</strong></td></tr>
+                    <tr><th>#{{ key+1 }}</th>
+                        <td>{{ value['run_time'] }} ms</td>
+                        <td>{{ value['store_time'] }} ms</td>
+                        <td>{% if value['eligible_for_caching'] %}Cachable{% else %}Not cachable{% endif %}</td>
+                        <td><a href="#" onclick="document.getElementById('JSMysqlndQCStacktrace{{ key+1 }}').style.display='inline'; return false;">Stacktrace</a></td>
+                    </tr>
+                    <tr><td colspan="5" style="overflow: scroll"><pre id="JSMysqlndQCStacktrace{{ key+1 }}" style="display:none;">{{ value['origin'] }}</pre></td></tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        {% else %}
+            <strong>No myslqnd_qc traces collected for this request.</strong>
+            <p>For collecting trace data PHP requires the <a href="http://php.net/mysqlnd_qc">mysqlnd_qc extension</a> and <i>mysqlnd_qc.collect_query_trace</i> has to be enabled in php.ini.</p>
+        {% endif %}
+    </div>
+{% endblock %}

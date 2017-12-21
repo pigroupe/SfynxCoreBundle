@@ -14,7 +14,7 @@
         $request  = $this->getRequest();
         $locale   = $request->getLocale();
         // we get params
-        $NoLayout = $this->container->get('request')->query->get('NoLayout');
+        $NoLayout = $this->container->get('request_stack')->getCurrentRequest()->query->get('NoLayout');
         // we get the entity
         $entity   = $em->getRepository("{{ bundle }}:{{ entity }}")->findOneByEntity($locale, $id, "object"); 
         if (!$entity) {

@@ -10,7 +10,7 @@
     {
         $em       = $this->getDoctrine()->getManager();
         // we get params
-        $NoLayout = $this->container->get('request')->query->get('NoLayout');
+        $NoLayout = $this->container->get('request_stack')->getCurrentRequest()->query->get('NoLayout');
         // we create the entity 
         $entity   = new {{ entity_class }}();
         // we generate the form  

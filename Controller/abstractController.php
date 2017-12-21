@@ -17,7 +17,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Form\Form;
 
-use Sfynx\ToolBundle\Exception\ControllerException;
+use Sfynx\CoreBundle\Layers\Infrastructure\Exception\ControllerException;
 use Sfynx\ToolBundle\Util\PiStringManager;
 
 /**
@@ -42,15 +42,15 @@ abstract class abstractController extends Controller
         // csrf control
         $this->checkCsrf('grid-action');
         //
-        $request = $this->container->get('request');
-        $em      = $this->getDoctrine()->getManager();        
+        $request = $this->container->get('request_stack')->getCurrentRequest();
+        $em      = $this->getDoctrine()->getManager();
         if ($request->isXmlHttpRequest()) {
             $data        = $request->get('data', null);
-            $new_data    = null;                                   
+            $new_data    = null;
             foreach ($data as $key => $value) {
                 $values     = explode('_', $value);
                 $id         = $values[2];
-                $position   = $values[0];  
+                $position   = $values[0];
                 $new_data[$key] = array('position'=>$position, 'id'=>$id);
                 $new_pos[$key]  = $position;
             }
@@ -75,24 +75,23 @@ abstract class abstractController extends Controller
             }
             $em->clear();
             // we disable all flash message
-            $this->container->get('session')->getFlashBag()->clear();            
+            $this->container->get('session')->getFlashBag()->clear();
             $tab= array();
             $tab['id'] = '-1';
             $tab['error'] = '';
             $tab['fieldErrors'] = '';
-            $tab['data'] = '';             
+            $tab['data'] = '';
             $response = new Response(json_encode($tab));
             $response->headers->set('Content-Type', 'application/json');
-            
-            return $response;            
-        } else {
-            throw ControllerException::callAjaxOnlySupported('enabledajax');
-        } 
+
+            return $response;
+        }
+        throw ControllerException::callAjaxOnlySupported('enabledajax');
     }
 
     /**
      * Disable entities.
-     * 
+     *
      * @return Response
      * @access public
      * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
@@ -102,15 +101,15 @@ abstract class abstractController extends Controller
         // csrf control
         $this->checkCsrf('grid-action');
         //
-        $request = $this->container->get('request');
-        $em      = $this->getDoctrine()->getManager();        
+        $request = $this->container->get('request_stack')->getCurrentRequest();
+        $em      = $this->getDoctrine()->getManager();
         if ($request->isXmlHttpRequest()) {
             $data        = $request->get('data', null);
             $new_data    = null;
             foreach ($data as $key => $value) {
                 $values     = explode('_', $value);
                 $id         = $values[2];
-                $position   = $values[0];    
+                $position   = $values[0];
                 $new_data[$key] = array('position'=>$position, 'id'=>$id);
                 $new_pos[$key]  = $position;
             }
@@ -129,7 +128,7 @@ abstract class abstractController extends Controller
             $em->clear();
             // we disable all flash message
             $this->container->get('session')->getFlashBag()->clear();
-            // we encode results            
+            // we encode results
             $tab= array();
             $tab['id'] = '-1';
             $tab['error'] = '';
@@ -137,13 +136,12 @@ abstract class abstractController extends Controller
             $tab['data'] = '';
             $response = new Response(json_encode($tab));
             $response->headers->set('Content-Type', 'application/json');
-            
-            return $response;            
-        } else {
-            throw ControllerException::callAjaxOnlySupported('disableajax');
-        } 
-    } 
-    
+
+            return $response;
+        }
+        throw ControllerException::callAjaxOnlySupported('disableajax');
+    }
+
     /**
      * Deletes a entity.
      *
@@ -156,15 +154,15 @@ abstract class abstractController extends Controller
         // csrf control
         $this->checkCsrf('grid-action');
         //
-        $request = $this->container->get('request');
-        $em      = $this->getDoctrine()->getManager();         
+        $request = $this->container->get('request_stack')->getCurrentRequest();
+        $em      = $this->getDoctrine()->getManager();
         if ($request->isXmlHttpRequest()) {
             $data        = $request->get('data', null);
             $new_data    = null;
             foreach ($data as $key => $value) {
                 $values     = explode('_', $value);
                 $id         = $values[2];
-                $position   = $values[0];    
+                $position   = $values[0];
                 $new_data[$key] = array('position'=>$position, 'id'=>$id);
                 $new_pos[$key]  = $position;
             }
@@ -177,7 +175,7 @@ abstract class abstractController extends Controller
             $em->clear();
             // we disable all flash message
             $this->container->get('session')->getFlashBag()->clear();
-            // we encode results            
+            // we encode results
             $tab= array();
             $tab['id'] = '-1';
             $tab['error'] = '';
@@ -185,13 +183,12 @@ abstract class abstractController extends Controller
             $tab['data'] = '';
             $response = new Response(json_encode($tab));
             $response->headers->set('Content-Type', 'application/json');
-            
+
             return $response;
-        } else {
-            throw ControllerException::callAjaxOnlySupported('deleteajax');
         }
-    }    
-    
+        throw ControllerException::callAjaxOnlySupported('deleteajax');
+    }
+
     /**
      * Archive entities.
      *
@@ -204,8 +201,8 @@ abstract class abstractController extends Controller
         // csrf control
         $this->checkCsrf('grid-action');
         //
-        $request = $this->container->get('request');
-        $em      = $this->getDoctrine()->getManager();         
+        $request = $this->container->get('request_stack')->getCurrentRequest();
+        $em      = $this->getDoctrine()->getManager();
         if ($request->isXmlHttpRequest()) {
             $data        = $request->get('data', null);
             $new_data    = null;
@@ -227,17 +224,17 @@ abstract class abstractController extends Controller
                 }
                 if (method_exists($entity, 'setArchiveAt')) {
                     $entity->setArchiveAt(new \DateTime());
-                }                 
+                }
                 if (method_exists($entity, 'setPosition')) {
                     $entity->setPosition(null);
-                }                                
+                }
                 $em->persist($entity);
                 $em->flush();
             }
             $em->clear();
             // we disable all flash message
             $this->container->get('session')->getFlashBag()->clear();
-            // we encode results    
+            // we encode results
             $tab= array();
             $tab['id'] = '-1';
             $tab['error'] = '';
@@ -245,12 +242,11 @@ abstract class abstractController extends Controller
             $tab['data'] = '';
             $response = new Response(json_encode($tab));
             $response->headers->set('Content-Type', 'application/json');
-            
+
             return $response;
-        } else {
-            throw ControllerException::callAjaxOnlySupported('disableajax');
         }
-    }    
+        throw ControllerException::callAjaxOnlySupported('disableajax');
+    }
 
     /**
      * Change the posistion of a entity .
@@ -264,8 +260,8 @@ abstract class abstractController extends Controller
         // csrf control
         $this->checkCsrf('grid-action');
         //
-        $request = $this->container->get('request');
-        $em      = $this->getDoctrine()->getManager();         
+        $request = $this->container->get('request_stack')->getCurrentRequest();
+        $em      = $this->getDoctrine()->getManager();
         if ($request->isXmlHttpRequest()) {
             $old_position     = $request->get('fromPosition', null);
             $new_position     = $request->get('toPosition', null);
@@ -273,19 +269,19 @@ abstract class abstractController extends Controller
             $data             = $request->get('id', null);
             $values           = explode('_', $data);
             $id               = $values[2];
-            if (!is_null($id)){
-                if ( ($new_position == "NaN") || is_null($new_position) || empty($new_position) )    $new_position     = 1;
+            if (!(null === $id)){
+                if ( ($new_position == "NaN") || (null === $new_position) || empty($new_position) )    $new_position     = 1;
                 $entity = $em->getRepository($this->_entityName)->find($id);
                 if (method_exists($entity, 'setPosition')) {
-                	$entity->setPosition($new_position);
+                    $entity->setPosition($new_position);
                 }
                 $em->persist($entity);
                 $em->flush();
-                $em->clear();    
-            }        
+                $em->clear();
+            }
             // we disable all flash message
             $this->container->get('session')->getFlashBag()->clear();
-            // we encode results    
+            // we encode results
             $tab= array();
             $tab['id'] = '-1';
             $tab['error'] = '';
@@ -293,13 +289,12 @@ abstract class abstractController extends Controller
             $tab['data'] = '';
             $response = new Response(json_encode($tab));
             $response->headers->set('Content-Type', 'application/json');
-            
+
             return $response;
-        } else {
-            throw ControllerException::callAjaxOnlySupported('positionajax');
         }
-    } 
-    
+        throw ControllerException::callAjaxOnlySupported('positionajax');
+    }
+
     /**
      * get entities in ajax request for select form.
      *
@@ -309,21 +304,21 @@ abstract class abstractController extends Controller
      */
     protected function selectajaxQuery($pagination, $MaxResults, $keywords = null, $query = null, $locale = '', $only_enabled  = true, $cacheQuery_hash = null)
     {
-    	$request = $this->container->get('request');
-    	$em      = $this->getDoctrine()->getManager();
-    	//
-    	if (empty($locale)) {
-            $locale = $this->container->get('request')->getLocale();
-    	}
-    	//
-    	if ($request->isXmlHttpRequest()) {
+        $request = $this->container->get('request_stack')->getCurrentRequest();
+        $em      = $this->getDoctrine()->getManager();
+        //
+        if (empty($locale)) {
+            $locale = $this->container->get('request_stack')->getCurrentRequest()->getLocale();
+        }
+        //
+        if ($request->isXmlHttpRequest()) {
             if ( !($query instanceof \Doctrine\DBAL\Query\QueryBuilder) && !($query instanceof \Doctrine\ORM\QueryBuilder)) {
                 $query    = $em->getRepository($this->_entityName)
-                        ->getAllByCategory('', null, '', '', false);
+                    ->getAllByCategory('', null, '', '', false);
             }
             if ($only_enabled) {
-                $query    			
-                ->andWhere('a.enabled = 1');
+                $query
+                    ->andWhere('a.enabled = 1');
             }
             // groupe by
             $query->groupBy('a.id');
@@ -336,7 +331,7 @@ abstract class abstractController extends Controller
                     if (isset($info['field_trans']) && !empty($info['field_trans'])) {
                         $is_trans = $info['field_trans'];
                         if (!isset($info['field_trans_name']) || empty($info['field_trans_name'])) {
-                                $is_trans = false;
+                            $is_trans = false;
                         }
                     }
                     if ($is_trans && isset($info['field_trans_name']) && isset($info['field_value']) && !empty($info['field_value']) && isset($info['field_name']) && !empty($info['field_name'])) {
@@ -374,17 +369,17 @@ abstract class abstractController extends Controller
                     $i++;
                 }
                 $query->setParameters($array_params);
-            }    		
+            }
             // pagination
-            if (!is_null($pagination)) {
+            if (!(null === $pagination)) {
                 $query->setFirstResult((intVal($pagination)-1)*intVal($MaxResults));
                 $query->setMaxResults(intVal($MaxResults));
                 //$query_sql = $query->getQuery()->getSql();
                 //var_dump($query_sql);
             }
             //
-            if (is_null($cacheQuery_hash)) {
-                    $query = $query->getQuery();
+            if ((null === $cacheQuery_hash)) {
+                $query = $query->getQuery();
             } elseif (is_array($cacheQuery_hash)) {
                 // we define all options
                 if (!isset($cacheQuery_hash['time'])) $cacheQuery_hash['time'] = 3600;
@@ -394,28 +389,27 @@ abstract class abstractController extends Controller
                 if (!isset($cacheQuery_hash['namespace'])) $cacheQuery_hash['namespace'] = '';
                 // we set the query result
                 $query = $em->getRepository($this->_entityName)->cacheQuery(
-                    $query->getQuery(), 
-                    $cacheQuery_hash['time'], 
-                    $cacheQuery_hash['mode'], 
-                    $cacheQuery_hash['setCacheable'], 
-                    $cacheQuery_hash['namespace'], 
+                    $query->getQuery(),
+                    $cacheQuery_hash['time'],
+                    $cacheQuery_hash['mode'],
+                    $cacheQuery_hash['setCacheable'],
+                    $cacheQuery_hash['namespace'],
                     $cacheQuery_hash['input_hash']
                 );
-            }    		
+            }
             // result
             $entities = $em->getRepository($this->_entityName)
-                    ->findTranslationsByQuery($locale, $query, 'object', false);
+                ->findTranslationsByQuery($locale, $query, 'object', false);
             $tab      = $this->renderselectajaxQuery($entities, $locale);
             // response
             $response = new Response(json_encode($tab));
             $response->headers->set('Content-Type', 'application/json');
 
-            return $response;    		 	
-    	} else {
-            throw ControllerException::callAjaxOnlySupported(' selectajax');
-    	}    	
-    }   
-    
+            return $response;
+        }
+        throw ControllerException::callAjaxOnlySupported(' selectajax');
+    }
+
     /**
      * Select all entities.
      *
@@ -425,20 +419,20 @@ abstract class abstractController extends Controller
      */
     protected function renderselectajaxQuery($entities, $locale)
     {
-    	$tab = array();
-    	foreach ($entities as $obj) {
+        $tab = [];
+        foreach ($entities as $obj) {
             $content   = $obj->translate($locale)->getTitle();
             if (!empty($content)) {
-                $tab[] = array(
+                $tab[] = [
                     'id' => $obj->getId(),
-                    'text' =>$this->container->get('twig')->render($content, array())
-                );
+                    'text' =>$this->container->get('twig')->render($content, [])
+                ];
             }
-    	}
-    	
-    	return $tab;
-    }    
-    
+        }
+
+        return $tab;
+    }
+
     /**
      * Create Ajax query
      *
@@ -448,18 +442,18 @@ abstract class abstractController extends Controller
      * @param string $table
      * @param array  $dateSearch
      * @param array  $cacheQuery_hash
-     * 
+     *
      * @return array
      * @access protected
      * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
      */
     public function createAjaxQuery($type, $aColumns, $qb = null, $tablecode = 'u', $table = null, $dateSearch = null, $cacheQuery_hash = null)
     {
-        $request = $this->container->get('request');
-        $locale = $this->container->get('request')->getLocale();
+        $request = $this->container->get('request_stack')->getCurrentRequest();
+        $locale = $this->container->get('request_stack')->getCurrentRequest()->getLocale();
         $em     = $this->getDoctrine()->getManager();
-        
-        if (is_null($qb)) {
+
+        if ((null === $qb)) {
             $qb     = $em->createQueryBuilder();
             if ($type == 'select') {
                 $qb->add('select', $tablecode);
@@ -470,19 +464,19 @@ abstract class abstractController extends Controller
             }
             if (isset($this->_entityName) && !empty($this->_entityName)) {
                 $qb->add('from', $this->_entityName.' '.$tablecode);
-            } elseif (!is_null($table)) {
+            } elseif (!(null === $table)) {
                 $qb->add('from', $table.' '.$tablecode);
             } else {
                 throw ControllerException::NotFoundOption('table');
             }
-        } elseif($type == "count") {
+        } elseif ($type == "count") {
             $qb->add('select', $tablecode.'.id');
         }
-        
+
         /**
          * Date
-         */    
-        if (!is_null($dateSearch) && is_array($dateSearch)) {
+         */
+        if (!(null === $dateSearch) && is_array($dateSearch)) {
             foreach ($dateSearch as $k => $columnSearch) {
                 $idMin = "date-{$columnSearch['idMin']}";
                 $idMax = "date-{$columnSearch['idMax']}";
@@ -499,7 +493,7 @@ abstract class abstractController extends Controller
                 }
             }
         }
-    
+
         /**
          * Filtering
          * NOTE this does not match the built-in DataTables filtering which does it
@@ -525,9 +519,9 @@ abstract class abstractController extends Controller
             }
         }
         if ($and!= "") {
-        	$qb->andWhere($and); 
-        }        
-        
+            $qb->andWhere($and);
+        }
+
         $or = $qb->expr()->orx();
         for ( $i=0 ; $i<count($aColumns) ; $i++ ) {
             if ( $request->get('bSearchable_'.$i) == "true" && $request->get('sSearch') != '' ) {
@@ -546,17 +540,17 @@ abstract class abstractController extends Controller
             }
         }
         if ($or!= "") {
-        	$qb->andWhere($or);
+            $qb->andWhere($or);
         }
-        
+
         /**
          * Grouping
-         */        
+         */
         $qb->groupBy($tablecode.'.id');
-            
+
         /**
          * Ordering
-          */
+         */
         $iSortingCols = $request->get('iSortingCols', '');
         if ( !empty($iSortingCols) ) {
             for ( $i=0 ; $i<intval($request->get('iSortingCols') ) ; $i++ ) {
@@ -569,9 +563,9 @@ abstract class abstractController extends Controller
                 }
             }
         }
-        
+
         /**
-         * Paging 
+         * Paging
          */
         if ($type == 'select') {
             $iDisplayStart = $request->get('iDisplayStart', 0);
@@ -583,7 +577,7 @@ abstract class abstractController extends Controller
         //$query_sql = $qb->getQuery()->getSql();
         //var_dump($query_sql);
         //exit;
-        if (is_null($cacheQuery_hash)) {
+        if ((null === $cacheQuery_hash)) {
             $qb = $qb->getQuery();
         } elseif (is_array($cacheQuery_hash)) {
             // we define all options
@@ -594,20 +588,20 @@ abstract class abstractController extends Controller
             if (!isset($cacheQuery_hash['namespace'])) $cacheQuery_hash['namespace'] = '';
             // we set the query result
             $qb     = $em->getRepository($this->_entityName)->cacheQuery(
-                $qb->getQuery(), 
-                $cacheQuery_hash['time'], 
-                $cacheQuery_hash['mode'], 
+                $qb->getQuery(),
+                $cacheQuery_hash['time'],
+                $cacheQuery_hash['mode'],
                 $cacheQuery_hash['setCacheable'],
-                $cacheQuery_hash['namespace'], 
+                $cacheQuery_hash['namespace'],
                 $cacheQuery_hash['input_hash']
             );
         }
         $result = $em->getRepository($this->_entityName)
-                ->setTranslatableHints($qb, $locale, false, true)->getResult();
+            ->setTranslatableHints($qb, $locale, false, true)->getResult();
         if ($type == 'count') {
             $result = count($result);
-        } 
-        
+        }
+
         return $result;
     }
 
@@ -615,34 +609,34 @@ abstract class abstractController extends Controller
      * Delete the query cache of a id hash.
      *
      * @param string $input_hash
-     * 
+     *
      * @return array
      * @access protected
      * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
      */
     public function deleteCacheQuery($input_hash)
     {
-    	$em = $this->getDoctrine()->getManager();
-    	$cacheDriver = $em->getConfiguration()->getResultCacheImpl();
-    	$cacheDriver->delete($input_hash);
-    }    
-    
+        $em = $this->getDoctrine()->getManager();
+        $cacheDriver = $em->getConfiguration()->getResultCacheImpl();
+        $cacheDriver->delete($input_hash);
+    }
+
     /**
      * Delete all query cache ids of a namespace.
      *
      * @param string $namespace
-     * 
+     *
      * @return array
      * @access protected
      * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
      */
     public function deleteAllCacheQuery($namespace = '')
     {
-    	$em = $this->getDoctrine()->getManager();
-    	$cacheDriver = $em->getConfiguration()->getResultCacheImpl();
-    	$cacheDriver->setNamespace($namespace);
-    	$cacheDriver->deleteAll();
-    }    
+        $em = $this->getDoctrine()->getManager();
+        $cacheDriver = $em->getConfiguration()->getResultCacheImpl();
+        $cacheDriver->setNamespace($namespace);
+        $cacheDriver->deleteAll();
+    }
 
     /**
      * Check the validity of a token.
@@ -650,27 +644,25 @@ abstract class abstractController extends Controller
      * <code>
      * in twig
      *     <a href="{{ path('admin_word', { 'NoLayout': NoLayout,  '_token': csrf_token('listword')  }) }}" class="button-ui-back-list">{{ 'pi.grid.action.back-to-the-list'|trans }}</a>
-     * in Controller action with admin_word routename    
+     * in Controller action with admin_word routename
      *     $this->checkCsrf('listword'); // name of the generated token, must be equal to the one from Twig
      * </code>
-     * 
+     *
      * @param string $name
-     * @param string $query
-     * 
+     *
      * @return array The list of all the errors
      * @access protected
      * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
-     */    
-    protected function checkCsrf($name, $query = '_token')
+     */
+    protected function checkCsrf($name)
     {
-    	$request      = $this->getRequest();
-    	$csrfProvider = $this->get('form.csrf_provider');
-    	if (!$csrfProvider->isCsrfTokenValid($name, $request->query->get($query))) {
+        $csrfProvider = $this->container->get('security.csrf.token_manager');
+        if (!$csrfProvider->isTokenValid($csrfProvider->getToken($name))) {
             throw new \Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException('CSRF token is invalid.');
-    	}
-    
-    	return true;
-    }    
+        }
+
+        return true;
+    }
 
     /**
      * Get all error messages after binding form.
@@ -678,51 +670,51 @@ abstract class abstractController extends Controller
      * @param Form   $form
      * @param string $type
      * @param string $delimiter
-     * 	
+     *
      * @return array The list of all the errors
      * @access protected
      * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
-     */    
+     */
     protected function getErrorMessages(Form $form, $type = 'array', $delimiter = "<br />")
     {
         return $this->container('sfynx.tool.twig.extension.form')->getFormErrors($form, $type, $delimiter);
     }
-    
+
     /**
      * Set all error messages in flash.
      *
      * @param Form $form
-     * 
+     *
      * @return array The list of all the errors
      * @access protected
      * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
      */
     protected function setFlashErrorMessages(Form $form)
     {
-    	return $this->container->get('request')
-                ->getSession()
-                ->getFlashBag()
-                ->add('errorform', $this->getErrorMessages($form, 'string' ));
-    }    
-    
+        return $this->container->get('request_stack')->getCurrentRequest()
+            ->getSession()
+            ->getFlashBag()
+            ->add('errorform', $this->getErrorMessages($form, 'string'));
+    }
+
     /**
      * Set all messages in flash.
      *
      * @param string $messages
      * @param string $param
-     * 
+     *
      * @return array	The list of all the errors
      * @access protected
      * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
      */
     protected function setFlashMessages($messages, $param = 'notice')
     {
-    	return $this->container->get('request')
-                ->getSession()
-                ->getFlashBag()
-                ->add($param, $messages);
-    }    
-    
+        return $this->container->get('request_stack')->getCurrentRequest()
+            ->getSession()
+            ->getFlashBag()
+            ->add($param, $messages);
+    }
+
     /**
      * Put result content in cache with ttl.
      *
@@ -731,12 +723,12 @@ abstract class abstractController extends Controller
     protected function getCacheFunction($key, $ttl)
     {
         $dossier = $this->container->getParameter("kernel.root_dir")."/cache/widget/";
-    	\Sfynx\ToolBundle\Util\PiFileManager::mkdirr($dossier, 0777);
-    	$this->container->get("sfynx.cache.filecache")->getClient()->setPath($dossier);
-    	
-        return $this->container->get("sfynx.cache.filecache")->get($key); 
-    } 
-    
+        \Sfynx\ToolBundle\Util\PiFileManager::mkdirr($dossier);
+        $this->container->get("sfynx.cache.filecache")->getClient()->setPath($dossier);
+
+        return $this->container->get("sfynx.cache.filecache")->get($key);
+    }
+
     /**
      * Put result content in cache with ttl.
      *
@@ -745,9 +737,9 @@ abstract class abstractController extends Controller
     protected function setCacheFunction($key, $ttl, $newvalue)
     {
         $dossier = $this->container->getParameter("kernel.root_dir")."/cache/widget/";
-    	\Sfynx\ToolBundle\Util\PiFileManager::mkdirr($dossier, 0777);
+        \Sfynx\ToolBundle\Util\PiFileManager::mkdirr($dossier);
         $this->container->get("sfynx.cache.filecache")->getClient()->setPath($dossier);
         // important : if ttl is equal to zero then the cache is infini
         $this->container->get("sfynx.cache.filecache")->set($key, $newvalue, $ttl);
-    }    
+    }
 }

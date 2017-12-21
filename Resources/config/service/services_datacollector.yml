@@ -1,0 +1,12 @@
+parameters:
+    sfynx.core.data_collector.mysqlnd.class: Sfynx\CoreBundle\DataCollector\MysqlndDataCollector
+
+services:
+    #
+    # configuration of Data collector services
+    #
+    sfynx.core.data_collector.mysqlnd:
+        class: '%sfynx.core.data_collector.mysqlnd.class%'
+        tags:
+          - {name: data_collector, template: SfynxCoreBundle:Collector:mysqlnd, id: mysqlnd}
+          - {name: kernel.event_listener, event: kernel.request, method: onEarlyKernelRequest}

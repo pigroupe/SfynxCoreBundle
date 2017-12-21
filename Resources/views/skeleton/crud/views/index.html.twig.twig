@@ -1,6 +1,6 @@
 {{ "{% initJquery 'GRID:grid-table' %}" }}
 {{ "{% if app.request.query.get('NoLayout') %}" }}
-	{{ "{% set layout_nav = getParameter('sfynx.auth.theme.layout.ajax') %}" }}
+	{{ "{% set layout_nav = getParameter('sfynx.template.theme.layout.ajax') %}" }}
 {{ "{% else %}" }}
 	{{ "{% set layout_nav = app.request.attributes.get('sfynx-layout') %}" }}
 {{ "{% endif %}" }}	
@@ -25,7 +25,7 @@
 	{{ "{% endif %}" }}
 	{% endif %}
 
-	{% include getParameter('sfynx.auth.theme.layout.admin.pc')|replace({'::': ':'})~"Crud:index-header.html.twig" %}
+	{% include getParameter('sfynx.template.theme.layout.admin.pc')|replace({'::': ':'})~"Crud:index-header.html.twig" %}
 	<table id="grid_{{ entity|lower|replace({"\\": '_'}) }}" class="grid" >
 	    <thead>
 	        <tr>
@@ -109,7 +109,7 @@
 	    {{ "{% endif %}" }}
 	    </tbody>
 	</table>
-	{{ '{% include getParameter('sfynx.auth.theme.layout.admin.pc')|replace({'::': ':'})~"Crud:index-footer.html.twig" %}' }}
+	{{ '{% include getParameter('sfynx.template.theme.layout.admin.pc')|replace({'::': ':'})~"Crud:index-footer.html.twig" %}' }}
 	
 {{ '{% endblock %}' }}
 

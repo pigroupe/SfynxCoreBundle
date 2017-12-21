@@ -15,6 +15,7 @@
 namespace Sfynx\CoreBundle\Tests\Form\Handler;
 
 use \Phake;
+use \PHPUnit\Framework\TestCase;
 
 /**
  * This is a base test case for all FormHandlers.
@@ -25,7 +26,7 @@ use \Phake;
  * @abstract
  * @author     Etienne de Longeaux <etienne.delongeaux@gmail.com>
  */
-abstract class AbstractFormHandlerTestCase extends \PHPUnit_Framework_TestCase
+abstract class AbstractFormHandlerTestCase extends TestCase
 {
     protected $form;
     protected $request;
@@ -36,7 +37,7 @@ abstract class AbstractFormHandlerTestCase extends \PHPUnit_Framework_TestCase
     {
         $this->form = Phake::mock('Symfony\Component\Form\Form');
         $this->request = Phake::mock('Symfony\Component\HttpFoundation\Request');
-        $this->userManager = Phake::mock('FOS\UserBundle\Model\UserManagerInterface');
+        $this->userManager = Phake::mock('Sfynx\AuthBundle\Domain\Service\User\Generalisation\Interfaces\UserManagerInterface');
         $this->eventDispatcher = Phake::mock(
             'Symfony\Component\HttpKernel\Debug\TraceableEventDispatcher'
         );

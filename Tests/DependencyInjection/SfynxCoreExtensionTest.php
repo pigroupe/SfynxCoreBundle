@@ -15,6 +15,7 @@ namespace Sfynx\CoreBundle\Tests\DependencyInjection;
 
 use Sfynx\CoreBundle\DependencyInjection\SfynxCoreExtension;
 use Phake;
+use \PHPUnit\Framework\TestCase;
 
 /**
  * @category   Core
@@ -22,7 +23,7 @@ use Phake;
  * @subpackage DependencyInjection
  * @author     Etienne de Longeaux <etienne.delongeaux@gmail.com>
  */
-class SfynxCoreExtensionTest extends \PHPUnit_Framework_TestCase
+class SfynxCoreExtensionTest extends TestCase
 {
     public function testLoadsSomeConfigurationFile()
     {

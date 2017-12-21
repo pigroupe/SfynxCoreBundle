@@ -27,7 +27,7 @@ class FormHandlerTest extends AbstractFormHandlerTestCase
     public function testProcessValidatesTheRequestAndForm()
     {
         $handler = Phake::partialMock(
-            'Sfynx\CoreBundle\Form\Handler\AbstractFormHandler',
+            'Sfynx\CoreBundle\Layers\Application\Validation\Handler\AbstractFormHandler',
             $this->form,
             $this->request
         );
@@ -46,7 +46,7 @@ class FormHandlerTest extends AbstractFormHandlerTestCase
     public function testReturnsTheOnSuccessReturnValue()
     {
         $handler = Phake::partialMock(
-            'Sfynx\CoreBundle\Form\Handler\AbstractFormHandler',
+            'Sfynx\CoreBundle\Layers\Application\Validation\Handler\AbstractFormHandler',
             $this->form,
             $this->request
         );
@@ -67,7 +67,7 @@ class FormHandlerTest extends AbstractFormHandlerTestCase
     public function testHasFormAccessorMethod()
     {
         $handler = Phake::partialMock(
-            'Sfynx\CoreBundle\Form\Handler\AbstractFormHandler',
+            'Sfynx\CoreBundle\Layers\Application\Validation\Handler\AbstractFormHandler',
             $this->form,
             $this->request
         );

@@ -1,6 +1,6 @@
 {{ "{% initJquery 'FORM:prototype-bytab' %}" }}
 {{ "{% if app.request.query.get('NoLayout') %}" }}
-	{{ "{% set layout_nav = getParameter('sfynx.auth.theme.layout.ajax') %}" }}
+	{{ "{% set layout_nav = getParameter('sfynx.template.theme.layout.ajax') %}" }}
 {{ "{% else %}" }}
 	{{ "{% set layout_nav = app.request.attributes.get('sfynx-layout') %}" }}
 {{ "{% endif %}" }}	
@@ -16,9 +16,9 @@
 
 	<!-- Begin tag markup -->
 	<div id="tabs">
-        {{ "{% include getParameter('sfynx.auth.theme.layout.admin.pc')|replace({'::': ':'})~'Crud:new-header.html.twig' %}" }}
-		{{ "{% form_theme form getParameter('sfynx.auth.theme.layout.admin.form.template') %}" }}
-		<form class="myform" action="{{ "{{ path('"~ route_name_prefix ~"_create', { 'NoLayout': app.request.query.get('NoLayout') }) }}" }}" method="post" {{ "{{ form_enctype(form) }}" }} novalidate>
+        {{ "{% include getParameter('sfynx.template.theme.layout.admin.pc')|replace({'::': ':'})~'Crud:new-header.html.twig' %}" }}
+		{{ "{% form_theme form getParameter('sfynx.template.theme.layout.admin.form.template') %}" }}
+		<form class="myform" action="{{ "{{ path('"~ route_name_prefix ~"_create', { 'NoLayout': app.request.query.get('NoLayout') }) }}" }}" method="post" {{ "{{ form_start(form) }}" }} novalidate>
 		    <div id="tabs-1">
 		    	{{ "{{ form_widget(form) }}" }}
 		    </div>
@@ -30,7 +30,7 @@
 			    </li>
 			</ul>		    		    
 		</form>
-        {{ "{% include getParameter('sfynx.auth.theme.layout.admin.pc')|replace({'::': ':'})~'Crud:new-footer.html.twig' %}" }}
+        {{ "{% include getParameter('sfynx.template.theme.layout.admin.pc')|replace({'::': ':'})~'Crud:new-footer.html.twig' %}" }}
 	</div>
 	<!-- End tag markup -->	
 	
