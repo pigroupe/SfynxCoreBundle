@@ -12,7 +12,7 @@
         $em       = $this->getDoctrine()->getManager();
         // we get language value
         if (empty($lang)) {
-            $lang = $this->container->get('request')->getLocale();
+            $lang = $this->container->get('request_stack')->getCurrentRequest()->getLocale();
         }
         // we get entity
         $entity = $em->getRepository("{{ bundle }}:{{ entity }}")->findOneByEntity($lang, $id, 'object', false);

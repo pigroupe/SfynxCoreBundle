@@ -28,7 +28,7 @@ use JMS\SecurityExtraBundle\Annotation\Secure;
 use JMS\SecurityExtraBundle\Annotation\PreAuthorize;
 
 use Sfynx\CoreBundle\Controller\abstractController;
-use Sfynx\ToolBundle\Exception\ControllerException;
+use Sfynx\CoreBundle\Layers\Infrastructure\Exception\ControllerException;
 
 use {{ namespace }}\Entity\{{ entity }};
 {% if 'new' in actions or 'edit' in actions %}

@@ -1,20 +1,65 @@
 parameters:
-    sfynx.core.manager.jquery.gridtable.class: Sfynx\CoreBundle\Util\PiJquery\PiGridTableManager
-    sfynx.core.manager.jquery.formsimple.class: Sfynx\CoreBundle\Util\PiJquery\PiFormSimpleManager
-    sfynx.core.manager.jquery.prototypebytabs.class: Sfynx\CoreBundle\Util\PiJquery\PiPrototypeByTabsManager
+    sfynx.core.monolog.handler.socket.class: sfynx\CoreBundle\Layers\Infrastructure\Monolog\Handler\SocketHandler
+
+    sfynx.core.manager.jquery.gridtable.class: Sfynx\CoreBundle\Layers\Domain\Service\Util\PiJquery\PiGridTableManager
+    sfynx.core.manager.jquery.formsimple.class: Sfynx\CoreBundle\Layers\Domain\Service\Util\PiJquery\PiFormSimpleManager
+    sfynx.core.manager.jquery.prototypebytabs.class: Sfynx\CoreBundle\Layers\Domain\Service\Util\PiJquery\PiPrototypeByTabsManager
+
+    sfynx.core.factory.cookie.class: Sfynx\CoreBundle\Layers\Domain\Service\Cookie\CookieFactory
+    sfynx.core.factory.cookie.params:
+      date_expire: '%sfynx.core.cookies.date_expire%'
+      date_interval: '%sfynx.core.cookies.date_interval%'
 
 services:
+    #
+    # commands services
+    #
+    sfynx.core.command.crud:
+        class: Sfynx\CoreBundle\Layers\Infrastructure\Command\DoctrineCrudCommand
+        tags:
+            - { name: console.command }
+
+    sfynx.core.command.database.drop:
+        class: Sfynx\CoreBundle\Layers\Infrastructure\Command\dropDatabaseCommand
+        tags:
+            - { name: console.command }
+
+    #
+    # MONOLOG:::configuration of the socket monolog processor
+    #
+    sfynx.core.monolog.handler.socket:
+        class: '%sfynx.core.monolog.handler.socket.class%'
+
+
     #
     # configuration of the JQUERY Util classes
     #
     sfynx.core.jquery_manager.gridtable:
-        class: %sfynx.core.manager.jquery.gridtable.class%
-        arguments: ['@service_container']                             
-            
+        class: '%sfynx.core.manager.jquery.gridtable.class%'
+        arguments:
+          - '@security.csrf.token_manager'
+          - '@sfynx.core.request.strategy'
+          - '@service_container'
+          - '@translator'
+
     sfynx.core.jquery_manager.formsimple:
-        class: %sfynx.core.manager.jquery.formsimple.class%
-        arguments: ['@service_container']
-        
+        class: '%sfynx.core.manager.jquery.formsimple.class%'
+        arguments:
+          - '@service_container'
+          - '@translator'
+          - '@sfynx.core.request.strategy'
+
     sfynx.core.jquery_manager.prototypebytabs:
-        class: %sfynx.core.manager.jquery.prototypebytabs.class%
-        arguments: ['@service_container']
+        class: '%sfynx.core.manager.jquery.prototypebytabs.class%'
+        arguments:
+          - '@service_container'
+          - '@translator'
+          - '@sfynx.core.request.strategy'
+
+    #
+    # cookie service
+    #
+    sfynx.core.cookie.factory:
+        class: '%sfynx.core.factory.cookie.class%'
+        calls:
+            - [ setParams, [ '%sfynx.core.factory.cookie.params%' ] ]

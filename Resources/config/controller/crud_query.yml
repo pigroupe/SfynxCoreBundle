@@ -1,0 +1,3 @@
+parameters:
+    sfynx.core.controller.query.selectajax.class: Sfynx\CoreBundle\Presentation\Layers\Coordination\Query\SelectajaxController
+

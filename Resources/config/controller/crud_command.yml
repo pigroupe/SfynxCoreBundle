@@ -1,0 +1,7 @@
+parameters:
+    sfynx.core.controller.command.enabledajax.class: Sfynx\CoreBundle\Layers\Presentation\Coordination\Command\EnabledajaxController
+    sfynx.core.controller.command.disableajax.class: Sfynx\CoreBundle\Layers\Presentation\Coordination\Command\DisableajaxController
+    sfynx.core.controller.command.deletajax.class: Sfynx\CoreBundle\Layers\Presentation\Coordination\Command\DeletajaxController
+    sfynx.core.controller.command.archiveajax.class: Sfynx\CoreBundle\Layers\Presentation\Coordination\Command\ArchiveajaxController
+    sfynx.core.controller.command.positionajax.class: Sfynx\CoreBundle\Layers\Presentation\Coordination\Command\PositionajaxController
+

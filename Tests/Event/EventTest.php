@@ -14,6 +14,7 @@
 namespace Sfynx\CoreBundle\Tests\Event;
 
 use Phake;
+use \PHPUnit\Framework\TestCase;
 
 /**
  * @category   Core
@@ -21,7 +22,7 @@ use Phake;
  * @subpackage Event
  * @author     Etienne de Longeaux <etienne.delongeaux@gmail.com>
  */
-abstract class EventTest extends \PHPUnit_Framework_TestCase
+abstract class EventTest extends TestCase
 {
     protected function createEvent($subject)
     {

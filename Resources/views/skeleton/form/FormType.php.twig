@@ -67,7 +67,7 @@ class {{ form_class }} extends AbstractType
     public function __construct(EntityManager $em, ContainerInterface $container)
     {
         $this->em        = $em;
-        $this->locale    = $container->get('request')->getLocale();
+        $this->locale    = $container->get('request_stack')->getCurrentRequest()->getLocale();
         $this->container = $container;
     }
         
@@ -169,7 +169,7 @@ class {{ form_class }} extends AbstractType
              
             ->add(
                 '{{ field }}',
-                'sonata_media_type',
+                'sfynx_media_type',
                 array(
                     'provider' => 'sonata.media.provider.image',
                     'context'  => 'default',
@@ -181,7 +181,7 @@ class {{ form_class }} extends AbstractType
              
             ->add(
                 '{{ field }}',
-                'sonata_media_type', array(
+                'sfynx_media_type', array(
                     'provider' => 'sonata.media.provider.file',
                     'context'  => 'default',
                     'label'    => 'pi.form.label.media.file',
@@ -426,7 +426,7 @@ class {{ form_class }} extends AbstractType
      * @access public
      * @author Etienne de Longeaux <etienne.delongeaux@gmail.com> 
      */
-    public function setDefaultOptions(OptionsResolverInterface $resolver)
+    public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults(
             array(

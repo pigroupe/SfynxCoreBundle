@@ -11,9 +11,9 @@
     public function showAction($id)
     {
         $em       = $this->getDoctrine()->getManager();
-        $locale   = $this->container->get('request')->getLocale();
+        $locale   = $this->container->get('request_stack')->getCurrentRequest()->getLocale();
         // we set params        
-        $NoLayout = $this->container->get('request')->query->get('NoLayout');
+        $NoLayout = $this->container->get('request_stack')->getCurrentRequest()->query->get('NoLayout');
         // we get entity object
         $entity   = $em->getRepository("{{ bundle }}:{{ entity }}")->findOneByEntity($locale, $id, 'object');
         if (!$entity) {

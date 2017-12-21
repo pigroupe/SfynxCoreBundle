@@ -1,7 +1,7 @@
 
     /**
      * Deletes a {{ entity }} entity.
-     * 
+     *
      * @param integer $id Id value
      *
      * @PreAuthorize("hasRole('ROLE_EDITOR') or (hasRole('ROLE_ADMIN') and hasRole('ROLE_SUPER_ADMIN'))")
@@ -14,7 +14,7 @@
         $request  = $this->getRequest();
         $locale   = $request->getLocale();
         // we get params
-        $NoLayout = $this->container->get('request')->query->get('NoLayout');        
+        $NoLayout = $this->container->get('request_stack')->getCurrentRequest()->query->get('NoLayout');
         //
         $form     = $this->createDeleteForm($id);
         $form->bind($request);
@@ -42,7 +42,7 @@
         return $this->redirect($this->generateUrl('{{ route_name_prefix }}', array('NoLayout' => $NoLayout)));
     }
 
-    private function createDeleteForm($id)
+    protected function createDeleteForm($id)
     {
         return $this->createFormBuilder(array('id' => $id))
             ->add('id', 'hidden')

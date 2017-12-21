@@ -2,7 +2,7 @@
   "name": "sfynx-project/core-bundle",
   "type": "symfony-bundle",
   "description": "This Bundle provides models of classes allowing to work and develop with doctrine (translation, tree, CRUD  generate Datatable table and multi-forms)",
-  "keywords": ["crud", "datatableJS", "multi-forms", "tree generalisation", "translation generalisation"],
+  "keywords": ["DDD", "crud", "datatableJS", "multi-forms", "tree generalisation", "translation generalisation"],
   "homepage": "http://pigroupe.github.io/cmf-sfynx/",
   "license": "LGPL-3.0+",
   "authors": [
@@ -17,7 +17,10 @@
   ],
 
   "require": {
-    "symfony/framework-bundle": "~2.3|~3.0"
+    "symfony/framework-bundle": "~2.8|~3.0",
+    "symfony/console": "*",
+    "sfynx-project/tool-utils-bundle": "2.x-dev",
+    "sfynx-project/tool-specification-bundle": "2.8.3"
   },
 
   "require-dev": {
@@ -39,7 +42,7 @@
 
   "extra": {
     "branch-alias": {
-      "dev-master": "2.3-dev"
+      "dev-master": "2.x-dev"
     }
   }
 }

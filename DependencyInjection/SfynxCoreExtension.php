@@ -40,22 +40,20 @@ class SfynxCoreExtension extends Extension{
     public function load(array $config, ContainerBuilder $container)
     {
         // we load all services
-        $loaderYaml = new Loader\YamlFileLoader($container, new FileLocator(__DIR__ . '/../Resources/config/service'));
-        $loaderYaml->load('services_cmfconfig.yml');
-        $loaderYaml->load('services_util.yml');
-        $loaderYaml->load('services_doctrine_extensions.yml');
+        $loaderYaml = new Loader\YamlFileLoader($container, new FileLocator(__DIR__ . '/../Resources/config'));
+        $loaderYaml->load('service/services_request.yml');
+        $loaderYaml->load('service/services_util.yml');
+        $loaderYaml->load('service/services_cmfconfig.yml');
+        $loaderYaml->load('service/services_doctrine_extensions.yml');
+        $loaderYaml->load('service/services_datacollector.yml');
+
+        // we load all controller parameters
+        $loaderYaml->load('controller/crud_command.yml');
+        $loaderYaml->load('controller/crud_query.yml');
+
         // we load config
         $configuration = new Configuration();
         $config        = $this->processConfiguration($configuration, $config);
-        
-        /**
-         * Cache config parameter
-         */
-        if (isset($config['cache_dir'])){
-            if (isset($config['cache_dir']['media'])) {
-                $container->setParameter('sfynx.core.cache_dir.media', $config['cache_dir']['media']);
-            }
-        }         
         
         /**
          * Cookies config parameter
