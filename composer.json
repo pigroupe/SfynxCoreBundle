@@ -19,6 +19,7 @@
   "require": {
     "symfony/framework-bundle": "~2.8|~3.0",
     "symfony/console": "*",
+    "sfynx-project/tool-trigger-bundle": "2.x-dev",
     "sfynx-project/tool-utils-bundle": "2.x-dev",
     "sfynx-project/tool-specification-bundle": "2.8.3"
   },
