@@ -43,7 +43,7 @@ interface GeneralRepositoryInterface
      * @return string the count of all fields.
      * @access public
      */
-    public function count($enabled = null);
+    public function total($enabled = null);
 
     /**
      * return query in cache

@@ -31,7 +31,7 @@ trait TraitGeneral
     /**
      * {@inheritdoc}
      */
-    public function count($enabled = null)
+    public function total($enabled = null)
     {
         if (!is_null($enabled)) {
             return $this->_em

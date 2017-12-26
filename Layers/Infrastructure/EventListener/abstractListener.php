@@ -124,7 +124,7 @@ abstract class abstractListener  extends abstractTriggerListener
         }
         // we give the right of persist if the entity is in the AUTHORIZATION_PREPERSIST container
         if ($this->is_permission_authorization_prepersist_authorized
-            && $this->container->isScopeActive('request')
+            && $this->container->get('request_stack')->getCurrentRequest()
             && isset($_SERVER['REQUEST_URI'])
             && !empty($_SERVER['REQUEST_URI'])
         ) {
@@ -355,7 +355,7 @@ abstract class abstractListener  extends abstractTriggerListener
             }
         }
         if ($this->is_permission_authorization_preremove_authorized
-            && $this->container->isScopeActive('request')
+            && $this->container->get('request_stack')->getCurrentRequest()
             && isset($_SERVER['REQUEST_URI'])
             && !empty($_SERVER['REQUEST_URI'])
         ) {
@@ -472,24 +472,6 @@ abstract class abstractListener  extends abstractTriggerListener
                    foreach ($authorized_page_roles as $key=>$role_page) {
                        if (in_array($role_page, $user_roles)) {
                            $right = true;
-                       }
-                   }
-               }
-               if (
-                   ( (get_class($entity) == 'Proxies\SfynxMediaBundleEntityMediaProxy') || get_class($entity) == 'Proxies\PiAppGedmoBundleEntityMediaProxy')
-                   	&& isset($GLOBALS['ENTITIES']['RESTRICTION_BY_MEDIA'])
-                  	&& is_array($GLOBALS['ENTITIES']['RESTRICTION_BY_MEDIA'])
-               ) {
-                   $methods_authorized = $GLOBALS['ENTITIES']['RESTRICTION_BY_MEDIA'];
-                   if (get_class($entity) == 'Proxies\SfynxMediaBundleEntityMediaProxy') {
-                       $media = $this->container->get('pi_app_gedmo.repository')->getRepository('Media')->findOneByMediaId($entity->getId());
-                   } else {
-                       $media = $entity;
-                   }
-                   $right = true;
-                   foreach ($methods_authorized as $method) {
-                       if ( method_exists($media, $method) && is_object($media->$method()) ) {
-                           $right = false;
                        }
                    }
                }
