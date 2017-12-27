@@ -28,8 +28,6 @@ abstract class AbstractFormRequest implements CommandRequestInterface
     /** @var array */
     protected $allowedValues = [];
     /** @var array */
-    protected $normalizers = [];
-    /** @var array */
     protected $requestParameters;
     /** @var array */
     protected $options;
@@ -50,6 +48,14 @@ abstract class AbstractFormRequest implements CommandRequestInterface
         $this->resolver = new OptionsResolver();
 
         $this->execute();
+    }
+
+    /**
+     * @return array
+     */
+    protected function getNormalizers(): array
+    {
+        return [];
     }
 
     /**
@@ -93,7 +99,7 @@ abstract class AbstractFormRequest implements CommandRequestInterface
         $this->setOptions();
 
         $mt = $this->object->requestMethod;
-        foreach (['defaults', 'required', 'allowedTypes', 'allowedValues', 'normalizers'] as $attribut) {
+        foreach (['defaults', 'required', 'allowedTypes', 'allowedValues'] as $attribut) {
             $this->$attribut = isset($this->$attribut[$mt]) ? $this->$attribut[$mt] : $this->$attribut;
         }
 
@@ -109,7 +115,7 @@ abstract class AbstractFormRequest implements CommandRequestInterface
         foreach ($this->allowedValues as $optionName => $optionValues) {
             $this->resolver->setAllowedValues($optionName, $optionValues);
         }
-        foreach ($this->normalizers as $optionName => $optionValues) {
+        foreach ($this->getNormalizers() as $optionName => $optionValues) {
             $this->resolver->setNormalizer($optionName, $optionValues);
         }
         $this->requestParameters = $this->resolver->resolve($this->options);
