@@ -4,6 +4,7 @@ namespace Sfynx\CoreBundle\Layers\Domain\Repository\Query;
 use Doctrine\Common\Persistence\ObjectRepository;
 use Doctrine\ORM\Query;
 use Doctrine\ORM\EntityManagerInterface;
+use Doctrine\ORM\QueryBuilder;
 
 use Sfynx\CoreBundle\Layers\Infrastructure\Cache\CacheQuery;
 use Sfynx\CoreBundle\Layers\Domain\Repository\Query\GeneralRepositoryInterface;
@@ -45,4 +46,12 @@ interface QueryRepositoryInterface extends GeneralRepositoryInterface,Translatio
      * @param integer   id    id de la référence demandée
      */
     public function getReference($id);
+
+    /**
+     * @param $query
+     * @param $dbRef
+     * @param $refValue
+     * @return QueryBuilder
+     */
+    public function clauseAndWhere($query, $dbRef, $refValue): QueryBuilder;
 }

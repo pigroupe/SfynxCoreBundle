@@ -235,7 +235,7 @@ abstract class abstractListener  extends abstractTriggerListener
             $entity->setUpdatedAt(new \DateTime());
         }
         if ($this->is_permission_authorization_preupdate_authorized
-            && $this->container->isScopeActive('request')
+            && $this->container->get('request_stack')->getCurrentRequest()
             && isset($_SERVER['REQUEST_URI']) && !empty($_SERVER['REQUEST_URI'])
         ) {
             // we give the right of update if the entity is in the AUTHORIZATION_PREPERSIST container

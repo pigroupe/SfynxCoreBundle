@@ -4,6 +4,7 @@ namespace Sfynx\CoreBundle\Layers\Infrastructure\Persistence\Adapter\Generalisat
 use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\Query;
 use Doctrine\ORM\EntityManagerInterface;
+use Doctrine\ORM\QueryBuilder;
 
 use Sfynx\CoreBundle\Layers\Infrastructure\Cache\CacheQuery;
 use Sfynx\CoreBundle\Layers\Domain\Repository\Query\QueryRepositoryInterface;
@@ -72,9 +73,10 @@ abstract class AbstractQueryRepository extends EntityRepository implements Query
      */
     public function clauseAndWhere($query, $dbRef, $refValue): QueryBuilder
     {
+        $refValueName = $this->struuid('clause');
         return $query
-            ->andWhere($dbRef.' = :refValue')
-            ->setParameter('refValue', $refValue);
+            ->andWhere($dbRef. ' = :'.$refValueName)
+            ->setParameter($refValueName, $refValue);
     }
 
     /**
@@ -96,6 +98,25 @@ abstract class AbstractQueryRepository extends EntityRepository implements Query
         self::addCriteria($qb, 'entity', $criteria);
 
         return $qb;
+    }
+
+    /**
+     * @param string $entropy
+     * @return string
+     */
+    protected function struuid(string $entropy)
+    {
+        $s = uniqid("", $entropy);
+        $num = hexdec(str_replace(".","", (string)$s));
+        $index = '1234567890ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+        $base= strlen($index);
+        $out = '';
+        for ($t = floor(log10($num) / log10($base)); $t >= 0; $t--) {
+            $a = floor($num / pow($base,$t));
+            $out = $out.substr($index,$a,1);
+            $num = $num-($a*pow($base,$t));
+        }
+        return $out;
     }
 
     /**

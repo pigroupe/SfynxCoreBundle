@@ -7,7 +7,7 @@ use Sfynx\CoreBundle\Layers\Domain\Workflow\Observer\Generalisation\Response\Abs
 use Sfynx\CoreBundle\Layers\Infrastructure\Exception\WorkflowException;
 
 /**
- * Class OBCreateFormView
+ * Class OBCreateEntityFormView
  *
  * @category Sfynx\CoreBundle\Layers
  * @package Domain
@@ -15,7 +15,7 @@ use Sfynx\CoreBundle\Layers\Infrastructure\Exception\WorkflowException;
  * @author     Etienne de Longeaux <etienne.delongeaux@gmail.com>
  * @copyright  2016 PI-GROUPE
  */
-class OBCreateFormView extends AbstractCreateFormView
+class OBCreateEntityFormView extends AbstractCreateFormView
 {
     /**
      * The process function create form view
@@ -36,6 +36,6 @@ class OBCreateFormView extends AbstractCreateFormView
     protected function createForm(): FormViewInterface
     {
         $this->formType->initData($this->wfLastData->formViewData);
-        return $this->formFactory->create($this->formType);
+        return $this->formFactory->create($this->formType, $this->wfHandler->entity);
     }
 }
