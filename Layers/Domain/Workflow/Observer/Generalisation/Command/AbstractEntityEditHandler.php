@@ -31,18 +31,22 @@ abstract class AbstractEntityEditHandler extends AbstractObserver
     protected $request;
     /** @var stdClass */
     protected $object;
+    /** @var bool */
+    protected $updateCommand;
 
     /**
      * AbstractEntityEditHandler constructor.
      * @param ManagerInterface $manager
      * @param RequestInterface $request
+     * @param bool $updateCommand
      */
-    public function __construct(ManagerInterface $manager, RequestInterface $request)
+    public function __construct(ManagerInterface $manager, RequestInterface $request, $updateCommand = false)
     {
         $this->entityName = $manager->getEntityName();
         $this->manager = $manager;
         $this->request = $request;
         $this->object = new stdClass();
+        $this->updateCommand = $updateCommand;
     }
 
     /**
@@ -63,6 +67,11 @@ abstract class AbstractEntityEditHandler extends AbstractObserver
         try {
             $query = $this->manager->getQueryRepository()->findOneQueryByEntity($this->wfCommand->entityId)->getQuery();
             $this->wfLastData->entity = $this->manager->getQueryRepository()->Result($query)->getOneOrNullResult(\Doctrine\ORM\AbstractQuery::HYDRATE_OBJECT);
+
+            $specs = new SpecIsValidRequest();
+            if ($this->updateCommand && !$specs->isSatisfiedBy($this->object)) {
+                $this->wfCommand = $this->manager->buildFromEntity($this->wfCommand, $this->wfLastData->entity);
+            }
         } catch (Exception $e) {
             throw EntityException::NotFoundEntity($this->entityName);
         }

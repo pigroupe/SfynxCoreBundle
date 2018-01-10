@@ -26,6 +26,10 @@ trait TraitProcess
             if ($entity instanceof EntityInterface) {
                 $entity = $this->manager->buildFromCommand($entity, $this->wfCommand);
                 $this->manager->getCommandRepository()->save($entity);
+
+                if ($this->updateCommand) {
+                    $this->wfCommand = $this->manager->buildFromEntity($this->wfCommand, $entity);
+                }
             }
         } catch (Exception $e) {
             $this->wfCommand->errors['success'] = 'errors.entity.save';

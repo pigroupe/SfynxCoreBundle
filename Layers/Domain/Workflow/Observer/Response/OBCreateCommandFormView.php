@@ -33,9 +33,23 @@ class OBCreateCommandFormView extends AbstractCreateFormView
         return true;
     }
 
+    /**
+     * @return FormViewInterface
+     */
     protected function createForm(): FormViewInterface
     {
         $this->formType->initData($this->wfLastData->formViewData);
         return $this->formFactory->create($this->formType, $this->wfHandler->command);
     }
+
+
+//    /**
+//     * @return FormInterface
+//     * VERSION SF3.4
+//     */
+//    protected function createForm(): FormInterface
+//    {
+//        $this->formType->initData($this->wfLastData->formViewData);
+//        return $this->formFactory->create(get_class($this->formType), $this->wfHandler->command);
+//    }
 }
