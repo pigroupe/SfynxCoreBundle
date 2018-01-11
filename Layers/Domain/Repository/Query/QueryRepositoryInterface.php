@@ -6,10 +6,10 @@ use Doctrine\ORM\Query;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\QueryBuilder;
 
-use Sfynx\CoreBundle\Layers\Infrastructure\Cache\CacheQuery;
 use Sfynx\CoreBundle\Layers\Domain\Repository\Query\GeneralRepositoryInterface;
 use Sfynx\CoreBundle\Layers\Domain\Repository\Query\TranslationRepositoryInterface;
-use Sfynx\CoreBundle\Layers\Infrastructure\Persistence\Repository\Generalisation\Interfaces\ResultInterface;
+use Sfynx\CoreBundle\Layers\Infrastructure\Persistence\Adapter\Generalisation\Interfaces\ResultInterface;
+use Sfynx\CoreBundle\Layers\Infrastructure\Cache\CacheQuery;
 
 /**
  * Query Repository Interface

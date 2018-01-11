@@ -241,7 +241,7 @@ trait TraitGeneral
         $query->setParameter('id', $id);
         $query->setMaxResults(1);
 
-        return current($this->findTranslationsByQuery($locale, $query, $result, $INNER_JOIN, $FALLBACK, $lazy_loading));
+        return current($this->findTranslationsByQuery($locale, $query->getQuery(), $result, $INNER_JOIN, $FALLBACK, $lazy_loading));
     }
 
     /**
