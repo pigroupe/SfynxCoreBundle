@@ -1,5 +1,5 @@
 <?php
-namespace Sfynx\CoreBundle\Layers\Infrastructure\Persistence\Repository\Generalisation\Interfaces;
+namespace Sfynx\CoreBundle\Layers\Infrastructure\Persistence\Adapter\Generalisation\Interfaces;
 
 use Sfynx\CoreBundle\Layers\Infrastructure\Persistence\FieldsDefinition\Generalisation\FieldsDefinitionAbstract;
 

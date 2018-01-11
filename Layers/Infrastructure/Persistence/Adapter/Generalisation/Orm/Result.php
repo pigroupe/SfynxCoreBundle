@@ -2,7 +2,7 @@
 namespace Sfynx\CoreBundle\Layers\Infrastructure\Persistence\Adapter\Generalisation\Orm;
 
 use Doctrine\ORM\Query;
-use Sfynx\CoreBundle\Layers\Infrastructure\Persistence\Repository\Generalisation\Interfaces\ResultInterface;
+use Sfynx\CoreBundle\Layers\Infrastructure\Persistence\Adapter\Generalisation\Interfaces\ResultInterface;
 use Sfynx\CoreBundle\Layers\Infrastructure\Persistence\FieldsDefinition\Generalisation\FieldsDefinitionAbstract;
 
 /**

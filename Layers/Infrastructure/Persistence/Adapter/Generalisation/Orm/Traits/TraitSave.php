@@ -6,7 +6,7 @@ namespace Sfynx\CoreBundle\Layers\Infrastructure\Persistence\Adapter\Generalisat
  *
  * @category   Sfynx\CoreBundle\Layers
  * @package    Infrastructure
- * @subpackage Persistence\Repository\Generalisation\Orm\Traits
+ * @subpackage Persistence\Adapter\Generalisation\Orm\Traits
  * @abstract
  */
 trait TraitSave

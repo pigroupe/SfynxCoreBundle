@@ -22,7 +22,7 @@ use Sfynx\CoreBundle\Layers\Infrastructure\Persistence\Adapter\Generalisation\Or
  *
  * @category   Sfynx\CoreBundle\Layers
  * @package    Infrastructure
- * @subpackage Persistence\Repository\Generalisation\Orm
+ * @subpackage Persistence\Adapter\Generalisation\Orm
  * @abstract
  * @author     Etienne de Longeaux <etienne.delongeaux@gmail.com>
  * @copyright  2015 PI-GROUPE

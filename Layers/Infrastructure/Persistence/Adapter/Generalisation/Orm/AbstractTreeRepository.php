@@ -16,7 +16,7 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  *
  * @category   Sfynx\CoreBundle\Layers
  * @package    Infrastructure
- * @subpackage Persistence\Repository\Generalisation\Orm
+ * @subpackage Persistence\Adapter\Generalisation\Orm
  * @abstract
  * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
  * @since 2012-03-09
