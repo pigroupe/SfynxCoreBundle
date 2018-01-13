@@ -30,7 +30,7 @@ services:
             - { name: doctrine.odm.mongodb.default_event_subscriber }            
         calls:
             - [ setAnnotationReader, [ '@annotation_reader' ] ]
-            - [ setDefaultLocale, [ %locale% ] ]
+            - [ setDefaultLocale, [ '%locale%' ] ]
             - [ setTranslationFallback, [ true ] ]
     
     gedmo.listener.timestampable:

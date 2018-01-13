@@ -14,10 +14,10 @@ services:
     # configuration of the class manager allowed for the config CMF
     #       
     sfynx.core.cmfconfig:
-      class: %sfynx.tool.manager.config.class%
+      class: '%sfynx.tool.manager.config.class%'
       arguments: ['@service_container']
       tags:
             - {name: kernel.event_listener, event: kernel.request, method: onKernelRequest}      
       calls:
-        - [ setConfig, [ 'JQUERY', 'GRID', %sfynx.core.config.jquery.grid% ] ]
-        - [ setConfig, [ 'JQUERY', 'FORM', %sfynx.core.config.jquery.form% ] ]
+        - [ setConfig, [ 'JQUERY', 'GRID', '%sfynx.core.config.jquery.grid%' ] ]
+        - [ setConfig, [ 'JQUERY', 'FORM', '%sfynx.core.config.jquery.form%' ] ]
