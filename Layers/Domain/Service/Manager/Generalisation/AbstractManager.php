@@ -155,7 +155,7 @@ abstract class AbstractManager implements ManagerInterface
      */
     public function update(EntityInterface $entity, $andFlush = true): void
     {
-        $this->getCommandRepository()->persist($user, $andFlush);
+        $this->getCommandRepository()->persist($entity, $andFlush);
     }
 
     /**
