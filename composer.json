@@ -4,7 +4,7 @@
   "description": "This Bundle provides models of classes allowing to work and develop with doctrine (translation, tree, CRUD  generate Datatable table and multi-forms)",
   "keywords": ["DDD", "crud", "datatableJS", "multi-forms", "tree generalisation", "translation generalisation"],
   "homepage": "http://pigroupe.github.io/cmf-sfynx/",
-  "license": "LGPL-3.0-or-latter",
+  "license": "LGPL-3.0-or-later",
   "authors": [
     {
       "name": "Etienne de Longeaux",
