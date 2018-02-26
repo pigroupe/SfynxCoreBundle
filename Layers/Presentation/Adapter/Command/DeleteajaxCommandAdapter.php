@@ -5,6 +5,7 @@ use Sfynx\CoreBundle\Layers\Presentation\Adapter\Generalisation\Interfaces\Comma
 use Sfynx\CoreBundle\Layers\Presentation\Request\Generalisation\Interfaces\CommandRequestInterface;
 use Sfynx\CoreBundle\Layers\Application\Command\DeleteajaxCommand;
 use Sfynx\CoreBundle\Layers\Application\Command\GridCommand;
+use Sfynx\CoreBundle\Layers\Application\Command\Generalisation\Interfaces\CommandInterface;
 
 /**
  * Class DeleteajaxCommandAdapter.
@@ -19,7 +20,7 @@ class DeleteajaxCommandAdapter implements CommandAdapterInterface
      * @param CommandRequestInterface $request
      * @return NewCommand
      */
-    public function createCommandFromRequest(CommandRequestInterface $request)
+    public function createCommandFromRequest(CommandRequestInterface $request): CommandInterface
     {
         $parameters = $request->getRequestParameters();
 

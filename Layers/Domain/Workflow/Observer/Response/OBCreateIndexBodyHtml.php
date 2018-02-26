@@ -27,10 +27,10 @@ class OBCreateIndexBodyHtml extends AbstractCreateIndexBodyHtml
             $this->wfLastData->body = $this->templating->render(
                 $this->param->templating,
                 [
-                    'isServerSide' => $this->wfHandler->query->isServerSide,
                     'entities'     => $this->wfHandler->entities,
-                    'NoLayout' => $this->wfHandler->query->NoLayout,
-                    'category' => $this->wfHandler->query->category
+                    'isServerSide' => property_exists($this->wfHandler->query, 'isServerSide') ? $this->wfHandler->query->getIsServerSide() : '',
+                    'NoLayout' => property_exists($this->wfHandler->query, 'noLayout') ? $this->wfHandler->query->getNoLayout() : '',
+                    'category' => property_exists($this->wfHandler->query, 'category') ? $this->wfHandler->query->getCategory() : '',
                 ]
             );
         } catch (Exception $e) {

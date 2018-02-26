@@ -28,7 +28,7 @@ class OBCreateIndexResponseJson extends AbstractCreateResponseJson
     public function process(): bool
     {
         $output = [
-            "sEcho" => $this->wfHandler->query->sEcho,
+            "sEcho" => $this->wfHandler->query->getSEcho(),
             "iTotalRecords" => $this->wfHandler->total,
             "iTotalDisplayRecords" => $this->wfHandler->total,
             "aaData" => $this->wfLastData->rows

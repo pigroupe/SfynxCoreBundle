@@ -44,6 +44,13 @@ interface ManagerInterface
     public function getEntityName();
 
     /**
+     * Returns the table name.
+     *
+     * @return string
+     */
+    public function getTableName();
+
+    /**
      * Returns the user's command repository
      *
      * @return CommandRepositoryInterface

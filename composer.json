@@ -4,7 +4,7 @@
   "description": "This Bundle provides models of classes allowing to work and develop with doctrine (translation, tree, CRUD  generate Datatable table and multi-forms)",
   "keywords": ["DDD", "crud", "datatableJS", "multi-forms", "tree generalisation", "translation generalisation"],
   "homepage": "http://pigroupe.github.io/cmf-sfynx/",
-  "license": "LGPL-3.0+",
+  "license": "LGPL-3.0-or-latter",
   "authors": [
     {
       "name": "Etienne de Longeaux",
@@ -21,9 +21,9 @@
     "symfony/console": "*",
     "sensio/generator-bundle": "~3.1.2",
     "gedmo/doctrine-extensions": "^2.4.31",
-    "sfynx-project/tool-trigger-bundle": "2.x-dev",
-    "sfynx-project/tool-utils-bundle": "2.x-dev",
-    "sfynx-project/tool-specification-bundle": "2.8.3"
+    "sfynx-project/tool-trigger-bundle": "~2.8.1",
+    "sfynx-project/tool-utils-bundle": "~2.8.1",
+    "sfynx-project/tool-specification-bundle": "~2.8.3"
   },
 
   "require-dev": {

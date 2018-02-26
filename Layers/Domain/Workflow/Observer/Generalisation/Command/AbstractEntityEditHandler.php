@@ -65,7 +65,7 @@ abstract class AbstractEntityEditHandler extends AbstractObserver
     protected function onInit(): void
     {
         try {
-            $query = $this->manager->getQueryRepository()->findOneQueryByEntity($this->wfCommand->entityId)->getQuery();
+            $query = $this->manager->getQueryRepository()->findOneQueryByEntity($this->wfCommand->getEntityId())->getQuery();
             $this->wfLastData->entity = $this->manager->getQueryRepository()->Result($query)->getOneOrNullResult(\Doctrine\ORM\AbstractQuery::HYDRATE_OBJECT);
 
             $specs = new SpecIsValidRequest();
@@ -117,7 +117,7 @@ abstract class AbstractEntityEditHandler extends AbstractObserver
     {
         $this->object->requestMethod = $this->request->getMethod();
         $this->object->validMethod = $this->getValidMethods();
-        $this->object->entityId = $this->wfCommand->entityId;
+        $this->object->entityId = $this->wfCommand->getEntityId();
         $this->object->errors = $this->wfCommand->errors;
     }
 

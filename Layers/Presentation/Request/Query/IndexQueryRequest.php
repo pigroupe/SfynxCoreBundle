@@ -20,7 +20,7 @@ class IndexQueryRequest implements QueryRequestInterface
     protected $required = [
         'locale',
         'category',
-        'NoLayout',
+        'noLayout',
         'sEcho',
         'isServerSide'
     ];
@@ -29,7 +29,7 @@ class IndexQueryRequest implements QueryRequestInterface
         'locale' => array('string', 'null'),
         'category' => array('string', 'null'),
         'isServerSide' => array('bool', 'null'),
-        'NoLayout' => array('bool', 'null'),
+        'noLayout' => array('bool', 'null'),
         'sEcho' => array('int', 'null')
     ];
 
@@ -98,12 +98,12 @@ class IndexQueryRequest implements QueryRequestInterface
         $this->option = [
             'locale' => $locale,
             'category' => $category,
-            'NoLayout' => $NoLayout,
+            'noLayout' => $NoLayout,
             'isServerSide' => $isServerSide,
             'sEcho' => $sEcho
         ];
 
-        foreach (['NoLayout', 'isServerSide'] as $data) {
+        foreach (['noLayout', 'isServerSide'] as $data) {
             if (isset($this->option[$data])) {
                 $this->option[$data] = (int)$this->option[$data] ? true : false;
             }

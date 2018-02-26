@@ -55,7 +55,7 @@ trait TraitBuild
      * @param array $excluded
      * @return EntityInterface
      */
-    final public static function buildFromCommand( EntityInterface $entity, CommandInterface $command, array $excluded = []): EntityInterface
+    final public static function buildFromCommand(EntityInterface $entity, CommandInterface $command, array $excluded = []): EntityInterface
     {
         foreach ((new ReflectionObject($command))->getProperties() as $oProperty) {
             $oProperty->setAccessible(true);
@@ -76,7 +76,7 @@ trait TraitBuild
      * @param array $excluded
      * @return EntityInterface
      */
-    final public static function buildFromArray( EntityInterface $entity, array $arr, array $excluded = []): EntityInterface
+    final public static function buildFromArray(EntityInterface $entity, array $arr, array $excluded = []): EntityInterface
     {
         foreach ($arr as $key => $value) {
             if (!in_array($key, $excluded)) {

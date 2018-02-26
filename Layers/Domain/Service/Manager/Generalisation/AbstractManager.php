@@ -61,6 +61,20 @@ abstract class AbstractManager implements ManagerInterface
     /**
      * {@inheritDoc}
      */
+    public function getTableName() {
+        return $this->getCommandRepository()->getTableName();
+    }
+
+    /**
+     * @return void
+     */
+    public function setIdGenerator() {
+        $this->getCommandRepository()->setIdGenerator();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
     public function getCommandRepository(): CommandRepositoryInterface
     {
         return $this->factory->getCommandRepository();

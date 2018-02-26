@@ -42,22 +42,17 @@ abstract class AbstractQuery implements QueryInterface
     }
 
     /**
-     * @param $property
+     * @param $methodName
+     * @param null $params
      * @return mixed
      */
-    public function __get($property) {
-        if (property_exists($this, $property)) {
+    public function __call($methodName, $params = null)
+    {
+        $methodPrefix = substr($methodName, 0, 3);
+        $property = lcfirst(substr($methodName, 3));
+        if($methodPrefix == 'get' && property_exists($this, $property)) {
             return $this->$property;
         }
-    }
-
-    /**
-     * @param $property
-     * @param $value
-     */
-    public function __set($property, $value) {
-        if (property_exists($this, $property)) {
-            $this->$property = $value;
-        }
+        exit("Opps! The method is not allowed!");
     }
 }

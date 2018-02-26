@@ -24,7 +24,7 @@ class SpecIsValidIdentifierValueQuery extends AbstractSpecification
     {
         return property_exists($object, 'wfQuery') &&
             property_exists($object->wfQuery, 'entityId') && (
-                null !== $object->wfQuery->entityId && is_int($object->wfQuery->entityId)
+                null !== $object->wfQuery->getEntityId() && is_int($object->wfQuery->getEntityId())
             );
     }
 }

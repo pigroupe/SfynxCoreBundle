@@ -26,7 +26,7 @@ class OBIndexFindEntitiesHandler extends AbstractIndexFindEntitiesHandler
     {
         try {
             $this->wfLastData->entities = $this->manager->getQueryRepository()->findTranslationsByQuery(
-                $this->wfQuery->locale,
+                $this->wfQuery->getLocale(),
                 $this->wfLastData->query->getQuery(),
                 'object',
                 false

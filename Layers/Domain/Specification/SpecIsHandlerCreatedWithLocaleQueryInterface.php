@@ -24,6 +24,6 @@ class SpecIsHandlerCreatedWithLocaleQueryInterface extends AbstractSpecification
     public function isSatisfiedBy(stdClass $object): bool
     {
         return property_exists($object->handler->query, 'locale') &&
-            is_string($object->handler->query->locale);
+            is_string($object->handler->query->getLocale());
     }
 }

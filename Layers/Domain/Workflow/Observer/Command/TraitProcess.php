@@ -27,7 +27,7 @@ trait TraitProcess
                 $entity = $this->manager->buildFromCommand($entity, $this->wfCommand);
                 $this->manager->getCommandRepository()->save($entity);
 
-                if ($this->updateCommand) {
+                if (property_exists($this, 'updateCommand') && true === $this->updateCommand) {
                     $this->wfCommand = $this->manager->buildFromEntity($this->wfCommand, $entity);
                 }
             }
