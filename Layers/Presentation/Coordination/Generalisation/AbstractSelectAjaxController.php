@@ -33,7 +33,7 @@ abstract class AbstractSelectAjaxController extends AbstractAjaxController
     protected $autorization_role = 'ROLE_USER';
     /** @var TranslatorInterface */
     protected $translator;
-    /** @var  */
+    /** @var \Twig_Environment */
     protected $twig;
 
     /**
@@ -53,7 +53,7 @@ abstract class AbstractSelectAjaxController extends AbstractAjaxController
         CsrfTokenManagerInterface $securityManager,
         PiFormExtension $formExtension,
         TranslatorInterface $translator,
-        $twig
+        \Twig_Environment $twig
     ) {
         parent::__construct($authorizationChecker, $manager, $request, $securityManager, $formExtension);
 
@@ -173,8 +173,8 @@ abstract class AbstractSelectAjaxController extends AbstractAjaxController
         if (!(null === $pagination)) {
             $query->setFirstResult((intVal($pagination)-1)*intVal($MaxResults));
             $query->setMaxResults(intVal($MaxResults));
-            //$query_sql = $query->getQuery()->getSql();
-            //var_dump($query_sql);
+//            $query_sql = $query->getQuery()->getSql();
+//            var_dump($query_sql);
         }
 
         if ((null === $cacheQuery_hash)) {
@@ -187,7 +187,7 @@ abstract class AbstractSelectAjaxController extends AbstractAjaxController
             if (!isset($cacheQuery_hash['input_hash'])) $cacheQuery_hash['input_hash'] = '';
             if (!isset($cacheQuery_hash['namespace'])) $cacheQuery_hash['namespace'] = '';
             // we set the query result
-            $query = $em->getRepository($this->_entityName)->cacheQuery(
+            $query = $this->manager->getQueryRepository()->cacheQuery(
                 $query->getQuery(),
                 $cacheQuery_hash['time'],
                 $cacheQuery_hash['mode'],

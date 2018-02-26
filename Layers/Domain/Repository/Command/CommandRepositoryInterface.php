@@ -36,4 +36,14 @@ interface CommandRepositoryInterface extends SaveRepositoryInterface,GeneralRepo
      * @return string
      */
     public function getEntityName(): string;
+
+    /**
+     * @return string
+     */
+    public function getTableName(): string;
+
+    /**
+     * @return CommandRepositoryInterface
+     */
+    public function setIdGenerator(): CommandRepositoryInterface;
 }

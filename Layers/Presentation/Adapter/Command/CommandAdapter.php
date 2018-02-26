@@ -30,10 +30,16 @@ class CommandAdapter implements CommandAdapterInterface
     {
         $this->parameters = $request->getRequestParameters();
 
-        $tab = get_object_vars($this->commmand);
-        $tab = is_array($tab) ? $tab : [];
-        foreach ($tab as $property => $value) {
-            $this->commmand->{$property} = isset($this->parameters[$property]) ? $this->parameters[$property] : $this->commmand->{$property};
+//        $tab = get_object_vars($this->commmand);
+//        $tab = is_array($tab) ? $tab : [];
+//        foreach ($tab as $property => $value) {
+//            $this->commmand->{$property} = isset($this->parameters[$property]) ? $this->parameters[$property] : $this->commmand->{$property};
+//        }
+
+        foreach ((new \ReflectionObject($this->commmand))->getProperties() as $oProperty) {
+            $oProperty->setAccessible(true);
+            $value = isset($this->parameters[$oProperty->getName()]) ? $this->parameters[$oProperty->getName()] : $oProperty->getValue($this->commmand);
+            $oProperty->setValue($this->commmand, $value);
         }
 
         return $this->commmand;

@@ -13,13 +13,13 @@ use Sfynx\CoreBundle\Layers\Application\Query\Generalisation\AbstractQuery;
 class IndexQuery extends AbstractQuery
 {
     /** @var string */
-    public $locale;
+    protected $locale;
     /** @var string */
-    public $category = '';
+    protected $category = '';
     /** @var boolean */
-    public $NoLayout = false;
+    protected $noLayout = false;
     /** @var boolean */
     public $isServerSide = false;
     /** @var int */
-    public $sEcho = '';
+    protected $sEcho = '';
 }

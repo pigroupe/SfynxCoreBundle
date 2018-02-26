@@ -97,7 +97,7 @@ abstract class AbstractEntityCreateHandler extends AbstractObserver
     {
         $this->object->requestMethod = $this->request->getMethod();
         $this->object->validMethod = $this->getValidMethods();
-        $this->object->entityId = $this->wfCommand->entityId;
+        $this->object->entityId = $this->wfCommand->getEntityId();
         $this->object->errors = $this->wfCommand->errors;
     }
 

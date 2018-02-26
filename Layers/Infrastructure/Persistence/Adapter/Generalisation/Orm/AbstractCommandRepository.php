@@ -59,4 +59,21 @@ abstract class AbstractCommandRepository extends EntityRepository implements Com
     {
         return $this->_entityName;
     }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getTableName(): string
+    {
+        return $this->getClassMetadata()->getTableName();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setIdGenerator(): CommandRepositoryInterface
+    {
+        $this->getClassMetadata()->setIdGenerator(new \Doctrine\ORM\Id\AssignedGenerator());
+        return $this;
+    }
 }

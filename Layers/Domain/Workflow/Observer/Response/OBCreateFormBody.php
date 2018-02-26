@@ -29,9 +29,9 @@ class OBCreateFormBody extends AbstractCreateFormBody
                 [
                     'entity' => $this->wfHandler->entity,
                     'edit_form' => $this->wfLastData->form->createView(),
-                    'NoLayout' => isset($this->wfHandler->command->NoLayout) ? $this->wfHandler->command->NoLayout : '',
-                    'category' => isset($this->wfHandler->command->category) ? $this->wfHandler->command->category : '',
-                    'status' => isset($this->wfHandler->command->status) ? $this->wfHandler->command->status : '',
+                    'NoLayout' => property_exists($this->wfHandler->command, 'noLayout') ? $this->wfHandler->command->getNoLayout() : '',
+                    'category' => property_exists($this->wfHandler->command, 'category') ? $this->wfHandler->command->getCategory() : '',
+                    'status' => property_exists($this->wfHandler->command, 'status') ? $this->wfHandler->command->getStatus() : '',
                     'errors_form' => $this->wfHandler->errors
                 ]
             );

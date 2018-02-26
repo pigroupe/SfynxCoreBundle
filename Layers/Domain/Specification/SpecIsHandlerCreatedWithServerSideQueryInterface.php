@@ -23,6 +23,6 @@ class SpecIsHandlerCreatedWithServerSideQueryInterface extends AbstractSpecifica
     public function isSatisfiedBy(stdClass $object): bool
     {
         return property_exists($object->handler->query, 'isServerSide') &&
-            is_bool($object->handler->query->isServerSide);
+            is_bool($object->handler->query->getIsServerSide());
     }
 }

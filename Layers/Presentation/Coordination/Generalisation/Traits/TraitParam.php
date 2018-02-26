@@ -14,7 +14,23 @@ use Sfynx\CoreBundle\Layers\Infrastructure\Exception\ControllerException;
 trait TraitParam
 {
     /** @var stdclass */
-    protected $param;
+    protected $param = null;
+
+    /**
+     * Sets parameter template values.
+     *
+     * @access protected
+     * @return void
+     */
+    public function setParam($property, $value = null)
+    {
+        if(is_null($this->param)) {
+            $this->param = (object) [];
+        }
+        if (!property_exists($this->param, $property)) {
+            $this->param->$property = $value;
+        }
+    }
 
     /**
      * Sets parameter template values.

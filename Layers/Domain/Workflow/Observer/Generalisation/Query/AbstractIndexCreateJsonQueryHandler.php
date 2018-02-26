@@ -113,7 +113,7 @@ abstract class AbstractIndexCreateJsonQueryHandler extends AbstractObserver
      */
     protected function createAjaxQuery($type, $aColumns, QueryBuilder $qb, $tablecode = 'a', $dateSearch = null, $cacheQuery_hash = null)
     {
-        $locale = $this->wfQuery->locale;
+        $locale = $this->wfQuery->getLocale();
 
         if ($type == "count") {
             $qb->add('select', $tablecode.'.id');

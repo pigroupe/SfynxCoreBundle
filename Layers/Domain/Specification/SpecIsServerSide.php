@@ -22,6 +22,6 @@ class SpecIsServerSide extends AbstractSpecification
      */
     public function isSatisfiedBy(stdClass $object): bool
     {
-        return $object->handler->query->isServerSide;
+        return $object->handler->query->getIsServerSide();
     }
 }
