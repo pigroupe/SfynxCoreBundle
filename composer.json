@@ -20,7 +20,9 @@
     "symfony/framework-bundle": "~2.8|~3.0",
     "symfony/console": "*",
     "sensio/generator-bundle": "~3.1.2",
-    "gedmo/doctrine-extensions": "^2.4.31",
+    "gedmo/doctrine-extensions": "~2.4.24",
+    "doctrine/doctrine-cache-bundle": "~1.3.0",
+    "stof/doctrine-extensions-bundle": "1.2.2",
     "sfynx-project/tool-trigger-bundle": "~2.8.1",
     "sfynx-project/tool-utils-bundle": "~2.8.1",
     "sfynx-project/tool-specification-bundle": "~2.8.3"
