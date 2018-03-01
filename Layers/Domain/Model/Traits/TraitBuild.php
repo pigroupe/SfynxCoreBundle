@@ -1,6 +1,7 @@
 <?php
 namespace Sfynx\CoreBundle\Layers\Domain\Model\Traits;
 
+use ReflectionClass;
 use ReflectionObject;
 use Sfynx\CoreBundle\Layers\Domain\Model\Interfaces\EntityInterface;
 use Sfynx\CoreBundle\Layers\Application\Command\Generalisation\Interfaces\CommandInterface;
@@ -94,12 +95,28 @@ trait TraitBuild
      * @param array $excluded
      * @return CommandInterface
      */
-    public static function buildFromEntity(CommandInterface $command, EntityInterface $entity, array $excluded = []): CommandInterface
+    public static function buildFromEntity(CommandInterface $command, EntityInterface $entity, array $excluded = [], array $match = []): CommandInterface
     {
         foreach ((new ReflectionObject($entity))->getProperties() as $oProperty) {
             $oProperty->setAccessible(true);
             if (!in_array($oProperty->getName(), $excluded)) {
-                $command->{$oProperty->getName()} = $oProperty->getValue($entity);
+                $value = $oProperty->getValue($entity);
+                $field = $oProperty->getName();
+
+//  https://stackoverflow.com/questions/3722394/accessing-private-variables-from-within-a-closure
+//                \Closure::bind(function (CommandInterface $command) use ( $value, &$field ) {
+//                    $field = $value;
+//                }, null, get_class($command));
+
+                if (array_key_exists($field, $match)) {
+                    $field = $match[$field];
+                }
+
+                if (property_exists($command, $field)) {
+                    $reflectionProperty = (new ReflectionClass(get_class($command)))->getProperty($field);
+                    $reflectionProperty->setAccessible(true);
+                    $reflectionProperty->setValue($command, $value);
+                }
             }
         }
         return $command;
