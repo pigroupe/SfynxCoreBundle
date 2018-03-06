@@ -376,7 +376,7 @@ abstract class abstractListener  extends abstractTriggerListener
         } else {
             return true;
         }
-        // If AnonymousToken user,
+        // If AnonymousToken user
         if ($isAnonymousToken && $this->tokenStorage->isAnonymousToken()) {
             //  we stop the remove method.
             $entityManager->getUnitOfWork()->detach($entity);

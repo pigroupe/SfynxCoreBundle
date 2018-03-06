@@ -40,7 +40,7 @@ abstract class AbstractEntityEditHandler extends AbstractObserver
      * @param RequestInterface $request
      * @param bool $updateCommand
      */
-    public function __construct(ManagerInterface $manager, RequestInterface $request, $updateCommand = false)
+    public function __construct(ManagerInterface $manager, RequestInterface $request, bool $updateCommand = false)
     {
         $this->entityName = $manager->getEntityName();
         $this->manager = $manager;
@@ -54,7 +54,7 @@ abstract class AbstractEntityEditHandler extends AbstractObserver
      */
     protected function getValidMethods(): array
     {
-        return ['POST'];
+        return ['POST', 'PATCH'];
     }
 
     /**
@@ -99,7 +99,7 @@ abstract class AbstractEntityEditHandler extends AbstractObserver
     protected function onContinue(): void
     {
         $entity = $this->wfLastData->entity;
-        $entity = $this->manager->buildFromCommand($entity, $this->wfCommand);
+        $entity = $this->manager->buildFromCommand($entity, $this->wfCommand, $this->updateCommand);
         $this->wfLastData->entity = $entity;
     }
 

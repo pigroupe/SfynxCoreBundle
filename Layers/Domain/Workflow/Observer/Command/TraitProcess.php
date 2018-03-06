@@ -24,7 +24,6 @@ trait TraitProcess
         $entity = $this->wfLastData->entity;
         try {
             if ($entity instanceof EntityInterface) {
-                $entity = $this->manager->buildFromCommand($entity, $this->wfCommand);
                 $this->manager->getCommandRepository()->save($entity);
 
                 if (property_exists($this, 'updateCommand') && true === $this->updateCommand) {
