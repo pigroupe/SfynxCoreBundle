@@ -54,14 +54,17 @@ trait TraitBuild
      * @param EntityInterface $entity
      * @param CommandInterface $command
      * @param array $excluded
+     * @param bool $updateCommand
      * @return EntityInterface
      */
-    final public static function buildFromCommand(EntityInterface $entity, CommandInterface $command, array $excluded = []): EntityInterface
+    final public static function buildFromCommand(EntityInterface $entity, CommandInterface $command, array $excluded = [], bool $updateCommand = false): EntityInterface
     {
         foreach ((new ReflectionObject($command))->getProperties() as $oProperty) {
             $oProperty->setAccessible(true);
             $valueCommand = $oProperty->getValue($command);
-            if ('' !== $valueCommand && null !== $valueCommand) {
+            if ($updateCommand ||
+                (!$updateCommand && '' !== $valueCommand && null !== $valueCommand)
+            ) {
                 if (!in_array($oProperty->getName(), $excluded)) {
                     $entity->{$oProperty->getName()} = $oProperty->getValue($command);
                 }

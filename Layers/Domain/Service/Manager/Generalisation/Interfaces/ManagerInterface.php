@@ -75,9 +75,10 @@ interface ManagerInterface
      * Build and return an existed instance of entity from command
      * @param EntityInterface $entity
      * @param CommandInterface $command
+     * @param bool $updateCommand
      * @return EntityInterface
      */
-    public function buildFromCommand(EntityInterface $entity, CommandInterface $command): EntityInterface;
+    public function buildFromCommand(EntityInterface $entity, CommandInterface $command, bool $updateCommand = false): EntityInterface;
 
     /**
      * Returns a CommandInterface object representation of the given object, using all its properties.
