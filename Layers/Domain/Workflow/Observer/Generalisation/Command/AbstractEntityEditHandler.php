@@ -2,6 +2,7 @@
 namespace Sfynx\CoreBundle\Layers\Domain\Workflow\Observer\Generalisation\Command;
 
 use stdClass;
+use Exception;
 use Sfynx\CoreBundle\Layers\Domain\Service\Manager\Generalisation\Interfaces\ManagerInterface;
 use Sfynx\CoreBundle\Layers\Domain\Service\Request\Generalisation\RequestInterface;
 use Sfynx\CoreBundle\Layers\Domain\Workflow\Observer\Generalisation\Interfaces\ObserverInterface;
