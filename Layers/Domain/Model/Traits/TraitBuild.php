@@ -23,30 +23,26 @@ trait TraitBuild
      */
     final public static function newFromArray(array $arr, array $excluded = []): EntityInterface
     {
-        $oVO = new static();
+        $oEntity = new static();
         foreach ($arr as $propertyName => $value) {
             if (!in_array($propertyName, $excluded)) {
-                $oVO->{$propertyName} = $value;
+                $oEntity->{$propertyName} = $value;
             }
         }
-        return $oVO;
+        return $oEntity;
     }
 
     /**
      * Build and return a new instance of entity from command
+     * @param EntityInterface $entity
      * @param CommandInterface $command
      * @param array $excluded
+     * @param bool $updateCommand
      * @return EntityInterface
      */
-    final public static function newFromCommand(CommandInterface $command, array $excluded = []): EntityInterface
+    final public static function newFromCommand(CommandInterface $command, array $excluded = [], bool $updateCommand = false): EntityInterface
     {
-        $oVO = new static();
-        foreach ($command as $propertyName => $value) {
-            if (!in_array($propertyName, $excluded)) {
-                $oVO->{$propertyName} = $value;
-            }
-        }
-        return $oVO;
+        return static::buildFromCommand(new static(), $command, $excluded, $updateCommand);
     }
 
     /**
