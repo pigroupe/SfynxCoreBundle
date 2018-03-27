@@ -6,10 +6,11 @@ use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 
 /**
- * Interface ChangeRepositoryFactoryPassInterface
+ * Interface HandlerPassInterface
  *
- * @category   Core
- * @package    Provider
+ * @category   Bundle
+ * @package    Sfynx\CoreBundle
+ * @subpackage DependencyInjection\Compiler\Provider\Generalisation
  * @author     Etienne de Longeaux <etienne.delongeaux@gmail.com>
  * @copyright  2015 PI-GROUPE
  * @license    http://opensource.org/licenses/gpl-license.php GNU Public License
