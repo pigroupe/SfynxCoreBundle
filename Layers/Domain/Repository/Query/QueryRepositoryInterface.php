@@ -42,6 +42,16 @@ interface QueryRepositoryInterface extends GeneralRepositoryInterface,Translatio
     public function getEm(): EntityManagerInterface;
 
     /**
+     * @return string
+     */
+    public function getEntityName(): string;
+
+    /**
+     * @return string
+     */
+    public function getTableName(): string;
+
+    /**
      * @param string    entityName    nom de l'entité
      * @param integer   id    id de la référence demandée
      */

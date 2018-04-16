@@ -4,7 +4,6 @@ namespace Sfynx\CoreBundle\Layers\Domain\Service\Manager\Generalisation\Interfac
 use Sfynx\CoreBundle\Layers\Domain\Repository\Query\QueryRepositoryInterface;
 use Sfynx\CoreBundle\Layers\Domain\Repository\Command\CommandRepositoryInterface;
 use Sfynx\CoreBundle\Layers\Application\Command\Generalisation\Interfaces\CommandInterface;
-use Sfynx\CoreBundle\Layers\Domain\Model\Interfaces\EntityInterface;
 
 /**
  * User Manager Interface
@@ -67,34 +66,63 @@ interface ManagerInterface
     /**
      * Build and return a new instance of entity from command
      * @param CommandInterface $command
-     * @return EntityInterface
+     * @return object
      */
-    public function newFromCommand(CommandInterface $command): EntityInterface;
+    public function newFromCommand(CommandInterface $command): object;
 
     /**
      * Build and return an existed instance of entity from command
-     * @param EntityInterface $entity
+     * @param object $entity
      * @param CommandInterface $command
      * @param bool $updateCommand
-     * @return EntityInterface
+     * @return object
      */
-    public function buildFromCommand(EntityInterface $entity, CommandInterface $command, bool $updateCommand = false): EntityInterface;
+    public function buildFromCommand(object $entity, CommandInterface $command, bool $updateCommand = false): object;
 
     /**
      * Returns a CommandInterface object representation of the given object, using all its properties.
      *
      * @param CommandInterface $command
-     * @param EntityInterface $entity
+     * @param object $entity
      * @return CommandInterface
      */
-    public function buildFromEntity(CommandInterface $command, EntityInterface $entity): CommandInterface;
+    public function buildFromEntity(CommandInterface $command, object $entity): CommandInterface;
+
+    /**
+     * Reloads an entity.
+     *
+     * @param object $entity
+     *
+     * @return void
+     */
+    public function reload(object $entity);
 
     /**
      * Creates an empty entity instance.
      *
-     * @return EntityInterface
+     * @return object
      */
-    public function create(): EntityInterface;
+    public function create(): object;
+
+    /**
+     * Updates an entity.
+     *
+     * @param object $entity
+     * @param bool $andFlush
+     *
+     * @return void
+     */
+    public function update(object $entity, $andFlush = true): void ;
+
+    /**
+     * Deletes an entity.
+     *
+     * @param object $entity
+     * @param bool $andFlush
+     *
+     * @return void
+     */
+    public function delete(object $entity, $andFlush = true) : void ;
 
     /**
      * Finds an entity by its primary key / identifier.
@@ -133,32 +161,4 @@ interface ManagerInterface
      * @throws \UnexpectedValueException
      */
     public function findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null);
-
-    /**
-     * Reloads an entity.
-     *
-     * @param EntityInterface $entity
-     *
-     * @return void
-     */
-    public function reload(EntityInterface $entity);
-
-    /**
-     * Updates an entity.
-     *
-     * @param EntityInterface $entity
-     * @param bool $andFlush
-     *
-     * @return void
-     */
-    public function update(EntityInterface $entity, $andFlush = true): void ;
-
-    /**
-     * Deletes an entity.
-     *
-     * @param EntityInterface $entity
-     *
-     * @return void
-     */
-    public function delete(EntityInterface $entity): void ;
 }

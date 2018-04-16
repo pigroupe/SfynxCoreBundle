@@ -5,7 +5,7 @@ use Exception;
 use Sfynx\CoreBundle\Layers\Application\Command\Generalisation\Interfaces\CommandHandlerInterface;
 use Sfynx\CoreBundle\Layers\Application\Command\Generalisation\Interfaces\CommandInterface;
 use Sfynx\CoreBundle\Layers\Application\Command\Generalisation\Interfaces\WorkflowCommandInterface;
-use Sfynx\CoreBundle\Layers\Domain\Model\Interfaces\EntityInterface;
+
 use Sfynx\CoreBundle\Layers\Infrastructure\Exception\WorkflowException;
 
 /**
@@ -19,7 +19,7 @@ class FormCommandHandler implements CommandHandlerInterface
 {
     /** @var CommandInterface */
     public $command;
-    /** @var EntityInterface */
+    /** @var object */
     public $entity;
     /** @var array */
     public $errors = [];
@@ -59,7 +59,7 @@ class FormCommandHandler implements CommandHandlerInterface
             $this->errors = $this->workflowCommand->getCommand()->errors;
         }
 
-        if (!($this->entity instanceof EntityInterface)) {
+        if (!is_object($this->entity)) {
             throw WorkflowException::noCreatedEntity();
         }
         return $this;

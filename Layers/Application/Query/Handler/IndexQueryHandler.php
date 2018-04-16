@@ -6,7 +6,7 @@ use stdClass;
 use Sfynx\CoreBundle\Layers\Application\Query\Generalisation\Interfaces\QueryHandlerInterface;
 use Sfynx\CoreBundle\Layers\Application\Query\Generalisation\Interfaces\QueryInterface;
 use Sfynx\CoreBundle\Layers\Application\Query\Generalisation\Interfaces\WorkflowQueryInterface;
-use Sfynx\CoreBundle\Layers\Domain\Model\Interfaces\EntityInterface;
+
 use Sfynx\CoreBundle\Layers\Domain\Specification\SpecIsHandlerCreatedWithEntities;
 use Sfynx\CoreBundle\Layers\Infrastructure\Exception\WorkflowException;
 
@@ -61,12 +61,12 @@ class IndexQueryHandler implements QueryHandlerInterface
         if (property_exists($this->workflowQuery->getData(), 'total')) {
             $this->total = end($this->workflowQuery->getData()->total);
         }
-        // we abort if we are not in the list of entities with EntityInterface
+        // we abort if we are not in the list of entities
         $object = new stdClass();
         $object->handler = $this;
         $specs = (new SpecIsHandlerCreatedWithEntities());
         if (!$specs->isSatisfiedBy($object)) {
-            throw WorkflowException::noEntityInterfaceInstances();
+            throw WorkflowException::noEntityInstances();
         }
         return $this;
     }
