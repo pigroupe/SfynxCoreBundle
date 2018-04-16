@@ -3,7 +3,7 @@ namespace Sfynx\CoreBundle\Layers\Domain\Specification;
 
 use stdClass;
 use Sfynx\SpecificationBundle\Specification\AbstractSpecification;
-use Sfynx\CoreBundle\Layers\Domain\Model\Interfaces\EntityInterface;
+
 
 /**
  * Class SpecIsHandlerCreatedWithEntityInterface
@@ -23,7 +23,7 @@ class SpecIsHandlerCreatedWithEntityInterface extends AbstractSpecification
      */
     public function isSatisfiedBy(stdClass $object): bool
     {
-        return property_exists($object->handler, 'entity') &&
-            ($object->handler->entity instanceof EntityInterface);
+        return property_exists($object->handler, 'entity')
+            && is_object($object->handler->entity);
     }
 }

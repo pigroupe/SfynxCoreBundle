@@ -2,7 +2,6 @@
 namespace Sfynx\CoreBundle\Layers\Domain\Service\Manager\Generalisation;
 
 use Sfynx\CoreBundle\Layers\Application\Command\Generalisation\Interfaces\CommandInterface;
-use Sfynx\CoreBundle\Layers\Domain\Model\Interfaces\EntityInterface;
 use Sfynx\CoreBundle\Layers\Domain\Service\Manager\Generalisation\Interfaces\ManagerInterface;
 use Sfynx\CoreBundle\Layers\Domain\Repository\Query\QueryRepositoryInterface;
 use Sfynx\CoreBundle\Layers\Domain\Repository\Command\CommandRepositoryInterface;
@@ -91,7 +90,7 @@ abstract class AbstractManager implements ManagerInterface
     /**
      * {@inheritDoc}
      */
-    public function newFromCommand(CommandInterface $command): EntityInterface
+    public function newFromCommand(CommandInterface $command): object
     {
         $class = $this->getClass();
         $entity = $class::newFromCommand($command);
@@ -102,7 +101,7 @@ abstract class AbstractManager implements ManagerInterface
     /**
      * {@inheritDoc}
      */
-    public function buildFromCommand(EntityInterface $entity, CommandInterface $command, bool $updateCommand = false): EntityInterface
+    public function buildFromCommand(object $entity, CommandInterface $command, bool $updateCommand = false): object
     {
         $class = $this->getClass();
         $entity = $class::buildFromCommand($entity, $command, [], $updateCommand);
@@ -113,7 +112,7 @@ abstract class AbstractManager implements ManagerInterface
     /**
      * {@inheritDoc}
      */
-    public function buildFromEntity(CommandInterface $command, EntityInterface $entity): CommandInterface
+    public function buildFromEntity(CommandInterface $command, object $entity): CommandInterface
     {
         $class = $this->getClass();
         $command =  $class::buildFromEntity($command, $entity);
@@ -124,12 +123,36 @@ abstract class AbstractManager implements ManagerInterface
     /**
      * {@inheritDoc}
      */
-    public function create(): EntityInterface
+    public function reload(object $entity)
+    {
+        $this->getCommandRepository()->refresh($entity);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function create(): object
     {
         $class = $this->getClass();
         $entity = new $class;
 
         return $entity;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function update(object $entity, $andFlush = true): void
+    {
+        $this->getCommandRepository()->persist($entity, $andFlush);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function delete(object $entity, $andFlush = true) : void
+    {
+        $this->getCommandRepository()->remove($entity, $andFlush);
     }
 
     /**
@@ -154,29 +177,5 @@ abstract class AbstractManager implements ManagerInterface
     public function findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
     {
         return $this->getQueryRepository()->findBy($criteria, $orderBy, $limit, $offset);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function reload(EntityInterface $entity)
-    {
-        $this->getCommandRepository()->refresh($entity);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function update(EntityInterface $entity, $andFlush = true): void
-    {
-        $this->getCommandRepository()->persist($entity, $andFlush);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function delete(EntityInterface $entity) : void
-    {
-        $this->getCommandRepository()->remove($entity, true);
     }
 }

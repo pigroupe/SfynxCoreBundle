@@ -58,6 +58,22 @@ abstract class AbstractQueryRepository extends EntityRepository implements Query
     }
 
     /**
+     * {@inheritdoc}
+     */
+    public function getEntityName(): string
+    {
+        return $this->_entityName;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getTableName(): string
+    {
+        return $this->getClassMetadata()->getTableName();
+    }
+
+    /**
      * @inheritdoc}
      */
     public function getReference($id)

@@ -54,12 +54,12 @@ class WorkflowException extends Exception
     }
 
     /**
-     * Returns the <No EntityInterface Instances> Exception.
+     * Returns the <No Entity Instances> Exception.
      *
      * @return WorkflowException
      */
-    public static function noEntityInterfaceInstances(): WorkflowException
+    public static function noEntityInstances(): WorkflowException
     {
-        return new static('Instances of EntityInterface have not been listed');
+        return new static('Instances of Entity have not been listed');
     }
 }
