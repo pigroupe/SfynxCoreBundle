@@ -2,7 +2,7 @@
 namespace Sfynx\CoreBundle\Layers\Domain\Workflow\Observer\Generalisation\Query;
 
 use SplSubject;
-use Sfynx\CoreBundle\Layers\Application\Query\Generalisation\Interfaces\WorkflowQueryInterface;
+use Sfynx\CoreBundle\Layers\Application\Query\Workflow\Generalisation\Interfaces\QueryWorkflowInterface;
 use Sfynx\CoreBundle\Layers\Application\Query\Generalisation\Interfaces\QueryInterface;
 use Sfynx\CoreBundle\Layers\Domain\Workflow\Observer\Generalisation\Interfaces\ObserverInterface;
 
@@ -33,10 +33,10 @@ abstract class AbstractObserver implements ObserverInterface
     }
 
     /**
-     * @param WorkflowQueryInterface $wfHandler
+     * @param QueryWorkflowInterface $wfHandler
      * @return AbstractObserver
      */
-    protected function init(WorkflowQueryInterface $wfHandler): AbstractObserver
+    protected function init(QueryWorkflowInterface $wfHandler): AbstractObserver
     {
         $this->wfQuery = $wfHandler->getQuery();
         $this->wfData = $wfHandler->getData();
@@ -56,7 +56,7 @@ abstract class AbstractObserver implements ObserverInterface
     /**
      * @return AbstractObserver
      */
-    protected function addHistory(WorkflowQueryInterface $wfHandler): AbstractObserver
+    protected function addHistory(QueryWorkflowInterface $wfHandler): AbstractObserver
     {
         $wfHandler->setQuery($this->wfQuery);
         foreach ($this->wfLastData as $propertyName => $propertyValue) {

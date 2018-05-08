@@ -5,7 +5,7 @@ use Symfony\Component\Validator\ConstraintValidator;
 use Symfony\Component\Validator\Constraint;
 
 use Sfynx\CoreBundle\Layers\Application\Validation\Validator\Constraint\Title;
-use Sfynx\CoreBundle\Layers\Application\Validation\Generalisation\ConstraintValidator\Traits\TraitValidator;
+use Sfynx\CoreBundle\Layers\Application\Validation\Validator\Constraint\Generalisation\Traits\TraitValidator;
 
 /**
  * Class TitleValidator

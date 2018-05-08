@@ -2,9 +2,9 @@
 namespace Sfynx\CoreBundle\Layers\Application\Command\Handler;
 
 use Exception;
-use Sfynx\CoreBundle\Layers\Application\Command\Generalisation\Interfaces\CommandHandlerInterface;
+use Sfynx\CoreBundle\Layers\Application\Command\Handler\Generalisation\Interfaces\CommandHandlerInterface;
 use Sfynx\CoreBundle\Layers\Application\Command\Generalisation\Interfaces\CommandInterface;
-use Sfynx\CoreBundle\Layers\Application\Command\Generalisation\Interfaces\WorkflowCommandInterface;
+use Sfynx\CoreBundle\Layers\Application\Command\Workflow\Generalisation\Interfaces\CommandWorkflowInterface;
 
 use Sfynx\CoreBundle\Layers\Infrastructure\Exception\WorkflowException;
 
@@ -25,13 +25,13 @@ class FormCommandHandler implements CommandHandlerInterface
     public $errors = [];
     /** @var string */
     public $url = null;
-    /** @var WorkflowCommandInterface */
+    /** @var CommandWorkflowInterface */
     protected $workflowCommand;
 
     /**
-     * @param WorkflowCommandInterface $workflowCommand
+     * @param CommandWorkflowInterface $workflowCommand
      */
-    public function __construct(WorkflowCommandInterface $workflowCommand)
+    public function __construct(CommandWorkflowInterface $workflowCommand)
     {
         $this->workflowCommand = $workflowCommand;
     }

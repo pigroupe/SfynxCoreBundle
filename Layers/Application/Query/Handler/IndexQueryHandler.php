@@ -3,9 +3,9 @@ namespace Sfynx\CoreBundle\Layers\Application\Query\Handler;
 
 use Exception;
 use stdClass;
-use Sfynx\CoreBundle\Layers\Application\Query\Generalisation\Interfaces\QueryHandlerInterface;
+use Sfynx\CoreBundle\Layers\Application\Query\Handler\Generalisation\Interfaces\QueryHandlerInterface;
 use Sfynx\CoreBundle\Layers\Application\Query\Generalisation\Interfaces\QueryInterface;
-use Sfynx\CoreBundle\Layers\Application\Query\Generalisation\Interfaces\WorkflowQueryInterface;
+use Sfynx\CoreBundle\Layers\Application\Query\Workflow\Generalisation\Interfaces\QueryWorkflowInterface;
 
 use Sfynx\CoreBundle\Layers\Domain\Specification\SpecIsHandlerCreatedWithEntities;
 use Sfynx\CoreBundle\Layers\Infrastructure\Exception\WorkflowException;
@@ -28,13 +28,13 @@ class IndexQueryHandler implements QueryHandlerInterface
     /** @var  array */
     public $total;
     /** @var array */
-    /** @var WorkflowQueryInterface */
+    /** @var QueryWorkflowInterface */
     protected $workflowQuery;
 
     /**
-     * @param WorkflowQueryInterface $workflowQuery
+     * @param QueryWorkflowInterface $workflowQuery
      */
-    public function __construct(WorkflowQueryInterface $workflowQuery)
+    public function __construct(QueryWorkflowInterface $workflowQuery)
     {
         $this->workflowQuery = $workflowQuery;
     }

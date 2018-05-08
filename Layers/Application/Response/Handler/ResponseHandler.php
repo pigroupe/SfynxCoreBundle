@@ -3,7 +3,7 @@ namespace Sfynx\CoreBundle\Layers\Application\Response\Handler;
 
 use Exception;
 use Symfony\Component\HttpFoundation\Response;
-use Sfynx\CoreBundle\Layers\Application\Response\Generalisation\Interfaces\ResponseHandlerInterface;
+use Sfynx\CoreBundle\Layers\Application\Response\Handler\Generalisation\Interfaces\ResponseHandlerInterface;
 use Sfynx\CoreBundle\Layers\Application\Common\Generalisation\Interfaces\HandlerInterface;
 use Sfynx\CoreBundle\Layers\Application\Common\Generalisation\Interfaces\WorkflowHandlerInterface;
 use Sfynx\CoreBundle\Layers\Infrastructure\Exception\WorkflowException;
