@@ -2,7 +2,7 @@
 namespace Sfynx\CoreBundle\Layers\Application\Validation\Validator\ConstraintValidator;
 
 use Sfynx\CoreBundle\Layers\Application\Validation\Validator\Constraint\Length;
-use Sfynx\CoreBundle\Layers\Application\Validation\Generalisation\ConstraintValidator\Traits\TraitValidator;
+use Sfynx\CoreBundle\Layers\Application\Validation\Validator\Constraint\Generalisation\Traits\TraitValidator;
 
 use Symfony\Component\Validator\Constraint;
 use Symfony\Component\Validator\ConstraintValidator;

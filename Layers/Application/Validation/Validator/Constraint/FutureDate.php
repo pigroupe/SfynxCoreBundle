@@ -1,7 +1,7 @@
 <?php
 namespace Sfynx\CoreBundle\Layers\Application\Validation\Validator\Constraint;
 
-use Sfynx\CoreBundle\Layers\Application\Validation\Generalisation\ConstraintValidator\AbstractDateConstraint;
+use Sfynx\CoreBundle\Layers\Application\Validation\Validator\Constraint\Generalisation\AbstractDateConstraint;
 
 /**
  * Class FutureDate

@@ -2,7 +2,7 @@
 namespace Sfynx\CoreBundle\Layers\Domain\Workflow\Observer\Generalisation\Command;
 
 use SplSubject;
-use Sfynx\CoreBundle\Layers\Application\Command\Generalisation\Interfaces\WorkflowCommandInterface;
+use Sfynx\CoreBundle\Layers\Application\Command\Workflow\Generalisation\Interfaces\CommandWorkflowInterface;
 use Sfynx\CoreBundle\Layers\Domain\Workflow\Observer\Generalisation\Interfaces\ObserverInterface;
 use Sfynx\CoreBundle\Layers\Application\Command\Generalisation\Interfaces\CommandInterface;
 
@@ -32,10 +32,10 @@ abstract class AbstractObserver implements ObserverInterface
     }
 
     /**
-     * @param WorkflowCommandInterface $wfHandler
+     * @param CommandWorkflowInterface $wfHandler
      * @return AbstractObserver
      */
-    protected function init(WorkflowCommandInterface $wfHandler): AbstractObserver
+    protected function init(CommandWorkflowInterface $wfHandler): AbstractObserver
     {
         $this->wfCommand = $wfHandler->getCommand();
         $this->wfData = $wfHandler->getData();
@@ -55,7 +55,7 @@ abstract class AbstractObserver implements ObserverInterface
     /**
      * @return AbstractObserver
      */
-    protected function addHistory(WorkflowCommandInterface $wfHandler): AbstractObserver
+    protected function addHistory(CommandWorkflowInterface $wfHandler): AbstractObserver
     {
         $wfHandler->setCommand($this->wfCommand);
         foreach ($this->wfLastData as $propertyName => $propertyValue) {
