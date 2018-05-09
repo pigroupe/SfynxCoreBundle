@@ -5,6 +5,7 @@ use \stdClass;
 use Sfynx\CoreBundle\Generator\Domain\Report\Generalisation\Interfaces\HandlerInterface;
 use Sfynx\CoreBundle\Generator\Domain\Report\ReporterObservable;
 use Sfynx\CoreBundle\Generator\Domain\Component\File\RecurseCopy;
+use Sfynx\CoreBundle\Generator\Domain\Component\Output\Output;
 
 /**
  * create Directories Handler
@@ -16,11 +17,16 @@ use Sfynx\CoreBundle\Generator\Domain\Component\File\RecurseCopy;
  */
 class CreateArtifatcHandler implements HandlerInterface
 {
+    /** @var Output */
+    public $output;
+
     /**
      * @inheritdoc
      */
     public function handle(ReporterObservable $reporter): void
     {
+        $this->output = $reporter->output;
+
         $this->objectHandler($reporter->getDataCl());
     }
 
@@ -30,16 +36,14 @@ class CreateArtifatcHandler implements HandlerInterface
      */
     protected function objectHandler(stdClass $object): void
     {
-        foreach ($object as $parent) {
-            if (($parent instanceof stdClass)
-                && !in_array('files', get_object_vars($parent))
-            ) {
-                foreach (get_object_vars($parent) as $children) {
+        if (property_exists($object, 'files')) {
+            $this->directoriesHandler($object);
+            $this->filesHandler($object);
+        } else {
+            foreach (get_object_vars($object) as $children) {
+                if ($children instanceof stdClass) {
                     $this->objectHandler($children);
                 }
-            } else {
-                $this->directoriesHandler($object);
-                $this->filesHandler($object);
             }
         }
     }
@@ -59,14 +63,30 @@ class CreateArtifatcHandler implements HandlerInterface
 
     /**
      * @param stdClass $object
+     * @param string $eol
      * @return void
      */
     protected function filesHandler(stdClass $object, $eol = PHP_EOL): void
     {
         foreach ($object->files as $file) {
             if (!empty($file->target_source)) {
+                $this->versioningFileHandler($file->target_path);
+
                 file_put_contents($file->target_path, '<?php' . $eol . $file->target_source);
+                $this->output->writeln(sprintf('<info>++</info> create file: "%s"', $file->target_path));
             }
+        }
+    }
+
+    /**
+     * @param string $path
+     * @retunr void
+     */
+    protected function versioningFileHandler(string $path): void
+    {
+        if (file_exists($path)) {
+            file_put_contents($path . '.back' . '.' . time(), file_get_contents($path));
+            $this->output->writeln(sprintf('<info>++</info> verioning file: "%s"', $path));
         }
     }
 }

@@ -27,13 +27,13 @@ class <?php echo $templater->getTargetClassname(); ?> extends AbstractDefaultTyp
     {
 <?php foreach ($templater->getTargetCommandFields() as $field): ?>
     <?php if ($field->type == 'id'): ?>
-        $<?php echo $field->name; ?> = $this->data_form['<?php echo $field->name; ?>List'];
+        $<?php echo $field->name; ?>List = $this->data_form['<?php echo $field->name; ?>List'];<?php echo PHP_EOL ?>
     <?php endif; ?>
 <?php endforeach; ?>
 
         $builder
 <?php foreach ($templater->getTargetCommandFields() as $field): ?>
-            <?php echo $templater->add($field->name, $field->type, $field) ?>
+            <?php echo $templater->add($field->name, $field->type, $field) ?><?php echo PHP_EOL ?>
 <?php endforeach; ?>
             <?php echo $templater->add('save', 'submit') ?>
             <?php echo $templater->add('saveAndContinue', 'submit') ?>

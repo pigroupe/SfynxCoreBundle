@@ -3,6 +3,7 @@ namespace Sfynx\CoreBundle\Generator\Domain\Report\Generator;
 
 use Sfynx\CoreBundle\Generator\Domain\Templater\Generalisation\Interfaces\TemplaterInterface;
 use Sfynx\CoreBundle\Generator\Domain\Report\Generalisation\AbstractGenerator;
+use Sfynx\CoreBundle\Generator\Domain\Component\File\ClassHandler;
 
 /**
  * Class PhpClassesGenerator
@@ -34,8 +35,8 @@ class PhpClassesGenerator extends AbstractGenerator
 
             $templater->targetClassname = $config['class'];
 
-            $namespace = substr($templater->targetClassname, 0, -strlen($templater->targetClassname) + strrpos($templater->targetClassname, '\\'));
-            $templater->targetClassname = substr($templater->targetClassname, strrpos($templater->targetClassname, '\\') + 1);
+            $namespace = ClassHandler::getDirenameFromNamespace($templater->targetClassname);
+            $templater->targetClassname = ClassHandler::getClassNameFromNamespace($templater->targetClassname);
 
             $templater->targetNamespace = sprintf('%s\%s', $templater->namespace, $namespace);
             $templater->targetPath = sprintf('%s/%s/%s', $templater->reportDir, str_replace('\\', '/', $namespace), $templater->targetClassname . '.php');

@@ -4,7 +4,9 @@ namespace Sfynx\CoreBundle\Generator\Domain\Templater\Templater_\Architecture\Do
 use Sfynx\CoreBundle\Generator\Domain\Widget\Generalisation\Interfaces\WidgetInterface;
 use Sfynx\CoreBundle\Generator\Domain\Templater\Generalisation\Interfaces\TemplaterInterface;
 use Sfynx\CoreBundle\Generator\Domain\Templater\Generalisation\AbstractTemplater;
+use Sfynx\CoreBundle\Generator\Domain\Report\Generalisation\AbstractGenerator;
 use Sfynx\CoreBundle\Generator\Domain\Report\ReporterObservable;
+use Sfynx\CoreBundle\Generator\Domain\Component\File\ClassHandler;
 
 /**
  * @category   Sfynx\CoreBundle\Generator
@@ -75,20 +77,18 @@ EOT;
      */
     public function getClassValue(array $data = []): string
     {
-        print_r($data);
+        $data = AbstractGenerator::transform($data, false);
 
-//        $namespace = new Nette\PhpGenerator\PhpNamespace('Foo');
-//        $namespace->addUse('Bar\AliasedClass');
-//
-//        $class = $namespace->addClass('Demo');
-//        $class->addImplement('Foo\A') // resolves to A
-//        ->addTrait('Bar\AliasedClass'); // resolves to AliasedClass
-//
-//        $method = $class->addMethod('method');
-//        $method->addParameter('arg')
-//            ->setTypeHint('Bar\OtherClass'); // resolves to \Bar\OtherClass
-//
-        return '';
+        $namespace = ClassHandler::getNamespace($this->getTargetNamespace());
+        ClassHandler::addUses($namespace, $data);
+
+        $class = $namespace->addClass($this->getTargetClassname());
+        ClassHandler::setClassCommentor($class, $this);
+        ClassHandler::addImplements($namespace, $class, $data);
+        ClassHandler::addTraits($namespace, $class, $data);
+        ClassHandler::setExtends($namespace, $class, $data);
+
+        return (string)$namespace;
     }
 }
 

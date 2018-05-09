@@ -3,6 +3,7 @@ namespace Sfynx\CoreBundle\Generator\Domain\Report\Generator;
 
 use Sfynx\CoreBundle\Generator\Domain\Templater\Generalisation\Interfaces\TemplaterInterface;
 use Sfynx\CoreBundle\Generator\Domain\Report\Generalisation\AbstractGenerator;
+use Sfynx\CoreBundle\Generator\Domain\Component\File\ClassHandler;
 
 /**
  * Class SimpleClassGenerator
@@ -38,8 +39,8 @@ class SimpleClassGenerator extends AbstractGenerator
                 $templater->targetClassname = $templater->getTargetClass()[$tagTemplater];
 
                 if (strrpos($templater->targetClassname, '\\')) {
-                    $namespace = $namespace . '\\' . substr($templater->targetClassname, 0, - strlen($templater->targetClassname) + strrpos($templater->targetClassname, '\\'));
-                    $templater->targetClassname = substr($templater->targetClassname, strrpos($templater->targetClassname, '\\') + 1);
+                    $namespace = $namespace . '\\' . ClassHandler::getDirenameFromNamespace($templater->targetClassname);
+                    $templater->targetClassname = ClassHandler::getClassNameFromNamespace($templater->targetClassname);
                 }
             }
 

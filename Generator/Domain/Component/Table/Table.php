@@ -49,6 +49,6 @@ class Table
      */
     public static function writeArray(array $data): string
     {
-        return var_export((array)$data, true);
+        return var_export($data, true);
     }
 }

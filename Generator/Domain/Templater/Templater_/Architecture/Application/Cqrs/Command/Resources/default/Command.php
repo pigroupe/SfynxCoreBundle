@@ -1,6 +1,6 @@
 namespace <?php echo $templater->getTargetNamespace(); ?>;
 
-use \Datetime;
+use Datetime;
 use Sfynx\CoreBundle\Layers\Application\Command\Generalisation\AbstractCommand;
 
 /**

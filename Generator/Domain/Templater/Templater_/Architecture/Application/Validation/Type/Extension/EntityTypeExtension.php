@@ -86,6 +86,15 @@ class EntityTypeExtension extends AbstractResolver implements ExtensionInterface
             unset($this->resolverParameters['targetEntity']);
         }
 
+        $name = $this->resolverParameters['name'];
+
+        $this->resolverParameters['query_builder'] =
+            "function (EntityRepository \$er) use (\$${name}List) {
+    return \$${name}List;
+}";
+
+//        $this->resolverParameters['query_builder'] = \Nette\Utils\Strings::indent(ltrim(rtrim($body_query_builder) . "\n"), 1);
+
         unset($this->resolverParameters['type']);
         unset($this->resolverParameters['name']);
     }
