@@ -5,8 +5,7 @@ use stdClass;
 use Sfynx\CoreBundle\Generator\Application\Config\Config;
 use Sfynx\CoreBundle\Generator\Domain\Component\Output\Output;
 use Sfynx\CoreBundle\Generator\Domain\Report\Exception\ReportException;
-use Sfynx\CoreBundle\Generator\Domain\Report\Generator\SimpleClassGenerator;
-use Sfynx\CoreBundle\Generator\Domain\Report\Generator\PhpClassGenerator;
+use Sfynx\CoreBundle\Generator\Domain\Report\Generalisation\AbstractGenerator;
 use Sfynx\CoreBundle\Generator\Domain\Report\Metrics;
 use Sfynx\CoreBundle\Generator\Domain\Report\Generator;
 use Sfynx\CoreBundle\Generator\Domain\Report\Data;
@@ -104,7 +103,7 @@ class ReporterObservable
      */
     public function convertDataToObject()
     {
-        SimpleClassGenerator::convertDataToObject();
+        AbstractGenerator::convertDataToObject();
     }
 
     /**
@@ -112,7 +111,7 @@ class ReporterObservable
      */
     public function getDataCl(): stdClass
     {
-        return SimpleClassGenerator::$dataCl;
+        return AbstractGenerator::$dataCl;
     }
 
     /**
@@ -120,6 +119,6 @@ class ReporterObservable
      */
     public function getDataArr(): array
     {
-        return SimpleClassGenerator::$dataArr;
+        return AbstractGenerator::$dataArr;
     }
 }

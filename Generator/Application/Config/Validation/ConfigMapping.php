@@ -15,7 +15,7 @@ use Sfynx\CoreBundle\Generator\Application\Config\Generalisation\ValidationInter
 use Sfynx\CoreBundle\Generator\Application\Config\Config;
 use Sfynx\CoreBundle\Generator\Application\Config\Exception\ConfigException;
 use Sfynx\CoreBundle\Generator\Domain\Widget\WidgetParser;
-use Sfynx\CoreBundle\Generator\Domain\Report\Generator\SimpleClassGenerator;
+use Sfynx\CoreBundle\Generator\Domain\Report\Generalisation\AbstractGenerator;
 use Sfynx\CoreBundle\Generator\Domain\Component\Config\Loader;
 
 /**
@@ -49,7 +49,7 @@ class ConfigMapping implements ValidationInterface
                 'valueObjects' => $vo,
                 'providers' => $providers,
                 'tree' => $tree,
-                'commandFields' => SimpleClassGenerator::transform($this->commandFields, false)
+                'commandFields' => AbstractGenerator::transform($this->commandFields, false)
             ]);
         }
     }
