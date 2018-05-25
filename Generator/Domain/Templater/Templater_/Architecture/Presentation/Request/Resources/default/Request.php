@@ -4,12 +4,12 @@ use Symfony\Component\OptionsResolver\Options;
 use Sfynx\CoreBundle\Layers\Presentation\Request\Generalisation\AbstractFormRequest;
 
 /**
- * Class <?php echo $templater->getTargetClassname(); ?> <?php echo PHP_EOL ?>
+ * Class <?php echo $templater->getTargetClassname(); ?><?php echo PHP_EOL ?>
  *
- * @category <?php echo $templater->getNamespace(); ?> <?php echo PHP_EOL ?>
+ * @category <?php echo $templater->getNamespace(); ?><?php echo PHP_EOL ?>
  * @package Presentation
- * @subpackage <?php echo str_replace($templater->getNamespace() . '\Presentation\\', '', $templater->getTargetNamespace()); ?> <?php echo PHP_EOL ?>
- * @author SFYNX <contact@pi-groupe.net> <?php echo PHP_EOL ?>
+ * @subpackage <?php echo str_replace($templater->getNamespace() . '\Presentation\\', '', $templater->getTargetNamespace()); ?><?php echo PHP_EOL ?>
+ * @author SFYNX <contact@pi-groupe.net><?php echo PHP_EOL ?>
  * @licence LGPL
  */
 class <?php echo $templater->getTargetClassname(); ?> extends AbstractFormRequest

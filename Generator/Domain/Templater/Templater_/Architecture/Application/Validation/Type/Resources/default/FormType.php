@@ -9,12 +9,12 @@ use Doctrine\ORM\EntityRepository;
 use Sfynx\CoreBundle\Layers\Application\Validation\Type\AbstractDefaultType;
 
 /**
- * Class <?php echo $templater->getTargetClassname(); ?> <?php echo PHP_EOL ?>
+ * Class <?php echo $templater->getTargetClassname(); ?><?php echo PHP_EOL ?>
  *
- * @category <?php echo $templater->getNamespace(); ?> <?php echo PHP_EOL ?>
+ * @category <?php echo $templater->getNamespace(); ?><?php echo PHP_EOL ?>
  * @package Application
- * @subpackage <?php echo str_replace($templater->getNamespace() . '\Application\\', '', $templater->getTargetNamespace()); ?> <?php echo PHP_EOL ?>
- * @author SFYNX <contact@pi-groupe.net> <?php echo PHP_EOL ?>
+ * @subpackage <?php echo str_replace($templater->getNamespace() . '\Application\\', '', $templater->getTargetNamespace()); ?><?php echo PHP_EOL ?>
+ * @author SFYNX <contact@pi-groupe.net><?php echo PHP_EOL ?>
  * @licence LGPL
  */
 class <?php echo $templater->getTargetClassname(); ?> extends AbstractDefaultType
@@ -26,18 +26,17 @@ class <?php echo $templater->getTargetClassname(); ?> extends AbstractDefaultTyp
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
 <?php foreach ($templater->getTargetCommandFields() as $field): ?>
-    <?php if ($field->type == 'id'): ?>
-        $<?php echo $field->name; ?>List = $this->data_form['<?php echo $field->name; ?>List'];<?php echo PHP_EOL ?>
-    <?php endif; ?>
+<?php if ($field->type == 'id'): ?>
+        $<?php echo lcfirst($field->name); ?>List = $this->data_form['<?php echo $field->name; ?>List'];<?php echo PHP_EOL ?>
+<?php endif; ?>
 <?php endforeach; ?>
 
         $builder
 <?php foreach ($templater->getTargetCommandFields() as $field): ?>
-            <?php echo $templater->add($field->name, $field->type, $field) ?><?php echo PHP_EOL ?>
+        <?php echo $templater->add($field->name, $field->type, $field) ?>
 <?php endforeach; ?>
-            <?php echo $templater->add('save', 'submit') ?>
-            <?php echo $templater->add('saveAndContinue', 'submit') ?>
-        ;
+        <?php echo $templater->add('save', 'submit') ?>
+        <?php echo $templater->add('saveAndContinue', 'submit', null, true) ?>
     }
 
     /**

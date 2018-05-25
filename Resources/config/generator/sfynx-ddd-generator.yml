@@ -2,11 +2,12 @@
 # --namespace=MyContext \
 # --conf-file=/var/www/app/config/generator/sfynx-ddd-generator.yml \
 # --report-template=default \
-# --report-dir=/var/www/src
+# --report-dir=/var/www/src/generator
 default:
     namespace: MyContext
     cqrs: Movie\Command
     template: default
+    indentation: 4
     widgets:
         presentation:
             widget_coordination:
@@ -36,7 +37,7 @@ default:
                         design: 'decorator'
                         class: Sfynx\CoreBundle\Layers\Application\Command\Handler\FormCommandHandler
                         arguments:
-                            - '$CommandWorkflow'
+                            - '$commandWorkflow'
                         handlers: [ 'MovieFormCommandValidationHandler', 'MovieFormCommandSpecHandler']
                         calls:
                             - [ process, [ '$command' ] ]
@@ -52,11 +53,11 @@ default:
                             - [ attach, [ 'new OBInjectFormErrors' ] ]
                             - [ attach, [ 'new OBMovieCreateFormBody' ] ]
                             - [ attach, [ 'new OBCreateResponseHtml' ] ]
-                    - ResponseHandlerResult:
+                    - responseHandlerResult:
                         design: 'handler'
                         class: Sfynx\CoreBundle\Layers\Application\Response\Handler\ResponseHandler
                         arguments:
-                            - '$WorkflowHandler'
+                            - '$workflowHandler'
                         calls:
                             - [ process, [ '$commandHandlerResult' ] ]
                     - codeln2:

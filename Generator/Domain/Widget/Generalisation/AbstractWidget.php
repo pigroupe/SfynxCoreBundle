@@ -50,6 +50,10 @@ abstract class AbstractWidget implements WidgetInterface
         $this->config = new Config();
         $this->config->set('pathDir', $parser->getConfig()->get('report-dir'));
         $this->config->set('template', $parser->getConfig()->get('report-template'));
+        $this->config->set('reportDir', $parser->getConfig()->get('report-dir') . '/' . $parser->getConfig()->get('namespace'));
+        $this->config->set('namespace', $parser->getConfig()->get('namespace'));
+        $this->config->set('template', $parser->getConfig()->get('report-template'));
+        $this->config->set('indentation', $parser->getConfig()->get('conf-indentation'));
 
         if (isset($parser->getConfig()->get('conf-widget')[static::TAG])
             && !empty($parser->getConfig()->get('conf-widget')[static::TAG])

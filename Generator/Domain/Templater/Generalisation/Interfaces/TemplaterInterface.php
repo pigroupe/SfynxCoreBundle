@@ -44,4 +44,9 @@ interface TemplaterInterface
      * @return string
      */
     public function getClassValue(array $data = []): string;
+
+    /**
+     * @return int
+     */
+    public function getIndentation(): int;
 }

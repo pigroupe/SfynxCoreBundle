@@ -8,12 +8,12 @@ use Sfynx\CoreBundle\Layers\Application\Command\Generalisation\Interfaces\Comman
 use Sfynx\CoreBundle\Layers\Application\Validation\Validator\Constraint\AssocAll;
 
 /**
- * Class <?php echo $templater->getTargetClassname(); ?> <?php echo PHP_EOL ?>
+ * Class <?php echo $templater->getTargetClassname(); ?><?php echo PHP_EOL ?>
  *
- * @category <?php echo $templater->getNamespace(); ?> <?php echo PHP_EOL ?>
+ * @category <?php echo $templater->getNamespace(); ?><?php echo PHP_EOL ?>
  * @package Application
- * @subpackage <?php echo str_replace($templater->getNamespace() . '\Application\\', '', $templater->getTargetNamespace()); ?> <?php echo PHP_EOL ?>
- * @author SFYNX <contact@pi-groupe.net> <?php echo PHP_EOL ?>
+ * @subpackage <?php echo str_replace($templater->getNamespace() . '\Application\\', '', $templater->getTargetNamespace()); ?><?php echo PHP_EOL ?>
+ * @author SFYNX <contact@pi-groupe.net><?php echo PHP_EOL ?>
  * @licence LGPL
  */
 class <?php echo $templater->getTargetClassname(); ?> extends AbstractCommandValidationHandler
@@ -21,11 +21,15 @@ class <?php echo $templater->getTargetClassname(); ?> extends AbstractCommandVal
     /** @var bool */
     protected $skipArrayValidator = [];
 
+    /**
+     * Init array of constraints
+     *
+     * @param CommandInterface $command
+     * @return void
+     */
     protected function initConstraints(CommandInterface $command): void
     {
         $this
-        ->add('_token', new Assert\Optional(new Assert\NotBlank()))
-
 <?php foreach ($templater->getTargetCommandFields() as $field): ?>
     <?php if ($field->required && ($field->required == true)): ?>
     ->add('<?php echo $field->name ?>', new Assert\Required([
@@ -40,6 +44,6 @@ class <?php echo $templater->getTargetClassname(); ?> extends AbstractCommandVal
         <?php if ($field->type == 'email'): ?>  new Assert\Email(),<?php endif; ?><?php echo "\r\n" ?>
         ]))
 <?php endforeach; ?>
-        ;
+        ->add('_token', new Assert\Optional(new Assert\NotBlank()));
     }
 }

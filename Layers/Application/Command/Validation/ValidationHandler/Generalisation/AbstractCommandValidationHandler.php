@@ -70,8 +70,10 @@ abstract class AbstractCommandValidationHandler extends AbstractCommandDecorator
     }
 
     /**
+     * Init array of constraints
+     *
      * @param CommandInterface $command
-     * @return void Init array of constraints
+     * @return void
      */
     abstract protected function initConstraints(CommandInterface $command): void;
 

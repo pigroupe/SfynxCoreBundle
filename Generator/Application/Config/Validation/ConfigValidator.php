@@ -25,7 +25,7 @@ class ConfigValidator implements ValidationInterface
      * List of concrete configuration targets which are to be there
      * @var string[]
      */
-    private static $defaultConf = ['conf-file', 'conf-array', 'namespace', 'report-dir', 'report-template', 'files'];
+    private static $defaultConf = ['conf-cqrs', 'conf-indentation', 'conf-file', 'conf-array', 'namespace', 'report-dir', 'report-template', 'files'];
 
     /**
      * @inheritdoc

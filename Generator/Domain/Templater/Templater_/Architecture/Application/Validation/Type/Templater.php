@@ -95,7 +95,7 @@ EOT;
      * @param stdClass|null $options
      * @return string
      */
-    public function add(string $child, string $type, stdClass $options = null): string
+    public function add(string $child, string $type, stdClass $options = null, bool $isEndLine = false): string
     {
         if (null === $options) {
             $options = [];
@@ -107,15 +107,16 @@ EOT;
 
         $parameters = $this->extensionInstance->getResolverParameters(false, ['templater' => $this]);
 
-        // We open the buffer.
-        ob_start ();
-        ?>->add('<?php echo $child; ?>', <?php echo $this->extensionInstance->getClassExtention()->name; ?>, <?php echo Table::writeArray($parameters) ?>)<?php
-        // We retrieve the contents of the buffer.
-        $content = ob_get_contents ();
-        // We clean the buffer.
-        ob_clean ();
-        // We close the buffer.
-        ob_end_flush ();
+        $content = sprintf('->add(\'%s\', %s, [', $child, $this->extensionInstance->getClassExtention()->name) . PHP_EOL;
+        foreach ($parameters as $k => $v) {
+            $content .= "            '$k' => $v," . PHP_EOL;
+        }
+
+        if ($isEndLine) {
+            $content .= '        ]);' .PHP_EOL;
+        } else {
+            $content .= '        ])' .PHP_EOL;
+        }
 
         return $content;
     }

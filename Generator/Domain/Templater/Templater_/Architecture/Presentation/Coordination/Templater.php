@@ -106,7 +106,7 @@ EOT;
                     $body .= "$pattern->content" . PHP_EOL;
                 } elseif (property_exists($pattern, 'class')) {
                     $code_class = ClassHandler::getClassNameFromNamespace($pattern->class);
-                    $code_arg = ucfirst(strtolower($code_class));
+                    $code_arg = $arg;
 
                     $finalClassArgs = '';
                     if (property_exists($pattern, 'arguments')
@@ -149,7 +149,7 @@ EOT;
         ClassHandler::addConstructorMethod($namespace, $class);
         ClassHandler::addCoordinationMethod($namespace, $class)->addBody($body);
 
-        return (string)$namespace;
+        return ClassHandler::tabsToSpaces($namespace, $this->getIndentation());
     }
 }
 
