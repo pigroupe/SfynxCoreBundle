@@ -1,30 +1,31 @@
 <?php
-namespace Sfynx\CoreBundle\Generator\Domain\Widget\Widget_\Architecture\Application\Cqrs;
+namespace Sfynx\CoreBundle\Generator\Domain\Widget\Widget_\Architecture\Infrastructure\Service;
 
 use Sfynx\CoreBundle\Generator\Domain\Widget\Generalisation\Interfaces\WidgetInterface;
+use Sfynx\CoreBundle\Generator\Domain\Templater\Generalisation\Interfaces\TemplaterInterface;
 use Sfynx\CoreBundle\Generator\Domain\Widget\Generalisation\AbstractWidget;
 use Sfynx\CoreBundle\Generator\Domain\Report\ReporterObservable;
 use Sfynx\CoreBundle\Generator\Domain\Templater\Templater_;
 
 /**
- * Cqrs Command Application Widget
+ * Service Infrastructure Widget
  * @category   Sfynx\CoreBundle\Generator
  * @package    Domain
- * @subpackage Widget\Widget_\Architecture\Application\Cqrs
+ * @subpackage Widget\Widget_\Architecture\Infrastructure\Service
  *
  * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
  */
-class CommandApplicationWidget extends AbstractWidget implements WidgetInterface
+class ServiceInfrastructureWidget extends AbstractWidget implements WidgetInterface
 {
     /** @var string */
-    const TAG = 'widget_cqrs_command';
+    const TAG = 'widget_infra_class';
 
     /**
      * @inheritdoc
      */
     public function getName(): string
     {
-        return 'CommandApplicationWidget is an extendable code parser for object-oriented PHP-Projects to generate Command component';
+        return 'ServiceInfrastructureWidget is an extendable code parser for object-oriented PHP-Projects to generate service component';
     }
 
     /**
@@ -32,7 +33,7 @@ class CommandApplicationWidget extends AbstractWidget implements WidgetInterface
      */
     public function getCategory(): string
     {
-        return WidgetInterface::CAT_ARCHI_APP;
+        return WidgetInterface::CAT_ARCHI_INFRA;
     }
 
     /**
@@ -52,13 +53,13 @@ EOT;
      */
     protected function getData(): array
     {
-        $templater = new Templater_\Architecture\Application\Cqrs\Command\Templater($this);
+        $templater = new Templater_\Architecture\Infrastructure\Service\Templater($this);
         $templater->apply();
 
         return [
-            WidgetInterface::KEY_TAG => Templater_\Architecture\Application\Cqrs\Command\Templater::TAG,
+            WidgetInterface::KEY_TAG => Templater_\Architecture\Infrastructure\Service\Templater::TAG,
             WidgetInterface::KEY_NAMESPACE => $templater->getTargetNamespace(),
-            WidgetInterface::KEY_CLASS => $templater->getTargetClass(),
+            WidgetInterface::KEY_CLASS => $templater->getTargetClassname(),
             WidgetInterface::KEY_CLASSNAME => $templater->getTargetClassname()
         ];
     }

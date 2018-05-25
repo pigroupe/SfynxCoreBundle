@@ -1,9 +1,11 @@
 <?php
 namespace Sfynx\CoreBundle\Generator\Domain\Templater\Generalisation;
 
-use Sfynx\CoreBundle\Generator\Domain\Report\ReporterObservable;
 use Sfynx\CoreBundle\Generator\Domain\Widget\Generalisation\Interfaces\WidgetInterface;
 use Sfynx\CoreBundle\Generator\Domain\Templater\Generalisation\Interfaces\TemplaterInterface;
+use Sfynx\CoreBundle\Generator\Domain\Component\File\ClassHandler;
+use Sfynx\CoreBundle\Generator\Domain\Report\ReporterObservable;
+use Sfynx\CoreBundle\Generator\Domain\Report\Generalisation\AbstractGenerator;
 use Sfynx\CoreBundle\Generator\Domain\Templater\Exception\TemplaterException;
 
 /**
@@ -43,12 +45,11 @@ abstract class AbstractTemplater implements TemplaterInterface
     /**
      * GraphAbstract constructor.
      * @param WidgetInterface $widget
-     * @param ReporterObservable $reporter
      */
-    public function __construct(WidgetInterface $widget, ReporterObservable $reporter)
+    public function __construct(WidgetInterface $widget)
     {
         $this->widget = $widget;
-        $this->reporter = $reporter;
+        $this->reporter = $widget->getParser()->getReporter();
     }
 
     /**
@@ -73,8 +74,11 @@ abstract class AbstractTemplater implements TemplaterInterface
 
             if ($this->widget->getConfig()->has($attribut)) {
                 $this->$attributName = $this->widget->getConfig()->get($attribut);
-            } else {
-                $this->$attributName = $this->widget->getConfig()->get($source)[$attribut];
+            } elseif ($this->widget->getConfig()->has($source)) {
+                $this->$attributName = $this->widget->getConfig()->get($source);
+                if (array_key_exists($attribut, $this->widget->getConfig()->get($source))) {
+                    $this->$attributName = $this->widget->getConfig()->get($source)[$attribut];
+                }
             }
         }
 
@@ -118,7 +122,61 @@ abstract class AbstractTemplater implements TemplaterInterface
      */
     public function getClassValue(array $data = []): string
     {
-        echo '';
+        $index = $this->updateIndex();
+
+        $data = AbstractGenerator::transform($data, false);
+
+        $namespace = ClassHandler::getNamespace($this->getTargetNamespace());
+        ClassHandler::addUses($namespace, $data);
+
+        if (property_exists($data, 'type') && ($data->type == 'interface')) {
+            $class = $namespace->addInterface($this->getTargetClassname());
+        } else {
+            $class = $namespace->addClass($this->getTargetClassname());
+        }
+
+        if (property_exists($data, 'type') && ($data->type == 'abstract')) {
+            $class->setAbstract(true);
+        }
+
+        ClassHandler::setClassCommentor($class, $this, $data);
+        ClassHandler::setExtends($namespace, $class, $data, $index);
+        ClassHandler::addImplements($namespace, $class, $data, $index, $this->getNamespace());
+        ClassHandler::addTraits($namespace, $class, $data, $index);
+        ClassHandler::addMethods($namespace, $class, $data, $index);
+
+        return (string)$namespace;
+    }
+
+    /**
+     * Update the index key with the complet namespace of generated class
+     *
+     * @return array|null
+     */
+    protected function updateIndex(): ?array
+    {
+        $index = $this->widget->getParser()->getConfig()->get('conf-index');
+        $classname = $this->getTargetClassname();
+        $namespace = $this->getTargetNamespace();
+
+        // we replace class name from complet name from index
+        foreach ($index as $class => $arguments) {
+            $oldkey = $class;
+            $newkey = $class;
+            str_replace($classname, $classname, $class, $count1);
+
+            if ($count1) {
+                if (array_key_exists($oldkey, $index)) {
+                    $newkey = $namespace . '\\' . $classname;
+                    $index[$newkey] = $index[$oldkey];
+                    unset($index[$oldkey]);
+                }
+            }
+        }
+
+        $this->widget->getParser()->getConfig()->set('conf-index', $index);
+
+        return $index;
     }
 
     /**
@@ -136,7 +194,7 @@ abstract class AbstractTemplater implements TemplaterInterface
         if($methodName == 'has') {
             return property_exists($this, $params[0]);
         }
-        exit("Opps! The method call is not allowed!");
+        exit(sprintf( "Opps! The method %s call is not allowed!", $methodName));
     }
 
     /**
@@ -148,6 +206,6 @@ abstract class AbstractTemplater implements TemplaterInterface
         if(property_exists($this, $property)) {
             return $this->$property;
         }
-        exit("Opps! The method is not allowed!");
+        exit(sprintf( "Opps! The property %s call is not allowed!", $property));
     }
 }

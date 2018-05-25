@@ -58,13 +58,16 @@ EOT;
     /**
      * @inheritdoc
      */
-    public function getData(ReporterObservable $reporter): array
+    public function getData(): array
     {
-        $templater = new Templater_\Architecture\Application\Validation\Type\Templater($this, $reporter);
+        $templater = new Templater_\Architecture\Application\Validation\Type\Templater($this);
         $templater->apply();
         
         return [
-            Templater_\Architecture\Application\Validation\Type\Templater::TAG,
+            WidgetInterface::KEY_TAG => Templater_\Architecture\Application\Validation\Type\Templater::TAG,
+            WidgetInterface::KEY_NAMESPACE => $templater->getTargetNamespace(),
+            WidgetInterface::KEY_CLASS => $templater->getTargetClass(),
+            WidgetInterface::KEY_CLASSNAME => $templater->getTargetClassname()
         ];
     }
 }

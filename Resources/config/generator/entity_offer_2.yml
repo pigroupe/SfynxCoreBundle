@@ -1,16 +1,16 @@
 # php vendor/bin/sfynx-ddd-generator \
-# --namespace=MyContext \
-# --conf-file=/var/www/app/config/generator/sfynx-ddd-generator.yml \
+# --namespace=PromotionContext \
+# --conf-file=/var/www/app/config/generator/entity_offer_2.yml \
 # --report-template=default \
 # --report-dir=/var/www/src
 default:
-    namespace: MyContext
-    cqrs: Movie\Command
+    namespace: PromotionContext
+    cqrs: Offer\Command
     template: default
     widgets:
         presentation:
             widget_coordination:
-                class: FormCoordination
+                class: Form2Coordination
                 arguments:
                     - '$workflowHandler'
                 extends: Sfynx\CoreBundle\Layers\Presentation\Coordination\Generalisation\AbstractFormController
@@ -23,34 +23,34 @@ default:
                         design: 'adapter'
                         class: Sfynx\CoreBundle\Layers\Presentation\Adapter\Command\CommandAdapter
                         arguments:
-                            - 'new MovieFormCommand'
+                            - 'new Offer2FormCommand'
                         calls:
-                            - [ createCommandFromRequest, [ 'new MovieFormRequest' ] ]
+                            - [ createCommandFromRequest, [ 'new Offer2FormRequest' ] ]
                     - commandWorkflow:
                         design: 'observer'
                         class: Sfynx\CoreBundle\Layers\Application\Command\Workflow\CommandWorkflow
                         calls:
-                            - [ attach, [ 'new OBMovieEntityEdit' ] ]
-                            - [ attach, [ 'new OBMovieEntityCreate' ] ]
+                            - [ attach, [ 'new OBOffer2EntityEdit' ] ]
+                            - [ attach, [ 'new OBOffer2EntityCreate' ] ]
                     - commandHandlerResult:
                         design: 'decorator'
                         class: Sfynx\CoreBundle\Layers\Application\Command\Handler\FormCommandHandler
                         arguments:
                             - '$CommandWorkflow'
-                        handlers: [ 'MovieFormCommandValidationHandler', 'MovieFormCommandSpecHandler']
+                        handlers: [ 'Offer2FormCommandValidationHandler', 'Offer2FormCommandSpecHandler']
                         calls:
                             - [ process, [ '$command' ] ]
                     - codeln1:
                         design: 'code'
-                        content: "$this->param->templating = '@Business/Movie/edit.html.twig'"
+                        content: "$this->param->templating = '@Business/Offer/edit.html.twig'"
                     - workflowHandler:
                         design: 'observer'
                         class: Sfynx\CoreBundle\Layers\Application\Common\Handler\WorkflowHandler
                         calls:
-                            - [ attach, [ 'new OBMovieCreateFormData' ] ]
+                            - [ attach, [ 'new OBOffer2CreateFormData' ] ]
                             - [ attach, [ 'new OBCreateEntityFormView' ] ]
                             - [ attach, [ 'new OBInjectFormErrors' ] ]
-                            - [ attach, [ 'new OBMovieCreateFormBody' ] ]
+                            - [ attach, [ 'new OBOffer2CreateFormBody' ] ]
                             - [ attach, [ 'new OBCreateResponseHtml' ] ]
                     - ResponseHandlerResult:
                         design: 'handler'
@@ -63,28 +63,28 @@ default:
                         design: 'code'
                         content: "return $responseHandlerResult->getResponse();"
             widget_request:
-                class: MovieFormRequest
+                class: Offer2FormRequest
                 arguments:
                   - 'Sfynx\CoreBundle\Layers\Domain\Service\Request\Generalisation\RequestInterface'
         application:
             widget_cqrs_command:
-                class: MovieFormCommand
+                class: Offer2FormCommand
                 arguments: ~
             widget_cqrs_validator_specification:
-                class: Validation\SpecHandler\MovieFormCommandSpecHandler
+                class: Validation\SpecHandler\Offer2FormCommandSpecHandler
                 arguments: ~
             widget_cqrs_validator_validation:
-                class: Validation\ValidationHandler\MovieFormCommandValidationHandler
+                class: Validation\ValidationHandler\Offer2FormCommandValidationHandler
                 arguments: ~
             widget_validation_type:
-                class: MovieType
+                class: Offer2Type
                 arguments: ~
         domain:
             widget_entity: true
             widget_service_class:
                 - EntityManager:
                     create: true
-                    class: Domain\Service\Movie\Manager\EntityManager
+                    class: Domain\Service\Offer\Manager\EntityManager
                     arguments: ~
                     comments: ['Layout manager working with entities (Orm, Odm, Couchdb)']
                     extends: Sfynx\CoreBundle\Layers\Domain\Service\Manager\Generalisation\AbstractManager
@@ -111,18 +111,18 @@ default:
                             visibility: 'public'
                             returnType: 'Sfynx\CoreBundle\Layers\Application\Command\Generalisation\Interfaces\CommandInterface'
                             returnParent: true
-                - MovieCommandRepositoryInterface:
+                - OfferCommandRepositoryInterface:
                     create: true
-                    class: Domain\Repository\Command\MovieCommandRepositoryInterface
+                    class: Domain\Repository\Command\OfferCommandRepositoryInterface
                     type: interface
-                - MovieQueryRepositoryInterface:
+                - OfferQueryRepositoryInterface:
                     create: true
-                    class: Domain\Repository\Query\MovieQueryRepositoryInterface
-                    type: interface            
+                    class: Domain\Repository\Query\OfferQueryRepositoryInterface
+                    type: interface
             widget_workflow_observer_class:
-                - OBMovieEntityCreate:
+                - OBOffer2EntityCreate:
                     create: true
-                    class: OBMovieEntityCreate
+                    class: OBOffer2EntityCreate
                     arguments:
                       - 'Sfynx\CoreBundle\Layers\Domain\Service\Manager\Generalisation\Interfaces\ManagerInterface'
                       - 'Sfynx\CoreBundle\Layers\Domain\Service\Request\Generalisation\RequestInterface'
@@ -131,9 +131,9 @@ default:
                         implements: ~
                         uses: ~
                         traits: [Sfynx\CoreBundle\Layers\Domain\Workflow\Observer\Command\TraitProcess]
-                - OBMovieEntityEdit:
+                - OBOffer2EntityEdit:
                     create: true
-                    class: OBMovieEntityEdit
+                    class: OBOffer2EntityEdit
                     arguments:
                       - 'Sfynx\CoreBundle\Layers\Domain\Service\Manager\Generalisation\Interfaces\ManagerInterface'
                       - 'Sfynx\CoreBundle\Layers\Domain\Service\Request\Generalisation\RequestInterface'
@@ -142,9 +142,9 @@ default:
                         implements: ~
                         uses: ~
                         traits: [Sfynx\CoreBundle\Layers\Domain\Workflow\Observer\Command\TraitProcess]
-                - OBMovieCreateFormData:
+                - OBOffer2CreateFormData:
                     create: true
-                    class: Domain\Workflow\Observer\Movie\Response\OBMovieCreateFormData
+                    class: Domain\Workflow\Observer\Offer\Response\OBOffer2CreateFormData
                     arguments:
                       - 'Sfynx\CoreBundle\Layers\Domain\Service\Request\Generalisation\RequestInterface'
                     extends: Sfynx\CoreBundle\Layers\Domain\Workflow\Observer\Generalisation\Response\AbstractCreateFormData
@@ -157,9 +157,9 @@ default:
                             comments: ['{@inheritdoc}']
                             visibility: 'protected'
                             returnType: 'bool'
-                - OBMovieCreateFormBody:
+                - OBOffer2CreateFormBody:
                     create: true
-                    class: Domain\Workflow\Observer\Movie\Response\OBMovieCreateFormBody
+                    class: Domain\Workflow\Observer\Offer\Response\OBOffer2CreateFormBody
                     arguments:
                       - 'Sfynx\CoreBundle\Layers\Domain\Service\Request\Generalisation\RequestInterface'
                       - 'Symfony\Bundle\FrameworkBundle\Templating\EngineInterface'
@@ -180,8 +180,8 @@ default:
                     arguments:
                       - 'Sfynx\CoreBundle\Layers\Domain\Service\Request\Generalisation\RequestInterface'
                       - 'Symfony\Component\Form\FormFactoryInterface'
-#                      - 'Sfynx\CoreBundle\Layers\Domain\Service\Form\Generalisation\Interfaces\FormTypeInterface'
-                      - 'new MovieType'
+                      - 'Sfynx\CoreBundle\Layers\Domain\Service\Form\Generalisation\Interfaces\FormTypeInterface'
+#                      - 'new Offer2Type'
                 - OBInjectFormErrors:
                     create: false
                     class: Sfynx\CoreBundle\Layers\Domain\Workflow\Observer\Response\OBInjectFormErrors
@@ -196,126 +196,55 @@ default:
         infrastructure:
             widget_security_parse: true
             widget_infra_class:
-                - CommandMovieRepository:
+                - CommandOfferRepository:
                     create: true
-                    class: Infrastructure\Persistence\Adapter\Command\Orm\MovieRepository
+                    class: Infrastructure\Persistence\Adapter\Command\Orm\OfferRepository
                     arguments: ~
                     comments:
                       - 'This class was generated by the Doctrine ORM. Add your own custom'
                       - 'repository methods below.'
                     extends: Sfynx\CoreBundle\Layers\Infrastructure\Persistence\Adapter\Generalisation\Orm\AbstractCommandRepository
                     options:
-                        implements: ['Domain\Repository\Command\MovieCommandRepositoryInterface']
+                        implements: ['Domain\Repository\Command\OfferCommandRepositoryInterface']
                         uses: ~
                         traits: ~
-                - QueryMovieRepository:
+                - QueryOfferRepository:
                     create: true
-                    class: Infrastructure\Persistence\Adapter\Query\Orm\MovieRepository
+                    class: Infrastructure\Persistence\Adapter\Query\Orm\OfferRepository
                     arguments: ~
                     comments:
                       - 'This class was generated by the Doctrine ORM. Add your own custom'
                       - 'repository methods below.'
                     extends: Sfynx\CoreBundle\Layers\Infrastructure\Persistence\Adapter\Generalisation\Orm\AbstractQueryRepository
                     options:
-                        implements: ['Domain\Repository\Query\MovieQueryRepositoryInterface']
+                        implements: ['Domain\Repository\Query\OfferQueryRepositoryInterface']
                         uses: ~
-                        traits: ~            
+                        traits: ~
     mapping:
         x-providers: [orm, couchdb]
         x-entities:
-#          Movie:
+#          Offer:
 #            x-fields:
 #              id:
 #                name: entityId
 #                type: id
 #                primaryKey: true
-#              title:
-#                type: string
-#                required: true
-#              releaseDate:
-#                type: datetime
-#                required: false
-#              synopsis:
-#                type: string
-#                required: false
-#              reference:
-#                type: string
-#                required: true
-#              genre:
+#              template:
 #                type: integer
-#                targetEntity: Genre
+#                targetEntity: PromotionContext\Domain\Entity\Template
 #                foreignKey: true
 #                required: true
-#          Price:
-#            x-fields:
-#              id:
-#                name: entityId
-#                type: id
-#                primaryKey: true
-#              title:
-#                type: string
-#                required: true
-#              date:
-#                type: datetime
-#                required: false
-#              reference:
-#                type: string
-#                required: true
-#              movie:
-#                type: integer
-#                targetEntity: Movie
-#                foreignKey: true
-#                required: true
-#          Genre:
-#            x-fields:
-#              id:
-#                name: entityId
-#                type: id
-#                primaryKey: true
-#              label:
-#                type: string
-#                required: false
-#
-#
-#
-          Movie:
+          Offer:
             x-fields:
               id:
                 type: valueObject
                 voName: IdVO
                 primaryKey: true
-              movie:
-                type: valueObject
-                voName: MovieVO
-              genre:
+              template:
                 type: valueObject
                 voName: IdVO
-                targetEntity: Genre
+                targetEntity: PromotionContext\Domain\Entity\Template
                 foreignKey: true
-                required: true
-          Price:
-            x-fields:
-              id:
-                type: valueObject
-                voName: IdVO
-                primaryKey: true
-              price:
-                type: valueObject
-                voName: PriceVO
-              movie:
-                type: valueObject
-                voName: IdVO
-                targetEntity: Movie
-                foreignKey: true
-                required: true
-          Genre:
-            x-fields:
-              id:
-                type: valueObject
-                voName: IdVO
-                primaryKey: true
-              label:
-                type: string
                 required: true
         x-valueObjects:
           IdVO:
@@ -324,37 +253,3 @@ default:
               id:
                 name: entityId
                 type: id
-          MovieVO:
-            type: \Domain\ValueObject\MovieVO
-            x-fields:
-              title:
-                type: valueObject
-                voName: TitleVO
-                required: true
-              releaseDate:
-                type: datetime
-                required: false
-              synopsis:
-                type: string
-                required: false
-              reference:
-                type: string
-                required: true
-          PriceVO:
-            type: \Domain\ValueObject\PriceVO
-            x-fields:
-              title:
-                type: valueObject
-                voName: TitleVO
-                required: true
-              date:
-                type: datetime
-                required: false
-              reference:
-                type: string
-                required: true
-          TitleVO:
-            type: \Domain\ValueObject\TitleVO
-            x-fields:
-              title:
-                type: string

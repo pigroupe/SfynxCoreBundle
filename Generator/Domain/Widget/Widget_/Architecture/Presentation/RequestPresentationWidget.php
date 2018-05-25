@@ -48,16 +48,18 @@ EOT;
     }
 
     /**
-     * @param ReporterObservable $reporter
-     * @return array
+     * @inheritdoc
      */
-    protected function getData(ReporterObservable $reporter): array
+    protected function getData(): array
     {
-        $templater = new Templater_\Architecture\Presentation\Request\Templater($this, $reporter);
+        $templater = new Templater_\Architecture\Presentation\Request\Templater($this);
         $templater->apply();
-        
+
         return [
-            Templater_\Architecture\Presentation\Request\Templater::TAG,
+            WidgetInterface::KEY_TAG => Templater_\Architecture\Presentation\Request\Templater::TAG,
+            WidgetInterface::KEY_NAMESPACE => $templater->getTargetNamespace(),
+            WidgetInterface::KEY_CLASS => $templater->getTargetClass(),
+            WidgetInterface::KEY_CLASSNAME => $templater->getTargetClassname()
         ];
     }
 }

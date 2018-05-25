@@ -24,7 +24,10 @@ interface WidgetInterface
     const KEY_CATEGORY = 'category';
     const KEY_NAME = 'name';
     const KEY_DESCRIPTION = 'desc';
-    const KEY_DATA = 'data';
+    const KEY_TAG = 'tag';
+    const KEY_NAMESPACE = 'namespace';
+    const KEY_CLASS = 'class';
+    const KEY_CLASSNAME = 'classname';
 
     /**
      * @param WidgetParser $parser
@@ -36,6 +39,11 @@ interface WidgetInterface
      * @return Config
      */
     public function getConfig(): Config;
+
+    /**
+     * @return WidgetParser
+     */
+    public function getParser(): WidgetParser;
 
     /**
      * @return string

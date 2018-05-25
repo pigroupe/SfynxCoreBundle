@@ -1,5 +1,5 @@
 <?php
-namespace Sfynx\CoreBundle\Generator\Domain\Templater\Templater_\Architecture\Domain\WorkflowObserver;
+namespace Sfynx\CoreBundle\Generator\Domain\Templater\Templater_\Architecture\Domain\Service;
 
 use Sfynx\CoreBundle\Generator\Domain\Widget\Generalisation\Interfaces\WidgetInterface;
 use Sfynx\CoreBundle\Generator\Domain\Templater\Generalisation\Interfaces\TemplaterInterface;
@@ -9,14 +9,14 @@ use Sfynx\CoreBundle\Generator\Domain\Report\ReporterObservable;
 /**
  * @category   Sfynx\CoreBundle\Generator
  * @package    Domain
- * @subpackage TemplaterTemplater_\Architecture\Domain\WorkflowObserver
+ * @subpackage TemplaterTemplater_\Architecture\Domain\Service
  *
  * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
  */
 class Templater extends AbstractTemplater implements TemplaterInterface
 {
     /** @var string */
-    const TAG = 'templater_archi_dom_work_obs';
+    const TAG = 'templater_archi_dom_services';
 
     /** @var array */
     const TARGET_ATTRIBUTS = [
@@ -32,7 +32,7 @@ class Templater extends AbstractTemplater implements TemplaterInterface
      */
     public static function scriptList(string $template): array
     {
-        return ['Domain\Workflow\Observer'];
+        return ['Domain\Service'];
     }
 
     /**

@@ -17,11 +17,13 @@ use Sfynx\CoreBundle\Generator\Domain\Component\Output\Output;
 class WidgetParser
 {
     /** @var Output */
-    private $output;
+    protected $output;
     /** @var Issuer */
-    private $issuer;
+    protected $issuer;
     /** @var Config */
-    public $config;
+    protected $config;
+    /** @var ReporterObservable */
+    protected $reporter;
 
     /**
      * Analyze constructor.
@@ -42,13 +44,15 @@ class WidgetParser
     public static function handlerList()
     {
         return [
-            Architecture\Presentation\RequestPresentationWidget::TAG => new Architecture\Presentation\RequestPresentationWidget(),
-            Architecture\Presentation\CoordinationtPresentationWidget::TAG => new Architecture\Presentation\CoordinationtPresentationWidget(),
-            Architecture\Application\Cqrs\CommandApplicationWidget::TAG => new Architecture\Application\Cqrs\CommandApplicationWidget(),
+            Architecture\Infrastructure\Service\ServiceInfrastructureWidget::TAG => new Architecture\Infrastructure\Service\ServiceInfrastructureWidget(),
+            Architecture\Domain\Service\ServiceDomainWidget::TAG => new Architecture\Domain\Service\ServiceDomainWidget(),
+            Architecture\Domain\Workflow\WorkflowObserverDomainWidget::TAG => new Architecture\Domain\Workflow\WorkflowObserverDomainWidget(),
+            Architecture\Application\Validation\ValidationTypeApplicationWidget::TAG => new Architecture\Application\Validation\ValidationTypeApplicationWidget(),
             Architecture\Application\Cqrs\CommandValidationHandlerApplicationWidget::TAG => new Architecture\Application\Cqrs\CommandValidationHandlerApplicationWidget(),
             Architecture\Application\Cqrs\CommandSpecHandlerApplicationWidget::TAG => new Architecture\Application\Cqrs\CommandSpecHandlerApplicationWidget(),
-            Architecture\Application\Validation\ValidationTypeApplicationWidget::TAG => new Architecture\Application\Validation\ValidationTypeApplicationWidget(),
-            Architecture\Domain\Workflow\WorkflowObserverDomainWidget::TAG => new Architecture\Domain\Workflow\WorkflowObserverDomainWidget()
+            Architecture\Application\Cqrs\CommandApplicationWidget::TAG => new Architecture\Application\Cqrs\CommandApplicationWidget(),
+            Architecture\Presentation\RequestPresentationWidget::TAG => new Architecture\Presentation\RequestPresentationWidget(),
+            Architecture\Presentation\CoordinationtPresentationWidget::TAG => new Architecture\Presentation\CoordinationtPresentationWidget(),
         ];
     }
 
@@ -72,6 +76,22 @@ class WidgetParser
         $this->output->write('<info>++</info> Executing system analyzes...');
         $this->output->clearln();
 
+        return $this->reporter;
+    }
+
+    /**
+     * @return Config
+     */
+    public function getConfig(): Config
+    {
+        return $this->config;
+    }
+
+    /**
+     * @return ReporterObservable
+     */
+    public function getReporter(): ReporterObservable
+    {
         return $this->reporter;
     }
 }
