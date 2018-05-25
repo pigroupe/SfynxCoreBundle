@@ -18,11 +18,11 @@ use Sfynx\CoreBundle\Generator\Domain\Component\File\ClassHandler;
 class Templater extends AbstractTemplater implements TemplaterInterface
 {
     /** @var string */
-    const TAG = 'templater_archi_pres_request';
+    const TAG = 'templater_archi_pres_coord';
 
     /** @var array */
     const TARGET_ATTRIBUTS = [
-        'conf-mapping' => 'commandFields',
+        'conf-index' => 'indexClasses',
         'conf-widget',
         'conf-cqrs'
     ];
@@ -82,58 +82,72 @@ EOT;
      */
     public function getClassValue(array $data = []): string
     {
+        $index = $this->getTargetIndexClasses();
+
         $data = AbstractGenerator::transform($this->getTargetWidget(), false);
 
         $namespace = ClassHandler::getNamespace($this->getTargetNamespace());
-        ClassHandler::addUses($namespace, $data);
+        ClassHandler::addUses($namespace, $data, $index);
 
         $class = $namespace->addClass($this->getTargetClassname());
-        ClassHandler::setClassCommentor($class, $this);
-        ClassHandler::addImplements($namespace, $class, $data);
-        ClassHandler::addTraits($namespace, $class, $data);
-        ClassHandler::setExtends($namespace, $class, $data);
-        $method = ClassHandler::setCoordinationMethode($namespace, $class);
+        ClassHandler::setClassCommentor($class, $this, $data);
+        ClassHandler::setExtends($namespace, $class, $data, $index);
+        ClassHandler::addImplements($namespace, $class, $data, $index);
+        ClassHandler::addTraits($namespace, $class, $data, $index);
 
         $body = '';
         foreach ($data->body as $options) {
             foreach ($options as $arg => $pattern) {
                 $code_design = $pattern->design;
-                $code_class = ClassHandler::getClassNameFromNamespace($pattern->class);
-                $code_arg = ucfirst(strtolower($code_class));
 
-                $finalClassArgs = '';
-                if (property_exists($pattern, 'arguments') && $pattern->arguments) {
-                    $finalClassArgs = ClassHandler::setArgs($namespace, $pattern->arguments);
-                }
+                if (($code_design == 'code')
+                    && (property_exists($pattern, 'content'))
+                ) {
+                    $body .= "$pattern->content" . PHP_EOL;
+                } elseif (property_exists($pattern, 'class')) {
+                    $code_class = ClassHandler::getClassNameFromNamespace($pattern->class);
+                    $code_arg = ucfirst(strtolower($code_class));
 
-                $body .= "\$$code_arg = new " . $code_class . "($finalClassArgs);" . PHP_EOL;
+                    $finalClassArgs = '';
+                    if (property_exists($pattern, 'arguments')
+                        && $pattern->arguments
+                    ) {
+                        $finalClassArgs = ClassHandler::setArgs($namespace, $pattern->arguments, $index);
+                    }
 
-                if (property_exists($pattern, 'calls') && $pattern->calls) {
-                    foreach ($pattern->calls as $call) {
-                        list($methodName, $methodArgs) = $call;
-                        $finalArgs = ClassHandler::setArgs($namespace, $methodArgs);
+                    $body .= "\$$code_arg = new " . $code_class . "($finalClassArgs);" . PHP_EOL;
 
-                        if (in_array($code_design, ['adapter', 'handler'])) {
-                            $body .= "\$$arg = \$$code_arg->$methodName($finalArgs);" . PHP_EOL;
-                        } elseif (in_array($code_design, ['decorator'])
-                            && property_exists($pattern, 'handlers') && $pattern->handlers
-                        ) {
-                            foreach ($pattern->handlers as $handler) {
-                                $body .= "\$$code_arg = new " . $handler . "(\$$code_arg);" . PHP_EOL;
+                    if (property_exists($pattern, 'calls')
+                        && !empty($pattern->calls)
+                    ) {
+                        foreach ($pattern->calls as $call) {
+                            list($methodName, $methodArgs) = $call;
+                            $finalArgs = ClassHandler::setArgs($namespace, $methodArgs, $index);
 
-                                $namespace->addUse($handler);
+                            if (in_array($code_design, ['adapter', 'handler'])) {
+                                $body .= "\$$arg = \$$code_arg->$methodName($finalArgs);" . PHP_EOL;
+                            } elseif (in_array($code_design, ['decorator'])
+                                && property_exists($pattern, 'handlers') && $pattern->handlers
+                            ) {
+                                foreach ($pattern->handlers as $handler) {
+                                    $body .= "\$$code_arg = new " . $handler . "(\$$code_arg);" . PHP_EOL;
+
+                                    ClassHandler::addUse($namespace, $handler, $index);
+                                }
+                                $body .= "\$$arg = \$$code_arg->$methodName($finalArgs);" . PHP_EOL;
+                            } else {
+                                $body .= "\$$code_arg->$methodName($finalArgs);" . PHP_EOL;
                             }
-                        } else {
-                            $body .= "\$$code_arg->$methodName($finalArgs);" . PHP_EOL;
                         }
                     }
-                }
-                $body .= PHP_EOL;
+                    $body .= PHP_EOL;
 
-                $namespace->addUse($pattern->class);
+                    ClassHandler::addUse($namespace, $pattern->class, $index);
+                }
             }
         }
-        $method->addBody($body);
+        ClassHandler::addConstructorMethod($namespace, $class);
+        ClassHandler::addCoordinationMethod($namespace, $class)->addBody($body);
 
         return (string)$namespace;
     }

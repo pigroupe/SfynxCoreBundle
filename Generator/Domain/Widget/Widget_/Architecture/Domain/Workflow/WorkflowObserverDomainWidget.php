@@ -2,6 +2,7 @@
 namespace Sfynx\CoreBundle\Generator\Domain\Widget\Widget_\Architecture\Domain\Workflow;
 
 use Sfynx\CoreBundle\Generator\Domain\Widget\Generalisation\Interfaces\WidgetInterface;
+use Sfynx\CoreBundle\Generator\Domain\Templater\Generalisation\Interfaces\TemplaterInterface;
 use Sfynx\CoreBundle\Generator\Domain\Widget\Generalisation\AbstractWidget;
 use Sfynx\CoreBundle\Generator\Domain\Report\ReporterObservable;
 use Sfynx\CoreBundle\Generator\Domain\Templater\Templater_;
@@ -48,16 +49,18 @@ EOT;
     }
 
     /**
-     * @param ReporterObservable $reporter
-     * @return array
+     * @inheritdoc
      */
-    protected function getData(ReporterObservable $reporter): array
+    protected function getData(): array
     {
-        $templater = new Templater_\Architecture\Domain\WorkflowObserver\Templater($this, $reporter);
+        $templater = new Templater_\Architecture\Domain\WorkflowObserver\Templater($this);
         $templater->apply();
-        
+
         return [
-            Templater_\Architecture\Domain\WorkflowObserver\Templater::TAG,
+            WidgetInterface::KEY_TAG => Templater_\Architecture\Domain\WorkflowObserver\Templater::TAG,
+            WidgetInterface::KEY_NAMESPACE => $templater->getTargetNamespace(),
+            WidgetInterface::KEY_CLASS => $templater->getTargetClassname(),
+            WidgetInterface::KEY_CLASSNAME => $templater->getTargetClassname()
         ];
     }
 }

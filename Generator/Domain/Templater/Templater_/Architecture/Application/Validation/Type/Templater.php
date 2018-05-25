@@ -109,7 +109,7 @@ EOT;
 
         // We open the buffer.
         ob_start ();
-        ?>->add('<?php echo $child; ?>', <?php echo $this->extensionInstance->getClassExtention()->name; ?>::class, <?php echo Table::writeArray($parameters) ?>)<?php
+        ?>->add('<?php echo $child; ?>', <?php echo $this->extensionInstance->getClassExtention()->name; ?>, <?php echo Table::writeArray($parameters) ?>)<?php
         // We retrieve the contents of the buffer.
         $content = ob_get_contents ();
         // We clean the buffer.

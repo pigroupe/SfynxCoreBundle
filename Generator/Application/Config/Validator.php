@@ -21,12 +21,13 @@ class Validator implements ValidationInterface
     protected static $handlerList = [
         1 => Validation\ConfigLocator::class,
         2 => Validation\ConfigLoader::class,
-        4 => Validation\ConfigNamespace::class,
+        3 => Validation\ConfigNamespace::class,
         4 => Validation\ConfigCqrs::class,
         5 => Validation\ConfigWidgets::class,
-        6 => Validation\ConfigTemplate::class,
-        7 => Validation\ConfigMapping::class,
-        8 => Validation\ConfigValidator::class,
+        6 => Validation\ConfigIndex::class,
+        7 => Validation\ConfigTemplate::class,
+        8 => Validation\ConfigMapping::class,
+        9 => Validation\ConfigValidator::class,
     ];
 
     /**

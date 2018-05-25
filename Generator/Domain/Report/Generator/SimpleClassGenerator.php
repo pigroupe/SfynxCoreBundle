@@ -36,7 +36,7 @@ class SimpleClassGenerator extends AbstractGenerator
             }
 
             if ($templater->has('targetClass')) {
-                $templater->targetClassname = $templater->getTargetClass()[$tagTemplater];
+                $templater->targetClassname = $templater->getTargetClass();
 
                 if (strrpos($templater->targetClassname, '\\')) {
                     $namespace = $namespace . '\\' . ClassHandler::getDirenameFromNamespace($templater->targetClassname);
@@ -45,7 +45,10 @@ class SimpleClassGenerator extends AbstractGenerator
             }
 
             $templater->targetNamespace = sprintf('%s\%s', $templater->namespace, $namespace);
-            $templater->targetPath = sprintf('%s/%s/%s', $templater->reportDir, str_replace('\\', '/', $namespace), $templater->targetClassname . '.' . $extension);
+            $templater->targetPath = sprintf('%s/%s/%s', $templater->reportDir, $namespace, $templater->targetClassname . '.' . $extension);
+
+            $templater->targetNamespace = str_replace('\\\\', '\\', $templater->targetNamespace);
+            $templater->targetPath = str_replace('\\', '/', $templater->targetPath);
 
             static::$dataArr[$cat][$tag]['files'][] = [
                 'target_namespace' => $templater->getTargetNamespace(),

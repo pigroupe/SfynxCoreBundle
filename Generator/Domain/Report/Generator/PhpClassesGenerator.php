@@ -35,11 +35,24 @@ class PhpClassesGenerator extends AbstractGenerator
 
             $templater->targetClassname = $config['class'];
 
-            $namespace = ClassHandler::getDirenameFromNamespace($templater->targetClassname);
-            $templater->targetClassname = ClassHandler::getClassNameFromNamespace($templater->targetClassname);
+            $namespace = '';
+            if (!strrpos($templater->targetClassname, '\\')) {
+                $scriptList = $templater::scriptList('');
+                $namespace = end($scriptList) . '\\' ;
+                if ($templater->has('targetCqrs')) {
+                    $namespace = $namespace . $templater->getTargetCqrs();
+                }
+            }
+            if (strrpos($templater->targetClassname, '\\')) {
+                $namespace = $namespace . '\\' . ClassHandler::getDirenameFromNamespace($templater->targetClassname);
+                $templater->targetClassname = ClassHandler::getClassNameFromNamespace($templater->targetClassname);
+            }
 
             $templater->targetNamespace = sprintf('%s\%s', $templater->namespace, $namespace);
-            $templater->targetPath = sprintf('%s/%s/%s', $templater->reportDir, str_replace('\\', '/', $namespace), $templater->targetClassname . '.php');
+            $templater->targetPath = sprintf('%s/%s/%s', $templater->reportDir, $namespace, $templater->targetClassname . '.php');
+
+            $templater->targetNamespace = str_replace('\\\\', '\\', $templater->targetNamespace);
+            $templater->targetPath = str_replace('\\', '/', $templater->targetPath);
 
             $source = '';
             if ($config['create']) {
