@@ -273,7 +273,7 @@ class ClassHandler
                     $methodClass = $class->addMethod($method->name);
 
                     // set Method values
-                    if (property_exists($method, 'comments')) {
+                    if (property_exists($method, 'comments') && !empty($method->comments)) {
                         foreach ($method->comments as $comment) {
                             $methodClass->addComment($comment);
                         }
@@ -310,10 +310,10 @@ class ClassHandler
                             }
                         }
                     }
-                    if (property_exists($method, 'visibility')) {
+                    if (property_exists($method, 'visibility') && !empty($method->visibility)) {
                         $methodClass->setVisibility($method->visibility);
                     }
-                    if (property_exists($method, 'returnType')) {
+                    if (property_exists($method, 'returnType')  && !empty($method->returnType)) {
                         $info = self::getArgResult($namespace, $method->returnType, [], false);
                         $methodClass->setReturnType($info['basename']);
                     }
@@ -325,8 +325,11 @@ class ClassHandler
                             $body .= $line . PHP_EOL;
                         }
                     }
-                    if (property_exists($method, 'returnParent')) {
+                    if (property_exists($method, 'returnParent') && !empty($method->returnParent)) {
                         $body .= "return parent::$method->name($methodArgs)" . PHP_EOL;
+                    }
+                    if (property_exists($method, 'insertParent') && !empty($method->insertParent)) {
+                        $body .= "parent::$method->name($methodArgs)" . PHP_EOL;
                     }
 
                     $methodClass->addBody($body);

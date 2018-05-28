@@ -77,6 +77,6 @@ class PhpClassesGenerator extends AbstractGenerator
     {
         ob_start();
         echo $templater->getClassValue($config);
-        return ob_get_clean();
+        return  ob_get_clean();
     }
 }
