@@ -31,6 +31,8 @@ abstract class AbstractTemplater implements TemplaterInterface
     /** @var string */
     const TEMPLATE_GENERATOR = ReporterObservable::GENERATOR_SIMPLE;
 
+    /** @var integer */
+    protected $indentation;
     /** @var WidgetInterface  */
     protected $widget;
     /** @var ReporterObservable  */
@@ -65,9 +67,10 @@ abstract class AbstractTemplater implements TemplaterInterface
      */
     final public function apply(): void
     {
-        $this->reportDir = $this->reporter->config->get('report-dir') . '/' . $this->reporter->config->get('namespace');
-        $this->namespace = $this->reporter->config->get('namespace');
-        $this->template = $this->reporter->config->get('report-template');
+        $this->reportDir = $this->widget->getConfig()->get('reportDir');
+        $this->namespace = $this->widget->getConfig()->get('namespace');
+        $this->template = $this->widget->getConfig()->get('template');
+        $this->indentation = $this->widget->getConfig()->get('indentation');
 
         foreach (static::TARGET_ATTRIBUTS as $source => $attribut) {
             $attributName = "target" . ucfirst(str_replace('conf-', '', $attribut));
@@ -145,7 +148,15 @@ abstract class AbstractTemplater implements TemplaterInterface
         ClassHandler::addTraits($namespace, $class, $data, $index);
         ClassHandler::addMethods($namespace, $class, $data, $index);
 
-        return (string)$namespace;
+        return ClassHandler::tabsToSpaces($namespace, $this->getIndentation());
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getIndentation(): int
+    {
+        return $this->indentation;
     }
 
     /**

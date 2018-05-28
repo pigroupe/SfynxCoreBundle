@@ -23,11 +23,12 @@ class Validator implements ValidationInterface
         2 => Validation\ConfigLoader::class,
         3 => Validation\ConfigNamespace::class,
         4 => Validation\ConfigCqrs::class,
-        5 => Validation\ConfigWidgets::class,
-        6 => Validation\ConfigIndex::class,
-        7 => Validation\ConfigTemplate::class,
-        8 => Validation\ConfigMapping::class,
-        9 => Validation\ConfigValidator::class,
+        5 => Validation\ConfigIndentation::class,
+        6 => Validation\ConfigWidgets::class,
+        7 => Validation\ConfigIndex::class,
+        8 => Validation\ConfigTemplate::class,
+        9 => Validation\ConfigMapping::class,
+        10 => Validation\ConfigValidator::class,
     ];
 
     /**

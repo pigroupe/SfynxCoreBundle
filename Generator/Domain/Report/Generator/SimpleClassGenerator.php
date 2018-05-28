@@ -68,6 +68,12 @@ class SimpleClassGenerator extends AbstractGenerator
     {
         ob_start();
         require $source;
-        return ob_get_clean();
+        $content =  ob_get_clean();
+
+//        $content = \Nette\Utils\Strings::indent(ltrim(rtrim($content) . "\n"), 0);
+        $content = \Nette\Utils\Strings::normalize($content);
+        $content = \Nette\PhpGenerator\Helpers::tabsToSpaces($content, $templater->getIndentation()) . PHP_EOL;
+
+        return $content;
     }
 }

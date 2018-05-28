@@ -1,7 +1,8 @@
 <?php
 namespace Sfynx\CoreBundle\Generator\Domain\Templater\Templater_\Architecture\Application\Validation\Type;
 
-use \stdClass;
+use stdClass;
+use Exception;
 use Sfynx\CoreBundle\Generator\Domain\Component\Table\Table;
 use Sfynx\CoreBundle\Generator\Domain\Templater\Templater_\Architecture\Application\Validation\Type\Extension;
 use Sfynx\CoreBundle\Generator\Domain\Widget\Generalisation\Interfaces\WidgetInterface;
@@ -95,27 +96,40 @@ EOT;
      * @param stdClass|null $options
      * @return string
      */
-    public function add(string $child, string $type, stdClass $options = null): string
+    public function add(string $child, string $type, stdClass $options = null, bool $isEndLine = false): string
     {
         if (null === $options) {
             $options = [];
         }
 
-        $instanceValue = self::$extensionList[$type];
+        if (array_key_exists($type, self::$extensionList)) {
+            $instanceValue = self::$extensionList[$type];
+        } else {
+            $instanceValue = self::$extensionList[self::TYPE_TEXT];
+        }
 
         $this->extensionInstance = new $instanceValue(json_decode(json_encode($options), true));
 
         $parameters = $this->extensionInstance->getResolverParameters(false, ['templater' => $this]);
 
-        // We open the buffer.
-        ob_start ();
-        ?>->add('<?php echo $child; ?>', <?php echo $this->extensionInstance->getClassExtention()->name; ?>, <?php echo Table::writeArray($parameters) ?>)<?php
-        // We retrieve the contents of the buffer.
-        $content = ob_get_contents ();
-        // We clean the buffer.
-        ob_clean ();
-        // We close the buffer.
-        ob_end_flush ();
+        $content = sprintf('->add(\'%s\', %s, [', $child, $this->extensionInstance->getClassExtention()->name) . PHP_EOL;
+        foreach ($parameters as $k => $v) {
+            if (is_bool($v)) {
+                $v = ($v === true) ? 'true' : $v;
+                $v = ($v === false) ? 'false' : $v;
+                $content .= "            '$k' => $v," . PHP_EOL;
+            } elseif (strpos($v, 'function') !== false) {
+                $content .= "            '$k' => $v," . PHP_EOL;
+            } else {
+                $content .= "            '$k' => '$v'," . PHP_EOL;
+            }
+        }
+
+        if ($isEndLine) {
+            $content .= '        ]);' .PHP_EOL;
+        } else {
+            $content .= '        ])' .PHP_EOL;
+        }
 
         return $content;
     }

@@ -1,11 +1,12 @@
 <?php
 namespace Sfynx\CoreBundle\Generator\Domain\Report\Handler;
 
-use \stdClass;
+use stdClass;
 use Sfynx\CoreBundle\Generator\Domain\Report\Generalisation\Interfaces\HandlerInterface;
 use Sfynx\CoreBundle\Generator\Domain\Report\ReporterObservable;
 use Sfynx\CoreBundle\Generator\Domain\Component\File\RecurseCopy;
 use Sfynx\CoreBundle\Generator\Domain\Component\Output\Output;
+use Sfynx\CoreBundle\Generator\Domain\Component\File\ClassHandler;
 
 /**
  * create Directories Handler
@@ -72,7 +73,7 @@ class CreateArtifatcHandler implements HandlerInterface
             if (!empty($file->target_source)) {
                 $this->versioningFileHandler($file->target_path);
 
-                file_put_contents($file->target_path, '<?php' . $eol . $file->target_source);
+                file_put_contents($file->target_path, '<?php' . $eol . ClassHandler::getFileCommentor() . $eol . $file->target_source);
                 $this->output->writeln(sprintf('<info>++</info> create file: "%s"', $file->target_path));
             }
         }

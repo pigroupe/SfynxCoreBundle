@@ -33,6 +33,7 @@ class EntityTypeExtension extends AbstractResolver implements ExtensionInterface
         'type' => '',
         'targetEntity' => '',
         'primaryKey' => false,
+        'foreignKey' => false,
         'expanded' => false,
         'multiple' => false,
         'required' => true,
@@ -58,6 +59,7 @@ class EntityTypeExtension extends AbstractResolver implements ExtensionInterface
         'type' => ['string', 'null'],
         'targetEntity' => ['string', 'null'],
         'primaryKey' => ['bool', 'null'],
+        'foreignKey' => ['bool', 'null'],
         'expanded' => ['bool', 'null'],
         'multiple' => ['bool', 'null'],
         'required' => ['bool', 'null'],
@@ -83,19 +85,22 @@ class EntityTypeExtension extends AbstractResolver implements ExtensionInterface
         $templater = $options['templater'];
 
         if (isset($this->resolverParameters['targetEntity']) && !empty($this->resolverParameters['targetEntity'])) {
-            $namespace = '\\' . $templater->namespace . '\\Domain\\Entity\\' . $this->resolverParameters['targetEntity'];
-            $this->resolverParameters['class'] = "$namespace::class";
+            $class = $this->resolverParameters['targetEntity'];
+
+            str_replace('\\', '\\', $this->resolverParameters['targetEntity'], $count);
+            if (0 == $count) {
+                $class = '\\' . $templater->namespace . '\\Domain\\Entity\\' . $this->resolverParameters['targetEntity'];
+            }
+
+            $this->resolverParameters['class'] = "$class::class";
             unset($this->resolverParameters['targetEntity']);
         }
 
-        $name = $this->resolverParameters['name'];
+        $name = lcfirst($this->resolverParameters['name']);
 
-        $this->resolverParameters['query_builder'] =
-            "function (EntityRepository \$er) use (\$${name}List) {
-    return \$${name}List;
-}";
-
-//        $this->resolverParameters['query_builder'] = \Nette\Utils\Strings::indent(ltrim(rtrim($body_query_builder) . "\n"), 1);
+        $this->resolverParameters['query_builder'] = "function (EntityRepository \$er) use (\$${name}List) {
+                return \$${name}List;
+            }";
 
         unset($this->resolverParameters['type']);
         unset($this->resolverParameters['name']);

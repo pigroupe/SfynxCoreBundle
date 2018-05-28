@@ -4,12 +4,12 @@ use Symfony\Component\OptionsResolver\Options;
 use Sfynx\CoreBundle\Layers\Presentation\Request\Generalisation\AbstractFormRequest;
 
 /**
- * Class <?php echo $templater->getTargetClassname(); ?> <?php echo PHP_EOL ?>
+ * Class <?php echo $templater->getTargetClassname(); ?><?php echo PHP_EOL ?>
  *
- * @category <?php echo $templater->getNamespace(); ?> <?php echo PHP_EOL ?>
+ * @category <?php echo $templater->getNamespace(); ?><?php echo PHP_EOL ?>
  * @package Presentation
- * @subpackage <?php echo str_replace($templater->getNamespace() . '\Presentation\\', '', $templater->getTargetNamespace()); ?> <?php echo PHP_EOL ?>
- * @author SFYNX <contact@pi-groupe.net> <?php echo PHP_EOL ?>
+ * @subpackage <?php echo str_replace($templater->getNamespace() . '\Presentation\\', '', $templater->getTargetNamespace()); ?><?php echo PHP_EOL ?>
+ * @author SFYNX <contact@pi-groupe.net><?php echo PHP_EOL ?>
  * @licence LGPL
  */
 class <?php echo $templater->getTargetClassname(); ?> extends AbstractFormRequest
@@ -39,7 +39,7 @@ class <?php echo $templater->getTargetClassname(); ?> extends AbstractFormReques
             '<?php echo $field->name ?>',
 <?php endforeach; ?>
         ],
-        'PUT'  => 'POST'
+        'PATCH' => 'POST'
     ];
 
     /**
@@ -49,16 +49,16 @@ class <?php echo $templater->getTargetClassname(); ?> extends AbstractFormReques
         'GET' => [
 <?php foreach ($templater->getTargetCommandFields() as $field): ?>
 <?php if ($field->name != 'entityId'): ?>
-            '<?php echo $field->name ?>' => ['<?php if ($field->type != 'id'): ?><?php if ($field->type == 'number'): ?>integer<?php elseif ($field->type == 'datetime'): ?>string<?php elseif ($field->type == 'valueObject'): ?>array<?php else: ?><?php echo $field->type ?><?php endif; ?><?php else: ?>string<?php endif; ?>', 'null'],
+            '<?php echo $field->name ?>' => ['<?php if (strpos($field->type, 'entityId') !== false): ?>integer<?php elseif (strpos(strtolower($field->type), 'id') !== false): ?>integer<?php elseif (strtolower($field->type) == 'number'): ?>integer<?php elseif (strtolower($field->type) == 'datetime'): ?>DateTime<?php elseif (strtolower($field->type) == 'valueobject'): ?>array<?php else: ?><?php echo $field->type ?><?php endif; ?>', 'null'],
 <?php endif; ?>
 <?php endforeach; ?>
         ],
         'POST' => [
 <?php foreach ($templater->getTargetCommandFields() as $field): ?>
-            '<?php echo $field->name ?>' => ['<?php if ($field->type != 'id'): ?><?php if ($field->type == 'number'): ?>integer<?php elseif ($field->type == 'datetime'): ?>string<?php elseif ($field->type == 'valueObject'): ?>array<?php else: ?><?php echo $field->type ?><?php endif; ?><?php else: ?>string<?php endif; ?>', 'null'],
+            '<?php echo $field->name ?>' => ['<?php if (strpos($field->type, 'entityId') !== false): ?>integer<?php elseif (strpos(strtolower($field->type), 'id') !== false): ?>integer<?php elseif (strtolower($field->type) == 'number'): ?>integer<?php elseif (strtolower($field->type) == 'datetime'): ?>DateTime<?php elseif (strtolower($field->type) == 'valueobject'): ?>array<?php else: ?><?php echo $field->type ?><?php endif; ?>', 'null'],
 <?php endforeach; ?>
         ],
-        'PUT' => 'POST'
+        'PATCH' => 'POST'
     ];
 
     /**
@@ -68,13 +68,40 @@ class <?php echo $templater->getTargetClassname(); ?> extends AbstractFormReques
     {
         $this->options = $this->request->getRequest()->get('', []);
 
-        foreach ([] as $data) {
+        // boolean trsnaformation
+        $dataBool = [
+<?php foreach ($templater->getTargetCommandFields() as $field): ?>
+<?php if (strpos(strtolower($field->type), 'bool') !== false): ?>
+        <?php echo $field->name ?>
+<?php endif; ?>
+<?php endforeach; ?>
+        ];
+
+        foreach ($dataBool as $data) {
             if (isset($this->options[$data])) {
                 $this->options[$data] = (int)$this->options[$data] ? true : false;
             }
         }
-        $id = $this->request->get('id', '');
-        $this->options['entityId'] = ('' !== $id) ? (int)$id : null;
+
+        // identifier trsnaformation
+<?php foreach ($templater->getTargetCommandFields() as $field): ?>
+<?php if (strpos(strtolower($field->type), 'id') !== false): ?>
+        $<?php echo $field->name ?> = $this->request->get('<?php echo $field->name ?>', '');
+        $this->options['<?php echo $field->name ?>'] = ('' !== $<?php echo $field->name ?>) ? (int)$<?php echo $field->name ?> : null;
+
+<?php endif; ?>
+<?php endforeach; ?>
+
+        // datetime trsnaformation
+<?php foreach ($templater->getTargetCommandFields() as $field): ?>
+<?php if (strpos(strtolower($field->type), 'datetime') !== false): ?>
+        if (isset($this->options['<?php echo $field->name ?>'])) {
+            $data = $this->options['<?php echo $field->name ?>'];
+            $this->options['<?php echo $field->name ?>'] = (null !== $data && !empty($data)) ? new \DateTime($data) : null;
+        }
+<?php endif; ?>
+<?php endforeach; ?>
+
         $this->options = (null !== $this->options) ? $this->options : [];
     }
 }

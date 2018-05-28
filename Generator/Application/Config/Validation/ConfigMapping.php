@@ -98,33 +98,37 @@ class ConfigMapping implements ValidationInterface
      */
     protected function buildTree(array $entities = null, array $vo = null, array $tree = []): array
     {
-        foreach ($entities as $name => $data) {
+        foreach ($entities as $nameEntity => $data) {
             foreach ($data['x-fields'] as $nameField => $field) {
                 if ($field['type'] == 'valueObject') {
-                    $tree[$name][$nameField] = $this->buildTree([$vo[$field['voName']]], $vo, []);
+                    $tree[$nameEntity][$nameField] = $this->buildTree([$vo[$field['voName']]], $vo, []);
 
                     if (isset($field['required'])) {
-                        foreach($tree[$name][$nameField] as $k => $f) {
-                            $tree[$name][$nameField][$k]['required'] = $field['required'];
+                        foreach($tree[$nameEntity][$nameField] as $k => $f) {
+                            $tree[$nameEntity][$nameField][$k]['required'] = $field['required'];
                         }
                     }
 
                     if (isset($field['targetEntity'])) {
-                        $tree[$name][$nameField]['id']['targetEntity'] = $field['targetEntity'];
+                        $tree[$nameEntity][$nameField]['id']['targetEntity'] = $field['targetEntity'];
                     }
 
-                    $this->addCommandFields($tree[$name][$nameField], $name, $nameField);
+                    if (isset($field['name'])) {
+                        $this->addCommandFields($tree[$nameEntity][$nameField], $field['name'], '');
+                    } else {
+                        $this->addCommandFields($tree[$nameEntity][$nameField], $nameEntity, $nameField);
+                    }
 
                     unset($field['type']); unset($field['voName']);
-                    $tree[$name][$nameField] = array_merge($field, $tree[$name][$nameField]);
+                    $tree[$nameEntity][$nameField] = array_merge($field, $tree[$nameEntity][$nameField]);
                 } else {
                     if (!isset($field['required'])) {
                         $field['required'] = false;
                     }
 
-                    $tree[$name][$nameField] = $field;
+                    $tree[$nameEntity][$nameField] = $field;
 
-                    $this->addCommandFields([$nameField => $field], $name);
+                    $this->addCommandFields([$nameField => $field], $nameEntity);
                 }
             }
         }
@@ -154,7 +158,9 @@ class ConfigMapping implements ValidationInterface
                 $name_ = $name . ucfirst($suffix);
             }
 
-            if (isset($field['type'])) {
+            if (isset($field['name'])) {
+                $this->commandFields[] = $field;
+            } elseif (isset($field['type'])) {
                 str_replace (ucfirst($attribut), '', $name_, $count);
                 if (strtolower($attribut) !== strtolower($name_) && $count == 0) {
                     $name_ = $name_ . ucfirst($attribut);
