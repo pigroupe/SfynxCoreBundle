@@ -26,11 +26,11 @@ class OBCreateEntityFormView extends AbstractCreateFormView
      */
     protected function process(): bool
     {
-//        try {
+        try {
             $this->wfLastData->form = $this->createForm();
-//        } catch (Exception $e) {
-//            throw WorkflowException::noCreatedForm();
-//        }
+        } catch (Exception $e) {
+            throw WorkflowException::noCreatedForm();
+        }
         return true;
     }
 
@@ -41,7 +41,7 @@ class OBCreateEntityFormView extends AbstractCreateFormView
         if ((Kernel::MAJOR_VERSION >= 3)
             && (Kernel::MINOR_VERSION >= 3)
         ) {
-            return $this->formFactory->create(get_class($this->formType), $this->wfHandler->command);
+            return $this->formFactory->create(get_class($this->formType), $this->wfHandler->entity);
         } else {
             return $this->formFactory->create($this->formType, $this->wfHandler->entity);
         }

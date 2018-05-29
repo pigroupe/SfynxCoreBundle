@@ -100,7 +100,7 @@ class ConfigMapping implements ValidationInterface
     {
         foreach ($entities as $nameEntity => $data) {
             foreach ($data['x-fields'] as $nameField => $field) {
-                if ($field['type'] == 'valueObject') {
+                if (strtolower($field['type']) == 'valueobject') {
                     $tree[$nameEntity][$nameField] = $this->buildTree([$vo[$field['voName']]], $vo, []);
 
                     if (isset($field['required'])) {
@@ -109,8 +109,8 @@ class ConfigMapping implements ValidationInterface
                         }
                     }
 
-                    if (isset($field['targetEntity'])) {
-                        $tree[$nameEntity][$nameField]['id']['targetEntity'] = $field['targetEntity'];
+                    if (isset($field['mapping'])) {
+                        $tree[$nameEntity][$nameField]['id']['mapping'] = $field['mapping'];
                     }
 
                     if (isset($field['name'])) {
