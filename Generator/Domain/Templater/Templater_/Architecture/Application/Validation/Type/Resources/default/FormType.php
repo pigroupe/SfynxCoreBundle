@@ -14,8 +14,10 @@ use Sfynx\CoreBundle\Layers\Application\Validation\Type\AbstractDefaultType;
  * @category <?php echo $templater->getNamespace(); ?><?php echo PHP_EOL ?>
  * @package Application
  * @subpackage <?php echo str_replace($templater->getNamespace() . '\Application\\', '', $templater->getTargetNamespace()); ?><?php echo PHP_EOL ?>
- * @author SFYNX <contact@pi-groupe.net><?php echo PHP_EOL ?>
- * @licence LGPL
+ *
+ * @author SFYNX <sfynx@pi-groupe.net>
+ * @link http://www.sfynx.fr
+ * @license LGPL (https://opensource.org/licenses/LGPL-3.0)
  */
 class <?php echo $templater->getTargetClassname(); ?> extends AbstractDefaultType
 {
@@ -54,6 +56,6 @@ class <?php echo $templater->getTargetClassname(); ?> extends AbstractDefaultTyp
      */
     public function getBlockPrefix()
     {
-        return '<?php echo $templater->reportDir; ?>_<?php echo $templater->getTargetClassname(); ?>';
+        return '<?php echo strtolower($templater->getNamespace()); ?>_<?php echo strtolower($templater->getTargetClassname()); ?>';
     }
 }

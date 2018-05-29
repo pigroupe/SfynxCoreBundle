@@ -10,7 +10,7 @@ use Sfynx\CoreBundle\Generator\Domain\Templater\Templater_;
  * Validation Type Application Widget
  * @category   Sfynx\CoreBundle\Generator
  * @package    Domain
- * @subpackage Widget\Widget_\Architecture\Application\Validation\Type
+ * @subpackage Widget\Widget_\Architecture\Application\Validation
  *
  * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
  */

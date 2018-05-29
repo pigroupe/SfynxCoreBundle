@@ -66,56 +66,6 @@ class ClassHandler
     }
 
     /**
-     * @param PhpNamespace $namespace
-     * @param stdClass $data
-     * @param array|null $index
-     * @param string $context
-     * @return void
-     * @static
-     */
-    public static function addUses(PhpNamespace $namespace, stdClass $data, ?array $index = [], string $context = ''): void
-    {
-        if (property_exists($data, 'options')
-            && property_exists($data->options, 'uses')
-            && $data->options->uses
-        ) {
-            foreach ($data->options->uses as $use) {
-                self::addUse($namespace, $use, $index, $context);
-            }
-        }
-    }
-
-    /**
-     * @param PhpNamespace $namespace
-     * @param string $use
-     * @param array|null $index
-     * @param string $context
-     * @return void
-     * @static
-     */
-    public static function addUse(PhpNamespace $namespace, string $use, ?array $index = [], string $context = ''): void
-    {
-        if (!empty($index)) {
-            foreach ($index as $class => $arguments) {
-                str_replace($use, $use, $class, $count);
-
-                if ($count
-                    && (self::getClassNameFromNamespace($use) == self::getClassNameFromNamespace($class))
-                ) {
-                    $use = $class;
-                }
-            }
-        }
-
-        str_replace($context, $context, $use, $countContext);
-        if ( !empty($context) && (0 == $countContext)) {
-            $use = $context . '\\' . $use;
-        }
-
-        $namespace->addUse($use);
-    }
-
-    /**
      * Get file doc comment
      *
      * @return string
@@ -170,25 +120,6 @@ class ClassHandler
     }
 
     /**
-     * @param PhpNamespace $namespace
-     * @param ClassType $class
-     * @param stdClass $data
-     * @param array|null $index
-     * @param string $context
-     * @return void
-     * @static
-     */
-    public static function setExtends(PhpNamespace $namespace, ClassType $class, stdClass $data, ?array $index = [], string $context = ''): void
-    {
-        if (property_exists($data, 'extends')
-            && $data->extends
-        ) {
-            $class->setExtends(self::getClassNameFromNamespace($data->extends));
-            self::addUse($namespace, $data->extends, $index, $context);
-        }
-    }
-
-    /**
      * @param ClassType $class
      * @param stdClass $data
      * @return void
@@ -197,7 +128,7 @@ class ClassHandler
     public static function addComments(ClassType $class, stdClass $data): void
     {
         if (property_exists($data, 'comments')
-            && $data->comments
+            && !empty($data->comments)
         ) {
             foreach ($data->comments as $comment) {
                 $class->addComment($comment);
@@ -214,11 +145,80 @@ class ClassHandler
      * @return void
      * @static
      */
+    public static function setExtends(PhpNamespace $namespace, ClassType $class, stdClass $data, ?array $index = [], string $context = ''): void
+    {
+        if (property_exists($data, 'extends')
+            && !empty($data->extends)
+        ) {
+            $class->setExtends(self::getClassNameFromNamespace($data->extends));
+            self::addUse($namespace, $data->extends, $index, $context);
+        }
+    }
+
+    /**
+     * @param PhpNamespace $namespace
+     * @param stdClass $data
+     * @param array|null $index
+     * @param string $context
+     * @return void
+     * @static
+     */
+    public static function addUses(PhpNamespace $namespace, stdClass $data, ?array $index = [], string $context = ''): void
+    {
+        if (property_exists($data, 'options')
+            && property_exists($data->options, 'uses')
+            && !empty($data->options->uses)
+        ) {
+            foreach ($data->options->uses as $use) {
+                self::addUse($namespace, $use, $index, $context);
+            }
+        }
+    }
+
+    /**
+     * @param PhpNamespace $namespace
+     * @param string $use
+     * @param array|null $index
+     * @param string $context
+     * @return void
+     * @static
+     */
+    public static function addUse(PhpNamespace $namespace, string $use, ?array $index = [], string $context = ''): void
+    {
+        if (!empty($index)) {
+            foreach ($index as $class => $arguments) {
+                str_replace($use, $use, $class, $count);
+
+                if ($count
+                    && (self::getClassNameFromNamespace($use) == self::getClassNameFromNamespace($class))
+                ) {
+                    $use = $class;
+                }
+            }
+        }
+
+        str_replace($context, $context, $use, $countContext);
+        if ( !empty($context) && (0 == $countContext)) {
+            $use = $context . '\\' . $use;
+        }
+
+        $namespace->addUse($use);
+    }
+
+    /**
+     * @param PhpNamespace $namespace
+     * @param ClassType $class
+     * @param stdClass $data
+     * @param array|null $index
+     * @param string $context
+     * @return void
+     * @static
+     */
     public static function addImplements(PhpNamespace $namespace, ClassType $class, stdClass $data, ?array $index = [], string $context = ''): void
     {
         if (property_exists($data, 'options')
             && property_exists($data->options, 'implements')
-            && $data->options->implements
+            && !empty($data->options->implements)
         ) {
             foreach ($data->options->implements as $implement) {
                 $class->addImplement(self::getClassNameFromNamespace($implement));
@@ -240,11 +240,44 @@ class ClassHandler
     {
         if (property_exists($data, 'options')
             && property_exists($data->options, 'traits')
-            && $data->options->traits
+            && !empty($data->options->traits)
         ) {
             foreach ($data->options->traits as $trait) {
                 $class->addTrait(self::getClassNameFromNamespace($trait));
                 self::addUse($namespace, $trait, $index, $context);
+            }
+        }
+    }
+
+    /**
+     * @param PhpNamespace $namespace
+     * @param ClassType $class
+     * @param stdClass $data
+     * @param array|null $index
+     * @param string $context
+     * @param bool $addConstruct
+     * @return void
+     * @static
+     */
+    public static function addArguments(PhpNamespace $namespace, ClassType $class, stdClass $data, ?array $index = [], string $context = '', bool $addConstruct = true): void
+    {
+        if (property_exists($data, 'arguments')
+            && !empty($data->arguments)
+        ) {
+            foreach ($data->arguments as $argument) {
+                self::addUse($namespace, $argument, $index, $context);
+                $info = self::getArgResult($namespace, $argument, [], false);
+
+                if (in_array($info['type'], ['interface', 'class'])) {
+                    if (!is_null($data)
+                        && property_exists($data, 'construct') && !empty($data->construct)
+                        && property_exists($data->construct, 'create') && ($data->construct->create == true)
+                        && property_exists($data->construct, 'body')
+                        && !empty($data->construct->body)
+                    ) {
+                        self::setArgClassResult($namespace, $argument, $index, $info['value'], $info['basename'], $addConstruct);
+                    }
+                }
             }
         }
     }
@@ -261,7 +294,7 @@ class ClassHandler
     {
         if (property_exists($data, 'options')
             && property_exists($data->options, 'methods')
-            && $data->options->methods
+            && !empty($data->options->methods)
         ) {
             foreach ($data->options->methods as $name => $method) {
                 if (property_exists($method, 'name')) {
@@ -319,17 +352,17 @@ class ClassHandler
                     }
 
                     // set Body of the method
-
                     if (property_exists($method, 'body') && !empty($method->body)) {
                         foreach ($method->body as $line) {
                             $body .= $line . PHP_EOL;
                         }
                     }
+
                     if (property_exists($method, 'returnParent') && !empty($method->returnParent)) {
-                        $body .= "return parent::$method->name($methodArgs)" . PHP_EOL;
+                        $body .= "return parent::$method->name($methodArgs);" . PHP_EOL;
                     }
                     if (property_exists($method, 'insertParent') && !empty($method->insertParent)) {
-                        $body .= "parent::$method->name($methodArgs)" . PHP_EOL;
+                        $body .= "parent::$method->name($methodArgs);" . PHP_EOL;
                     }
 
                     $methodClass->addBody($body);
@@ -351,10 +384,11 @@ class ClassHandler
     /**
      * @param PhpNamespace $namespace
      * @param ClassType $class
+     * @param stdClass $data
      * @return Method|null
      * @static
      */
-    public static function addConstructorMethod(PhpNamespace $namespace, ClassType $class): ?Method
+    public static function addConstructorMethod(PhpNamespace $namespace, ClassType $class, stdClass $data = null): ?Method
     {
         if (!empty(self::$constructorArguments)) {
             $method = $class->addMethod('__construct')
@@ -370,6 +404,19 @@ class ClassHandler
                 $method->addComment(sprintf('@param %s %s', $interface, $arg));
 
                 $class->addProperty($arg)->setComment(sprintf('@var %s', $interface))->setVisibility('protected');
+            }
+            self::$constructorArguments = [];
+
+            if (!is_null($data)
+                && property_exists($data, 'construct') && !empty($data->construct)
+                && property_exists($data->construct, 'create') && ($data->construct->create == true)
+                && property_exists($data->construct, 'body')
+                && !empty($data->construct->body)
+            ) {
+                $body .= PHP_EOL;
+                foreach ($data->construct->body as $line) {
+                    $body .= $line . PHP_EOL;
+                }
             }
 
             $method->addBody($body);
@@ -403,9 +450,12 @@ class ClassHandler
     public static function setArgs(PhpNamespace $namespace, array $arguments, ?array $index = [], bool $addConstruct = true): string
     {
         $result = [];
-        foreach ($arguments as $argument) {
-            $info = self::getArgResult($namespace, $argument, $index, $addConstruct);
-            $result[] = $info['argument'];
+
+        if (!empty($arguments)) {
+            foreach ($arguments as $argument) {
+                $info = self::getArgResult($namespace, $argument, $index, $addConstruct);
+                $result[] = $info['argument'];
+            }
         }
 
         return implode(', ', $result);
@@ -434,9 +484,16 @@ class ClassHandler
 
         $interfaceName = lcfirst(str_replace('Interface', '', $basename, $countInterface));
         if (1 == $countInterface) {
-            $argResult = self::setArgInterfaceResult($namespace, $argument, $index, $interfaceName, $basename, $addConstruct);
+            $argResult = self::setArgClassResult($namespace, $argument, $index, $interfaceName, $basename, $addConstruct);
             $type = 'interface';
             $value = $interfaceName;
+        }
+
+        $classArgument = str_replace('\\', '\\', trim($argument), $countArg);
+        if ((1 <= $countArg) && (0 == $countInterface)) {
+            $argResult = self::setArgClassResult($namespace, $argument, $index, $basename, $basename, $addConstruct);;
+            $type = 'class';
+            $value = $basename;
         }
 
         $newArgument = str_replace(' ', ' ', trim($argument), $countVar);
@@ -488,7 +545,7 @@ class ClassHandler
      * @param bool $addConstruct
      * @return string
      */
-    public static function setArgInterfaceResult(PhpNamespace $namespace, string $argument, ?array $index = [], string $interfaceName, string $basename, bool $addConstruct = true): string
+    public static function setArgClassResult(PhpNamespace $namespace, string $argument, ?array $index = [], string $interfaceName, string $basename, bool $addConstruct = true): string
     {
         self::addUse($namespace, $argument, $index);
 

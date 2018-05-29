@@ -43,6 +43,9 @@ class Templater extends AbstractTemplater implements TemplaterInterface
         self::TYPE_SUBMIT => Extension\SubmitTypeExtension::class,
     ];
 
+    /** @var array */
+    protected static $excludeAttributs = ['mapping', 'primaryKey', 'foreignKey', 'defaultValue', 'nullable'];
+
     /**
      * @inheritdoc
      */
@@ -98,18 +101,28 @@ EOT;
      */
     public function add(string $child, string $type, stdClass $options = null, bool $isEndLine = false): string
     {
+        // we convert options to array
         if (null === $options) {
             $options = [];
         }
+        $options = json_decode(json_encode($options), true);
 
+        // we cheick extension instance
         if (array_key_exists($type, self::$extensionList)) {
             $instanceValue = self::$extensionList[$type];
         } else {
             $instanceValue = self::$extensionList[self::TYPE_TEXT];
         }
 
-        $this->extensionInstance = new $instanceValue(json_decode(json_encode($options), true));
+        // we delete all attributes that are not used by extensions
+        foreach (self::$excludeAttributs as $attribut) {
+            if (isset($options[$attribut])) {
+                unset($options[$attribut]);
+            }
+        }
 
+        // we execute extension
+        $this->extensionInstance = new $instanceValue($options);
         $parameters = $this->extensionInstance->getResolverParameters(false, ['templater' => $this]);
 
         $content = sprintf('->add(\'%s\', %s, [', $child, $this->extensionInstance->getClassExtention()->name) . PHP_EOL;
@@ -118,9 +131,12 @@ EOT;
                 $v = ($v === true) ? 'true' : $v;
                 $v = ($v === false) ? 'false' : $v;
                 $content .= "            '$k' => $v," . PHP_EOL;
-            } elseif (strpos($v, 'function') !== false) {
+            } elseif (!is_array($v) && strpos($v, 'function') !== false) {
                 $content .= "            '$k' => $v," . PHP_EOL;
             } else {
+                if (is_array($v)) {
+                    $v = var_export($v);
+                }
                 $content .= "            '$k' => '$v'," . PHP_EOL;
             }
         }

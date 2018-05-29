@@ -65,7 +65,7 @@ class Templater extends AbstractTemplater implements TemplaterInterface
     public function getDescription(): string
     {
         return <<<EOT
-This class expose workflow observer component
+This class expose service component
 EOT;
     }
 }

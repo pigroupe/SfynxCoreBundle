@@ -9,8 +9,10 @@ use Sfynx\CoreBundle\Layers\Presentation\Request\Generalisation\AbstractFormRequ
  * @category <?php echo $templater->getNamespace(); ?><?php echo PHP_EOL ?>
  * @package Presentation
  * @subpackage <?php echo str_replace($templater->getNamespace() . '\Presentation\\', '', $templater->getTargetNamespace()); ?><?php echo PHP_EOL ?>
- * @author SFYNX <contact@pi-groupe.net><?php echo PHP_EOL ?>
- * @licence LGPL
+ *
+ * @author SFYNX <sfynx@pi-groupe.net>
+ * @link http://www.sfynx.fr
+ * @license LGPL (https://opensource.org/licenses/LGPL-3.0)
  */
 class <?php echo $templater->getTargetClassname(); ?> extends AbstractFormRequest
 {
@@ -68,11 +70,11 @@ class <?php echo $templater->getTargetClassname(); ?> extends AbstractFormReques
     {
         $this->options = $this->request->getRequest()->get('', []);
 
-        // boolean trsnaformation
+        // boolean transformation
         $dataBool = [
 <?php foreach ($templater->getTargetCommandFields() as $field): ?>
 <?php if (strpos(strtolower($field->type), 'bool') !== false): ?>
-        <?php echo $field->name ?>
+            '<?php echo $field->name ?>',
 <?php endif; ?>
 <?php endforeach; ?>
         ];
@@ -83,7 +85,7 @@ class <?php echo $templater->getTargetClassname(); ?> extends AbstractFormReques
             }
         }
 
-        // identifier trsnaformation
+        // identifier transformation
 <?php foreach ($templater->getTargetCommandFields() as $field): ?>
 <?php if (strpos(strtolower($field->type), 'id') !== false): ?>
         $<?php echo $field->name ?> = $this->request->get('<?php echo $field->name ?>', '');
@@ -92,7 +94,7 @@ class <?php echo $templater->getTargetClassname(); ?> extends AbstractFormReques
 <?php endif; ?>
 <?php endforeach; ?>
 
-        // datetime trsnaformation
+        // datetime transformation
 <?php foreach ($templater->getTargetCommandFields() as $field): ?>
 <?php if (strpos(strtolower($field->type), 'datetime') !== false): ?>
         if (isset($this->options['<?php echo $field->name ?>'])) {
