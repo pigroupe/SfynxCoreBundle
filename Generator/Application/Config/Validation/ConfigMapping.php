@@ -96,12 +96,17 @@ class ConfigMapping implements ValidationInterface
      * @param array $tree
      * @return array
      */
-    protected function buildTree(array $entities = null, array $vo = null, array $tree = []): array
+    protected function buildTree(array $entities = null, array $vo = null, array $tree = [], string $nameEntityOverload = ''): array
     {
         foreach ($entities as $nameEntity => $data) {
             foreach ($data['x-fields'] as $nameField => $field) {
+                $field['entityName'] = $nameEntity;
+                if (!empty($nameEntityOverload)) {
+                    $field['entityName'] = $nameEntityOverload;
+                }
+
                 if (strtolower($field['type']) == 'valueobject') {
-                    $tree[$nameEntity][$nameField] = $this->buildTree([$vo[$field['voName']]], $vo, []);
+                    $tree[$nameEntity][$nameField] = $this->buildTree([$vo[$field['voName']]], $vo, [], $field['entityName']);
 
                     if (isset($field['required'])) {
                         foreach($tree[$nameEntity][$nameField] as $k => $f) {

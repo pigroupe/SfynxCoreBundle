@@ -1,3 +1,56 @@
+<?php
+
+    $fieldsEntityOption = '';
+    if ($templater->has('targetOptions') && !empty($templater->getTargetOptions())) {
+        $fieldsEntityOption = $templater->getTargetOptions()['entity'];
+    }
+
+    // we search ManyToOne relationship
+    $fieldsEntityList = [];
+    if (empty($fieldsEntityOption)) {
+        foreach ($templater->getTargetCommandFields() as $field) {
+            if (($field->type == 'id')
+                && property_exists($field, 'mapping')
+            ) {
+                $fieldsEntityList[] = $field;
+            }
+        }
+    } else {
+        $fieldsEntityList = [];
+        foreach ($templater->getTargetCommandFields() as $field) {
+            if (($field->type == 'id')
+                && property_exists($field, 'mapping')
+                && ($field->entityName == $fieldsEntityOption)
+            ) {
+                $fieldsEntityList[] = $field;
+            }
+        }
+    }
+
+    // we search ManyToMany  relationship
+    $fieldsEntityArrayList = [];
+    if (empty($fieldsEntityOption)) {
+        foreach ($templater->getTargetCommandFields() as $field) {
+            if (($field->type == 'array')
+                && property_exists($field, 'mapping')
+                && property_exists($field, 'multiple') && ($field->multiple == true)
+            ) {
+                $fieldsEntityArrayList[] = $field;
+            }
+        }
+    } else {
+        $fieldsEntityArrayList = [];
+        foreach ($templater->getTargetCommandFields() as $field) {
+            if (($field->type == 'array')
+                && property_exists($field, 'mapping')
+                && property_exists($field, 'multiple') && ($field->multiple == true)
+                && ($field->entityName == $fieldsEntityOption)
+            ) {
+                $fieldsEntityArrayList[] = $field;
+            }
+        }
+    }
+?>
 namespace <?php echo $templater->getTargetNamespace(); ?>;
 
 use Sfynx\CoreBundle\Layers\Application\Command\Generalisation\Interfaces\CommandInterface;
@@ -23,7 +76,12 @@ class <?php echo $templater->getTargetClassname(); ?> extends AbstractManager
     public function newFromCommand(CommandInterface $command): object
     {
         $class = $this->getClass();
-        $entity = $class::newFromCommand($command, ['image', 'image2']);
+        $entity = $class::newFromCommand($command, [
+<?php foreach ($fieldsEntityList as $field): ?>
+                '<?php echo lcfirst($field->name); ?>',
+<?php endforeach; ?>
+            ]
+        );
         $this->transformEntity($entity, $command);
 
         return $entity;
@@ -35,7 +93,13 @@ class <?php echo $templater->getTargetClassname(); ?> extends AbstractManager
     public function buildFromCommand(object $entity, CommandInterface $command, bool $updateCommand = false): object
     {
         $class = $this->getClass();
-        $entity = $class::buildFromCommand($entity, $command, ['image', 'image2'], $updateCommand);
+        $entity = $class::buildFromCommand($entity, $command, [
+<?php foreach ($fieldsEntityList as $field): ?>
+                '<?php echo lcfirst($field->name); ?>',
+<?php endforeach; ?>
+            ],
+            $updateCommand
+        );
         $this->transformEntity($entity, $command);
 
         return $entity;
@@ -44,7 +108,7 @@ class <?php echo $templater->getTargetClassname(); ?> extends AbstractManager
     /**
      * {@inheritdoc}
      */
-    public function buildFromEntity(CommandInterface $command, object $entity): \CommandInterface
+    public function buildFromEntity(CommandInterface $command, object $entity): CommandInterface
     {
         $class = $this->getClass();
         $command = $class::buildFromEntity($command, $entity);
@@ -59,17 +123,28 @@ class <?php echo $templater->getTargetClassname(); ?> extends AbstractManager
     */
     protected function transformEntity(object &$entity, CommandInterface $command): EntityManager
     {
-<?php foreach ($templater->getTargetCommandFields() as $field): ?>
-<?php if ($field->type == 'id'  && property_exists($field, 'mapping')): ?>
+<?php foreach ($fieldsEntityList as $field): ?>
         if ('' !== $command-><?php echo lcfirst($field->name); ?> && null !== $command-><?php echo lcfirst($field->name); ?>) {
-            $entity->set<?php echo ucfirst($field->name); ?>(
+            $entity->set<?php echo ucfirst(str_replace($field->entityName, '', $field->name)); ?>(
                 $this->getQueryRepository()->getEntityManager()->getReference(
-                    '\<?php if(property_exists($field, 'mapping') && property_exists($field->mapping, 'targetEntity')): echo $field->mapping->targetEntity; endif; ?>',
+                    '\<?php if(property_exists($field, 'mapping') && property_exists($field->mapping, 'targetEntity')): echo \Sfynx\CoreBundle\Generator\Domain\Component\File\ClassHandler::createNamespaceEntity($templater, $field->mapping->targetEntity); endif; ?>',
                     $command-><?php echo lcfirst($field->name); ?><?php echo PHP_EOL ?>
                 )
             );
         }
-<?php endif; ?>
+<?php endforeach; ?>
+
+<?php foreach ($fieldsEntityArrayList as $field): ?>
+        if ('' !== $command-><?php echo lcfirst($field->name); ?> && null !== $command-><?php echo lcfirst($field->name); ?>) {
+            foreach ($command-><?php echo lcfirst($field->name); ?> as $key => $<?php echo lcfirst($field->name); ?>Id) {
+                $entity->add<?php echo ucfirst($field->name); ?>(
+                    $this->getQueryRepository()->getEntityManager()->getReference(
+                        '\<?php if(property_exists($field, 'mapping') && property_exists($field->mapping, 'targetEntity')): echo \Sfynx\CoreBundle\Generator\Domain\Component\File\ClassHandler::createNamespaceEntity($templater, $field->mapping->targetEntity); endif; ?>',
+                        $<?php echo lcfirst($field->name); ?>Id
+                    )
+                );
+            }
+        }
 <?php endforeach; ?>
 
         return $this;

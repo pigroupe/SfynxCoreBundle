@@ -28,9 +28,7 @@ class PhpClassesGenerator extends AbstractGenerator
         static::$dataArr[$cat][$tag]['desc'] = $templater->getDescription();
 
         foreach (array_values($templater->getTargetWidget()) as $data) {
-            $keys = array_keys($data);
             $values = array_values($data);
-            $index = end($keys);
             $config = end($values);
 
             $templater->targetClassname = $config['class'];

@@ -9,7 +9,7 @@ use Sfynx\CoreBundle\Generator\Domain\Templater\Generalisation\Interfaces\Extens
 use Sfynx\CoreBundle\Layers\Domain\Component\Generalisation\AbstractResolver;
 
 /**
- * TextareaTypeExtension class
+ * TextTypeExtension class
  *
  * @category   Sfynx\CoreBundle\Generator
  * @package    Domain

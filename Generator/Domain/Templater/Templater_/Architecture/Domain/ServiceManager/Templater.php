@@ -18,6 +18,20 @@ class Templater extends AbstractTemplater implements TemplaterInterface
     /** @var string */
     const TAG = 'templater_archi_dom_services_manager';
 
+    /** @var array */
+    const TARGET_ATTRIBUTS = [
+        'conf-mapping' => 'commandFields',
+        'conf-widget',
+        'conf-options' => 'options',
+        'conf-cqrs'
+    ];
+
+    /** @var string */
+    const TEMPLATE_GENERATOR = ReporterObservable::GENERATOR_TEMPLATE_MULTIPLE;
+
+    /** @var bool */
+    const NAMESPACE_WITH_CQRS = false;
+
     /**
      * @inheritdoc
      */

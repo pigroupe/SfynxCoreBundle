@@ -545,8 +545,14 @@ class ClassHandler
      * @param bool $addConstruct
      * @return string
      */
-    public static function setArgClassResult(PhpNamespace $namespace, string $argument, ?array $index = [], string $interfaceName, string $basename, bool $addConstruct = true): string
-    {
+    public static function setArgClassResult(
+            PhpNamespace $namespace,
+            string $argument,
+            ?array $index = [],
+            string $interfaceName,
+            string $basename,
+            bool $addConstruct = true
+    ): string {
         self::addUse($namespace, $argument, $index);
 
         $attribute = "\$$interfaceName";
@@ -567,5 +573,20 @@ class ClassHandler
         list($type, $arg) = explode(' ', $argument);
 
         return $arg;
+    }
+
+    /**
+     * @param TemplaterInterface $templater
+     * @param stdClass $data
+     * @return string
+     * @static
+     */
+    public static function createNamespaceEntity(TemplaterInterface $templater, string $entityName): string
+    {
+        if (!strrpos($entityName, '\\')) {
+            $entityName = sprintf('%s\%s', $templater->namespace, 'Domain\\Service\\Entity\\' . $entityName);
+        }
+
+        return $entityName;
     }
 }

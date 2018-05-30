@@ -27,13 +27,11 @@ class ReporterObservable
     public $output;
     /** @var Metrics */
     public $metrics;
-    /** @var SimpleClassGenerator */
-    public $simpleClassGenerator;
-    /** @var PhpClassGenerator */
-    public $phpClassGenerator;
 
     /** @var string */
-    const GENERATOR_SIMPLE = 'simpleClassGenerator';
+    const GENERATOR_TEMPLATE = 'templateClassGenerator';
+    /** @var string */
+    const GENERATOR_TEMPLATE_MULTIPLE = 'templateClassesGenerator';
     /** @var string */
     const GENERATOR_PHP = 'phpClassGenerator';
     /** @var string */
@@ -44,7 +42,8 @@ class ReporterObservable
      * @var string[]
      */
     protected static $generatorList = [
-        Generator\SimpleClassGenerator::class => self::GENERATOR_SIMPLE,
+        Generator\TemplateClassGenerator::class => self::GENERATOR_TEMPLATE,
+        Generator\TemplateClassesGenerator::class => self::GENERATOR_TEMPLATE_MULTIPLE,
         Generator\PhpClassGenerator::class => self::GENERATOR_PHP,
         Generator\PhpClassesGenerator::class => self::GENERATOR_PHP_MULTIPLE,
     ];
