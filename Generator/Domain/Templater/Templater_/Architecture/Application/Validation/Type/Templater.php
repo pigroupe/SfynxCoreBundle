@@ -25,8 +25,12 @@ class Templater extends AbstractTemplater implements TemplaterInterface
     /** @var string */
     const TAG = 'templater_archi_app_validation_type';
 
+    /** @var bool */
+    const NAMESPACE_WITH_CQRS = false;
+
     const TYPE_ENTITY = 'id';
     const TYPE_TEXT = 'string';
+    const TYPE_ARRAY = 'array';
     const TYPE_TEXTAREA = 'textarea';
     const TYPE_DATE = 'datetime';
     const TYPE_SUBMIT = 'submit';
@@ -38,13 +42,14 @@ class Templater extends AbstractTemplater implements TemplaterInterface
     protected static $extensionList = [
         self::TYPE_ENTITY => Extension\EntityTypeExtension::class,
         self::TYPE_TEXT => Extension\TextTypeExtension::class,
+        self::TYPE_ARRAY => Extension\ChoiceTypeExtension::class,
         self::TYPE_TEXTAREA => Extension\TextareaTypeExtension::class,
         self::TYPE_DATE => Extension\DateTypeExtension::class,
         self::TYPE_SUBMIT => Extension\SubmitTypeExtension::class,
     ];
 
     /** @var array */
-    protected static $excludeAttributs = ['mapping', 'primaryKey', 'foreignKey', 'defaultValue', 'nullable'];
+    protected static $excludeAttributs = ['properties', 'mapping', 'primaryKey', 'foreignKey', 'defaultValue', 'nullable', 'entityName'];
 
     /**
      * @inheritdoc
@@ -114,6 +119,8 @@ EOT;
             $instanceValue = self::$extensionList[self::TYPE_TEXT];
         }
 
+        $resolverParametersOption = array_merge($options, ['templater' => $this]);
+
         // we delete all attributes that are not used by extensions
         foreach (self::$excludeAttributs as $attribut) {
             if (isset($options[$attribut])) {
@@ -123,7 +130,7 @@ EOT;
 
         // we execute extension
         $this->extensionInstance = new $instanceValue($options);
-        $parameters = $this->extensionInstance->getResolverParameters(false, ['templater' => $this]);
+        $parameters = $this->extensionInstance->getResolverParameters(false, $resolverParametersOption);
 
         $content = sprintf('->add(\'%s\', %s, [', $child, $this->extensionInstance->getClassExtention()->name) . PHP_EOL;
         foreach ($parameters as $k => $v) {
@@ -133,10 +140,13 @@ EOT;
                 $content .= "            '$k' => $v," . PHP_EOL;
             } elseif (!is_array($v) && strpos($v, 'function') !== false) {
                 $content .= "            '$k' => $v," . PHP_EOL;
+            } elseif (!is_array($v) && strpos($v, '::class') !== false) {
+                $content .= "            '$k' => $v," . PHP_EOL;
+            } elseif (!is_array($v) && strpos($v, 'List') !== false) {
+                $content .= "            '$k' => $v," . PHP_EOL;
+            } elseif (is_array($v)) {
+                $content .= "            '$k' => []," . PHP_EOL;
             } else {
-                if (is_array($v)) {
-                    $v = var_export($v);
-                }
                 $content .= "            '$k' => '$v'," . PHP_EOL;
             }
         }

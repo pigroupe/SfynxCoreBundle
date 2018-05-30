@@ -6,7 +6,7 @@ use Sfynx\CoreBundle\Generator\Domain\Report\Generalisation\AbstractGenerator;
 use Sfynx\CoreBundle\Generator\Domain\Component\File\ClassHandler;
 
 /**
- * Class SimpleClassGenerator
+ * Class TemplateClassGenerator
  *
  * @category   Sfynx\CoreBundle\Generator
  * @package    Domain
@@ -14,7 +14,7 @@ use Sfynx\CoreBundle\Generator\Domain\Component\File\ClassHandler;
  *
  * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
  */
-class SimpleClassGenerator extends AbstractGenerator
+class TemplateClassGenerator extends AbstractGenerator
 {
     /**
      * @inheritdoc
@@ -31,11 +31,11 @@ class SimpleClassGenerator extends AbstractGenerator
             list($namespace, $source) = $data;
             list($direname, $basename, $extension, $templater->targetClassname) = array_values(pathinfo($source));
 
-            if ($templater->has('targetCqrs')) {
+            if ($templater->has('targetCqrs') && $templater::NAMESPACE_WITH_CQRS) {
                 $namespace = $namespace . '\\' . $templater->getTargetCqrs();
             }
 
-            if ($templater->has('targetClass')) {
+            if ($templater->has('targetClass') && !empty($templater->getTargetClass())) {
                 $templater->targetClassname = $templater->getTargetClass();
 
                 if (strrpos($templater->targetClassname, '\\')) {
@@ -70,7 +70,6 @@ class SimpleClassGenerator extends AbstractGenerator
         require $source;
         $content =  ob_get_clean();
 
-//        $content = \Nette\Utils\Strings::indent(ltrim(rtrim($content) . "\n"), 0);
         $content = \Nette\Utils\Strings::normalize($content);
         $content = \Nette\PhpGenerator\Helpers::tabsToSpaces($content, $templater->getIndentation()) . PHP_EOL;
 

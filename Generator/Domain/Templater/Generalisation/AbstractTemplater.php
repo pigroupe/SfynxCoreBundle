@@ -22,14 +22,20 @@ abstract class AbstractTemplater implements TemplaterInterface
 {
     /** @var string */
     const TAG = '';
+
     /** @var array */
     const TARGET_ATTRIBUTS = [
         'conf-mapping' => 'commandFields',
         'conf-widget' => 'class',
+        'conf-options' => 'options',
         'conf-cqrs'
     ];
+
     /** @var string */
-    const TEMPLATE_GENERATOR = ReporterObservable::GENERATOR_SIMPLE;
+    const TEMPLATE_GENERATOR = ReporterObservable::GENERATOR_TEMPLATE;
+
+    /** @var bool */
+    const NAMESPACE_WITH_CQRS = true;
 
     /** @var integer */
     protected $indentation;
