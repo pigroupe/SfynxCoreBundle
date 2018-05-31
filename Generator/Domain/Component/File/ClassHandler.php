@@ -268,14 +268,16 @@ class ClassHandler
                 self::addUse($namespace, $argument, $index, $context);
                 $info = self::getArgResult($namespace, $argument, [], false);
 
-                if (in_array($info['type'], ['interface', 'class'])) {
-                    if (!is_null($data)
-                        && property_exists($data, 'construct') && !empty($data->construct)
-                        && property_exists($data->construct, 'create') && ($data->construct->create == true)
-                        && property_exists($data->construct, 'body')
-                        && !empty($data->construct->body)
-                    ) {
+                if (!is_null($data)
+                    && property_exists($data, 'construct') && !empty($data->construct)
+                    && property_exists($data->construct, 'create') && ($data->construct->create == true)
+                    && property_exists($data->construct, 'body')
+                    && !empty($data->construct->body)
+                ) {
+                    if (in_array($info['type'], ['interface', 'class'])) {
                         self::setArgClassResult($namespace, $argument, $index, $info['value'], $info['basename'], $addConstruct);
+                    } elseif ($addConstruct && in_array($info['type'], ['var'])) {
+                        self::addConstructorArgument($info['argument'], $info);
                     }
                 }
             }
@@ -373,10 +375,10 @@ class ClassHandler
 
     /**
      * @param string $interfaceName
-     * @param string $attributeName
+     * @param string|array $attributeName
      * @return void
      */
-    public static function addConstructorArgument(string $interfaceName, string $attributeName): void
+    public static function addConstructorArgument(string $interfaceName, $attributeName): void
     {
         self::$constructorArguments[$interfaceName] = $attributeName;
     }
@@ -396,14 +398,37 @@ class ClassHandler
                 ->addComment('');
 
             $body = '';
-            foreach (self::$constructorArguments as $interface => $attribute) {
-                $arg = lcfirst(str_replace('Interface', '', $interface));
-                $body .= "$attribute = \$$arg;" . PHP_EOL;
 
-                $method->addParameter($arg)->setTypeHint($interface);
-                $method->addComment(sprintf('@param %s %s', $interface, $arg));
+            foreach (self::$constructorArguments as $value => $attribute) {
+                $defaultValue = null;
 
-                $class->addProperty($arg)->setComment(sprintf('@var %s', $interface))->setVisibility('protected');
+                if (is_array($attribute) && isset($attribute['value'])) {
+                    $value = preg_replace('!\s+!', ' ', $attribute['value']);
+                    list($type, $arg) = explode(' ', $value);
+
+                    str_replace('=', '=', $value, $countEgual);
+                    if (1 == $countEgual) {
+                        list($content, $defaultValue) = explode('=', $value);
+                        $defaultValue = trim($defaultValue);
+                        $defaultValue = ($defaultValue == "false") ? false : $defaultValue;
+                        $defaultValue = ($defaultValue == "true") ? true : $defaultValue;
+                    }
+                } else {
+                    $arg = lcfirst(str_replace('Interface', '', $value));
+                    $body .= "$attribute = \$$arg;" . PHP_EOL;
+                    $type = $value;
+                }
+                $type = trim($type);
+                $value = trim($value);
+                $arg = trim(str_replace('$', '', $arg));
+
+                $Parameter = $method->addParameter($arg)->setTypeHint($type);
+                if (!is_null($defaultValue)) {
+                    $Parameter->setDefaultValue($defaultValue);
+                }
+
+                $method->addComment(sprintf('@param %s %s', $value, $arg));
+                $class->addProperty($arg)->setComment(sprintf('@var %s', $type))->setVisibility('protected');
             }
             self::$constructorArguments = [];
 
@@ -496,7 +521,7 @@ class ClassHandler
             $value = $basename;
         }
 
-        $newArgument = str_replace(' ', ' ', trim($argument), $countVar);
+        $newArgument = str_replace(' ', ' ', trim(preg_replace('!\s+!', ' ', $argument)), $countVar);
         if ((1 <= $countVar) && (0 == $countNew)) {
             $argResult = self::setArgVarResult($newArgument);
             $type = 'var';

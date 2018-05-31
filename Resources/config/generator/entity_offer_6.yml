@@ -1,17 +1,17 @@
 # php vendor/bin/sfynx-ddd-generator \
 # --namespace=PromotionContext \
-# --conf-file=/var/www/app/config/generator/action_go_premise_request.yml \
+# --conf-file=/var/www/app/config/generator/entity_offer_6.yml \
 # --report-template=default \
-# --report-dir=/var/www/src/generator/FormAction
+# --report-dir=/var/www/src/generator/FormOffer
 default:
     namespace: PromotionContext
-    cqrs: Activity\Command
+    cqrs: Offer\Command
     template: default
     indentation: 4
     widgets:
         presentation:
             widget_coordination:
-                class: FormCoordination
+                class: Form6Coordination
                 arguments:
                     - '$workflowHandler'
                 extends: Sfynx\CoreBundle\Layers\Presentation\Coordination\Generalisation\AbstractFormController
@@ -24,33 +24,34 @@ default:
                         design: 'adapter'
                         class: Sfynx\CoreBundle\Layers\Presentation\Adapter\Command\CommandAdapter
                         arguments:
-                            - 'new GoPromiseRequestFormCommand'
+                            - 'new Offer6FormCommand'
                         calls:
-                            - [ createCommandFromRequest, [ 'new GoPromiseRequestFormRequest' ] ]
+                            - [ createCommandFromRequest, [ 'new Offer6FormRequest' ] ]
                     - commandWorkflow:
                         design: 'observer'
                         class: Sfynx\CoreBundle\Layers\Application\Command\Workflow\CommandWorkflow
                         calls:
-                            - [ attach, [ 'new OBGoPromiseRequestCreate' ] ]
+                            - [ attach, [ 'new OBOffer6EntityEdit' ] ]
+                            - [ attach, [ 'new OBOffer6EntityCreate' ] ]
                     - commandHandlerResult:
                         design: 'decorator'
                         class: Sfynx\CoreBundle\Layers\Application\Command\Handler\FormCommandHandler
                         arguments:
                             - '$commandWorkflow'
-                        handlers: [ 'GoPromiseRequestFormCommandValidationHandler', 'GoPromiseRequestFormCommandSpecHandler']
+                        handlers: [ 'Offer6FormCommandValidationHandler', 'Offer6FormCommandSpecHandler']
                         calls:
                             - [ process, [ '$updateCommand' ] ]
                     - codeln1:
                         design: 'code'
-                        content: "$this->param->templating = '@Business/Activity/edit.html.twig'"
+                        content: "$this->param->templating = '@Business/Offer/edit.html.twig'"
                     - workflowHandler:
                         design: 'observer'
                         class: Sfynx\CoreBundle\Layers\Application\Common\Handler\WorkflowHandler
                         calls:
-                            - [ attach, [ 'new OBActivityCreateFormData' ] ]
+                            - [ attach, [ 'new OBOffer6CreateFormData' ] ]
                             - [ attach, [ 'new OBCreateCommandFormView' ] ]
                             - [ attach, [ 'new OBInjectFormErrors' ] ]
-                            - [ attach, [ 'new OBActivityCreateFormBody' ] ]
+                            - [ attach, [ 'new OBOffer6CreateFormBody' ] ]
                             - [ attach, [ 'new OBCreateResponseHtml' ] ]
                     - responseHandlerResult:
                         design: 'handler'
@@ -63,82 +64,66 @@ default:
                         design: 'code'
                         content: "return $responseHandlerResult->getResponse();"
             widget_request:
-                class: GoPromiseRequestFormRequest
+                class: Offer6FormRequest
                 arguments:
                   - 'Sfynx\CoreBundle\Layers\Domain\Service\Request\Generalisation\RequestInterface'
         application:
             widget_cqrs_command:
-                class: GoPromiseRequestFormCommand
+                class: Offer6FormCommand
                 arguments: ~
             widget_cqrs_validator_specification:
-                class: Validation\SpecHandler\GoPromiseRequestFormCommandSpecHandler
+                class: Validation\SpecHandler\Offer6FormCommandSpecHandler
                 arguments: ~
             widget_cqrs_validator_validation:
-                class: Validation\ValidationHandler\GoPromiseRequestFormCommandValidationHandler
+                class: Validation\ValidationHandler\Offer6FormCommandValidationHandler
                 arguments: ~
             widget_validation_type:
-                class: GoPromiseRequestType
+                class: Offer6Type
                 arguments: ~
         domain:
             widget_entity: true
             widget_service_manager_class:
-                - ActivityEntityManager:
+                - OfferEntityManager:
                     create: true
-                    class: Activity\Manager\ActivityManager
+                    class: Offer\Manager\Tmp6OfferManager
                     arguments: ~
                     options:
-                        entity: 'Activity'
-#            widget_service_class:
-#                - EntityManager:
-#                    create: true
-#                    class: Domain\Service\Entity\Activity\Manager\EntityManager
-#                    arguments: ~
-#                    comments: ['Layout manager working with entities (Orm, Odm, Couchdb)']
-#                    extends: Sfynx\CoreBundle\Layers\Domain\Service\Manager\Generalisation\AbstractManager
-#                    options:
-#                        implements: ~
-#                        uses: ~
-#                        traits: ~
-#                        methods:
-#                          - name: 'newFromCommand'
-#                            comments: ['{@inheritdoc}']
-#                            arguments: ['Sfynx\CoreBundle\Layers\Application\Command\Generalisation\Interfaces\CommandInterface']
-#                            visibility: 'public'
-#                            returnType: 'object'
-#                            returnParent: true
-#                          - name: 'buildFromCommand'
-#                            comments: ['{@inheritdoc}']
-#                            arguments: ['object $entity', 'Sfynx\CoreBundle\Layers\Application\Command\Generalisation\Interfaces\CommandInterface', 'bool $updateCommand = false']
-#                            visibility: 'public'
-#                            returnType: 'object'
-#                            returnParent: true
-#                          - name: 'buildFromEntity'
-#                            comments: ['{@inheritdoc}']
-#                            arguments: ['Sfynx\CoreBundle\Layers\Application\Command\Generalisation\Interfaces\CommandInterface', 'object $entity']
-#                            visibility: 'public'
-#                            returnType: 'Sfynx\CoreBundle\Layers\Application\Command\Generalisation\Interfaces\CommandInterface'
-#                            returnParent: true
+                        entity: 'Offer'
             widget_workflow_observer_class:
-                - OBGoPromiseRequestCreate:
+                - OBOffer6EntityCreate:
                     create: true
-                    class: OBGoPromiseRequestCreate
+                    class: OBOffer6EntityCreate
                     arguments:
-                      - 'PromotionContext\Domain\Service\Entity\ActionWorkflow\ActionWorkflowManager'
-                      - 'PromotionContext\Domain\Service\Entity\Activity\ActivityManager'
-                      - 'PromotionContext\Domain\Service\Entity\TypeList\TypeListManager'
+                      - 'Sfynx\CoreBundle\Layers\Domain\Service\Manager\Generalisation\Interfaces\ManagerInterface'
                       - 'Sfynx\CoreBundle\Layers\Domain\Service\Request\Generalisation\RequestInterface'
                     construct:
                         create: true
                         body:
-                          - 'parent::__construct($actionWorkflowManager, $request);'
+                          - 'parent::__construct($manager, $request);'
                     extends: Sfynx\CoreBundle\Layers\Domain\Workflow\Observer\Generalisation\Command\AbstractEntityCreateHandler
                     options:
                         implements: ~
                         uses: ~
                         traits: [Sfynx\CoreBundle\Layers\Domain\Workflow\Observer\Command\TraitProcess]
-                - OBGoPromiseRequestFormData:
+                - OBOffer6EntityEdit:
                     create: true
-                    class: Domain\Workflow\Observer\Activity\Response\OBGoPromiseRequestFormData
+                    class: OBOffer6EntityEdit
+                    arguments:
+                      - 'Sfynx\CoreBundle\Layers\Domain\Service\Manager\Generalisation\Interfaces\ManagerInterface'
+                      - 'Sfynx\CoreBundle\Layers\Domain\Service\Request\Generalisation\RequestInterface'
+                      - 'bool $updateCommand = false'
+                    construct:
+                        create: true
+                        body:
+                          - 'parent::__construct($manager, $request, $updateCommand);'
+                    extends: Sfynx\CoreBundle\Layers\Domain\Workflow\Observer\Generalisation\Command\AbstractEntityEditHandler
+                    options:
+                        implements: ~
+                        uses: ~
+                        traits: [Sfynx\CoreBundle\Layers\Domain\Workflow\Observer\Command\TraitProcess]
+                - OBOffer6CreateFormData:
+                    create: true
+                    class: Domain\Workflow\Observer\Offer\Response\OBOffer6CreateFormData
                     arguments:
                       - 'Sfynx\CoreBundle\Layers\Domain\Service\Request\Generalisation\RequestInterface'
                     construct:
@@ -162,9 +147,9 @@ default:
                               - '} catch (Exception $e) {'
                               - '    throw WorkflowException::noCreatedFormData();'
                               - '}'
-                - OBGoPromiseRequestFormBody:
+                - OBOffer6CreateFormBody:
                     create: true
-                    class: Domain\Workflow\Observer\Activity\Response\OBGoPromiseRequestFormBody
+                    class: Domain\Workflow\Observer\Offer\Response\OBOffer6CreateFormBody
                     arguments:
                       - 'Sfynx\CoreBundle\Layers\Domain\Service\Request\Generalisation\RequestInterface'
                       - 'Symfony\Bundle\FrameworkBundle\Templating\EngineInterface'
@@ -199,7 +184,7 @@ default:
                       - 'Sfynx\CoreBundle\Layers\Domain\Service\Request\Generalisation\RequestInterface'
                       - 'Symfony\Component\Form\FormFactoryInterface'
                       - 'Sfynx\CoreBundle\Layers\Domain\Service\Form\Generalisation\Interfaces\FormTypeInterface'
-#                      - 'new GoPromiseRequestType'
+#                      - 'new Offer6Type'
                 - OBInjectFormErrors:
                     create: false
                     class: Sfynx\CoreBundle\Layers\Domain\Workflow\Observer\Response\OBInjectFormErrors
@@ -216,41 +201,26 @@ default:
     mapping:
         x-providers: [orm, couchdb]
         x-entities:
-#          Activity:
-#            x-fields:
-#              documents:
-#                type: array
-#                required: true
-#                multiple: true
-#                properties: ['name', 'date']
-#                mapping:
-#                  relationship: ManyToMany
-#                  targetEntity: DocContext\Domain\Entity\Media
-#              applicantProfil:
-#                type: id
-#                foreignKey: true
-#                required: true
-#                mapping:
-#                  relationship: ManyToOne
-#                  targetEntity: UserContext\Domain\Entity\User
-          Activity:
+          Offer:
             x-fields:
-              documents:
-                type: array
-                required: true
-                multiple: true
-                properties: ['name', 'date']
-                mapping:
-                  relationship: ManyToMany
-                  targetEntity: DocContext\Domain\Entity\Media
-              applicantProfilId:
+              id:
+                name: entityId
                 type: valueObject
                 voName: IdVO
+                primaryKey: true
+              priceTTC:
+                type: float
+                required: true
+              offerType:
+                type: id
                 foreignKey: true
                 required: true
                 mapping:
                   relationship: ManyToOne
-                  targetEntity: UserContext\Domain\Entity\User
+                  tergetEntity: PromotionContext\Domain\Entity\TypeList
+              title:
+                type: string
+                required: true
         x-valueObjects:
           IdVO:
             type: Sfynx\CoreBundle\Layers\Domain\ValueObject\IdVO

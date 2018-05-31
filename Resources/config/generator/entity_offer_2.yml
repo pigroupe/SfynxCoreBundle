@@ -20,7 +20,7 @@ default:
                     uses: ~
                     traits: ~
                 body:
-                    - command:
+                    - updateCommand:
                         design: 'adapter'
                         class: Sfynx\CoreBundle\Layers\Presentation\Adapter\Command\CommandAdapter
                         arguments:
@@ -40,7 +40,7 @@ default:
                             - '$commandWorkflow'
                         handlers: [ 'Offer2FormCommandValidationHandler', 'Offer2FormCommandSpecHandler']
                         calls:
-                            - [ process, [ '$command' ] ]
+                            - [ process, [ '$updateCommand' ] ]
                     - codeln1:
                         design: 'code'
                         content: "$this->param->templating = '@Business/Offer/edit.html.twig'"
@@ -82,6 +82,13 @@ default:
                 arguments: ~
         domain:
             widget_entity: true
+            widget_service_manager_class:
+                - OfferEntityManager:
+                    create: true
+                    class: Offer\Manager\Tmp2OfferManager
+                    arguments: ~
+                    options:
+                        entity: 'Offer'
             widget_workflow_observer_class:
                 - OBOffer2EntityCreate:
                     create: true
@@ -108,7 +115,7 @@ default:
                     construct:
                         create: true
                         body:
-                          - 'parent::__construct($manager, $request);'
+                          - 'parent::__construct($manager, $request, $updateCommand);'
                     extends: Sfynx\CoreBundle\Layers\Domain\Workflow\Observer\Generalisation\Command\AbstractEntityEditHandler
                     options:
                         implements: ~
@@ -119,6 +126,10 @@ default:
                     class: Domain\Workflow\Observer\Offer\Response\OBOffer2CreateFormData
                     arguments:
                       - 'Sfynx\CoreBundle\Layers\Domain\Service\Request\Generalisation\RequestInterface'
+                    construct:
+                        create: true
+                        body:
+                          - 'parent::__construct($request);'
                     extends: Sfynx\CoreBundle\Layers\Domain\Workflow\Observer\Generalisation\Response\AbstractCreateFormData
                     options:
                         implements: ~

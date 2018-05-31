@@ -20,7 +20,7 @@ default:
                     uses: ~
                     traits: ~
                 body:
-                    - command:
+                    - updateCommand:
                         design: 'adapter'
                         class: Sfynx\CoreBundle\Layers\Presentation\Adapter\Command\CommandAdapter
                         arguments:
@@ -40,7 +40,7 @@ default:
                             - '$Commandworkflow'
                         handlers: [ 'Offer1FormCommandValidationHandler', 'Offer1FormCommandSpecHandler']
                         calls:
-                            - [ process, [ '$command' ] ]
+                            - [ process, [ '$updateCommand' ] ]
                     - codeln1:
                         design: 'code'
                         content: "$this->param->templating = '@Business/Offer/edit.html.twig'"
@@ -85,8 +85,10 @@ default:
             widget_service_manager_class:
                 - OfferEntityManager:
                     create: true
-                    class: Activity\EntityManager
+                    class: Offer\Manager\OfferManager
                     arguments: ~
+                    options:
+                        entity: 'Offer'
             widget_service_class:
 #                - EntityManager:
 #                    create: true
@@ -132,20 +134,15 @@ default:
                     arguments:
                       - 'Sfynx\CoreBundle\Layers\Domain\Service\Manager\Generalisation\Interfaces\ManagerInterface'
                       - 'Sfynx\CoreBundle\Layers\Domain\Service\Request\Generalisation\RequestInterface'
+                    construct:
+                        create: true
+                        body:
+                          - 'parent::__construct($manager, $request);'
                     extends: Sfynx\CoreBundle\Layers\Domain\Workflow\Observer\Generalisation\Command\AbstractEntityCreateHandler
                     options:
                         implements: ~
                         uses: ~
                         traits: [Sfynx\CoreBundle\Layers\Domain\Workflow\Observer\Command\TraitProcess]
-                        methods:
-                          - name: '__construct'
-                            comments: ['{@inheritdoc}']
-                            arguments:
-                              - 'Sfynx\CoreBundle\Layers\Domain\Service\Manager\Generalisation\Interfaces\ManagerInterface'
-                              - 'Sfynx\CoreBundle\Layers\Domain\Service\Request\Generalisation\RequestInterface'
-                            visibility: 'public'
-                            returnType: ~
-                            insertParent: true
                 - OBOffer1EntityEdit:
                     create: true
                     class: OBOffer1EntityEdit
@@ -172,6 +169,12 @@ default:
                     class: Domain\Workflow\Observer\Offer\Response\OBOffer1CreateFormData
                     arguments:
                       - 'Sfynx\CoreBundle\Layers\Domain\Service\Request\Generalisation\RequestInterface'
+                      - 'PromotionContext\Domain\Service\Entity\TypeList\TypeListManager'
+                      - 'PromotionContext\Domain\Service\Entity\MailTemplate\Manager\TemplateManager'
+                    construct:
+                        create: true
+                        body:
+                          - 'parent::__construct($request, $typeListManager, $templateManager);'
                     extends: Sfynx\CoreBundle\Layers\Domain\Workflow\Observer\Generalisation\Response\AbstractCreateFormData
                     options:
                         implements: ~
