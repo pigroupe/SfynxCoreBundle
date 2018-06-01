@@ -34,16 +34,16 @@ class <?php echo $templater->getTargetClassname(); ?> extends AbstractCommandVal
         $this
 <?php foreach ($templater->getTargetCommandFields() as $field): ?>
     <?php if ($field->required && ($field->required == true)): ?>
-    ->add('<?php echo $field->name ?>', new Assert\Required([
+    ->add('<?php echo lcfirst($field->name) ?>', new Assert\Required([
     <?php else: ?>
-    ->add('<?php echo $field->name ?>', new Assert\Optional([
+    ->add('<?php echo lcfirst($field->name) ?>', new Assert\Optional([
     <?php endif; ?>
          new Assert\NotBlank(),
-        <?php if ($field->type == 'id'): ?>     new Assert\Regex('/^[0-9]+$/'),<?php endif; ?>
-        <?php if ($field->type == 'boolean'): ?>    new Assert\Type('boolean'),<?php endif; ?>
-    <?php if ($field->type == 'datetime'): ?> new Assert\DateTime(['format' => 'yyyy-MM-dd']),<?php endif; ?>
-        <?php if ($field->type == 'array'): ?>  new Assert\Type('array'),<?php endif; ?>
-        <?php if ($field->type == 'email'): ?>  new Assert\Email(),<?php endif; ?><?php echo "\r\n" ?>
+<?php if ($field->type == 'id'): ?>             new Assert\Regex('/^[0-9]+$/'),<?php endif; ?>
+<?php if ($field->type == 'boolean'): ?>             new Assert\Type('boolean'),<?php endif; ?>
+<?php if ($field->type == 'datetime'): ?>             new Assert\DateTime(['format' => 'yyyy-MM-dd']),<?php endif; ?>
+<?php if ($field->type == 'array'): ?>             new Assert\Type('array'),<?php endif; ?>
+<?php if ($field->type == 'email'): ?>             new Assert\Email(),<?php endif; ?><?php echo "\r\n" ?>
         ]))
 <?php endforeach; ?>
         ->add('_token', new Assert\Optional(new Assert\NotBlank()));

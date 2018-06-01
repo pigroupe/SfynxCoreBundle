@@ -29,19 +29,19 @@ class <?php echo $templater->getTargetClassname(); ?> extends AbstractDefaultTyp
     {
 <?php foreach ($templater->getTargetCommandFields() as $field): ?>
 <?php if ($field->type == 'id'): ?>
-        $<?php echo lcfirst($field->name); ?>List = $this->data_form['<?php echo $field->name; ?>List'];<?php echo PHP_EOL ?>
+        $<?php echo lcfirst($field->name); ?>List = $this->data_form['<?php echo lcfirst($field->name); ?>List'];<?php echo PHP_EOL ?>
 <?php endif; ?>
 <?php endforeach; ?>
 
 <?php foreach ($templater->getTargetCommandFields() as $field): ?>
 <?php if (($field->type == 'array') && (property_exists($field, 'mapping'))): ?>
-        $<?php echo lcfirst($field->name); ?>List = $this->data_form['<?php echo $field->name; ?>List'];<?php echo PHP_EOL ?>
+        $<?php echo lcfirst($field->name); ?>List = $this->data_form['<?php echo lcfirst($field->name); ?>List'];<?php echo PHP_EOL ?>
 <?php endif; ?>
 <?php endforeach; ?>
 
         $builder
 <?php foreach ($templater->getTargetCommandFields() as $field): ?>
-        <?php echo $templater->add($field->name, $field->type, $field) ?>
+        <?php echo $templater->add(lcfirst($field->name), $field->type, $field) ?>
 <?php endforeach; ?>
         <?php echo $templater->add('save', 'submit') ?>
         <?php echo $templater->add('saveAndContinue', 'submit', null, true) ?>

@@ -119,13 +119,13 @@ class <?php echo $templater->getTargetClassname(); ?> extends AbstractManager
     /**
     * @param object $entity
     * @param CommandInterface $command
-    * @return EntityManager
+    * @return <?php echo $templater->getTargetClassname(); ?>
     */
-    protected function transformEntity(object &$entity, CommandInterface $command): EntityManager
+    protected function transformEntity(object &$entity, CommandInterface $command): <?php echo $templater->getTargetClassname(); ?><?php echo PHP_EOL ?>
     {
 <?php foreach ($fieldsEntityList as $field): ?>
         if ('' !== $command-><?php echo lcfirst($field->name); ?> && null !== $command-><?php echo lcfirst($field->name); ?>) {
-            $entity->set<?php echo ucfirst(str_replace($field->entityName, '', $field->name)); ?>(
+            $entity->set<?php echo ucfirst(str_replace([$field->entityName, 'Id'], ['', ''], $field->name)); ?>(
                 $this->getQueryRepository()->getEntityManager()->getReference(
                     '\<?php if(property_exists($field, 'mapping') && property_exists($field->mapping, 'targetEntity')): echo \Sfynx\CoreBundle\Generator\Domain\Component\File\ClassHandler::createNamespaceEntity($templater, $field->mapping->targetEntity); endif; ?>',
                     $command-><?php echo lcfirst($field->name); ?><?php echo PHP_EOL ?>

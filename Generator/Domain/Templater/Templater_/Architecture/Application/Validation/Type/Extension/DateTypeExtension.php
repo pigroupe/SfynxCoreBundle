@@ -25,7 +25,7 @@ class DateTypeExtension extends AbstractResolver implements ExtensionInterface
         'label' => '',
         'name' => '',
         'type' => '',
-        'widget' => 'choice',
+        'widget' => 'single_text',
         'input' => 'datetime',
         'format' => 'yyyy-MM-dd',
         'error_bubbling' => true,

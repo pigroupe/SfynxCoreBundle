@@ -43,7 +43,7 @@ default:
                             - [ process, [ '$updateCommand' ] ]
                     - codeln1:
                         design: 'code'
-                        content: "$this->param->templating = '@Business/Offer/edit.html.twig'"
+                        content: "$this->setParam('templating', '@Business/Offer/edit.html.twig');"
                     - workflowHandler:
                         design: 'observer'
                         class: Sfynx\CoreBundle\Layers\Application\Common\Handler\WorkflowHandler
@@ -189,9 +189,11 @@ default:
                               - 'try {'
                               - "    $this->wfLastData->formViewData['command'] = $this->wfHandler->command;"
                               - "    $this->wfLastData->formViewData['entity'] = $this->wfHandler->entity;"
+                              - "    $this->wfLastData->formViewData['data_class'] = get_class($this->wfHandler->command);"
                               - '} catch (Exception $e) {'
                               - '    throw WorkflowException::noCreatedFormData();'
                               - '}'
+                              - 'return true;'
                 - OBOffer1CreateFormBody:
                     create: true
                     class: Domain\Workflow\Observer\Offer\Response\OBOffer1CreateFormBody
@@ -219,9 +221,11 @@ default:
                               - "           'edit_form' => $this->wfLastData->form->createView(),"
                               - "           'errors_form' => $this->wfHandler->errors"
                               - '        ]'
+                              - '    );'
                               - '} catch (Exception $e) {'
                               - '    throw WorkflowException::noCreatedViewForm();'
                               - '}'
+                              - 'return true;'
                 - OBCreateCommandFormView:
                     create: false
                     class: Sfynx\CoreBundle\Layers\Domain\Workflow\Observer\Response\OBCreateCommandFormView
