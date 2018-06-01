@@ -437,7 +437,7 @@ class ClassHandler
                     $Parameter->setDefaultValue($defaultValue);
                 }
 
-                $method->addComment(sprintf('@param %s %s', $value, $arg));
+                $method->addComment(sprintf('@param %s $%s', $value, $arg));
                 $class->addProperty($arg)->setComment(sprintf('@var %s', $type))->setVisibility('protected');
             }
             self::$constructorArguments = [];
@@ -575,7 +575,7 @@ class ClassHandler
      * @param PhpNamespace $namespace
      * @param string $argument
      * @param array|null $index
-     * @param string $interfaceName
+     * @param string $value
      * @param string $basename
      * @param bool $addConstruct
      * @return string
@@ -584,15 +584,16 @@ class ClassHandler
             PhpNamespace $namespace,
             string $argument,
             ?array $index = [],
-            string $interfaceName,
+            string $value,
             string $basename,
             bool $addConstruct = true
     ): string {
         self::addUse($namespace, $argument, $index);
 
-        $attribute = "\$$interfaceName";
+        $value = lcfirst($value);
+        $attribute = "\$$value";
         if ($addConstruct) {
-            $attribute = "\$this->$interfaceName";
+            $attribute = "\$this->$value";
             self::addConstructorArgument($basename, $attribute);
         }
 
