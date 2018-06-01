@@ -18,6 +18,6 @@ class <?php echo $templater->getTargetClassname(); ?> extends AbstractCommand
 {
 <?php foreach ($templater->getTargetCommandFields() as $field): ?>
     /** @var <?php if ($field->type == 'id'): ?>integer<?php else: ?><?php echo $field->type ?><?php endif; ?> */
-    protected $<?php echo $field->name ?>;
+    protected $<?php echo lcfirst($field->name) ?>;
 <?php endforeach; ?>
 }

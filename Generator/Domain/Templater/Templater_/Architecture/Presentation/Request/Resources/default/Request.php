@@ -21,7 +21,7 @@ class <?php echo $templater->getTargetClassname(); ?> extends AbstractFormReques
      */
     protected $defaults = [
 <?php foreach ($templater->getTargetCommandFields() as $field): ?>
-        '<?php echo $field->name ?>' => null,
+        '<?php echo lcfirst($field->name) ?>' => null,
 <?php endforeach; ?>
     ];
 
@@ -32,13 +32,13 @@ class <?php echo $templater->getTargetClassname(); ?> extends AbstractFormReques
         'GET'  => [
 <?php foreach ($templater->getTargetCommandFields() as $field): ?>
 <?php if ($field->name != 'entityId'): ?>
-            '<?php echo $field->name ?>',
+            '<?php echo lcfirst($field->name) ?>',
 <?php endif; ?>
 <?php endforeach; ?>
         ],
         'POST'  => [
 <?php foreach ($templater->getTargetCommandFields() as $field): ?>
-            '<?php echo $field->name ?>',
+            '<?php echo lcfirst($field->name) ?>',
 <?php endforeach; ?>
         ],
         'PATCH' => 'POST'
@@ -51,13 +51,13 @@ class <?php echo $templater->getTargetClassname(); ?> extends AbstractFormReques
         'GET' => [
 <?php foreach ($templater->getTargetCommandFields() as $field): ?>
 <?php if ($field->name != 'entityId'): ?>
-            '<?php echo $field->name ?>' => ['<?php if (strpos($field->type, 'entityId') !== false): ?>integer<?php elseif (strpos(strtolower($field->type), 'id') !== false): ?>integer<?php elseif (strtolower($field->type) == 'number'): ?>integer<?php elseif (strtolower($field->type) == 'datetime'): ?>DateTime<?php elseif (strtolower($field->type) == 'valueobject'): ?>array<?php else: ?><?php echo $field->type ?><?php endif; ?>', 'null'],
+            '<?php echo lcfirst($field->name) ?>' => ['<?php if (strpos($field->type, 'entityId') !== false): ?>integer<?php elseif (strpos(strtolower($field->type), 'id') !== false): ?>integer<?php elseif (strtolower($field->type) == 'number'): ?>integer<?php elseif (strtolower($field->type) == 'datetime'): ?>DateTime<?php elseif (strtolower($field->type) == 'valueobject'): ?>array<?php else: ?><?php echo $field->type ?><?php endif; ?>', 'null'],
 <?php endif; ?>
 <?php endforeach; ?>
         ],
         'POST' => [
 <?php foreach ($templater->getTargetCommandFields() as $field): ?>
-            '<?php echo $field->name ?>' => ['<?php if (strpos($field->type, 'entityId') !== false): ?>integer<?php elseif (strpos(strtolower($field->type), 'id') !== false): ?>integer<?php elseif (strtolower($field->type) == 'number'): ?>integer<?php elseif (strtolower($field->type) == 'datetime'): ?>DateTime<?php elseif (strtolower($field->type) == 'valueobject'): ?>array<?php else: ?><?php echo $field->type ?><?php endif; ?>', 'null'],
+            '<?php echo lcfirst($field->name) ?>' => ['<?php if (strpos($field->type, 'entityId') !== false): ?>integer<?php elseif (strpos(strtolower($field->type), 'id') !== false): ?>integer<?php elseif (strtolower($field->type) == 'number'): ?>integer<?php elseif (strtolower($field->type) == 'datetime'): ?>DateTime<?php elseif (strtolower($field->type) == 'valueobject'): ?>array<?php else: ?><?php echo $field->type ?><?php endif; ?>', 'null'],
 <?php endforeach; ?>
         ],
         'PATCH' => 'POST'
@@ -74,7 +74,7 @@ class <?php echo $templater->getTargetClassname(); ?> extends AbstractFormReques
         $dataBool = [
 <?php foreach ($templater->getTargetCommandFields() as $field): ?>
 <?php if (strpos(strtolower($field->type), 'bool') !== false): ?>
-            '<?php echo $field->name ?>',
+            '<?php echo lcfirst($field->name) ?>',
 <?php endif; ?>
 <?php endforeach; ?>
         ];
@@ -88,8 +88,8 @@ class <?php echo $templater->getTargetClassname(); ?> extends AbstractFormReques
         // identifier transformation
 <?php foreach ($templater->getTargetCommandFields() as $field): ?>
 <?php if (strpos(strtolower($field->type), 'id') !== false): ?>
-        $<?php echo $field->name ?> = $this->request->get('<?php echo $field->name ?>', '');
-        $this->options['<?php echo $field->name ?>'] = ('' !== $<?php echo $field->name ?>) ? (int)$<?php echo $field->name ?> : null;
+        $<?php echo lcfirst($field->name) ?> = $this->request->get('<?php echo lcfirst($field->name) ?>', '');
+        $this->options['<?php echo lcfirst($field->name) ?>'] = ('' !== $<?php echo lcfirst($field->name) ?>) ? (int)$<?php echo lcfirst($field->name) ?> : null;
 
 <?php endif; ?>
 <?php endforeach; ?>
@@ -97,9 +97,9 @@ class <?php echo $templater->getTargetClassname(); ?> extends AbstractFormReques
         // datetime transformation
 <?php foreach ($templater->getTargetCommandFields() as $field): ?>
 <?php if (strpos(strtolower($field->type), 'datetime') !== false): ?>
-        if (isset($this->options['<?php echo $field->name ?>'])) {
-            $data = $this->options['<?php echo $field->name ?>'];
-            $this->options['<?php echo $field->name ?>'] = (null !== $data && !empty($data)) ? new \DateTime($data) : null;
+        if (isset($this->options['<?php echo lcfirst($field->name) ?>'])) {
+            $data = $this->options['<?php echo lcfirst($field->name) ?>'];
+            $this->options['<?php echo lcfirst($field->name) ?>'] = (null !== $data && !empty($data)) ? new \DateTime($data) : null;
         }
 <?php endif; ?>
 <?php endforeach; ?>
