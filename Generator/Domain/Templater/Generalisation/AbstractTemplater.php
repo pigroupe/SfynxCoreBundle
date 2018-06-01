@@ -1,6 +1,7 @@
 <?php
 namespace Sfynx\CoreBundle\Generator\Domain\Templater\Generalisation;
 
+use Nette\PhpGenerator\ClassType;
 use Sfynx\CoreBundle\Generator\Domain\Widget\Generalisation\Interfaces\WidgetInterface;
 use Sfynx\CoreBundle\Generator\Domain\Templater\Generalisation\Interfaces\TemplaterInterface;
 use Sfynx\CoreBundle\Generator\Domain\Component\File\ClassHandler;
@@ -138,10 +139,9 @@ abstract class AbstractTemplater implements TemplaterInterface
         $namespace = ClassHandler::getNamespace($this->getTargetNamespace());
         ClassHandler::addUses($namespace, $data);
 
+        $class = ClassHandler::getClass($this->getTargetClassname());
         if (property_exists($data, 'type') && ($data->type == 'interface')) {
-            $class = $namespace->addInterface($this->getTargetClassname());
-        } else {
-            $class = $namespace->addClass($this->getTargetClassname());
+            $class->setType(ClassType::TYPE_INTERFACE);
         }
 
         if (property_exists($data, 'type') && ($data->type == 'abstract')) {
@@ -157,7 +157,8 @@ abstract class AbstractTemplater implements TemplaterInterface
         ClassHandler::addConstructorMethod($namespace, $class, $data);
         ClassHandler::addMethods($namespace, $class, $data, $index);
 
-        return ClassHandler::tabsToSpaces($namespace, $this->getIndentation());
+        return ClassHandler::tabsToSpaces($namespace, $this->getIndentation()) . PHP_EOL .
+                ClassHandler::tabsToSpaces($class, $this->getIndentation());
     }
 
     /**

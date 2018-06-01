@@ -56,6 +56,16 @@ class ClassHandler
     }
 
     /**
+     * @param string $class
+     * @return ClassType
+     * @static
+     */
+    public static function getClass(string $class): ClassType
+    {
+        return new ClassType($class);
+    }
+
+    /**
      * @param object $class
      * @return string
      * @static

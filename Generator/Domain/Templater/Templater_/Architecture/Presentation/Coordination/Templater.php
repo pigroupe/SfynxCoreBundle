@@ -89,7 +89,7 @@ EOT;
         $namespace = ClassHandler::getNamespace($this->getTargetNamespace());
         ClassHandler::addUses($namespace, $data, $index);
 
-        $class = $namespace->addClass($this->getTargetClassname());
+        $class = ClassHandler::getClass($this->getTargetClassname());
         ClassHandler::setClassCommentor($class, $this, $data);
         ClassHandler::setExtends($namespace, $class, $data, $index);
         ClassHandler::addImplements($namespace, $class, $data, $index);
@@ -149,7 +149,8 @@ EOT;
         ClassHandler::addConstructorMethod($namespace, $class);
         ClassHandler::addCoordinationMethod($namespace, $class)->addBody($body);
 
-        return ClassHandler::tabsToSpaces($namespace, $this->getIndentation());
+        return ClassHandler::tabsToSpaces($namespace, $this->getIndentation()) . PHP_EOL .
+            ClassHandler::tabsToSpaces($class, $this->getIndentation());
     }
 }
 

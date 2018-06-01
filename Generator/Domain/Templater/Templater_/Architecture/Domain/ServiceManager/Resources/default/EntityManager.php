@@ -119,9 +119,9 @@ class <?php echo $templater->getTargetClassname(); ?> extends AbstractManager
     /**
     * @param object $entity
     * @param CommandInterface $command
-    * @return EntityManager
+    * @return <?php echo $templater->getTargetClassname(); ?>
     */
-    protected function transformEntity(object &$entity, CommandInterface $command): EntityManager
+    protected function transformEntity(object &$entity, CommandInterface $command): <?php echo $templater->getTargetClassname(); ?>
     {
 <?php foreach ($fieldsEntityList as $field): ?>
         if ('' !== $command-><?php echo lcfirst($field->name); ?> && null !== $command-><?php echo lcfirst($field->name); ?>) {
