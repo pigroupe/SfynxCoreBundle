@@ -25,8 +25,14 @@ class ResponseHandler implements ResponseHandlerInterface
     protected $serializer;
     /** @var string */
     protected $format;
+    /** @var int */
+    protected $status;
     /** @var string */
-    protected $url;
+    protected $url = '';
+    /** @var array */
+    protected $headers;
+    /** @var string */
+    protected $body = '';
 
     const options = [
         'version' => 1,
@@ -49,50 +55,105 @@ class ResponseHandler implements ResponseHandlerInterface
     }
 
     /**
-     * @param null $data
-     * @param null $statusCode
+     * @param null $body
+     * @param null $status
      * @param array $headers
      * @param null|string $url
      * @return ResponseHandlerInterface
      */
-    public function create($data = null, $statusCode = null, array $headers = [], string $url = null): ResponseHandlerInterface
+    public function create($body = null, $status = Response::HTTP_OK, array $headers = [], string $url = null): ResponseHandlerInterface
     {
         $this
+            ->setStatus($status)
             ->setUrl($url)
-            ->setStatusCode($statusCode ?: Response::HTTP_OK)
             ->setHeaders($headers)
-            ->setData($data)
+            ->setContent($body)
         ;
+
         return $this;
     }
 
     /**
      * {@inheritdoc}
      */
-    public function setUrl(string $url = null, $status = Response::HTTP_FOUND): ResponseHandler
+    public function getResponse(): Response
+    {
+        if (!is_null($this->url)) {
+            $this->response = new RedirectResponse($this->url);
+        } elseif ('json' == $this->getFormat()) {
+            $this->response = new JsonResponse();
+        } else {
+            $this->response = new Response();
+        }
+
+        $this->response->setStatusCode($this->status);
+
+        if (!empty($this->headers)) {
+            $this->response->headers->replace($this->headers);
+        }
+
+        if (!empty($this->body)) {
+            $this->response->setContent($this->body);
+        }
+
+        return $this->response;
+    }
+
+    /**
+     * Sets the HTTP status code.
+     *
+     * @param int $status
+     * @return ResponseHandler
+     */
+    protected function setStatus(int $status): ResponseHandler
+    {
+        $this->status = $status;
+        return $this;
+    }
+
+    /**
+     * @param string|null $url
+     * @return ResponseHandler
+     */
+    protected function setUrl(string $url = null): ResponseHandler
     {
         $this->url = $url;
         if (null !== $url) {
-            $this->setStatusCode($status);
+            $this->setStatus(Response::HTTP_FOUND);
         }
         return $this;
     }
 
     /**
-     * {@inheritdoc}
+     * Sets the headers.
+     *
+     * @param array $headers
+     * @return ResponseHandler
      */
-    public function getResponse()
+    protected function setHeaders(array $headers): ResponseHandler
     {
-        if (null === $this->response) {
-            if (!is_null($this->url)) {
-                $this->response = new RedirectResponse($this->url);
-            } elseif ('json' == $this->getFormat()) {
-                $this->response = new JsonResponse();
-            } else {
-                $this->response = new Response();
-            }
+        // The $headers array must contain the "Content-Type" element.
+        // Use the format of the request if not defined.
+        if (!array_key_exists('Content-Type', $headers)) {
+            $headers['Content-Type'] = $this->getRequest()->getMimeType($this->getFormat());
         }
-        return $this->response;
+        $this->headers = $headers;
+        return $this;
+    }
+
+    /**
+     * Sets the data.
+     *
+     * @param mixed $data
+     * @return ResponseHandler
+     */
+    protected function setContent($body): ResponseHandler
+    {
+        $this->body = $body;
+        if (null !== $body && !is_string($body)) {
+            $this->body = $this->getSerializer()->serialize($body, $this->getFormat());
+        }
+        return $this;
     }
 
     /**
@@ -115,37 +176,6 @@ class ResponseHandler implements ResponseHandlerInterface
     protected function getRequest(): RequestInterface
     {
         return $this->request;
-    }
-
-    /**
-     * Sets the HTTP status code.
-     *
-     * @param int $code
-     * @return ResponseHandler
-     */
-    protected function setStatusCode($code): ResponseHandler
-    {
-        $this->getResponse()->setStatusCode($code);
-        return $this;
-    }
-
-    /**
-     * Sets the headers.
-     *
-     * @param array $headers
-     * @return ResponseHandler
-     */
-    protected function setHeaders(array $headers): ResponseHandler
-    {
-        // The $headers array must contain the "Content-Type" element.
-        // Use the format of the request if not defined.
-        if (!array_key_exists('Content-Type', $headers)) {
-            $headers['Content-Type'] = $this->getRequest()->getMimeType($this->getFormat());
-        }
-        if (!empty($headers)) {
-            $this->getResponse()->headers->replace($headers);
-        }
-        return $this;
     }
 
     /**
@@ -182,30 +212,12 @@ class ResponseHandler implements ResponseHandlerInterface
     }
 
     /**
-     * @param int $group
+     * @param array $group
      */
     protected function setGroup(array $group): ResponseHandler
     {
         if (null !== $group) {
             $this->getSerializer()->getSerializationContext()->setGroups($group);
-        }
-        return $this;
-    }
-
-    /**
-     * Sets the data.
-     *
-     * @param mixed $data
-     * @return ResponseHandler
-     */
-    protected function setData($data): ResponseHandler
-    {
-        if (null !== $data && !is_string($data)) {
-            $this->getResponse()->setContent(
-                $this->getSerializer()->serialize($data, $this->getFormat())
-            );
-        } else {
-            $this->getResponse()->setContent($data);
         }
         return $this;
     }

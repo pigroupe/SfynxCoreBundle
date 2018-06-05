@@ -87,9 +87,12 @@ class <?php echo $templater->getTargetClassname(); ?> extends AbstractFormReques
 
         // identifier transformation
 <?php foreach ($templater->getTargetCommandFields() as $field): ?>
-<?php if (strpos(strtolower($field->type), 'id') !== false): ?>
-        $<?php echo lcfirst($field->name) ?> = $this->request->get('<?php echo lcfirst($field->name) ?>', '');
-        $this->options['<?php echo lcfirst($field->name) ?>'] = ('' !== $<?php echo lcfirst($field->name) ?>) ? (int)$<?php echo lcfirst($field->name) ?> : null;
+<?php if ((strpos(strtolower($field->type), 'id') !== false) || (strpos(strtolower($field->type), 'integer') !== false)): ?>
+        //$<?php echo lcfirst($field->name) ?> = $this->request->get('<?php echo lcfirst($field->name) ?>', '');
+        //$this->options['<?php echo lcfirst($field->name) ?>'] = ('' !== $<?php echo lcfirst($field->name) ?>) ? (int)$<?php echo lcfirst($field->name) ?> : null;
+        if (isset($this->options['<?php echo lcfirst($field->name) ?>'])) {
+            $this->options['<?php echo lcfirst($field->name) ?>'] = ('' !== $this->options['<?php echo lcfirst($field->name) ?>']) ? (int)$this->options['<?php echo lcfirst($field->name) ?>'] : null;
+        }
 
 <?php endif; ?>
 <?php endforeach; ?>
@@ -99,7 +102,7 @@ class <?php echo $templater->getTargetClassname(); ?> extends AbstractFormReques
 <?php if (strpos(strtolower($field->type), 'datetime') !== false): ?>
         if (isset($this->options['<?php echo lcfirst($field->name) ?>'])) {
             $data = $this->options['<?php echo lcfirst($field->name) ?>'];
-            $this->options['<?php echo lcfirst($field->name) ?>'] = (null !== $data && !empty($data)) ? new \DateTime($data) : null;
+            $this->options['<?php echo lcfirst($field->name) ?>'] = (null !== $data && !empty($data)) ? new \DateTime($data) : new \DateTime('now');
         }
 <?php endif; ?>
 <?php endforeach; ?>

@@ -3,6 +3,7 @@ namespace Sfynx\CoreBundle\Layers\Domain\Workflow\Observer\Response;
 
 use Exception;
 use Symfony\Component\HttpFoundation\Response;
+use Sfynx\CoreBundle\Layers\Domain\Specification\SpecIsHandlerCreatedWithNoRedirection;
 use Sfynx\CoreBundle\Layers\Domain\Workflow\Observer\Generalisation\Response\AbstractCreateResponseJson;
 use Sfynx\CoreBundle\Layers\Domain\Service\Response\Serializer\SerializerStrategy;
 use Sfynx\CoreBundle\Layers\Domain\Service\Response\Handler\ResponseHandler;
@@ -27,14 +28,14 @@ class OBCreateResponseJson extends AbstractCreateResponseJson
      */
     public function process(): bool
     {
-        $return = true;
         try {
+            $url = !property_exists($this->wfHandler, 'url') ? null : $this->wfHandler->url;
             $this->wfLastData->response = (new ResponseHandler(SerializerStrategy::create(), $this->request->setRequestFormat('json')))
-                ->create($this->wfLastData->rows, Response::HTTP_OK, $this->headers)
+                ->create($this->wfLastData->rows, Response::HTTP_OK, $this->headers, $url)
                 ->getResponse();
         } catch (Exception $e) {
             throw ResponseException::noCreatedResponse();
         }
-        return $return;
+        return true;
     }
 }

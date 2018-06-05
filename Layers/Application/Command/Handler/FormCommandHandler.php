@@ -51,6 +51,10 @@ class FormCommandHandler implements CommandHandlerInterface
 
         if (property_exists($this->workflowCommand->getData(), 'entity')) {
             $this->entity = end($this->workflowCommand->getData()->entity);
+
+            if (!is_object($this->entity)) {
+                throw WorkflowException::noCreatedEntity();
+            }
         }
         if (property_exists($this->workflowCommand->getData(), 'url')) {
             $this->url = end($this->workflowCommand->getData()->url);
@@ -59,9 +63,6 @@ class FormCommandHandler implements CommandHandlerInterface
             $this->errors = $this->workflowCommand->getCommand()->errors;
         }
 
-        if (!is_object($this->entity)) {
-            throw WorkflowException::noCreatedEntity();
-        }
         return $this;
     }
 }

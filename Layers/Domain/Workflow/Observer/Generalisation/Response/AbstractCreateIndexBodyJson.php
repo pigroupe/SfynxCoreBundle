@@ -14,6 +14,7 @@ use Sfynx\CoreBundle\Layers\Domain\Specification\SpecIsServerSide;
 use Sfynx\CoreBundle\Layers\Domain\Specification\SpecIsValidRequest;
 use Sfynx\CoreBundle\Layers\Domain\Specification\SpecIsHandlerCreatedWithServerSideQueryInterface;
 use Sfynx\CoreBundle\Layers\Domain\Specification\SpecIsXmlHttpRequest;
+use Sfynx\CoreBundle\Layers\Domain\Specification\SpecIsHandlerCreatedWithNoRedirection;
 use Sfynx\CoreBundle\Layers\Domain\Workflow\Observer\Generalisation\Response\AbstractObserver;
 use Sfynx\CoreBundle\Layers\Infrastructure\Exception\WorkflowException;
 
@@ -106,7 +107,9 @@ abstract class AbstractCreateIndexBodyJson extends AbstractObserver
             ->AndSpec(new SpecIsObjectCreatedWithHandlerInterface())
             ->AndSpec(new SpecIsHandlerCreatedWithQueryInterface())
             ->AndSpec(new SpecIsHandlerCreatedWithServerSideQueryInterface())
-            ->AndSpec(new SpecIsServerSide());
+            ->AndSpec(new SpecIsServerSide())
+            ->AndSpec(new SpecIsHandlerCreatedWithNoRedirection())
+        ;
         if (!$specs->isSatisfiedBy($this->object)) {
             return $this;
         }

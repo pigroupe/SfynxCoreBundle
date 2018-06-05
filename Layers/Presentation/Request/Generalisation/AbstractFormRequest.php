@@ -19,9 +19,9 @@ use Sfynx\CoreBundle\Layers\Domain\Specification\SpecIsValidRequest;
  */
 abstract class AbstractFormRequest implements CommandRequestInterface
 {
-    /** @var array  */
+    /** @var array */
     protected $defaults = [];
-    /** @var array  */
+    /** @var array */
     protected $required = [];
     /** @var array  */
     protected $allowedTypes = [];
@@ -31,6 +31,8 @@ abstract class AbstractFormRequest implements CommandRequestInterface
     protected $requestParameters;
     /** @var array */
     protected $options;
+    /** @var array */
+    protected $parameters;
     /** @var OptionsResolverInterface */
     protected $resolver;
     /** @var RequestInterface */
@@ -41,10 +43,12 @@ abstract class AbstractFormRequest implements CommandRequestInterface
     /**
      * AbstractFormRequest constructor.
      * @param RequestInterface $request
+     * @param array $parameters
      */
-    public function __construct(RequestInterface $request)
+    public function __construct(RequestInterface $request, array $parameters =[])
     {
         $this->request  = $request;
+        $this->parameters  = $parameters;
         $this->object = new stdClass();
         $this->resolver = new OptionsResolver();
 

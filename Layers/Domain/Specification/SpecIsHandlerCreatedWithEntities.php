@@ -4,8 +4,6 @@ namespace Sfynx\CoreBundle\Layers\Domain\Specification;
 use Sfynx\SpecificationBundle\Specification\AbstractSpecification;
 use stdClass;
 
-
-
 /**
  * Class SpecIsHandlerCreatedWithEntities
  *

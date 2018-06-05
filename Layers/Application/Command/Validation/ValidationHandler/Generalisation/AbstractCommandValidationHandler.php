@@ -1,6 +1,7 @@
 <?php
 namespace Sfynx\CoreBundle\Layers\Application\Command\Validation\ValidationHandler\Generalisation;
 
+use Exception;
 use Symfony\Component\Validator\ConstraintViolationListInterface;
 use Symfony\Component\Validator\Validator\RecursiveValidator;
 use Symfony\Component\Validator\Constraint;
@@ -54,7 +55,7 @@ abstract class AbstractCommandValidationHandler extends AbstractCommandDecorator
         if (!(count($this->errors) === 0)
             && $this->throwExceptionFromErrors
         ) {
-            throw new \Exception(json_encode($this->getErrors())) ;
+            throw new Exception(json_encode($this->getErrors())) ;
         }
         // execute next commandHandler
         $command->errors = $this->getErrors();
@@ -80,7 +81,7 @@ abstract class AbstractCommandValidationHandler extends AbstractCommandDecorator
     /**
      * @param string $field
      * @param Constraint $constraints
-     * @return AbstractCommandDecoratorHandler
+     * @return $this
      */
     protected function add(string $field, Constraint $constraints): AbstractCommandDecoratorHandler
     {

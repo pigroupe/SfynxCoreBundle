@@ -7,6 +7,7 @@ use Sfynx\CoreBundle\Layers\Domain\Service\Request\Generalisation\RequestInterfa
 use Sfynx\CoreBundle\Layers\Domain\Specification\SpecIsValidRequest;
 use Sfynx\CoreBundle\Layers\Domain\Specification\SpecIsXmlHttpRequest;
 use Sfynx\CoreBundle\Layers\Domain\Specification\SpecIsHandlerCreatedWithEntityInterface;
+use Sfynx\CoreBundle\Layers\Domain\Specification\SpecIsHandlerCreatedWithNoRedirection;
 use Sfynx\CoreBundle\Layers\Domain\Workflow\Observer\Generalisation\Response\AbstractObserver;
 use Sfynx\CoreBundle\Layers\Infrastructure\Exception\WorkflowException;
 
@@ -68,7 +69,9 @@ abstract class AbstractCreateFormData extends AbstractObserver
         // we abort if we are not in the create form process
         $specs = (new SpecIsValidRequest())
             ->NotSpec(new SpecIsXmlHttpRequest())
-            ->AndSpec(new SpecIsHandlerCreatedWithEntityInterface());
+            ->AndSpec(new SpecIsHandlerCreatedWithEntityInterface())
+            ->AndSpec(new SpecIsHandlerCreatedWithNoRedirection())
+        ;
         if (!$specs->isSatisfiedBy($this->object)) {
             return $this;
         }

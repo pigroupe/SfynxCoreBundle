@@ -3,17 +3,14 @@ namespace Sfynx\CoreBundle\Layers\Domain\Workflow\Observer\Generalisation\Comman
 
 use stdClass;
 use Exception;
-use Sfynx\CoreBundle\Layers\Domain\Service\Manager\Generalisation\Interfaces\ManagerInterface;
 use Sfynx\CoreBundle\Layers\Domain\Service\Request\Generalisation\RequestInterface;
 use Sfynx\CoreBundle\Layers\Domain\Workflow\Observer\Generalisation\Interfaces\ObserverInterface;
 use Sfynx\CoreBundle\Layers\Domain\Workflow\Observer\Generalisation\Command\AbstractObserver;
 use Sfynx\CoreBundle\Layers\Domain\Specification\SpecIsValidRequest;
 use Sfynx\CoreBundle\Layers\Domain\Specification\SpecIsValidCommand;
-use Sfynx\CoreBundle\Layers\Domain\Specification\SpecIsEntityCreated;
-use Sfynx\CoreBundle\Layers\Infrastructure\Exception\EntityException;
 
 /**
- * Abstract Class AbstractEntityCreateHandler
+ * Abstract Class AbstractCreateHandler
  *
  * @category Sfynx\CoreBundle\Layers
  * @package Domain
@@ -22,12 +19,8 @@ use Sfynx\CoreBundle\Layers\Infrastructure\Exception\EntityException;
  * @author     Etienne de Longeaux <etienne.delongeaux@gmail.com>
  * @copyright  2016 PI-GROUPE
  */
-abstract class AbstractEntityCreateHandler extends AbstractObserver
+abstract class AbstractCreateHandler extends AbstractObserver
 {
-    /** @var string */
-    protected $entityName = '';
-    /** @var ManagerInterface */
-    protected $manager;
     /** @var RequestInterface */
     protected $request;
     /** @var stdClass */
@@ -35,16 +28,11 @@ abstract class AbstractEntityCreateHandler extends AbstractObserver
 
     /**
      * AbstractEntityCreateHandler constructor.
-     * @param ManagerInterface $manager
      * @param RequestInterface $request
-     * @param bool $updateCommand
      */
-    public function __construct(ManagerInterface $manager, RequestInterface $request, bool $updateCommand = false)
+    public function __construct(RequestInterface $request)
     {
-        $this->entityName = $manager->getEntityName();
-        $this->manager = $manager;
         $this->request = $request;
-        $this->updateCommand = $updateCommand;
 
         $this->object = new stdClass();
     }
@@ -64,16 +52,8 @@ abstract class AbstractEntityCreateHandler extends AbstractObserver
      */
     protected function onInit(): void
     {
-        try {
-            $this->wfLastData->entity = $this->manager->newFromCommand($this->wfCommand);
-
-            $specs = new SpecIsValidRequest();
-            if ($this->updateCommand && !$specs->isSatisfiedBy($this->object)) {
-                $this->wfCommand = $this->manager->buildFromEntity($this->wfCommand, $this->wfLastData->entity);
-            }
-        } catch (Exception $e) {
-            throw EntityException::NotBuildEntityFromCommand($this->entityName);
-        }
+        // this is to desable SpecIsHandlerCreatedWithEntityInterface specification
+        $this->wfLastData->entity = new stdClass();
     }
 
     /**
@@ -106,7 +86,6 @@ abstract class AbstractEntityCreateHandler extends AbstractObserver
     {
         $this->object->requestMethod = $this->request->getMethod();
         $this->object->validMethod = $this->getValidMethods();
-        $this->object->entityId = $this->wfCommand->getEntityId();
         $this->object->errors = $this->wfCommand->errors;
     }
 
@@ -118,11 +97,6 @@ abstract class AbstractEntityCreateHandler extends AbstractObserver
     {
         // preapre object attribut used by specifications
         $this->prepareObject();
-        // we abort if we are not in the create form process
-        $specs = new SpecIsEntityCreated();
-        if (!$specs->isSatisfiedBy($this->object)) {
-            return $this;
-        }
         // we run edit form process
         $this->process();
 

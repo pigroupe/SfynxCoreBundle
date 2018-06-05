@@ -14,6 +14,7 @@ use Sfynx\CoreBundle\Layers\Domain\Specification\SpecIsHandlerCreatedWithServerS
 use Sfynx\CoreBundle\Layers\Domain\Specification\SpecIsHandlerCreatedWithNoLayoutQueryInterface;
 use Sfynx\CoreBundle\Layers\Domain\Specification\SpecIsHandlerCreatedWithCategoryQueryInterface;
 use Sfynx\CoreBundle\Layers\Domain\Specification\SpecIsXmlHttpRequest;
+use Sfynx\CoreBundle\Layers\Domain\Specification\SpecIsHandlerCreatedWithNoRedirection;
 use Sfynx\CoreBundle\Layers\Domain\Workflow\Observer\Generalisation\Response\AbstractObserver;
 use Sfynx\CoreBundle\Layers\Infrastructure\Exception\WorkflowException;
 
@@ -92,6 +93,7 @@ abstract class AbstractCreateIndexBodyHtml extends AbstractObserver
             ->AndSpec(new SpecIsHandlerCreatedWithNoLayoutQueryInterface())
             ->AndSpec(new SpecIsHandlerCreatedWithCategoryQueryInterface())
             ->AndSpec(new SpecIsHandlerCreatedWithEntities())
+            ->AndSpec(new SpecIsHandlerCreatedWithNoRedirection())
             ;
         if (!$specs->isSatisfiedBy($this->object)) {
             return $this;

@@ -53,7 +53,7 @@ abstract class AbstractQuery implements QueryInterface
         if($methodPrefix == 'get' && property_exists($this, $property)) {
             return $this->$property;
         }
-        exit("Opps! The method is not allowed!");
+        exit(sprintf("Opps! The method %s is not allowed!", $property));
     }
 
     /**
@@ -65,6 +65,6 @@ abstract class AbstractQuery implements QueryInterface
         if(property_exists($this, $property)) {
             return $this->$property;
         }
-        exit("Opps! The method is not allowed!");
+        exit(sprintf("Opps! The method %s is not allowed!", $property));
     }
 }

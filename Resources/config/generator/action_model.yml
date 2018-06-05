@@ -107,6 +107,7 @@ default:
                     create: true
                     class: OBGoPromiseRequestCreate
                     arguments:
+                      - 'PromotionContext\Domain\Service\Entity\Business\BusinessManager'
                       - 'ProfilContext\Domain\Service\Entity\Profil\ProfilManager'
                       - 'DocContext\Domain\Service\Entity\Media\MediaManager'
                       - 'PromotionContext\Domain\Service\Entity\TypeList\TypeListManager'
@@ -128,6 +129,8 @@ default:
                     arguments:
                       - 'Sfynx\CoreBundle\Layers\Domain\Service\Request\Generalisation\RequestInterface'
                       - 'ProfilContext\Domain\Service\Entity\Profil\ProfilManager'
+                      - 'DocContext\Domain\Service\Entity\Media\MediaManager'
+                      - 'DocContext\Domain\Service\Entity\DocTopicWorkflow\DocTopicWorkflowManager'
                     construct:
                         create: true
                         body:
@@ -256,7 +259,7 @@ default:
                 type: array
                 required: true
                 multiple: true
-                properties: ['name', 'date']
+                properties: ['nom']
                 mapping:
                   relationship: ManyToMany
                   targetEntity: DocContext\Domain\Entity\Media
@@ -308,7 +311,7 @@ default:
                 label: Objectif de date
               comment:
                 name: comment
-                type: string
+                type: textarea
                 required: false
         x-valueObjects:
           IdVO:
