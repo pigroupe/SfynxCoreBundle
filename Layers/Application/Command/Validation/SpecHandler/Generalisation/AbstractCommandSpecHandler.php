@@ -22,7 +22,22 @@ abstract class AbstractCommandSpecHandler extends AbstractCommandDecoratorHandle
 {
     use TraitLogger;
 
+    /**
+     * @var null
+     */
     protected $object = null;
+
+    /**
+     * AbstractCommandSpecHandler constructor.
+     * @param CommandHandlerInterface $commandHandler
+     * @param mixed|null $object
+     */
+    public function __construct(CommandHandlerInterface $commandHandler, $object = null)
+    {
+        parent::__construct($commandHandler);
+
+        $this->setObject($object);
+    }
 
     /**
      * init the object that must satisfy specs

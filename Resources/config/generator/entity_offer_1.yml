@@ -53,7 +53,7 @@ default:
                             - [ attach, [ 'new OBInjectFormErrors' ] ]
                             - [ attach, [ 'new OBOffer1CreateFormBody' ] ]
                             - [ attach, [ 'new OBCreateResponseHtml' ] ]
-                    - ResponseHandlerResult:
+                    - responseHandlerResult:
                         design: 'handler'
                         class: Sfynx\CoreBundle\Layers\Application\Response\Handler\ResponseHandler
                         arguments:
@@ -62,7 +62,7 @@ default:
                             - [ process, [ '$commandHandlerResult' ] ]
                     - codeln2:
                         design: 'code'
-                        content: "return $R esponseHandlerResult->getResponse();"
+                        content: "return $responseHandlerResult->getResponse();"
             widget_request:
                 class: Offer1FormRequest
                 arguments:

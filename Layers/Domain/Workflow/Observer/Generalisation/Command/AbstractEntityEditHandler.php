@@ -46,8 +46,9 @@ abstract class AbstractEntityEditHandler extends AbstractObserver
         $this->entityName = $manager->getEntityName();
         $this->manager = $manager;
         $this->request = $request;
-        $this->object = new stdClass();
         $this->updateCommand = $updateCommand;
+
+        $this->object = new stdClass();
     }
 
     /**

@@ -5,24 +5,26 @@ use Sfynx\SpecificationBundle\Specification\AbstractSpecification;
 use stdClass;
 
 /**
- * Class SpecIsValidRequest
+ * Class SpecIsHandlerCreatedWithNoRedirection
  *
  * @category Sfynx\CoreBundle\Layers
  * @package Domain
  * @subpackage Specification
  * @author     Etienne de Longeaux <etienne.delongeaux@gmail.com>
  */
-class SpecIsValidRequest extends AbstractSpecification
+class SpecIsHandlerCreatedWithNoRedirection extends AbstractSpecification
 {
     /**
-     * return true if the request status is validated
+     * return true if the command is validated
      *
      * @param stdClass $object
      * @return bool
      */
     public function isSatisfiedBy(stdClass $object): bool
     {
-        return  property_exists($object, 'requestMethod') && property_exists($object, 'validMethod') &&
-            array_search($object->requestMethod, $object->validMethod) !== false;
+        return !property_exists($object->handler, 'url')
+            || (null === $object->handler->url)
+            || empty($object->handler->url)
+        ;
     }
 }

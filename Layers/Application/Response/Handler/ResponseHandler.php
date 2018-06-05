@@ -43,14 +43,19 @@ class ResponseHandler implements ResponseHandlerInterface
      */
     public function process(HandlerInterface $handler): ResponseHandlerInterface
     {
+        // set handler
+        $this->handler = $handler;
         // execute all observers in the wrokflow
         $this->WorkflowHandler->process($handler);
         // get last version of response and body objects
-        $this->handler = $handler;
-        $this->response = end($this->WorkflowHandler->getData()->response);
-        if (!($this->response instanceof Response)) {
-            throw ResponseException::noCreatedResponse();
+        if (property_exists($this->WorkflowHandler->getData(), 'response')) {
+            $this->response = end($this->WorkflowHandler->getData()->response);
+
+            if (!($this->response instanceof Response)) {
+                throw ResponseException::noCreatedResponse();
+            }
         }
+
         return $this;
     }
 

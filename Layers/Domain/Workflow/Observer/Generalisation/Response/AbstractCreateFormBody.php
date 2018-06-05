@@ -11,6 +11,7 @@ use Sfynx\CoreBundle\Layers\Domain\Specification\SpecIsHandlerCreatedWithErrors;
 use Sfynx\CoreBundle\Layers\Domain\Specification\SpecIsFormCreated;
 use Sfynx\CoreBundle\Layers\Domain\Specification\SpecIsParamCreatedWithTemplating;
 use Sfynx\CoreBundle\Layers\Domain\Specification\SpecIsXmlHttpRequest;
+use Sfynx\CoreBundle\Layers\Domain\Specification\SpecIsHandlerCreatedWithNoRedirection;
 use Sfynx\CoreBundle\Layers\Domain\Workflow\Observer\Generalisation\Response\AbstractObserver;
 use Sfynx\CoreBundle\Layers\Infrastructure\Exception\WorkflowException;
 
@@ -87,6 +88,7 @@ abstract class AbstractCreateFormBody extends AbstractObserver
             ->AndSpec(new SpecIsParamCreatedWithTemplating())
             ->AndSpec(new SpecIsHandlerCreatedWithErrors())
             ->AndSpec(new SpecIsFormCreated())
+            ->AndSpec(new SpecIsHandlerCreatedWithNoRedirection())
         ;
         if (!$specs->isSatisfiedBy($this->object)) {
             return $this;

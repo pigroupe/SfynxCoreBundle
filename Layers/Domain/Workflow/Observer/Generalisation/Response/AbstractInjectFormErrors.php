@@ -10,6 +10,7 @@ use Sfynx\CoreBundle\Layers\Domain\Specification\SpecIsValidRequest;
 use Sfynx\CoreBundle\Layers\Domain\Specification\SpecIsHandlerCreatedWithErrors;
 use Sfynx\CoreBundle\Layers\Domain\Specification\SpecIsFormCreated;
 use Sfynx\CoreBundle\Layers\Domain\Specification\SpecIsXmlHttpRequest;
+use Sfynx\CoreBundle\Layers\Domain\Specification\SpecIsHandlerCreatedWithNoRedirection;
 use Sfynx\CoreBundle\Layers\Domain\Workflow\Observer\Generalisation\Interfaces\ObserverInterface;
 use Sfynx\CoreBundle\Layers\Domain\Workflow\Observer\Generalisation\Response\AbstractObserver;
 
@@ -78,6 +79,7 @@ abstract class AbstractInjectFormErrors extends AbstractObserver
             ->NotSpec(new SpecIsXmlHttpRequest())
             ->AndSpec(new SpecIsHandlerCreatedWithErrors())
             ->AndSpec(new SpecIsFormCreated())
+            ->AndSpec(new SpecIsHandlerCreatedWithNoRedirection())
         ;
         if (!$specs->isSatisfiedBy($this->object)) {
             return $this;

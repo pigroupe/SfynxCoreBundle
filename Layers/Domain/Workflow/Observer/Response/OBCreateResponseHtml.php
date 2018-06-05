@@ -3,6 +3,7 @@ namespace Sfynx\CoreBundle\Layers\Domain\Workflow\Observer\Response;
 
 use Exception;
 use Symfony\Component\HttpFoundation\Response;
+use Sfynx\CoreBundle\Layers\Domain\Specification\SpecIsCreatedWithBody;
 use Sfynx\CoreBundle\Layers\Domain\Workflow\Observer\Generalisation\Response\AbstractCreateResponseHtml;
 use Sfynx\CoreBundle\Layers\Domain\Service\Response\Serializer\SerializerStrategy;
 use Sfynx\CoreBundle\Layers\Domain\Service\Response\Handler\ResponseHandler;
@@ -27,6 +28,12 @@ class OBCreateResponseHtml extends AbstractCreateResponseHtml
      */
     public function process(): bool
     {
+        // we abort if we are not in the create form process
+        $specs = new SpecIsCreatedWithBody();
+        if (!$specs->isSatisfiedBy($this->object)) {
+            $this->wfLastData->body = '';
+        }
+
         try {
             $url = !property_exists($this->wfHandler, 'url') ? null : $this->wfHandler->url;
             $this->wfLastData->response = (new ResponseHandler(SerializerStrategy::create(), $this->request->setRequestFormat('html')))
