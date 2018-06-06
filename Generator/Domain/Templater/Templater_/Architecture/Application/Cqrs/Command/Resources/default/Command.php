@@ -1,3 +1,6 @@
+<?php
+use Sfynx\CoreBundle\Generator\Domain\Component\File\ClassHandler;
+?>
 namespace <?php echo $templater->getTargetNamespace(); ?>;
 
 use Datetime;
@@ -17,7 +20,7 @@ use Sfynx\CoreBundle\Layers\Application\Command\Generalisation\AbstractCommand;
 class <?php echo $templater->getTargetClassname(); ?> extends AbstractCommand
 {
 <?php foreach ($templater->getTargetCommandFields() as $field): ?>
-    /** @var <?php if ($field->type == 'id'): ?>integer<?php else: ?><?php echo $field->type ?><?php endif; ?> */
+    /** @var <?php echo ClassHandler::getType($field->type); ?> */
     protected $<?php echo lcfirst($field->name) ?>;
 <?php endforeach; ?>
 }

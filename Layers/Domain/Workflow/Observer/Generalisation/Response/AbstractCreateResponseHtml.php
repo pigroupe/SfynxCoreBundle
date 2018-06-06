@@ -35,7 +35,7 @@ abstract class AbstractCreateResponseHtml extends AbstractObserver
      * @param RequestInterface $request
      * @param array $headers
      */
-    public function __construct(RequestInterface $request, array $headers = ['Cache-Control' => 'no-cache'])
+    public function __construct(RequestInterface $request, array $headers = [])
     {
         $this->request = $request;
         $this->headers = $headers;

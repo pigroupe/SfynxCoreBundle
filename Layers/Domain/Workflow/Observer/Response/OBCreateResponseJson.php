@@ -3,7 +3,6 @@ namespace Sfynx\CoreBundle\Layers\Domain\Workflow\Observer\Response;
 
 use Exception;
 use Symfony\Component\HttpFoundation\Response;
-use Sfynx\CoreBundle\Layers\Domain\Specification\SpecIsHandlerCreatedWithNoRedirection;
 use Sfynx\CoreBundle\Layers\Domain\Workflow\Observer\Generalisation\Response\AbstractCreateResponseJson;
 use Sfynx\CoreBundle\Layers\Domain\Service\Response\Serializer\SerializerStrategy;
 use Sfynx\CoreBundle\Layers\Domain\Service\Response\Handler\ResponseHandler;
