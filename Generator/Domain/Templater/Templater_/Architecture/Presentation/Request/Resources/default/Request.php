@@ -1,3 +1,6 @@
+<?php
+use Sfynx\CoreBundle\Generator\Domain\Component\File\ClassHandler;
+?>
 namespace <?php echo $templater->getTargetNamespace(); ?>;
 
 use Symfony\Component\OptionsResolver\Options;
@@ -51,13 +54,13 @@ class <?php echo $templater->getTargetClassname(); ?> extends AbstractFormReques
         'GET' => [
 <?php foreach ($templater->getTargetCommandFields() as $field): ?>
 <?php if ($field->name != 'entityId'): ?>
-            '<?php echo lcfirst($field->name) ?>' => ['<?php if (strpos($field->type, 'entityId') !== false): ?>integer<?php elseif (strpos(strtolower($field->type), 'id') !== false): ?>integer<?php elseif (strtolower($field->type) == 'number'): ?>integer<?php elseif (strtolower($field->type) == 'datetime'): ?>DateTime<?php elseif (strtolower($field->type) == 'valueobject'): ?>array<?php else: ?><?php echo $field->type ?><?php endif; ?>', 'null'],
+            '<?php echo lcfirst($field->name) ?>' => ['<?php echo ClassHandler::getType($field->type); ?>', 'null'],
 <?php endif; ?>
 <?php endforeach; ?>
         ],
         'POST' => [
 <?php foreach ($templater->getTargetCommandFields() as $field): ?>
-            '<?php echo lcfirst($field->name) ?>' => ['<?php if (strpos($field->type, 'entityId') !== false): ?>integer<?php elseif (strpos(strtolower($field->type), 'id') !== false): ?>integer<?php elseif (strtolower($field->type) == 'number'): ?>integer<?php elseif (strtolower($field->type) == 'datetime'): ?>DateTime<?php elseif (strtolower($field->type) == 'valueobject'): ?>array<?php else: ?><?php echo $field->type ?><?php endif; ?>', 'null'],
+            '<?php echo lcfirst($field->name) ?>' => ['<?php echo ClassHandler::getType($field->type); ?>', 'null'],
 <?php endforeach; ?>
         ],
         'PATCH' => 'POST'
@@ -68,7 +71,10 @@ class <?php echo $templater->getTargetClassname(); ?> extends AbstractFormReques
      */
     protected function setOptions()
     {
-        $this->options = $this->request->getRequest()->get('', []);
+        $this->options = array_merge(
+            $this->request->getRequest()->get('<?php echo strtolower($templater->getNamespace()); ?>_<?php if (property_exists($templater, 'targetCqrs')) echo str_replace('\\', '_', strtolower($templater->getTargetCqrs())); else strtolower($templater->getTargetClassname()); ?>', []),
+            $this->parameters
+        );
 
         // boolean transformation
         $dataBool = [
@@ -87,23 +93,20 @@ class <?php echo $templater->getTargetClassname(); ?> extends AbstractFormReques
 
         // identifier transformation
 <?php foreach ($templater->getTargetCommandFields() as $field): ?>
-<?php if ((strpos(strtolower($field->type), 'id') !== false) || (strpos(strtolower($field->type), 'integer') !== false)): ?>
+<?php if (ClassHandler::isIntType($field->type)): ?>
         //$<?php echo lcfirst($field->name) ?> = $this->request->get('<?php echo lcfirst($field->name) ?>', '');
         //$this->options['<?php echo lcfirst($field->name) ?>'] = ('' !== $<?php echo lcfirst($field->name) ?>) ? (int)$<?php echo lcfirst($field->name) ?> : null;
-        if (isset($this->options['<?php echo lcfirst($field->name) ?>'])) {
-            $this->options['<?php echo lcfirst($field->name) ?>'] = ('' !== $this->options['<?php echo lcfirst($field->name) ?>']) ? (int)$this->options['<?php echo lcfirst($field->name) ?>'] : null;
+        if (isset($this->options['<?php echo lcfirst($field->name) ?>']) && !empty($this->options['<?php echo lcfirst($field->name) ?>'])) {
+            $this->options['<?php echo lcfirst($field->name) ?>'] = (int)$this->options['<?php echo lcfirst($field->name) ?>'];
         }
-
 <?php endif; ?>
 <?php endforeach; ?>
 
         // datetime transformation
 <?php foreach ($templater->getTargetCommandFields() as $field): ?>
-<?php if (strpos(strtolower($field->type), 'datetime') !== false): ?>
-        if (isset($this->options['<?php echo lcfirst($field->name) ?>'])) {
-            $data = $this->options['<?php echo lcfirst($field->name) ?>'];
-            $this->options['<?php echo lcfirst($field->name) ?>'] = (null !== $data && !empty($data)) ? new \DateTime($data) : new \DateTime('now');
-        }
+<?php if (ClassHandler::isDateType($field->type)): ?>
+        $this->options['<?php echo lcfirst($field->name) ?>'] = (isset($this->options['<?php echo lcfirst($field->name) ?>'])
+        && !empty($this->options['<?php echo lcfirst($field->name) ?>'])) ? new \DateTime($this->options['<?php echo lcfirst($field->name) ?>']) : new \DateTime('now');
 <?php endif; ?>
 <?php endforeach; ?>
 

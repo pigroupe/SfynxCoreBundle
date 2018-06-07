@@ -21,6 +21,17 @@ class ClassHandler
     /** @var array */
     public static $constructorArguments = [];
 
+    const TYPE_ENTITY = 'id';
+    const TYPE_INTEGER = 'integer';
+    const TYPE_NUMBER = 'number';
+    const TYPE_BOOLEAN = 'boolean';
+    const TYPE_ARRAY = 'array';
+    const TYPE_TEXT = 'string';
+    const TYPE_TEXTAREA = 'textarea';
+    const TYPE_EMAIL = 'email';
+    const TYPE_DATE = 'datetime';
+    const TYPE_SUBMIT = 'submit';
+
     /**
      * @inheritdoc
      */
@@ -624,5 +635,69 @@ class ClassHandler
         }
 
         return $entityName;
+    }
+
+    /**
+     * @param string $type
+     * @static
+     * @return mixed
+     */
+    public static function getType(string $type)
+    {
+        switch ($type) {
+            case self::TYPE_ENTITY:
+                $newType = 'int';
+                break;
+            case self::TYPE_INTEGER:
+                $newType = 'int';
+                break;
+            case self::TYPE_NUMBER:
+                $newType = 'int';
+                break;
+            case self::TYPE_BOOLEAN:
+                $newType = 'bool';
+                break;
+            case self::TYPE_TEXTAREA:
+                $newType = 'string';
+                break;
+            case self::TYPE_EMAIL:
+                $newType = 'string';
+                break;
+            case self::TYPE_DATE:
+                $newType = 'DateTime';
+                break;
+            default:
+                $newType = $type;
+        }
+
+        return $newType;
+    }
+
+    /**
+     * @param string $value
+     * @static
+     * @return bool
+     */
+    public static function isIntType(string $value)
+    {
+        if ((strpos(strtolower($value), 'int') !== false)
+            || (strpos(strtolower($value), 'id') !== false)
+        ) {
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * @param string $value
+     * @static
+     * @return bool
+     */
+    public static function isDateType(string $value)
+    {
+        if (strpos(strtolower($value), 'date') !== false) {
+            return true;
+        }
+        return false;
     }
 }

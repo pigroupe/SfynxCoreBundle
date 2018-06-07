@@ -62,6 +62,6 @@ class <?php echo $templater->getTargetClassname(); ?> extends AbstractDefaultTyp
      */
     public function getBlockPrefix()
     {
-        return '<?php echo strtolower($templater->getNamespace()); ?>_<?php echo strtolower($templater->getTargetClassname()); ?>';
+        return '<?php echo strtolower($templater->getNamespace()); ?>_<?php if (property_exists($templater, 'targetCqrs')) echo str_replace('\\', '_', strtolower($templater->getTargetCqrs())); else strtolower($templater->getTargetClassname()); ?>';
     }
 }

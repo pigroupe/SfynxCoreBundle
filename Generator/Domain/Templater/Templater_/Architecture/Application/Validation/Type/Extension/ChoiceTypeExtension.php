@@ -72,11 +72,14 @@ class ChoiceTypeExtension extends AbstractResolver implements ExtensionInterface
         ) {
             $name = lcfirst($this->resolverParameters['name']);
 
-            $return = $this->createReturnValue($name, $options);
+            $return = $this->createReturnValue($options);
 
             $this->resolverParameters['choices'] = "\$${name}List";
-            $this->resolverParameters['choice_label'] = "function (\$${name}, \$key, \$index) {
+            $this->resolverParameters['choice_label'] = "function (\$entity, \$key, \$index) {
                 return ${return};
+            }";
+            $this->resolverParameters['choice_value'] = "function (\$entity = null) {
+                return \$entity ? \$entity->getId() : '';
             }";
         }
 
@@ -89,7 +92,7 @@ class ChoiceTypeExtension extends AbstractResolver implements ExtensionInterface
      * @param array $options
      * @return string
      */
-    protected function createReturnValue(string $name, array $options = []): string
+    protected function createReturnValue(array $options = []): string
     {
         $content = '';
 
@@ -98,31 +101,16 @@ class ChoiceTypeExtension extends AbstractResolver implements ExtensionInterface
         ) {
             $start = true;
             foreach ($options['properties'] as $property) {
+                $function = ucfirst($property);
                 if ($start) {
-                    $function = ucfirst($property);
-                    $content .= "\$${name}->get${function}()";
+                    $content .= "\$entity->get${function}()";
                     $start = false;
                 } else {
-                    $content .= " . ' - ' . \$${name}->getName()";
+                    $content .= " . ' - ' . \$entity->${function}()";
                 }
             }
         }
 
         return $content;
     }
-
-
-//->add('phase', ChoiceType::class, [
-//'choices' => $phaseAll,
-//'choice_label' => function($phase, $key, $index) {
-//    /** @var PhaseWorkflow $phase */
-//    return $phase->getLabel();
-//},
-//'required'  => false,
-//'multiple'    => false,
-//'expanded' => false,
-//'mapped' => false
-//])
-
-
 }

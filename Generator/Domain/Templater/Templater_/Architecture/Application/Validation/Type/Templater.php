@@ -3,6 +3,7 @@ namespace Sfynx\CoreBundle\Generator\Domain\Templater\Templater_\Architecture\Ap
 
 use stdClass;
 use Exception;
+use Sfynx\CoreBundle\Generator\Domain\Component\File\ClassHandler;
 use Sfynx\CoreBundle\Generator\Domain\Component\Table\Table;
 use Sfynx\CoreBundle\Generator\Domain\Templater\Templater_\Architecture\Application\Validation\Type\Extension;
 use Sfynx\CoreBundle\Generator\Domain\Widget\Generalisation\Interfaces\WidgetInterface;
@@ -28,24 +29,17 @@ class Templater extends AbstractTemplater implements TemplaterInterface
     /** @var bool */
     const NAMESPACE_WITH_CQRS = false;
 
-    const TYPE_ENTITY = 'id';
-    const TYPE_TEXT = 'string';
-    const TYPE_ARRAY = 'array';
-    const TYPE_TEXTAREA = 'textarea';
-    const TYPE_DATE = 'datetime';
-    const TYPE_SUBMIT = 'submit';
-
     /**
      * List of concrete extension Type that can be built using this form type.
      * @var string[]
      */
     protected static $extensionList = [
-        self::TYPE_ENTITY => Extension\EntityTypeExtension::class,
-        self::TYPE_TEXT => Extension\TextTypeExtension::class,
-        self::TYPE_ARRAY => Extension\ChoiceTypeExtension::class,
-        self::TYPE_TEXTAREA => Extension\TextareaTypeExtension::class,
-        self::TYPE_DATE => Extension\DateTypeExtension::class,
-        self::TYPE_SUBMIT => Extension\SubmitTypeExtension::class,
+        ClassHandler::TYPE_ENTITY => Extension\EntityTypeExtension::class,
+        ClassHandler::TYPE_TEXT => Extension\TextTypeExtension::class,
+        ClassHandler::TYPE_ARRAY => Extension\ChoiceTypeExtension::class,
+        ClassHandler::TYPE_TEXTAREA => Extension\TextareaTypeExtension::class,
+        ClassHandler::TYPE_DATE => Extension\DateTypeExtension::class,
+        ClassHandler::TYPE_SUBMIT => Extension\SubmitTypeExtension::class,
     ];
 
     /** @var array */
@@ -116,7 +110,7 @@ EOT;
         if (array_key_exists($type, self::$extensionList)) {
             $instanceValue = self::$extensionList[$type];
         } else {
-            $instanceValue = self::$extensionList[self::TYPE_TEXT];
+            $instanceValue = self::$extensionList[ClassHandler::TYPE_TEXT];
         }
 
         $resolverParametersOption = array_merge($options, ['templater' => $this]);

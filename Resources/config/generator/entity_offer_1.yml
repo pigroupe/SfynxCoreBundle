@@ -134,10 +134,12 @@ default:
                     arguments:
                       - 'Sfynx\CoreBundle\Layers\Domain\Service\Manager\Generalisation\Interfaces\ManagerInterface'
                       - 'Sfynx\CoreBundle\Layers\Domain\Service\Request\Generalisation\RequestInterface'
+                      - 'Symfony\Bundle\FrameworkBundle\Routing\Router'
+                      - 'bool $updateCommand = false'
                     construct:
                         create: true
                         body:
-                          - 'parent::__construct($manager, $request);'
+                          - 'parent::__construct($manager, $request, $updateCommand);'
                     extends: Sfynx\CoreBundle\Layers\Domain\Workflow\Observer\Generalisation\Command\AbstractEntityCreateHandler
                     options:
                         implements: ~
@@ -149,21 +151,17 @@ default:
                     arguments:
                       - 'Sfynx\CoreBundle\Layers\Domain\Service\Manager\Generalisation\Interfaces\ManagerInterface'
                       - 'Sfynx\CoreBundle\Layers\Domain\Service\Request\Generalisation\RequestInterface'
+                      - 'Symfony\Bundle\FrameworkBundle\Routing\Router'
+                      - 'bool $updateCommand = false'
+                    construct:
+                        create: true
+                        body:
+                          - 'parent::__construct($manager, $request, $updateCommand);'
                     extends: Sfynx\CoreBundle\Layers\Domain\Workflow\Observer\Generalisation\Command\AbstractEntityEditHandler
                     options:
                         implements: ~
                         uses: ~
                         traits: [Sfynx\CoreBundle\Layers\Domain\Workflow\Observer\Command\TraitProcess]
-                        methods:
-                          - name: '__construct'
-                            comments: ['{@inheritdoc}']
-                            arguments:
-                              - 'Sfynx\CoreBundle\Layers\Domain\Service\Manager\Generalisation\Interfaces\ManagerInterface'
-                              - 'Sfynx\CoreBundle\Layers\Domain\Service\Request\Generalisation\RequestInterface'
-                              - 'bool $updateCommand = false'
-                            visibility: 'public'
-                            returnType: ~
-                            insertParent: true
                 - OBOffer1CreateFormData:
                     create: true
                     class: Domain\Workflow\Observer\Offer\Response\OBOffer1CreateFormData

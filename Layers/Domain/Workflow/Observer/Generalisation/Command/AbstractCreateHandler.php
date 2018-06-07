@@ -42,7 +42,7 @@ abstract class AbstractCreateHandler extends AbstractObserver
      */
     protected function getValidMethods(): array
     {
-        return array('POST');
+        return ['POST'];
     }
 
     /**

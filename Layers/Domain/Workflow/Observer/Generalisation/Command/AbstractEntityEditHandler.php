@@ -56,7 +56,7 @@ abstract class AbstractEntityEditHandler extends AbstractObserver
      */
     protected function getValidMethods(): array
     {
-        return ['POST', 'PATCH'];
+        return ['POST', 'PATCH', 'PUT'];
     }
 
     /**

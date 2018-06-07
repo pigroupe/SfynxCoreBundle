@@ -89,7 +89,7 @@ class ResponseHandler implements ResponseHandlerInterface
         $this->response->setStatusCode($this->status);
 
         if (!empty($this->headers)) {
-            $this->response->headers->replace($this->headers);
+            $this->response->headers->add($this->headers);
         }
 
         if (!empty($this->body)) {

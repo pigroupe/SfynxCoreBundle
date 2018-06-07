@@ -17,8 +17,10 @@ default:
                 extends: Sfynx\CoreBundle\Layers\Presentation\Coordination\Generalisation\AbstractFormController
                 options:
                     implements: ~
-                    uses: ['Sfynx\CoreBundle\Layers\Presentation\Coordination\Generalisation\Traits\TraitParam']
-                    traits: ~
+                    uses:
+                      - 'ProfilContext\Domain\Service\Entity\Profil\ProfilManager'
+                    traits:
+                      - 'Sfynx\CoreBundle\Layers\Presentation\Coordination\Generalisation\Traits\TraitParam'
                 body:
                     - updateCommand:
                         design: 'adapter'
@@ -75,12 +77,16 @@ default:
                 arguments: ~
             widget_cqrs_validator_validation:
                 class: Validation\ValidationHandler\GoPromiseRequestFormCommandValidationHandler
+## TODO
 #                arguments:
 #                  - '$commandHandlerResult'
-#                  - 'Symfony\Component\Validator\Validator\ValidatorInterface'
+#                  - 'new SymfonyValidatorStrategy'
 #                  - 'false'
-#                options:
-#                    uses: ['Sfynx\CoreBundle\Layers\Application\Validation\Validator\SymfonyValidatorStrategy']
+#            widget_service_app_class:
+#                - SymfonyValidatorStrategy:
+#                    create: false
+#                    class: 'Sfynx\CoreBundle\Layers\Application\Validation\Validator\SymfonyValidatorStrategy'
+#                    arguments: ['Symfony\Component\Validator\Validator\ValidatorInterface']
             widget_validation_type:
                 class: Action\GoPromiseRequestType
                 arguments: ~
@@ -107,18 +113,15 @@ default:
                     create: true
                     class: OBGoPromiseRequestCreate
                     arguments:
-                      - 'PromotionContext\Domain\Service\Entity\Business\BusinessManager'
-                      - 'ProfilContext\Domain\Service\Entity\Profil\ProfilManager'
-                      - 'DocContext\Domain\Service\Entity\Media\MediaManager'
-                      - 'PromotionContext\Domain\Service\Entity\TypeList\TypeListManager'
-                      - 'PromotionContext\Domain\Service\Entity\ActionWorkflow\ActionWorkflowManager'
-                      - 'PromotionContext\Domain\Service\Entity\Activity\Manager\ActivityManager'
                       - 'Sfynx\CoreBundle\Layers\Domain\Service\Request\Generalisation\RequestInterface'
+                      - 'Symfony\Bundle\FrameworkBundle\Routing\Router'
+                      - 'PromotionContext\Domain\Service\Entity\Activity\Manager\ActivityManager'
+                      - 'DocContext\Domain\Service\Entity\Media\MediaManager'
                     construct:
                         create: true
                         body:
-                          - 'parent::__construct($actionWorkflowManager, $request);'
-                    extends: Sfynx\CoreBundle\Layers\Domain\Workflow\Observer\Generalisation\Command\AbstractEntityCreateHandler
+                          - 'parent::__construct($request);'
+                    extends: Sfynx\CoreBundle\Layers\Domain\Workflow\Observer\Generalisation\Command\AbstractCreateHandler
                     options:
                         implements: ~
                         uses: ~
@@ -128,7 +131,7 @@ default:
                     class: Domain\Workflow\Observer\Activity\Response\OBGoPromiseRequestFormData
                     arguments:
                       - 'Sfynx\CoreBundle\Layers\Domain\Service\Request\Generalisation\RequestInterface'
-                      - 'ProfilContext\Domain\Service\Entity\Profil\ProfilManager'
+                      - 'UserContext\Domain\Service\Entity\User\UserManager'
                       - 'DocContext\Domain\Service\Entity\Media\MediaManager'
                       - 'DocContext\Domain\Service\Entity\DocTopicWorkflow\DocTopicWorkflowManager'
                     construct:
@@ -272,6 +275,15 @@ default:
                 mapping:
                   relationship: ManyToOne
                   targetEntity: PromotionContext\Domain\Entity\Business
+              activityGoPromiseId:
+                name: activityGoPromise
+                type: valueObject
+                voName: IdVO
+                foreignKey: true
+                required: true
+                mapping:
+                  relationship: ManyToOne
+                  targetEntity: PromotionContext\Domain\Entity\Activity
               profil:
                 name: profil
                 type: valueObject
