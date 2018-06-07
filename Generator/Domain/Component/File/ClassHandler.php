@@ -665,6 +665,7 @@ class ClassHandler
                 break;
             case self::TYPE_DATE:
                 $newType = 'DateTime';
+                break;
             default:
                 $newType = $type;
         }

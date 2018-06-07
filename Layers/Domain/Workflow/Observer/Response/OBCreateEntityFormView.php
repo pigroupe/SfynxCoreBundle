@@ -42,8 +42,7 @@ class OBCreateEntityFormView extends AbstractCreateFormView
             && (Kernel::MINOR_VERSION >= 3)
         ) {
             return $this->formFactory->create(get_class($this->formType), $this->wfHandler->entity);
-        } else {
-            return $this->formFactory->create($this->formType, $this->wfHandler->entity);
         }
+        return $this->formFactory->create($this->formType, $this->wfHandler->entity);
     }
 }

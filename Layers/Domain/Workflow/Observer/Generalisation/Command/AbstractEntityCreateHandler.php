@@ -32,6 +32,8 @@ abstract class AbstractEntityCreateHandler extends AbstractObserver
     protected $request;
     /** @var stdClass */
     protected $object;
+    /** @var bool */
+    protected $updateCommand;
 
     /**
      * AbstractEntityCreateHandler constructor.
@@ -54,7 +56,7 @@ abstract class AbstractEntityCreateHandler extends AbstractObserver
      */
     protected function getValidMethods(): array
     {
-        return array('POST');
+        return ['POST'];
     }
 
     /**

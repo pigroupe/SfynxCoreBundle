@@ -72,7 +72,7 @@ class <?php echo $templater->getTargetClassname(); ?> extends AbstractFormReques
     protected function setOptions()
     {
         $this->options = array_merge(
-            $this->request->getRequest()->get('<?php echo strtolower($templater->getNamespace()); ?>_<?php echo strtolower($templater->getTargetClassname()); ?>', []),
+            $this->request->getRequest()->get('<?php echo strtolower($templater->getNamespace()); ?>_<?php if (property_exists($templater, 'targetCqrs')) echo str_replace('\\', '_', strtolower($templater->getTargetCqrs())); else strtolower($templater->getTargetClassname()); ?>', []),
             $this->parameters
         );
 

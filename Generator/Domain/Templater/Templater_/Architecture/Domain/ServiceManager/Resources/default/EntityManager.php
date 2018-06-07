@@ -55,6 +55,8 @@ namespace <?php echo $templater->getTargetNamespace(); ?>;
 
 use Sfynx\CoreBundle\Layers\Application\Command\Generalisation\Interfaces\CommandInterface;
 use Sfynx\CoreBundle\Layers\Domain\Service\Manager\Generalisation\AbstractManager;
+use Sfynx\CoreBundle\Layers\Domain\Repository\Command\CommandRepositoryInterface;
+use Sfynx\CoreBundle\Layers\Domain\Repository\Query\QueryRepositoryInterface;
 
 /**
  * Class <?php echo $templater->getTargetClassname(); ?><?php echo PHP_EOL ?>
@@ -70,6 +72,22 @@ use Sfynx\CoreBundle\Layers\Domain\Service\Manager\Generalisation\AbstractManage
  */
 class <?php echo $templater->getTargetClassname(); ?> extends AbstractManager
 {
+    /**
+     * {@inheritdoc}
+     */
+    public function getQueryRepository(): QueryRepositoryInterface
+    {
+        return parent::getQueryRepository();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getCommandRepository(): CommandRepositoryInterface
+    {
+        return parent::getCommandRepository();
+    }
+
     /**
      * {@inheritdoc}
      */
