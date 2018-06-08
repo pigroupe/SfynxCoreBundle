@@ -217,13 +217,14 @@ class ClassHandler
                 }
             }
         }
-
-        str_replace($context, $context, $use, $countContext);
-        if ( !empty($context) && (0 == $countContext)) {
-            $use = $context . '\\' . $use;
+        str_replace('$', '$', $use, $countVar);
+        if (0 == $countVar) {
+            str_replace($context, $context, $use, $countContext);
+            if (!empty($context) && (0 == $countContext)) {
+                $use = $context . '\\' . $use;
+            }
+            $namespace->addUse($use);
         }
-
-        $namespace->addUse($use);
     }
 
     /**
@@ -380,7 +381,6 @@ class ClassHandler
                             $body .= $line . PHP_EOL;
                         }
                     }
-
                     if (property_exists($method, 'returnParent') && !empty($method->returnParent)) {
                         $body .= "return parent::$method->name($methodArgs);" . PHP_EOL;
                     }
@@ -419,7 +419,6 @@ class ClassHandler
                 ->addComment('');
 
             $body = '';
-
             foreach (self::$constructorArguments as $value => $attribute) {
                 $defaultValue = null;
 
@@ -464,7 +463,6 @@ class ClassHandler
                     $body .= $line . PHP_EOL;
                 }
             }
-
             $method->addBody($body);
 
             return  $method;
@@ -496,7 +494,6 @@ class ClassHandler
     public static function setArgs(PhpNamespace $namespace, array $arguments, ?array $index = [], bool $addConstruct = true): string
     {
         $result = [];
-
         if (!empty($arguments)) {
             foreach ($arguments as $argument) {
                 $info = self::getArgResult($namespace, $argument, $index, $addConstruct);
@@ -562,11 +559,9 @@ class ClassHandler
     public static function setArgNewResult(PhpNamespace $namespace, string $argument, ?array $index = [], string $className): string
     {
         $newArgs = null;
-
         foreach ($index as $class => $args) {
-            str_replace($className, $className, $class, $countClass);
-
-            if (($countClass == 1)
+            $namespaceClass = self::getClassNameFromNamespace($class);
+            if (($namespaceClass == $className)
                 && !empty($args)
             ) {
                 foreach ($args as $arg) {
@@ -576,7 +571,6 @@ class ClassHandler
                 $newArgs = implode(', ', $newArgs);
             }
         }
-
         self::addUse($namespace, $className, $index);
 
         return "$argument($newArgs)";

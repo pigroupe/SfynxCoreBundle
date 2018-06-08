@@ -100,6 +100,23 @@ EOT;
      */
     public function add(string $child, string $type, stdClass $options = null, bool $isEndLine = false): string
     {
+        $content = $this->_add($child, $type, $options, $isEndLine). PHP_EOL;
+        if (ClassHandler::TYPE_ENTITY == $type) {
+            $content .= '/*        ' . PHP_EOL;
+            $content .= '        ' . $this->_add($child, ClassHandler::TYPE_ARRAY, $options, $isEndLine) . '*/' . PHP_EOL;
+        }
+
+        return $content;
+    }
+
+    /**
+     * @param string $child
+     * @param string $type
+     * @param stdClass|null $options
+     * @return string
+     */
+    protected function _add(string $child, string $type, stdClass $options = null, bool $isEndLine = false): string
+    {
         // we convert options to array
         if (null === $options) {
             $options = [];
@@ -146,9 +163,9 @@ EOT;
         }
 
         if ($isEndLine) {
-            $content .= '        ]);' .PHP_EOL;
+            $content .= '        ]);';
         } else {
-            $content .= '        ])' .PHP_EOL;
+            $content .= '        ])';
         }
 
         return $content;

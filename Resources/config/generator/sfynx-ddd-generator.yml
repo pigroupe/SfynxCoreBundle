@@ -73,10 +73,19 @@ default:
                 arguments: ~
             widget_cqrs_validator_specification:
                 class: Validation\SpecHandler\MovieFormCommandSpecHandler
-                arguments: ~
+                arguments:
+                  - '$commandHandlerResult'
             widget_cqrs_validator_validation:
                 class: Validation\ValidationHandler\MovieFormCommandValidationHandler
-                arguments: ~
+                arguments:
+                  - '$commandHandlerResult'
+                  - 'new SymfonyValidatorStrategy'
+                  - 'false'
+            widget_service_app_class:
+                - SymfonyValidatorStrategy:
+                    create: false
+                    class: 'Sfynx\CoreBundle\Layers\Application\Validation\Validator\SymfonyValidatorStrategy'
+                    arguments: ['Symfony\Component\Validator\Validator\ValidatorInterface']
             widget_validation_type:
                 class: MovieType
                 arguments: ~

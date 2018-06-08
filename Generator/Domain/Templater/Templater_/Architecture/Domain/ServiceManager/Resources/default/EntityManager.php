@@ -1,4 +1,5 @@
 <?php
+    use Sfynx\CoreBundle\Generator\Domain\Component\File\ClassHandler;
 
     $fieldsEntityOption = '';
     if ($templater->has('targetOptions') && !empty($templater->getTargetOptions())) {
@@ -9,7 +10,7 @@
     $fieldsEntityList = [];
     if (empty($fieldsEntityOption)) {
         foreach ($templater->getTargetCommandFields() as $field) {
-            if (($field->type == 'id')
+            if (($field->type == ClassHandler::TYPE_ENTITY)
                 && property_exists($field, 'mapping')
             ) {
                 $fieldsEntityList[] = $field;
@@ -18,7 +19,7 @@
     } else {
         $fieldsEntityList = [];
         foreach ($templater->getTargetCommandFields() as $field) {
-            if (($field->type == 'id')
+            if (($field->type == ClassHandler::TYPE_ENTITY)
                 && property_exists($field, 'mapping')
                 && ($field->entityName == $fieldsEntityOption)
             ) {
@@ -31,7 +32,7 @@
     $fieldsEntityArrayList = [];
     if (empty($fieldsEntityOption)) {
         foreach ($templater->getTargetCommandFields() as $field) {
-            if (($field->type == 'array')
+            if (($field->type == ClassHandler::TYPE_ARRAY)
                 && property_exists($field, 'mapping')
                 && property_exists($field, 'multiple') && ($field->multiple == true)
             ) {
@@ -41,7 +42,7 @@
     } else {
         $fieldsEntityArrayList = [];
         foreach ($templater->getTargetCommandFields() as $field) {
-            if (($field->type == 'array')
+            if (($field->type == ClassHandler::TYPE_ARRAY)
                 && property_exists($field, 'mapping')
                 && property_exists($field, 'multiple') && ($field->multiple == true)
                 && ($field->entityName == $fieldsEntityOption)
@@ -50,6 +51,21 @@
             }
         }
     }
+
+    $fieldsEntityListContent = '[';
+    $end = false;
+    if (!empty($fieldsEntityList)) {
+        foreach ($fieldsEntityList as $field) {
+            $end = PHP_EOL;
+            $fieldsEntityListContent .= PHP_EOL . "                '" . lcfirst($field->name) . "'," . $end;
+        }
+    }
+    if ($end) {
+        $fieldsEntityListContent .= '        ]';
+    } else {
+        $fieldsEntityListContent .= ']';
+    }
+
 ?>
 namespace <?php echo $templater->getTargetNamespace(); ?>;
 
@@ -94,12 +110,7 @@ class <?php echo $templater->getTargetClassname(); ?> extends AbstractManager
     public function newFromCommand(CommandInterface $command): object
     {
         $class = $this->getClass();
-        $entity = $class::newFromCommand($command, [
-<?php foreach ($fieldsEntityList as $field): ?>
-                '<?php echo lcfirst($field->name); ?>',
-<?php endforeach; ?>
-            ]
-        );
+        $entity = $class::newFromCommand($command, <?php echo $fieldsEntityListContent; ?>);
         $this->transformEntity($entity, $command);
 
         return $entity;
@@ -111,13 +122,7 @@ class <?php echo $templater->getTargetClassname(); ?> extends AbstractManager
     public function buildFromCommand(object $entity, CommandInterface $command, bool $updateCommand = false): object
     {
         $class = $this->getClass();
-        $entity = $class::buildFromCommand($entity, $command, [
-<?php foreach ($fieldsEntityList as $field): ?>
-                '<?php echo lcfirst($field->name); ?>',
-<?php endforeach; ?>
-            ],
-            $updateCommand
-        );
+        $entity = $class::buildFromCommand($entity, $command, <?php echo $fieldsEntityListContent; ?>, $updateCommand);
         $this->transformEntity($entity, $command);
 
         return $entity;
