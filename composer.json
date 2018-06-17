@@ -17,6 +17,7 @@
   ],
 
   "require": {
+    "php": "^7.2",
     "symfony/framework-bundle": "~2.8|~3.0",
     "symfony/console": "*",
     "sensio/generator-bundle": "~3.1.2",

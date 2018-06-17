@@ -48,7 +48,6 @@ class WidgetParser
             Architecture\Domain\Service\ManagerServiceDomainWidget::TAG => new Architecture\Domain\Service\ManagerServiceDomainWidget(),
             Architecture\Domain\Service\ServiceDomainWidget::TAG => new Architecture\Domain\Service\ServiceDomainWidget(),
             Architecture\Domain\Workflow\WorkflowObserverDomainWidget::TAG => new Architecture\Domain\Workflow\WorkflowObserverDomainWidget(),
-            Architecture\Application\Service\ServiceApplicationWidget::TAG => new Architecture\Application\Service\ServiceApplicationWidget(),
             Architecture\Application\Validation\ValidationTypeApplicationWidget::TAG => new Architecture\Application\Validation\ValidationTypeApplicationWidget(),
             Architecture\Application\Cqrs\CommandValidationHandlerApplicationWidget::TAG => new Architecture\Application\Cqrs\CommandValidationHandlerApplicationWidget(),
             Architecture\Application\Cqrs\CommandSpecHandlerApplicationWidget::TAG => new Architecture\Application\Cqrs\CommandSpecHandlerApplicationWidget(),

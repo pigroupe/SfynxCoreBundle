@@ -23,16 +23,9 @@ class <?php echo $templater->getTargetClassname(); ?> extends AbstractFormReques
      * @var array $defaults List of default values for optional parameters.
      */
     protected $defaults = [
-        'GET' => [
 <?php foreach ($templater->getTargetCommandFields() as $field): ?>
-            '<?php echo lcfirst($field->name) ?>' => <?php if (ClassHandler::getType($field->type) == 'bool') echo 'true'; else echo 'null'; ?>,
+        '<?php echo lcfirst($field->name) ?>' => null,
 <?php endforeach; ?>
-        ],
-        'POST' => [
-<?php foreach ($templater->getTargetCommandFields() as $field): ?>
-            '<?php echo lcfirst($field->name) ?>' => <?php if (ClassHandler::getType($field->type) == 'bool') echo 'false'; else echo 'null'; ?>,
-<?php endforeach; ?>
-        ]
     ];
 
     /**

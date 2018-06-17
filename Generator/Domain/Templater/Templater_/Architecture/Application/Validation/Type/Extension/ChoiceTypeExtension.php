@@ -76,10 +76,13 @@ class ChoiceTypeExtension extends AbstractResolver implements ExtensionInterface
 
             $this->resolverParameters['choices'] = "\$${name}List";
             $this->resolverParameters['choice_label'] = "function (\$entity, \$key, \$index) {
-                return ${return};
+                return is_object(\$entity) ? ${return} : \$entity;
             }";
             $this->resolverParameters['choice_value'] = "function (\$entity = null) {
-                return \$entity ? \$entity->getId() : '';
+                if (!\$entity) {
+                    return '';
+                }
+                return is_object(\$entity) ? \$entity->getId() : \$entity;
             }";
         }
 

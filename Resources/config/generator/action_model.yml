@@ -116,6 +116,7 @@ default:
                       - 'Sfynx\CoreBundle\Layers\Domain\Service\Request\Generalisation\RequestInterface'
                       - 'Symfony\Bundle\FrameworkBundle\Routing\Router'
                       - 'PromotionContext\Domain\Service\Entity\Activity\Manager\ActivityManager'
+                      - 'PromotionContext\Domain\Service\Entity\Period\Manager\EntityManager'
                       - 'DocContext\Domain\Service\Entity\Media\MediaManager'
                     construct:
                         create: true
