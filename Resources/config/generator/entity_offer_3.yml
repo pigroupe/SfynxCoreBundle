@@ -73,10 +73,19 @@ default:
                 arguments: ~
             widget_cqrs_validator_specification:
                 class: Validation\SpecHandler\Offer3FormCommandSpecHandler
-                arguments: ~
+                arguments:
+                  - '$commandHandlerResult'
             widget_cqrs_validator_validation:
                 class: Validation\ValidationHandler\Offer3FormCommandValidationHandler
-                arguments: ~
+                arguments:
+                  - '$commandHandlerResult'
+                  - 'new SymfonyValidatorStrategy'
+                  - 'false'
+            widget_service_app_class:
+                - SymfonyValidatorStrategy:
+                    create: false
+                    class: 'Sfynx\CoreBundle\Layers\Application\Validation\Validator\SymfonyValidatorStrategy'
+                    arguments: ['Symfony\Component\Validator\Validator\ValidatorInterface']
             widget_validation_type:
                 class: Offer3Type
                 arguments: ~
@@ -234,8 +243,8 @@ default:
                 foreignKey: true
                 required: true
                 mapping:
-                relationship: ManyToOne
-                targetEntity: GeographieContext\Domain\Entity\Address
+                  relationship: ManyToOne
+                  targetEntity: GeographieContext\Domain\Entity\Address
         x-valueObjects:
           IdVO:
             type: Sfynx\CoreBundle\Layers\Domain\ValueObject\IdVO

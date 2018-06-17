@@ -45,7 +45,6 @@ class SfynxCoreExtension extends Extension{
         $loaderYaml->load('service/services_util.yml');
         $loaderYaml->load('service/services_cmfconfig.yml');
         $loaderYaml->load('service/services_doctrine_extensions.yml');
-        $loaderYaml->load('service/services_datacollector.yml');
 
         // we load all controller parameters
         $loaderYaml->load('controller/crud_command.yml');
