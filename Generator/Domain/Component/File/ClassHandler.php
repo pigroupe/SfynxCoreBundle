@@ -217,13 +217,14 @@ class ClassHandler
                 }
             }
         }
-
-        str_replace($context, $context, $use, $countContext);
-        if ( !empty($context) && (0 == $countContext)) {
-            $use = $context . '\\' . $use;
+        str_replace('$', '$', $use, $countVar);
+        if (0 == $countVar) {
+            str_replace($context, $context, $use, $countContext);
+            if (!empty($context) && (0 == $countContext)) {
+                $use = $context . '\\' . $use;
+            }
+            $namespace->addUse($use);
         }
-
-        $namespace->addUse($use);
     }
 
     /**
@@ -380,7 +381,6 @@ class ClassHandler
                             $body .= $line . PHP_EOL;
                         }
                     }
-
                     if (property_exists($method, 'returnParent') && !empty($method->returnParent)) {
                         $body .= "return parent::$method->name($methodArgs);" . PHP_EOL;
                     }
@@ -419,12 +419,11 @@ class ClassHandler
                 ->addComment('');
 
             $body = '';
-
             foreach (self::$constructorArguments as $value => $attribute) {
                 $defaultValue = null;
 
-                if (is_array($attribute) && isset($attribute['value'])) {
-                    $value = preg_replace('!\s+!', ' ', $attribute['value']);
+                if (is_array($attribute) && isset($attribute['basename'])) {
+                    $value = preg_replace('!\s+!', ' ', $attribute['basename']);
                     list($type, $arg) = explode(' ', $value);
 
                     str_replace('=', '=', $value, $countEgual);
@@ -448,7 +447,7 @@ class ClassHandler
                     $Parameter->setDefaultValue($defaultValue);
                 }
 
-                $method->addComment(sprintf('@param %s $%s', $value, $arg));
+                $method->addComment(sprintf('@param %s $%s', $type, $arg));
                 $class->addProperty($arg)->setComment(sprintf('@var %s', $type))->setVisibility('protected');
             }
             self::$constructorArguments = [];
@@ -464,7 +463,6 @@ class ClassHandler
                     $body .= $line . PHP_EOL;
                 }
             }
-
             $method->addBody($body);
 
             return  $method;
@@ -496,7 +494,6 @@ class ClassHandler
     public static function setArgs(PhpNamespace $namespace, array $arguments, ?array $index = [], bool $addConstruct = true): string
     {
         $result = [];
-
         if (!empty($arguments)) {
             foreach ($arguments as $argument) {
                 $info = self::getArgResult($namespace, $argument, $index, $addConstruct);
@@ -516,6 +513,8 @@ class ClassHandler
      */
     public static function getArgResult(PhpNamespace $namespace, string $argument, ?array $index = [], bool $addConstruct = true): array
     {
+        $argument = trim(preg_replace('!\s+!', ' ', $argument));
+
         $basename = ClassHandler::getClassNameFromNamespace($argument);
         $argResult = $argument;
         $type = 'default';
@@ -535,15 +534,21 @@ class ClassHandler
             $value = $interfaceName;
         }
 
-        $classArgument = str_replace('\\', '\\', trim($argument), $countArg);
+        $classArgument = str_replace('\\', '\\', $argument, $countArg);
         if ((1 <= $countArg) && (0 == $countInterface)) {
             $argResult = self::setArgClassResult($namespace, $argument, $index, $basename, $basename, $addConstruct);;
             $type = 'class';
             $value = $basename;
         }
 
-        $newArgument = str_replace(' ', ' ', trim(preg_replace('!\s+!', ' ', $argument)), $countVar);
-        if ((1 <= $countVar) && (0 == $countNew)) {
+        $newArgument = str_replace(' ', ' ', $argument, $countVar);
+        str_replace('=', '=', $argument, $countEgual);
+        if (1 == $countEgual) {
+            list($content, $defaultValue) = explode('=', $argument);
+            $argResult = trim($defaultValue);
+            $type = 'var';
+            $value = $content;
+        } elseif ((1 <= $countVar) && (0 == $countNew)) {
             $argResult = self::setArgVarResult($newArgument);
             $type = 'var';
             $value = $newArgument;
@@ -562,11 +567,9 @@ class ClassHandler
     public static function setArgNewResult(PhpNamespace $namespace, string $argument, ?array $index = [], string $className): string
     {
         $newArgs = null;
-
         foreach ($index as $class => $args) {
-            str_replace($className, $className, $class, $countClass);
-
-            if (($countClass == 1)
+            $namespaceClass = self::getClassNameFromNamespace($class);
+            if (($namespaceClass == $className)
                 && !empty($args)
             ) {
                 foreach ($args as $arg) {
@@ -576,7 +579,6 @@ class ClassHandler
                 $newArgs = implode(', ', $newArgs);
             }
         }
-
         self::addUse($namespace, $className, $index);
 
         return "$argument($newArgs)";

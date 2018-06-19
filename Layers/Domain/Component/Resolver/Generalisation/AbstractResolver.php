@@ -22,8 +22,7 @@ abstract class AbstractResolver implements ResolverInterface
     /** @var array|stdClass */
     protected $resolverParameters;
     /** @var array */
-    protected $options;
-
+    protected $parameters;
     /** @var array */
     protected $defaults = [];
     /** @var array */
@@ -35,12 +34,12 @@ abstract class AbstractResolver implements ResolverInterface
 
     /**
      * AbstractResolver constructor.
-     * @param array $options
+     * @param array $parameters
      * @param OptionsResolverInterface|null $OptionsResolver
      */
-    public function __construct(array $options = [], OptionsResolverInterface $OptionsResolver = null)
+    public function __construct(array $parameters = [], OptionsResolverInterface $OptionsResolver = null)
     {
-        $this->options = $options;
+        $this->parameters = $parameters;
         $this->resolver = $OptionsResolver;
         if (null === $OptionsResolver) {
             $this->resolver = new OptionsResolver();
@@ -89,7 +88,7 @@ abstract class AbstractResolver implements ResolverInterface
         foreach ($this->getNormalizers() as $optionName => $optionValues) {
             $this->resolver->setNormalizer($optionName, $optionValues);
         }
-        $this->resolverParameters = $this->resolver->resolve($this->options);
+        $this->resolverParameters = $this->resolver->resolve($this->parameters);
     }
 
     /**

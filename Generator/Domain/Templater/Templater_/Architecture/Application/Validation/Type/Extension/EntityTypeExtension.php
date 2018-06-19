@@ -29,7 +29,7 @@ class EntityTypeExtension extends AbstractResolver implements ExtensionInterface
         'choices_as_values' => true,
         'choice_name' => '',
         'choice_label' => '',
-        'choice_value' => '',
+        'choice_value' => 'id',
         'label' => '',
         'expanded' => false,
         'multiple' => false,
@@ -76,10 +76,7 @@ class EntityTypeExtension extends AbstractResolver implements ExtensionInterface
      */
     protected function transformParameters(array $options = []): void
     {
-        if (isset($options['mapping'])
-            && isset($options['mapping']['targetEntity'])
-            && !empty($options['mapping']['targetEntity'])
-        ) {
+        if (!empty($options['mapping']['targetEntity'])) {
             $templater = $options['templater'];
 
             str_replace('\\', '\\', $options['mapping']['targetEntity'], $count);

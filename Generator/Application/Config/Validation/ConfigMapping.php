@@ -34,9 +34,7 @@ class ConfigMapping implements ValidationInterface
      */
     public function validate(Config $config)
     {
-        if (isset($config->get('conf-array')['mapping'])
-            && !empty($config->get('conf-array')['mapping'])
-        ) {
+        if (!empty($config->get('conf-array')['mapping'])) {
             $mapping = $config->get('conf-array')['mapping'];
 
             $providers = $this->parseProviders($mapping);

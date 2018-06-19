@@ -39,11 +39,11 @@ class TemplateClassesGenerator extends AbstractGenerator
                     $namespace = $namespace . '\\' . $templater->getTargetCqrs();
                 }
 
-                if (isset($config['options']) && !empty($config['options'])) {
+                if (!empty($config['options'])) {
                     $templater->targetOptions = $config['options'];
                 }
 
-                if (isset($config['class']) && !empty($config['class'])) {
+                if (!empty($config['class'])) {
                     $templater->targetClass = $config['class'];
                     $templater->targetClassname = $config['class'];
 
@@ -63,6 +63,7 @@ class TemplateClassesGenerator extends AbstractGenerator
                     'target_namespace' => $templater->getTargetNamespace(),
                     'target_path' => $templater->getTargetPath(),
                     'target_source' => $this->renderSource($templater, $source),
+                    'target_extension' => $extension,
                 ];
             }
         }

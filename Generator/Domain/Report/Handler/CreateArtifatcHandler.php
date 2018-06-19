@@ -73,7 +73,10 @@ class CreateArtifatcHandler implements HandlerInterface
             if (!empty($file->target_source)) {
                 $this->versioningFileHandler($file->target_path);
 
-                file_put_contents($file->target_path, '<?php' . $eol . ClassHandler::getFileCommentor() . $eol . $file->target_source);
+                $content = ClassHandler::getFileCommentor() . $eol . $file->target_source;
+                $content = ('php' == $file->target_extension) ? '<?php' . $eol . $content : $content;
+
+                file_put_contents($file->target_path, $content);
                 $this->output->writeln(sprintf('<info>++</info> create file: "%s"', $file->target_path));
             }
         }

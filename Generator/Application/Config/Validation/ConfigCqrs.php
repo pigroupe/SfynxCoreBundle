@@ -29,9 +29,7 @@ class ConfigCqrs implements ValidationInterface
     {
         $config->set('conf-cqrs', static::DEFAULT_CONF);
 
-        if (isset($config->get('conf-array')['cqrs'])
-            && !empty($config->get('conf-array')['cqrs'])
-        ) {
+        if (!empty($config->get('conf-array')['cqrs'])) {
             $config->set('conf-cqrs', $config->get('conf-array')['cqrs']);
         }
     }

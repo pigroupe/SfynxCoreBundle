@@ -37,8 +37,7 @@ class ConfigTemplate implements ValidationInterface
             && in_array($config->get('report-template'), self::$templateType)
         ) {
             $config->set('report-template', $config->get('report-template'));
-        } elseif (isset($config->get('conf-array')['template'])
-            && !empty($config->get('conf-array')['template'])
+        } elseif (!empty($config->get('conf-array')['template'])
             && in_array($config->get('conf-array')['template'], self::$templateType)
         ) {
             $config->set('report-template', $config->get('conf-array')['template']);

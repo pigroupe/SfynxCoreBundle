@@ -53,6 +53,7 @@ class PhpClassGenerator extends AbstractGenerator
                 'target_namespace' => $templater->getTargetNamespace(),
                 'target_path' => $templater->getTargetPath(),
                 'target_source' => $this->renderSource($templater, $source),
+                'target_extension' => 'php',
             ];
         }
     }

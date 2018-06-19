@@ -66,18 +66,22 @@ class ChoiceTypeExtension extends AbstractResolver implements ExtensionInterface
      */
     protected function transformParameters(array $options = []): void
     {
-        if (isset($options['mapping'])
-            && isset($options['mapping']['targetEntity'])
-            && !empty($options['mapping']['targetEntity'])
-        ) {
+        if (!empty($options['mapping']['targetEntity'])) {
             $name = lcfirst($this->resolverParameters['name']);
 
             $return = $this->createReturnValue($options);
 
             $this->resolverParameters['choices'] = "\$${name}List";
+
+            if (!empty($return)) {
             $this->resolverParameters['choice_label'] = "function (\$entity, \$key, \$index) {
                 return is_object(\$entity) ? ${return} : \$entity;
             }";
+            } else {
+            $this->resolverParameters['choice_label'] = "function (\$entity, \$key, \$index) {
+                return \$entity;
+            }";
+            }
             $this->resolverParameters['choice_value'] = "function (\$entity = null) {
                 if (!\$entity) {
                     return '';
@@ -99,9 +103,7 @@ class ChoiceTypeExtension extends AbstractResolver implements ExtensionInterface
     {
         $content = '';
 
-        if (isset($options['properties'])
-            && !empty($options['properties'])
-        ) {
+        if (!empty($options['properties'])) {
             $start = true;
             foreach ($options['properties'] as $property) {
                 $function = ucfirst($property);

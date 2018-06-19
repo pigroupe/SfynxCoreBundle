@@ -23,9 +23,16 @@ class <?php echo $templater->getTargetClassname(); ?> extends AbstractFormReques
      * @var array $defaults List of default values for optional parameters.
      */
     protected $defaults = [
+        'GET' => [
 <?php foreach ($templater->getTargetCommandFields() as $field): ?>
-        '<?php echo lcfirst($field->name) ?>' => null,
+            '<?php echo lcfirst($field->name) ?>' => <?php if (ClassHandler::getType($field->type) == 'bool') echo 'true'; else echo 'null'; ?>,
 <?php endforeach; ?>
+        ],
+        'POST' => [
+<?php foreach ($templater->getTargetCommandFields() as $field): ?>
+            '<?php echo lcfirst($field->name) ?>' => <?php if (ClassHandler::getType($field->type) == 'bool') echo 'false'; else echo 'null'; ?>,
+<?php endforeach; ?>
+        ]
     ];
 
     /**
@@ -96,7 +103,7 @@ class <?php echo $templater->getTargetClassname(); ?> extends AbstractFormReques
 <?php if (ClassHandler::isIntType($field->type)): ?>
         //$<?php echo lcfirst($field->name) ?> = $this->request->get('<?php echo lcfirst($field->name) ?>', '');
         //$this->options['<?php echo lcfirst($field->name) ?>'] = ('' !== $<?php echo lcfirst($field->name) ?>) ? (int)$<?php echo lcfirst($field->name) ?> : null;
-        if (isset($this->options['<?php echo lcfirst($field->name) ?>']) && !empty($this->options['<?php echo lcfirst($field->name) ?>'])) {
+        if (!empty($this->options['<?php echo lcfirst($field->name) ?>'])) {
             $this->options['<?php echo lcfirst($field->name) ?>'] = (int)$this->options['<?php echo lcfirst($field->name) ?>'];
         }
 <?php endif; ?>
@@ -105,8 +112,7 @@ class <?php echo $templater->getTargetClassname(); ?> extends AbstractFormReques
         // datetime transformation
 <?php foreach ($templater->getTargetCommandFields() as $field): ?>
 <?php if (ClassHandler::isDateType($field->type)): ?>
-        $this->options['<?php echo lcfirst($field->name) ?>'] = (isset($this->options['<?php echo lcfirst($field->name) ?>'])
-        && !empty($this->options['<?php echo lcfirst($field->name) ?>'])) ? new \DateTime($this->options['<?php echo lcfirst($field->name) ?>']) : new \DateTime('now');
+        $this->options['<?php echo lcfirst($field->name) ?>'] = (!empty($this->options['<?php echo lcfirst($field->name) ?>'])) ? new \DateTime($this->options['<?php echo lcfirst($field->name) ?>']) : new \DateTime('now');
 <?php endif; ?>
 <?php endforeach; ?>
 
