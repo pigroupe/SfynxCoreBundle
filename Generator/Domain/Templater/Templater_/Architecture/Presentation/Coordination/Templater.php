@@ -130,9 +130,8 @@ EOT;
                                 && property_exists($pattern, 'handlers') && $pattern->handlers
                             ) {
                                 foreach ($pattern->handlers as $handler) {
-                                    $body .= "\$$code_arg = new " . $handler . "(\$$code_arg);" . PHP_EOL;
-
-                                    ClassHandler::addUse($namespace, $handler, $index);
+                                    $functionResult = ClassHandler::setArgNewResult($namespace, $handler, $index, $handler);
+                                    $body .= "\$$code_arg = new " . $functionResult . ";" . PHP_EOL;
                                 }
                                 $body .= "\$$arg = \$$code_arg->$methodName($finalArgs);" . PHP_EOL;
                             } else {
@@ -149,7 +148,7 @@ EOT;
         ClassHandler::addConstructorMethod($namespace, $class);
         ClassHandler::addCoordinationMethod($namespace, $class)->addBody($body);
 
-        return ClassHandler::tabsToSpaces($namespace, $this->getIndentation()) . PHP_EOL .
+        return ClassHandler::tabsToSpaces($namespace, $this->getIndentation()) .
             ClassHandler::tabsToSpaces($class, $this->getIndentation());
     }
 }

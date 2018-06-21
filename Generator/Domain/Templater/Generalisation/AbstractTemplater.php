@@ -150,14 +150,14 @@ abstract class AbstractTemplater implements TemplaterInterface
 
         ClassHandler::setClassCommentor($class, $this, $data);
         ClassHandler::setExtends($namespace, $class, $data, $index);
-        ClassHandler::addUses($namespace, $data, $index, $this->getNamespace());
+        ClassHandler::addUses($namespace, $data, $index);
         ClassHandler::addImplements($namespace, $class, $data, $index, $this->getNamespace());
         ClassHandler::addTraits($namespace, $class, $data, $index);
         ClassHandler::addArguments($namespace, $class, $data, $index);
         ClassHandler::addConstructorMethod($namespace, $class, $data);
         ClassHandler::addMethods($namespace, $class, $data, $index);
 
-        return ClassHandler::tabsToSpaces($namespace, $this->getIndentation()) . PHP_EOL .
+        return ClassHandler::tabsToSpaces($namespace, $this->getIndentation()) .
                 ClassHandler::tabsToSpaces($class, $this->getIndentation());
     }
 

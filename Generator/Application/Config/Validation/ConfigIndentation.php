@@ -29,9 +29,7 @@ class ConfigIndentation implements ValidationInterface
     {
         $config->set('conf-indentation', static::DEFAULT_CONF);
 
-        if (isset($config->get('conf-array')['indentation'])
-            && !empty($config->get('conf-array')['indentation'])
-        ) {
+        if (!empty($config->get('conf-array')['indentation'])) {
             $config->set('conf-indentation', (int)$config->get('conf-array')['indentation']);
         }
     }
