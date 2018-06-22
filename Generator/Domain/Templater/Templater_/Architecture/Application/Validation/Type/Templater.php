@@ -49,7 +49,7 @@ class Templater extends AbstractTemplater implements TemplaterInterface
         'defaultValue',
         'nullable',
         'entityName',
-        'serviceType',
+        'form',
     ];
 
     /**
@@ -130,11 +130,14 @@ EOT;
         }
         $options = json_decode(json_encode($options), true);
 
+        if (!empty($options['form']['type'] )) {
+            $type = $options['form']['type'];
+        }
+
         // we cheick extension instance
+        $instanceValue = self::$extensionList[ClassHandler::TYPE_TEXT];
         if (array_key_exists($type, self::$extensionList)) {
             $instanceValue = self::$extensionList[$type];
-        } else {
-            $instanceValue = self::$extensionList[ClassHandler::TYPE_TEXT];
         }
 
         $resolverParametersOption = array_merge($options, ['templater' => $this]);
@@ -150,10 +153,9 @@ EOT;
         $this->extensionInstance = new $instanceValue($options);
         $parameters = $this->extensionInstance->getResolverParameters(false, $resolverParametersOption);
 
-        if (!empty($resolverParametersOption['serviceType'])) {
-            $type = "'" . $resolverParametersOption['serviceType'] . "'";
-        } else {
-            $type = $this->extensionInstance->getClassExtention()->name;
+        $type = $this->extensionInstance->getClassExtention()->name;
+        if (!empty($resolverParametersOption['form']['serviceType'])) {
+            $type = "'" . $resolverParametersOption['form']['serviceType'] . "'";
         }
 
         $content = sprintf('->add(\'%s\', %s, [', $child, $type) . PHP_EOL;
@@ -162,11 +164,13 @@ EOT;
                 $v = ($v === true) ? 'true' : $v;
                 $v = ($v === false) ? 'false' : $v;
                 $content .= "            '$k' => $v," . PHP_EOL;
-            } elseif (!is_array($v) && strpos($v, 'function') !== false) {
-                $content .= "            '$k' => $v," . PHP_EOL;
-            } elseif (!is_array($v) && strpos($v, '::class') !== false) {
-                $content .= "            '$k' => $v," . PHP_EOL;
-            } elseif (!is_array($v) && strpos($v, 'List') !== false) {
+            } elseif (!is_array($v)
+                && (
+                    strpos($v, 'function') !== false
+                    || strpos($v, 'List') !== false
+                    || strpos($v, '::class') !== false
+                )
+            ) {
                 $content .= "            '$k' => $v," . PHP_EOL;
             } elseif (is_array($v)) {
                 $content .= "            '$k' => []," . PHP_EOL;
@@ -175,10 +179,9 @@ EOT;
             }
         }
 
+        $content .= '        ])';
         if ($isEndLine) {
             $content .= '        ]);';
-        } else {
-            $content .= '        ])';
         }
 
         return $content;
