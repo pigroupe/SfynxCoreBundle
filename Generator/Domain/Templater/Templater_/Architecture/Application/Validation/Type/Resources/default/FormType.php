@@ -37,7 +37,7 @@ class <?php echo $templater->getTargetClassname(); ?> extends AbstractDefaultTyp
 <?php endforeach; ?>
 
 <?php foreach ($templater->getTargetCommandFields() as $field): ?>
-<?php if (($field->type == ClassHandler::TYPE_ARRAY) && (property_exists($field, 'mapping'))): ?>
+<?php if ($field->type == ClassHandler::TYPE_ARRAY && property_exists($field, 'mapping')): ?>
         $<?php echo lcfirst($field->name); ?>List = $this->data_form['<?php echo lcfirst($field->name); ?>List'];<?php echo PHP_EOL ?>
 <?php endif; ?>
 <?php endforeach; ?>

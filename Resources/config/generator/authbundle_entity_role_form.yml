@@ -1,0 +1,327 @@
+# php vendor/bin/sfynx-ddd-generator \
+# --namespace=Sfynx\AuthBundle \
+# --conf-file=/var/www/app/config/generator/authbundle_entity_role_form.yml \
+# --report-template=default \
+# --report-dir=/var/www/src/generator/authbundle
+default:
+    namespace: PromotionContext
+    cqrs: Role\Command
+    template: default
+    indentation: 4
+    widgets:
+        presentation:
+            widget_coordination:
+                class: FormCoordination
+                arguments:
+                    - '$workflowHandler'
+                extends: Sfynx\CoreBundle\Layers\Presentation\Coordination\Generalisation\AbstractFormController
+                options:
+                    implements: ~
+                    uses: ~
+                    traits: ~
+                body:
+                    - updateCommand:
+                        design: 'adapter'
+                        class: Sfynx\CoreBundle\Layers\Presentation\Adapter\Command\CommandAdapter
+                        arguments:
+                            - 'new RoleFormCommand'
+                        calls:
+                            - [ createCommandFromRequest, [ 'new RoleFormRequest' ] ]
+                    - commandWorkflow:
+                        design: 'observer'
+                        class: Sfynx\CoreBundle\Layers\Application\Command\Workflow\CommandWorkflow
+                        calls:
+                            - [ attach, [ 'new OBRoleEntityEdit' ] ]
+                            - [ attach, [ 'new OBRoleEntityCreate' ] ]
+                    - commandHandlerResult:
+                        design: 'decorator'
+                        class: Sfynx\CoreBundle\Layers\Application\Command\Handler\FormCommandHandler
+                        arguments:
+                            - '$Commandworkflow'
+                        handlers: [ 'RoleFormCommandValidationHandler', 'RoleFormCommandSpecHandler']
+                        calls:
+                            - [ process, [ '$updateCommand' ] ]
+                    - codeln1:
+                        design: 'code'
+                        content: "$this->setParam('templating', '@Business/Role/edit.html.twig');"
+                    - workflowHandler:
+                        design: 'observer'
+                        class: Sfynx\CoreBundle\Layers\Application\Common\Handler\WorkflowHandler
+                        calls:
+                            - [ attach, [ 'new OBRoleCreateFormData' ] ]
+                            - [ attach, [ 'new OBCreateCommandFormView' ] ]
+                            - [ attach, [ 'new OBInjectFormErrors' ] ]
+                            - [ attach, [ 'new OBRoleCreateFormBody' ] ]
+                            - [ attach, [ 'new OBCreateResponseHtml' ] ]
+                    - responseHandlerResult:
+                        design: 'handler'
+                        class: Sfynx\CoreBundle\Layers\Application\Response\Handler\ResponseHandler
+                        arguments:
+                            - '$Workflowhandler'
+                        calls:
+                            - [ process, [ '$commandHandlerResult' ] ]
+                    - codeln2:
+                        design: 'code'
+                        content: "return $responseHandlerResult->getResponse();"
+            widget_request:
+                class: RoleFormRequest
+                arguments:
+                  - 'Sfynx\CoreBundle\Layers\Domain\Service\Request\Generalisation\RequestInterface'
+        application:
+            widget_cqrs_command:
+                class: RoleFormCommand
+                arguments: ~
+            widget_cqrs_validator_specification:
+                class: Validation\SpecHandler\RoleFormCommandSpecHandler
+                arguments:
+                  - '$commandHandlerResult'
+            widget_cqrs_validator_validation:
+                class: Validation\ValidationHandler\RoleFormCommandValidationHandler
+                arguments:
+                  - '$commandHandlerResult'
+                  - 'new SymfonyValidatorStrategy'
+                  - 'false'
+            widget_service_app_class:
+                - SymfonyValidatorStrategy:
+                    create: false
+                    class: 'Sfynx\CoreBundle\Layers\Application\Validation\Validator\SymfonyValidatorStrategy'
+                    arguments: ['Symfony\Component\Validator\Validator\ValidatorInterface']
+            widget_validation_type:
+                class: RoleType
+                arguments: ~
+        domain:
+            widget_entity: true
+            widget_service_manager_class:
+                - RoleEntityManager:
+                    create: true
+                    class: Role\Manager\RoleManager
+                    arguments: ~
+                    options:
+                        entity: 'Role'
+            widget_service_class:
+                - RoleCommandRepositoryInterface:
+                    create: true
+                    class: Domain\Repository\Command\RoleCommandRepositoryInterface
+                    type: interface
+                - RoleQueryRepositoryInterface:
+                    create: true
+                    class: Domain\Repository\Query\RoleQueryRepositoryInterface
+                    type: interface
+            widget_workflow_observer_class:
+                - OBRoleEntityCreate:
+                    create: true
+                    class: OBRoleEntityCreate
+                    arguments:
+                      - 'Sfynx\CoreBundle\Layers\Domain\Service\Manager\Generalisation\Interfaces\ManagerInterface'
+                      - 'Sfynx\CoreBundle\Layers\Domain\Service\Request\Generalisation\RequestInterface'
+                      - 'Symfony\Bundle\FrameworkBundle\Routing\Router'
+                      - 'bool $updateCommand = false'
+                    construct:
+                        create: true
+                        body:
+                          - 'parent::__construct($manager, $request, $updateCommand);'
+                    extends: Sfynx\CoreBundle\Layers\Domain\Workflow\Observer\Generalisation\Command\AbstractEntityCreateHandler
+                    options:
+                        implements: ~
+                        uses: ~
+                        traits: [Sfynx\CoreBundle\Layers\Domain\Workflow\Observer\Command\TraitProcess]
+                - OBRoleEntityEdit:
+                    create: true
+                    class: OBRoleEntityEdit
+                    arguments:
+                      - 'Sfynx\CoreBundle\Layers\Domain\Service\Manager\Generalisation\Interfaces\ManagerInterface'
+                      - 'Sfynx\CoreBundle\Layers\Domain\Service\Request\Generalisation\RequestInterface'
+                      - 'Symfony\Bundle\FrameworkBundle\Routing\Router'
+                      - 'bool $updateCommand = false'
+                    construct:
+                        create: true
+                        body:
+                          - 'parent::__construct($manager, $request, $updateCommand);'
+                    extends: Sfynx\CoreBundle\Layers\Domain\Workflow\Observer\Generalisation\Command\AbstractEntityEditHandler
+                    options:
+                        implements: ~
+                        uses: ~
+                        traits: [Sfynx\CoreBundle\Layers\Domain\Workflow\Observer\Command\TraitProcess]
+                - OBRoleCreateFormData:
+                    create: true
+                    class: Domain\Workflow\Observer\Role\Response\OBRoleCreateFormData
+                    arguments:
+                      - 'Sfynx\CoreBundle\Layers\Domain\Service\Request\Generalisation\RequestInterface'
+                      - 'Sfynx\AuthBundle\Domain\Service\Layout\Manager\LayoutManager'
+                      - 'Sfynx\AuthBundle\Domain\Service\Document\Manager\DocumentManager'
+                      - 'Sfynx\AuthBundle\Domain\Service\Role\Manager\RoleManager'
+                    construct:
+                        create: true
+                        body:
+                          - 'parent::__construct($request);'
+                    extends: Sfynx\CoreBundle\Layers\Domain\Workflow\Observer\Generalisation\Response\AbstractCreateFormData
+                    options:
+                        implements: ~
+                        uses: ['Sfynx\CoreBundle\Layers\Infrastructure\Exception\WorkflowException', 'Exception']
+                        traits: ~
+                        models:
+                          - 'Sfynx\CoreBundle\Generator\Domain\Component\File\HandlerModel\Observer\FormData'
+#                        methods:
+#                          - name: 'process'
+#                            comments: ['{@inheritdoc}']
+#                            visibility: 'protected'
+#                            returnType: 'bool'
+#                            body:
+#                              - 'try {'
+#                              - "    $this->wfLastData->formViewData['command'] = $this->wfHandler->command;"
+#                              - "    $this->wfLastData->formViewData['entity'] = $this->wfHandler->entity;"
+#                              - "    $this->wfLastData->formViewData['data_class'] = get_class($this->wfHandler->command);"
+#                              - '} catch (Exception $e) {'
+#                              - '    throw WorkflowException::noCreatedFormData();'
+#                              - '}'
+#                              - 'return true;'
+                - OBRoleCreateFormBody:
+                    create: true
+                    class: Domain\Workflow\Observer\Role\Response\OBRoleCreateFormBody
+                    arguments:
+                      - 'Sfynx\CoreBundle\Layers\Domain\Service\Request\Generalisation\RequestInterface'
+                      - 'Symfony\Bundle\FrameworkBundle\Templating\EngineInterface'
+                      - '$this->param'
+                    extends: Sfynx\CoreBundle\Layers\Domain\Workflow\Observer\Generalisation\Response\AbstractCreateFormBody
+                    options:
+                        implements: ~
+                        uses: ['Sfynx\CoreBundle\Layers\Infrastructure\Exception\WorkflowException', 'Exception']
+                        traits: ~
+                        methods:
+                          - name: 'process'
+                            comments: ['{@inheritdoc}']
+                            visibility: 'protected'
+                            returnType: 'bool'
+                            body:
+                              - "$this->wfLastData->body = '';"
+                              - 'try {'
+                              - "    $this->wfLastData->body = $this->templating->render("
+                              - "        $this->param->templating,"
+                              - '        ['
+                              - "           'entity' => $this->wfHandler->entity,"
+                              - "           'edit_form' => $this->wfLastData->form->createView(),"
+                              - "           'errors_form' => $this->wfHandler->errors"
+                              - '        ]'
+                              - '    );'
+                              - '} catch (Exception $e) {'
+                              - '    throw WorkflowException::noCreatedViewForm();'
+                              - '}'
+                              - 'return true;'
+                - OBCreateCommandFormView:
+                    create: false
+                    class: Sfynx\CoreBundle\Layers\Domain\Workflow\Observer\Response\OBCreateCommandFormView
+                    arguments:
+                      - 'Sfynx\CoreBundle\Layers\Domain\Service\Request\Generalisation\RequestInterface'
+                      - 'Symfony\Component\Form\FormFactoryInterface'
+#                      - 'Sfynx\CoreBundle\Layers\Domain\Service\Form\Generalisation\Interfaces\FormTypeInterface'
+                      - 'new RoleType'
+                - OBInjectFormErrors:
+                    create: false
+                    class: Sfynx\CoreBundle\Layers\Domain\Workflow\Observer\Response\OBInjectFormErrors
+                    arguments:
+                      - 'Sfynx\CoreBundle\Layers\Domain\Service\Request\Generalisation\RequestInterface'
+                      - 'Symfony\Component\Translation\TranslatorInterface'
+                - OBCreateResponseHtml:
+                    create: false
+                    class: Sfynx\CoreBundle\Layers\Domain\Workflow\Observer\Response\OBCreateResponseHtml
+                    arguments:
+                      - 'Sfynx\CoreBundle\Layers\Domain\Service\Request\Generalisation\RequestInterface'
+        infrastructure:
+            widget_security_parse: true
+            widget_infra_class:
+                - CommandRoleRepository:
+                    create: true
+                    class: Infrastructure\Persistence\Adapter\Command\Orm\RoleRepository
+                    arguments: ~
+                    comments:
+                      - 'This class was generated by the Doctrine ORM. Add your own custom'
+                      - 'repository methods below.'
+                    extends: Sfynx\CoreBundle\Layers\Infrastructure\Persistence\Adapter\Generalisation\Orm\AbstractCommandRepository
+                    options:
+                        implements: ['Domain\Repository\Command\RoleCommandRepositoryInterface']
+                        uses: ~
+                        traits: ~
+                - QueryRoleRepository:
+                    create: true
+                    class: Infrastructure\Persistence\Adapter\Query\Orm\RoleRepository
+                    arguments: ~
+                    comments:
+                      - 'This class was generated by the Doctrine ORM. Add your own custom'
+                      - 'repository methods below.'
+                    extends: Sfynx\CoreBundle\Layers\Infrastructure\Persistence\Adapter\Generalisation\Orm\AbstractQueryRepository
+                    options:
+                        implements: ['Domain\Repository\Query\RoleQueryRepositoryInterface']
+                        uses: ~
+                        traits: ~
+    mapping:
+        x-providers: [orm, couchdb]
+        x-entities:
+          Role:
+            x-fields:
+              id:
+                name: entityId
+                type: valueObject
+                voName: IdVO
+                primaryKey: true
+                mapping:
+                  manager: 'Sfynx\AuthBundle\Domain\Service\Role\Manager\RoleManager'
+              role:
+                type: valueObject
+                voName: RoleVO
+              layout:
+                type: valueObject
+                voName: IdVO
+                foreignKey: true
+                required: true
+                choice_label: Layout
+                mapping:
+                  relationship: ManyToOne
+                  targetEntity: SfynxAuthBundle\Domain\Entity\Layout
+                  manager: 'Sfynx\AuthBundle\Domain\Service\Layout\Manager\LayoutManager'
+        x-valueObjects:
+          IdVO:
+            type: Sfynx\CoreBundle\Layers\Domain\ValueObject\IdVO
+            x-fields:
+              id:
+                type: id
+          RoleVO:
+            type: Domain\ValueObject\RoleVO
+            x-fields:
+              name:
+                type: string
+                required: true
+              label:
+                type: string
+                required: true
+              enabled:
+                type: boolean
+                defaultValue: true
+                required: false
+              comment:
+                name: comment
+                type: textarea
+                required: false
+              heritage:
+                type: array
+                form:
+                  type: array
+                  serviceType: sfynx_security_roles
+                required: true
+                multiple: true
+                expanded: false
+              routeLogin:
+                type: string
+                form:
+                  type: array
+                  serviceType: sfynx_routes
+                required: false
+                multiple: false
+                expanded: false
+              routeLogout:
+                type: string
+                form:
+                  type: array
+                  serviceType: sfynx_routes
+                required: false
+                multiple: false
+                expanded: false

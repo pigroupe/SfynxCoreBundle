@@ -20,7 +20,7 @@ use Sfynx\CoreBundle\Layers\Application\Command\Generalisation\AbstractCommand;
 class <?php echo $templater->getTargetClassname(); ?> extends AbstractCommand
 {
 <?php foreach ($templater->getTargetCommandFields() as $field): ?>
-    /** @var <?php echo ClassHandler::getType($field->type); ?> */
+    /** @var <?php echo ClassHandler::getType($field->type, $field); ?> */
     protected $<?php echo lcfirst($field->name) ?>;
 <?php endforeach; ?>
 }

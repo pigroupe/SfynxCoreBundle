@@ -1,12 +1,15 @@
 <?php
 namespace Sfynx\CoreBundle\Generator\Domain\Component\File;
 
+use SplSubject;
+use SplObserver;
 use stdClass;
 use Nette\PhpGenerator\Helpers;
 use Nette\PhpGenerator\PhpNamespace;
 use Nette\PhpGenerator\ClassType;
 use Nette\PhpGenerator\Method;
 use Sfynx\CoreBundle\Generator\Domain\Templater\Generalisation\Interfaces\TemplaterInterface;
+use Sfynx\CoreBundle\Generator\Domain\Component\File\HandlerModel\Observer\FormData;
 
 /**
  * File finder
@@ -16,11 +19,18 @@ use Sfynx\CoreBundle\Generator\Domain\Templater\Generalisation\Interfaces\Templa
  *
  * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
  */
-class ClassHandler
+class ClassHandler implements SplSubject
 {
+    /** @var \SplObserver[] */
+    protected $observers = [];
+
+    /** @var stdClass */
+    public $event;
+
     /** @var array */
     public static $constructorArguments = [];
 
+    /** @var string */
     const TYPE_ENTITY = 'id';
     const TYPE_INTEGER = 'integer';
     const TYPE_NUMBER = 'number';
@@ -31,6 +41,56 @@ class ClassHandler
     const TYPE_EMAIL = 'email';
     const TYPE_DATE = 'datetime';
     const TYPE_SUBMIT = 'submit';
+
+    /**
+     * @param TemplaterInterface $template
+     * @param PhpNamespace $namespace
+     * @param ClassType $class
+     * @param stdClass $data
+     * @param array|null $index
+     */
+    public  function __construct(TemplaterInterface $template, PhpNamespace $namespace, ClassType $class, stdClass $data, ?array $index = [])
+    {
+        $this->event = new stdClass();
+        $this->event->template = $template;
+        $this->event->namespace = $namespace;
+        $this->event->class = $class;
+        $this->event->data = $data;
+        $this->event->index = $index;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function attach(SplObserver $observer)
+    {
+        $key = array_search($observer,$this->observers, true);
+        if (!$key) {
+            $this->observers[] = $observer;
+        }
+        return $this;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function detach(SplObserver $observer)
+    {
+        $key = array_search($observer,$this->observers, true);
+        if ($key) {
+            unset($this->observers[$key]);
+        }
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function notify()
+    {
+        foreach ($this->observers as $observer) {
+            $observer->update($this);
+        }
+    }
 
     /**
      * @inheritdoc
@@ -395,6 +455,29 @@ class ClassHandler
     }
 
     /**
+     * @param TemplaterInterface $template
+     * @param PhpNamespace $namespace
+     * @param ClassType $class
+     * @param stdClass $data
+     * @param array|null $index
+     * @return void
+     * @static
+     */
+    public static function addModels(TemplaterInterface $template, PhpNamespace $namespace, ClassType $class, stdClass $data, ?array $index = []): void
+    {
+        if (property_exists($data, 'options')
+            && property_exists($data->options, 'models')
+            && !empty($data->options->models)
+        ) {
+            $obsModel = new self($template, $namespace, $class, $data, $index);
+            foreach ($data->options->models as $model) {
+                $obsModel->attach(new $model());
+            }
+            $obsModel->notify();
+        }
+    }
+
+    /**
      * @param string $interfaceName
      * @param string|array $attributeName
      * @return void
@@ -419,6 +502,7 @@ class ClassHandler
                 ->addComment('');
 
             $body = '';
+
             foreach (self::$constructorArguments as $value => $attribute) {
                 $defaultValue = null;
 
@@ -536,7 +620,7 @@ class ClassHandler
 
         $classArgument = str_replace('\\', '\\', $argument, $countArg);
         if ((1 <= $countArg) && (0 == $countInterface)) {
-            $argResult = self::setArgClassResult($namespace, $argument, $index, $basename, $basename, $addConstruct);;
+            $argResult = self::setArgClassResult($namespace, $argument, $index, $basename, $basename, $addConstruct);
             $type = 'class';
             $value = $basename;
         }
@@ -552,6 +636,15 @@ class ClassHandler
             $argResult = self::setArgVarResult($newArgument);
             $type = 'var';
             $value = $newArgument;
+        }
+
+        $asClassArgument = str_replace(' as ', ' as ', $argument, $countAs);
+        if ((1 <= $countAs) && (0 == $countInterface)) {
+            list($content, $defaultValue) = explode(' as ', $argument);
+            $argResult = self::setArgClassResult($namespace, $argument, $index, trim($defaultValue), $basename, $addConstruct);
+            $type = 'class';
+            $value = $defaultValue;
+            $basename = $defaultValue;
         }
 
         return ['argument' => $argResult, 'basename' => $basename, 'type' => $type, 'value' => $value];
@@ -641,10 +734,11 @@ class ClassHandler
 
     /**
      * @param string $type
+     * @param object $options
      * @static
      * @return mixed
      */
-    public static function getType(string $type)
+    public static function getType(string $type, object $options = null)
     {
         switch ($type) {
             case self::TYPE_ENTITY:
@@ -667,6 +761,15 @@ class ClassHandler
                 break;
             case self::TYPE_DATE:
                 $newType = 'DateTime';
+                break;
+            case self::TYPE_ARRAY:
+                $newType = 'array';
+                if (!is_null($options)
+                    && property_exists($options, 'multiple')
+                    && !$options->multiple
+                ) {
+                    $newType = 'int';
+                }
                 break;
             default:
                 $newType = $type;
