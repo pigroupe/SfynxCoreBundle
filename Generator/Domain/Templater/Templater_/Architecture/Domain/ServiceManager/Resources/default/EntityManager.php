@@ -12,6 +12,7 @@
         foreach ($templater->getTargetCommandFields() as $field) {
             if (($field->type == ClassHandler::TYPE_ENTITY)
                 && property_exists($field, 'mapping')
+                && (!property_exists($field, 'primaryKey') || !$field->primaryKey)
             ) {
                 $fieldsEntityList[] = $field;
             }
@@ -21,6 +22,7 @@
         foreach ($templater->getTargetCommandFields() as $field) {
             if (($field->type == ClassHandler::TYPE_ENTITY)
                 && property_exists($field, 'mapping')
+                && (!property_exists($field, 'primaryKey') || !$field->primaryKey)
                 && ($field->entityName == $fieldsEntityOption)
             ) {
                 $fieldsEntityList[] = $field;
@@ -35,6 +37,7 @@
             if (($field->type == ClassHandler::TYPE_ARRAY)
                 && property_exists($field, 'mapping')
                 && property_exists($field, 'multiple') && ($field->multiple == true)
+                && (!property_exists($field, 'primaryKey') || !$field->primaryKey)
             ) {
                 $fieldsEntityArrayList[] = $field;
             }
@@ -45,6 +48,7 @@
             if (($field->type == ClassHandler::TYPE_ARRAY)
                 && property_exists($field, 'mapping')
                 && property_exists($field, 'multiple') && ($field->multiple == true)
+                && (!property_exists($field, 'primaryKey') || !$field->primaryKey)
                 && ($field->entityName == $fieldsEntityOption)
             ) {
                 $fieldsEntityArrayList[] = $field;
@@ -142,6 +146,7 @@ class <?php echo $templater->getTargetClassname(); ?> extends AbstractManager
     */
     protected function transformEntity(object &$entity, CommandInterface $command): <?php echo $templater->getTargetClassname(); ?><?php echo PHP_EOL ?>
     {
+        // we search ManyToOne relationship
 <?php foreach ($fieldsEntityList as $field): ?>
         if ('' !== $command-><?php echo lcfirst($field->name); ?> && null !== $command-><?php echo lcfirst($field->name); ?>) {
             $entity->set<?php echo ucfirst(str_replace([$field->entityName, 'Id'], ['', ''], $field->name)); ?>(
@@ -153,6 +158,7 @@ class <?php echo $templater->getTargetClassname(); ?> extends AbstractManager
         }
 <?php endforeach; ?>
 
+        // we search ManyToMany  relationship
 <?php foreach ($fieldsEntityArrayList as $field): ?>
         if ('' !== $command-><?php echo lcfirst($field->name); ?> && null !== $command-><?php echo lcfirst($field->name); ?>) {
             foreach ($command-><?php echo lcfirst($field->name); ?> as $key => $<?php echo lcfirst($field->name); ?>Id) {
