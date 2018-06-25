@@ -1,10 +1,10 @@
 # php vendor/bin/sfynx-ddd-generator \
-# --namespace=Sfynx\AuthBundle \
+# --namespace=Sfynx\\AuthBundle \
 # --conf-file=/var/www/app/config/generator/authbundle_entity_role_form.yml \
 # --report-template=default \
 # --report-dir=/var/www/src/generator/authbundle
 default:
-    namespace: PromotionContext
+    namespace: Sfynx\AuthBundle
     cqrs: Role\Command
     template: default
     indentation: 4
@@ -147,9 +147,8 @@ default:
                     class: Domain\Workflow\Observer\Role\Response\OBRoleCreateFormData
                     arguments:
                       - 'Sfynx\CoreBundle\Layers\Domain\Service\Request\Generalisation\RequestInterface'
-                      - 'Sfynx\AuthBundle\Domain\Service\Layout\Manager\LayoutManager'
-                      - 'Sfynx\AuthBundle\Domain\Service\Document\Manager\DocumentManager'
-                      - 'Sfynx\AuthBundle\Domain\Service\Role\Manager\RoleManager'
+                      - 'Sfynx\AuthBundle\Domain\Service\Role\Manager\EntityManager as RoleManager'
+                      - 'Sfynx\AuthBundle\Domain\Service\Layout\Manager\EntityManager as LayoutManager'
                     construct:
                         create: true
                         body:
@@ -264,7 +263,8 @@ default:
                 voName: IdVO
                 primaryKey: true
                 mapping:
-                  manager: 'Sfynx\AuthBundle\Domain\Service\Role\Manager\RoleManager'
+                  targetEntity: 'SfynxAuthBundle\Domain\Entity\Role'
+                  manager: 'Sfynx\AuthBundle\Domain\Service\Role\Manager\EntityManager as RoleManager'
               role:
                 type: valueObject
                 voName: RoleVO
@@ -276,16 +276,16 @@ default:
                 choice_label: Layout
                 mapping:
                   relationship: ManyToOne
-                  targetEntity: SfynxAuthBundle\Domain\Entity\Layout
-                  manager: 'Sfynx\AuthBundle\Domain\Service\Layout\Manager\LayoutManager'
+                  targetEntity: 'SfynxAuthBundle\Domain\Entity\Layout'
+                  manager: 'Sfynx\AuthBundle\Domain\Service\Layout\Manager\EntityManager as LayoutManager'
         x-valueObjects:
           IdVO:
-            type: Sfynx\CoreBundle\Layers\Domain\ValueObject\IdVO
+            type: 'Sfynx\CoreBundle\Layers\Domain\ValueObject\IdVO'
             x-fields:
               id:
                 type: id
           RoleVO:
-            type: Domain\ValueObject\RoleVO
+            type: 'Domain\ValueObject\RoleVO'
             x-fields:
               name:
                 type: string
@@ -296,9 +296,8 @@ default:
               enabled:
                 type: boolean
                 defaultValue: true
-                required: false
+#                required: false
               comment:
-                name: comment
                 type: textarea
                 required: false
               heritage:

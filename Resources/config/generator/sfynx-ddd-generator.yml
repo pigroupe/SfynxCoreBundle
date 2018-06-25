@@ -204,6 +204,10 @@ default:
                     class: Domain\Workflow\Observer\Movie\Response\OBMovieCreateFormData
                     arguments:
                       - 'Sfynx\CoreBundle\Layers\Domain\Service\Request\Generalisation\RequestInterface'
+                      - 'MyContext\Domain\Service\Entity\Genre\Manager\GenreManager'
+                      - 'MyContext\Domain\Service\Entity\Movie\Manager\MovieManager'
+                      - 'MyContext\Domain\Service\Entity\Price\Manager\PriceManager'
+                      - 'Sfynx\MediaBundle\Layers\Domain\Service\Mediatheque\Manager\EntityManager as MediathequeManager'
                     construct:
                         create: true
                         body:
@@ -213,20 +217,22 @@ default:
                         implements: ~
                         uses: ['Sfynx\CoreBundle\Layers\Infrastructure\Exception\WorkflowException', 'Exception']
                         traits: ~
-                        methods:
-                          - name: 'process'
-                            comments: ['{@inheritdoc}']
-                            visibility: 'protected'
-                            returnType: 'bool'
-                            body:
-                              - 'try {'
-                              - "    $this->wfLastData->formViewData['command'] = $this->wfHandler->command;"
-                              - "    $this->wfLastData->formViewData['entity'] = $this->wfHandler->entity;"
-                              - "    $this->wfLastData->formViewData['data_class'] = get_class($this->wfHandler->command);"
-                              - '} catch (Exception $e) {'
-                              - '    throw WorkflowException::noCreatedFormData();'
-                              - '}'
-                              - 'return true;'
+                        models:
+                          - 'Sfynx\CoreBundle\Generator\Domain\Component\File\HandlerModel\Observer\FormData'
+#                        methods:
+#                          - name: 'process'
+#                            comments: ['{@inheritdoc}']
+#                            visibility: 'protected'
+#                            returnType: 'bool'
+#                            body:
+#                              - 'try {'
+#                              - "    $this->wfLastData->formViewData['command'] = $this->wfHandler->command;"
+#                              - "    $this->wfLastData->formViewData['entity'] = $this->wfHandler->entity;"
+#                              - "    $this->wfLastData->formViewData['data_class'] = get_class($this->wfHandler->command);"
+#                              - '} catch (Exception $e) {'
+#                              - '    throw WorkflowException::noCreatedFormData();'
+#                              - '}'
+#                              - 'return true;'
                 - OBMovieCreateFormBody:
                     create: true
                     class: Domain\Workflow\Observer\Movie\Response\OBMovieCreateFormBody
@@ -381,6 +387,9 @@ default:
                 type: valueObject
                 voName: IdVO
                 primaryKey: true
+                mapping:
+                  targetEntity: 'MyContext\Domain\Entity\Movie'
+                  manager: 'MyContext\Domain\Service\Entity\Movie\Manager\MovieManager'
               documents:
                 type: array
                 required: true
@@ -388,7 +397,8 @@ default:
                 properties: ['name', 'date']
                 mapping:
                   relationship: ManyToMany
-                  targetEntity: Sfynx\MediaBundle\Layers\Domain\Entity\Mediatheque
+                  targetEntity: 'Sfynx\MediaBundle\Layers\Domain\Entity\Mediatheque'
+                  manager: 'Sfynx\MediaBundle\Layers\Domain\Service\Mediatheque\Manager\EntityManager as MediathequeManager'
               comments:
                 type: array
                 required: true
@@ -404,12 +414,16 @@ default:
                 mapping:
                   relationship: ManyToOne
                   targetEntity: Genre
+                  manager: 'MyContext\Domain\Service\Entity\Genre\Manager\GenreManager'
           Price:
             x-fields:
               id:
                 type: valueObject
                 voName: IdVO
                 primaryKey: true
+                mapping:
+                  targetEntity: 'MyContext\Domain\Entity\Price'
+                  manager: 'MyContext\Domain\Service\Entity\Price\Manager\PriceManager'
               price:
                 type: valueObject
                 voName: PriceVO
@@ -421,12 +435,16 @@ default:
                 mapping:
                   relationship: ManyToOne
                   targetEntity: Movie
+                  manager: 'MyContext\Domain\Service\Entity\Movie\Manager\MovieManager'
           Genre:
             x-fields:
               id:
                 type: valueObject
                 voName: IdVO
                 primaryKey: true
+                mapping:
+                  targetEntity: 'MyContext\Domain\Entity\Genre'
+                  manager: 'MyContext\Domain\Service\Entity\Genre\Manager\GenreManager'
               label:
                 type: string
                 required: true
