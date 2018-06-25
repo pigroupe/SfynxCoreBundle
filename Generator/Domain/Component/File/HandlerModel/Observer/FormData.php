@@ -35,7 +35,7 @@ class FormData implements HandlerModelInterface
             . 'return true;'  . PHP_EOL
         ;
 
-        ClassHandler::addMethods(
+        ClassHandler::createMethods(
             $subject->event->namespace,
             $subject->event->class,
             AbstractGenerator::transform([

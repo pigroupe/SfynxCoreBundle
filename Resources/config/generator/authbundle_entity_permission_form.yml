@@ -1,11 +1,11 @@
 # php vendor/bin/sfynx-ddd-generator \
-# --namespace=MyContext \
-# --conf-file=/var/www/app/config/generator/sfynx-ddd-generator.yml \
+# --namespace=Sfynx\\AuthBundle \
+# --conf-file=/var/www/app/config/generator/authbundle_entity_permission_form.yml \
 # --report-template=default \
-# --report-dir=/var/www/src/generator/MyContext
+# --report-dir=/var/www/src/generator/authbundle
 default:
-    namespace: MyContext
-    cqrs: Movie\Command
+    namespace: Sfynx\AuthBundle
+    cqrs: Permission\Command
     template: default
     indentation: 4
     widgets:
@@ -24,59 +24,59 @@ default:
                         design: 'adapter'
                         class: Sfynx\CoreBundle\Layers\Presentation\Adapter\Command\CommandAdapter
                         arguments:
-                            - 'new MovieFormCommand'
+                            - 'new PermissionFormCommand'
                         calls:
-                            - [ createCommandFromRequest, [ 'new MovieFormRequest' ] ]
+                            - [ createCommandFromRequest, [ 'new PermissionFormRequest' ] ]
                     - commandWorkflow:
                         design: 'observer'
                         class: Sfynx\CoreBundle\Layers\Application\Command\Workflow\CommandWorkflow
                         calls:
-                            - [ attach, [ 'new OBMovieEntityEdit' ] ]
-                            - [ attach, [ 'new OBMovieEntityCreate' ] ]
+                            - [ attach, [ 'new OBPermissionEntityEdit' ] ]
+                            - [ attach, [ 'new OBPermissionEntityCreate' ] ]
                     - commandHandlerResult:
                         design: 'decorator'
                         class: Sfynx\CoreBundle\Layers\Application\Command\Handler\FormCommandHandler
                         arguments:
-                            - '$commandWorkflow'
-                        handlers: [ 'MovieFormCommandValidationHandler', 'MovieFormCommandSpecHandler']
+                            - '$Commandworkflow'
+                        handlers: [ 'PermissionFormCommandValidationHandler', 'PermissionFormCommandSpecHandler']
                         calls:
                             - [ process, [ '$updateCommand' ] ]
                     - codeln1:
                         design: 'code'
-                        content: "$this->setParam('templating', '@Business/Movie/edit.html.twig');"
+                        content: "$this->setParam('templating', '@Business/Permission/edit.html.twig');"
                     - workflowHandler:
                         design: 'observer'
                         class: Sfynx\CoreBundle\Layers\Application\Common\Handler\WorkflowHandler
                         calls:
-                            - [ attach, [ 'new OBMovieCreateFormData' ] ]
+                            - [ attach, [ 'new OBPermissionCreateFormData' ] ]
                             - [ attach, [ 'new OBCreateCommandFormView' ] ]
                             - [ attach, [ 'new OBInjectFormErrors' ] ]
-                            - [ attach, [ 'new OBMovieCreateFormBody' ] ]
+                            - [ attach, [ 'new OBPermissionCreateFormBody' ] ]
                             - [ attach, [ 'new OBCreateResponseHtml' ] ]
                     - responseHandlerResult:
                         design: 'handler'
                         class: Sfynx\CoreBundle\Layers\Application\Response\Handler\ResponseHandler
                         arguments:
-                            - '$workflowHandler'
+                            - '$Workflowhandler'
                         calls:
                             - [ process, [ '$commandHandlerResult' ] ]
                     - codeln2:
                         design: 'code'
                         content: "return $responseHandlerResult->getResponse();"
             widget_request:
-                class: MovieFormRequest
+                class: PermissionFormRequest
                 arguments:
                   - 'Sfynx\CoreBundle\Layers\Domain\Service\Request\Generalisation\RequestInterface'
         application:
             widget_cqrs_command:
-                class: MovieFormCommand
+                class: PermissionFormCommand
                 arguments: ~
             widget_cqrs_validator_specification:
-                class: Validation\SpecHandler\MovieFormCommandSpecHandler
+                class: Validation\SpecHandler\PermissionFormCommandSpecHandler
                 arguments:
                   - '$commandHandlerResult'
             widget_cqrs_validator_validation:
-                class: Validation\ValidationHandler\MovieFormCommandValidationHandler
+                class: Validation\ValidationHandler\PermissionFormCommandValidationHandler
                 arguments:
                   - '$commandHandlerResult'
                   - 'new SymfonyValidatorStrategy'
@@ -87,87 +87,30 @@ default:
                     class: 'Sfynx\CoreBundle\Layers\Application\Validation\Validator\SymfonyValidatorStrategy'
                     arguments: ['Symfony\Component\Validator\Validator\ValidatorInterface']
             widget_validation_type:
-                class: MovieType
+                class: PermissionType
                 arguments: ~
         domain:
             widget_entity: true
             widget_service_manager_class:
-                - MovieEntityManager:
+                - PermissionEntityManager:
                     create: true
-                    class: Movie\Manager\MovieManager
+                    class: Permission\Manager\PermissionManager
                     arguments: ~
                     options:
-                        entity: 'Movie'
-                - PriceEntityManager:
-                    create: true
-                    class: Price\Manager\PriceManager
-                    arguments: ~
-                    options:
-                        entity: 'Price'
-                - GenreEntityManager:
-                    create: true
-                    class: Genre\Manager\GenreManager
-                    arguments: ~
-                    options:
-                        entity: 'Genre'
+                        entity: 'Permission'
             widget_service_class:
-#                - EntityManager:
-#                    create: true
-#                    class: Domain\Service\Entity\Movie\Manager\EntityManager
-#                    arguments: ~
-#                    comments: ['Layout manager working with entities (Orm, Odm, Couchdb)']
-#                    extends: Sfynx\CoreBundle\Layers\Domain\Service\Manager\Generalisation\AbstractManager
-#                    options:
-#                        implements: ~
-#                        uses: ~
-#                        traits: ~
-#                        methods:
-#                          - name: 'newFromCommand'
-#                            comments: ['{@inheritdoc}']
-#                            arguments: ['Sfynx\CoreBundle\Layers\Application\Command\Generalisation\Interfaces\CommandInterface']
-#                            visibility: 'public'
-#                            returnType: 'object'
-#                            returnParent: true
-#                          - name: 'buildFromCommand'
-#                            comments: ['{@inheritdoc}']
-#                            arguments: ['object $entity', 'Sfynx\CoreBundle\Layers\Application\Command\Generalisation\Interfaces\CommandInterface', 'bool $updateCommand = false']
-#                            visibility: 'public'
-#                            returnType: 'object'
-#                            returnParent: true
-#                          - name: 'buildFromEntity'
-#                            comments: ['{@inheritdoc}']
-#                            arguments: ['Sfynx\CoreBundle\Layers\Application\Command\Generalisation\Interfaces\CommandInterface', 'object $entity']
-#                            visibility: 'public'
-#                            returnType: 'Sfynx\CoreBundle\Layers\Application\Command\Generalisation\Interfaces\CommandInterface'
-#                            returnParent: true
-                - MovieCommandRepositoryInterface:
+                - PermissionCommandRepositoryInterface:
                     create: true
-                    class: Domain\Repository\Command\MovieCommandRepositoryInterface
+                    class: Domain\Repository\Command\PermissionCommandRepositoryInterface
                     type: interface
-                - MovieQueryRepositoryInterface:
+                - PermissionQueryRepositoryInterface:
                     create: true
-                    class: Domain\Repository\Query\MovieQueryRepositoryInterface
-                    type: interface
-                - GenreCommandRepositoryInterface:
-                    create: true
-                    class: Domain\Repository\Command\GenreCommandRepositoryInterface
-                    type: interface
-                - GenreQueryRepositoryInterface:
-                    create: true
-                    class: Domain\Repository\Query\GenreQueryRepositoryInterface
-                    type: interface
-                - PriceCommandRepositoryInterface:
-                    create: true
-                    class: Domain\Repository\Command\PriceCommandRepositoryInterface
-                    type: interface
-                - PriceQueryRepositoryInterface:
-                    create: true
-                    class: Domain\Repository\Query\PriceQueryRepositoryInterface
+                    class: Domain\Repository\Query\PermissionQueryRepositoryInterface
                     type: interface
             widget_workflow_observer_class:
-                - OBMovieEntityCreate:
+                - OBPermissionEntityCreate:
                     create: true
-                    class: OBMovieEntityCreate
+                    class: OBPermissionEntityCreate
                     arguments:
                       - 'Sfynx\CoreBundle\Layers\Domain\Service\Manager\Generalisation\Interfaces\ManagerInterface'
                       - 'Sfynx\CoreBundle\Layers\Domain\Service\Request\Generalisation\RequestInterface'
@@ -182,9 +125,9 @@ default:
                         implements: ~
                         uses: ~
                         traits: [Sfynx\CoreBundle\Layers\Domain\Workflow\Observer\Command\TraitProcess]
-                - OBMovieEntityEdit:
+                - OBPermissionEntityEdit:
                     create: true
-                    class: OBMovieEntityEdit
+                    class: OBPermissionEntityEdit
                     arguments:
                       - 'Sfynx\CoreBundle\Layers\Domain\Service\Manager\Generalisation\Interfaces\ManagerInterface'
                       - 'Sfynx\CoreBundle\Layers\Domain\Service\Request\Generalisation\RequestInterface'
@@ -199,15 +142,12 @@ default:
                         implements: ~
                         uses: ~
                         traits: [Sfynx\CoreBundle\Layers\Domain\Workflow\Observer\Command\TraitProcess]
-                - OBMovieCreateFormData:
+                - OBPermissionCreateFormData:
                     create: true
-                    class: Domain\Workflow\Observer\Movie\Response\OBMovieCreateFormData
+                    class: Domain\Workflow\Observer\Permission\Response\OBPermissionCreateFormData
                     arguments:
                       - 'Sfynx\CoreBundle\Layers\Domain\Service\Request\Generalisation\RequestInterface'
-                      - 'MyContext\Domain\Service\Entity\Genre\Manager\GenreManager'
-                      - 'MyContext\Domain\Service\Entity\Movie\Manager\MovieManager'
-                      - 'MyContext\Domain\Service\Entity\Price\Manager\PriceManager'
-                      - 'Sfynx\MediaBundle\Layers\Domain\Service\Mediatheque\Manager\EntityManager as MediathequeManager'
+                      - 'Sfynx\AuthBundle\Domain\Service\Permission\Manager\EntityManager as PermissionManager'
                     construct:
                         create: true
                         body:
@@ -233,9 +173,9 @@ default:
 #                              - '    throw WorkflowException::noCreatedFormData();'
 #                              - '}'
 #                              - 'return true;'
-                - OBMovieCreateFormBody:
+                - OBPermissionCreateFormBody:
                     create: true
-                    class: Domain\Workflow\Observer\Movie\Response\OBMovieCreateFormBody
+                    class: Domain\Workflow\Observer\Permission\Response\OBPermissionCreateFormBody
                     arguments:
                       - 'Sfynx\CoreBundle\Layers\Domain\Service\Request\Generalisation\RequestInterface'
                       - 'Symfony\Bundle\FrameworkBundle\Templating\EngineInterface'
@@ -272,7 +212,7 @@ default:
                       - 'Sfynx\CoreBundle\Layers\Domain\Service\Request\Generalisation\RequestInterface'
                       - 'Symfony\Component\Form\FormFactoryInterface'
 #                      - 'Sfynx\CoreBundle\Layers\Domain\Service\Form\Generalisation\Interfaces\FormTypeInterface'
-                      - 'new MovieType'
+                      - 'new PermissionType'
                 - OBInjectFormErrors:
                     create: false
                     class: Sfynx\CoreBundle\Layers\Domain\Workflow\Observer\Response\OBInjectFormErrors
@@ -287,100 +227,34 @@ default:
         infrastructure:
             widget_security_parse: true
             widget_infra_class:
-                - CommandMovieRepository:
+                - CommandPermissionRepository:
                     create: true
-                    class: Infrastructure\Persistence\Adapter\Command\Orm\MovieRepository
+                    class: Infrastructure\Persistence\Adapter\Command\Orm\PermissionRepository
                     arguments: ~
                     comments:
                       - 'This class was generated by the Doctrine ORM. Add your own custom'
                       - 'repository methods below.'
                     extends: Sfynx\CoreBundle\Layers\Infrastructure\Persistence\Adapter\Generalisation\Orm\AbstractCommandRepository
                     options:
-                        implements: ['Domain\Repository\Command\MovieCommandRepositoryInterface']
+                        implements: ['Domain\Repository\Command\PermissionCommandRepositoryInterface']
                         uses: ~
                         traits: ~
-                - QueryMovieRepository:
+                - QueryPermissionRepository:
                     create: true
-                    class: Infrastructure\Persistence\Adapter\Query\Orm\MovieRepository
+                    class: Infrastructure\Persistence\Adapter\Query\Orm\PermissionRepository
                     arguments: ~
                     comments:
                       - 'This class was generated by the Doctrine ORM. Add your own custom'
                       - 'repository methods below.'
                     extends: Sfynx\CoreBundle\Layers\Infrastructure\Persistence\Adapter\Generalisation\Orm\AbstractQueryRepository
                     options:
-                        implements: ['Domain\Repository\Query\MovieQueryRepositoryInterface']
+                        implements: ['Domain\Repository\Query\PermissionQueryRepositoryInterface']
                         uses: ~
                         traits: ~
     mapping:
         x-providers: [orm, couchdb]
         x-entities:
-#          Movie:
-#            x-fields:
-#              id:
-#                name: entityId
-#                type: id
-#                primaryKey: true
-#              documents:
-#                type: array
-#                required: true
-#                multiple: true
-#                properties: ['name', 'date']
-#                mapping:
-#                  relationship: ManyToMany
-#                  targetEntity: Sfynx\MediaBundle\Layers\Domain\Entity\Mediatheque
-#              comments:
-#                type: array
-#                required: true
-#                multiple: true
-#              title:
-#                type: string
-#                required: true
-#              releaseDate:
-#                type: datetime
-#                required: false
-#              synopsis:
-#                type: string
-#                required: false
-#              reference:
-#                type: string
-#                required: true
-#              genre:
-#                type: id
-#                foreignKey: true
-#                required: true
-#                mapping:
-#                  relationship: ManyToOne
-#                  targetEntity: Genre
-#          Price:
-#            x-fields:
-#              id:
-#                type: id
-#                primaryKey: true
-#              title:
-#                type: string
-#                required: true
-#              date:
-#                type: datetime
-#                required: false
-#              reference:
-#                type: string
-#                required: true
-#              movie:
-#                type: id
-#                foreignKey: true
-#                required: true
-#                mapping:
-#                  relationship: ManyToOne
-#                  targetEntity: Movie
-#          Genre:
-#            x-fields:
-#              id:
-#                type: id
-#                primaryKey: true
-#              label:
-#                type: string
-#                required: false
-          Movie:
+          Permission:
             x-fields:
               id:
                 name: entityId
@@ -388,103 +262,28 @@ default:
                 voName: IdVO
                 primaryKey: true
                 mapping:
-                  targetEntity: 'MyContext\Domain\Entity\Movie'
-                  manager: 'MyContext\Domain\Service\Entity\Movie\Manager\MovieManager'
-              documents:
-                type: array
-                required: true
-                multiple: true
-                properties: ['name', 'date']
-                mapping:
-                  relationship: ManyToMany
-                  targetEntity: 'Sfynx\MediaBundle\Layers\Domain\Entity\Mediatheque'
-                  manager: 'Sfynx\MediaBundle\Layers\Domain\Service\Mediatheque\Manager\EntityManager as MediathequeManager'
-              comments:
-                type: array
-                required: true
-                multiple: true
-              movie:
+                  targetEntity: SfynxAuthBundle\Domain\Entity\Permission
+                  manager: 'Sfynx\AuthBundle\Domain\Service\Permission\Manager\EntityManager as PermissionManager'
+              permission:
                 type: valueObject
-                voName: MovieVO
-              genre:
-                type: valueObject
-                voName: IdVO
-                foreignKey: true
-                required: true
-                mapping:
-                  relationship: ManyToOne
-                  targetEntity: Genre
-                  manager: 'MyContext\Domain\Service\Entity\Genre\Manager\GenreManager'
-          Price:
-            x-fields:
-              id:
-                type: valueObject
-                voName: IdVO
-                primaryKey: true
-                mapping:
-                  targetEntity: 'MyContext\Domain\Entity\Price'
-                  manager: 'MyContext\Domain\Service\Entity\Price\Manager\PriceManager'
-              price:
-                type: valueObject
-                voName: PriceVO
-              movie:
-                type: valueObject
-                voName: IdVO
-                foreignKey: true
-                required: true
-                mapping:
-                  relationship: ManyToOne
-                  targetEntity: Movie
-                  manager: 'MyContext\Domain\Service\Entity\Movie\Manager\MovieManager'
-          Genre:
-            x-fields:
-              id:
-                type: valueObject
-                voName: IdVO
-                primaryKey: true
-                mapping:
-                  targetEntity: 'MyContext\Domain\Entity\Genre'
-                  manager: 'MyContext\Domain\Service\Entity\Genre\Manager\GenreManager'
-              label:
-                type: string
-                required: true
+                voName: PermissionVO
         x-valueObjects:
           IdVO:
             type: Sfynx\CoreBundle\Layers\Domain\ValueObject\IdVO
             x-fields:
               id:
                 type: id
-          MovieVO:
-            type: \Domain\ValueObject\MovieVO
+          PermissionVO:
+            type: Domain\ValueObject\PermissionVO
             x-fields:
-              title:
-                type: valueObject
-                voName: TitleVO
+              name:
+                type: string
                 required: true
-              releaseDate:
-                type: datetime
+              enabled:
+                type: boolean
+                defaultValue: true
                 required: false
-              synopsis:
-                type: string
+              comment:
+                type: textarea
                 required: false
-              reference:
-                type: string
-                required: true
-          PriceVO:
-            type: \Domain\ValueObject\PriceVO
-            x-fields:
-              title:
-                type: valueObject
-                voName: TitleVO
-                required: true
-              date:
-                type: datetime
-                required: false
-              reference:
-                type: string
-                required: true
-          TitleVO:
-            type: \Domain\ValueObject\TitleVO
-            x-fields:
-              title:
-                type: string
+                defaultValue: 'put yout comment'

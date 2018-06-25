@@ -29,6 +29,8 @@ class ClassHandler implements SplSubject
 
     /** @var array */
     public static $constructorArguments = [];
+    /** @var array */
+    public static $classMethods = [];
 
     /** @var string */
     const TYPE_ENTITY = 'id';
@@ -374,7 +376,7 @@ class ClassHandler implements SplSubject
      * @return void
      * @static
      */
-    public static function addMethods(PhpNamespace $namespace, ClassType $class, stdClass $data, ?array $index = []): void
+    public static function createMethods(PhpNamespace $namespace, ClassType $class, stdClass $data, ?array $index = []): void
     {
         if (property_exists($data, 'options')
             && property_exists($data->options, 'methods')
@@ -449,9 +451,26 @@ class ClassHandler implements SplSubject
                     }
 
                     $methodClass->addBody($body);
+
+                    self::$classMethods[] = $methodClass;
                 }
             }
         }
+    }
+
+    /**
+     * @param ClassType $class
+     * @return void
+     * @static
+     */
+    public static function addMethods(ClassType $class): void
+    {
+        // we sort in the opposite direction
+        krsort(self::$classMethods);
+        // we replace methods with the new order
+        $class->setMethods(self::$classMethods);
+        // we initialize methods tab
+        self::$classMethods = [];
     }
 
     /**
@@ -549,6 +568,8 @@ class ClassHandler implements SplSubject
             }
             $method->addBody($body);
 
+            self::$classMethods[] = $method;
+
             return  $method;
         }
 
@@ -618,8 +639,17 @@ class ClassHandler implements SplSubject
             $value = $interfaceName;
         }
 
+        $asClassArgument = str_replace(' as ', ' as ', $argument, $countAs);
+        if ((1 <= $countAs) && (0 == $countInterface)) {
+            list($content, $defaultValue) = explode(' as ', $argument);
+            $type = 'class';
+            $value = $defaultValue;
+            $basename = $defaultValue;
+            $argResult = self::setArgClassResult($namespace, $argument, $index, trim($value), $basename, $addConstruct);
+        }
+
         $classArgument = str_replace('\\', '\\', $argument, $countArg);
-        if ((1 <= $countArg) && (0 == $countInterface)) {
+        if ((0 == $countAs) && (1 <= $countArg) && (0 == $countInterface)) {
             $argResult = self::setArgClassResult($namespace, $argument, $index, $basename, $basename, $addConstruct);
             $type = 'class';
             $value = $basename;
@@ -627,24 +657,15 @@ class ClassHandler implements SplSubject
 
         $newArgument = str_replace(' ', ' ', $argument, $countVar);
         str_replace('=', '=', $argument, $countEgual);
-        if (1 == $countEgual) {
+        if ((0 == $countAs) && (1 == $countEgual)) {
             list($content, $defaultValue) = explode('=', $argument);
             $argResult = trim($defaultValue);
             $type = 'var';
             $value = $content;
-        } elseif ((1 <= $countVar) && (0 == $countNew)) {
+        } elseif ((0 == $countAs) && (1 <= $countVar) && (0 == $countNew)) {
             $argResult = self::setArgVarResult($newArgument);
             $type = 'var';
             $value = $newArgument;
-        }
-
-        $asClassArgument = str_replace(' as ', ' as ', $argument, $countAs);
-        if ((1 <= $countAs) && (0 == $countInterface)) {
-            list($content, $defaultValue) = explode(' as ', $argument);
-            $argResult = self::setArgClassResult($namespace, $argument, $index, trim($defaultValue), $basename, $addConstruct);
-            $type = 'class';
-            $value = $defaultValue;
-            $basename = $defaultValue;
         }
 
         return ['argument' => $argResult, 'basename' => $basename, 'type' => $type, 'value' => $value];
@@ -776,6 +797,35 @@ class ClassHandler implements SplSubject
         }
 
         return $newType;
+    }
+
+    /**
+     * @param stdClass $field
+     * @return string
+     */
+    public static function getValue(stdClass $field, string $defaultBoolValue = 'true')
+    {
+        // set default value
+        $value = 'null';
+        if (self::getType($field->type) == 'bool') {
+            $value =  $defaultBoolValue;
+        }
+        // set default value if specify in field
+        if (property_exists($field, 'defaultValue')) {
+            $value =  $field->defaultValue;
+        }
+
+        if (is_bool($value)) {
+            $value = (int)$value ? 'true' : 'false';
+        }
+        if ($value !== 'null'
+            && self::getType($field->type) !== 'bool'
+            && is_string($value)
+        ) {
+            $value = "'$value'";
+        }
+
+        return $value;
     }
 
     /**

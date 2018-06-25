@@ -28,6 +28,8 @@ class ConfigMapping implements ValidationInterface
 {
     /** @var array */
     protected $commandFields = [];
+    /** @var array */
+    protected static $includeKeys = ['required', 'primaryKey'];
 
     /**
      * @inheritdoc
@@ -106,12 +108,13 @@ class ConfigMapping implements ValidationInterface
                 if (strtolower($field['type']) == 'valueobject') {
                     $tree[$nameEntity][$nameField] = $this->buildTree([$vo[$field['voName']]], $vo, [], $field['entityName']);
 
-                    if (isset($field['required'])) {
-                        foreach($tree[$nameEntity][$nameField] as $k => $f) {
-                            $tree[$nameEntity][$nameField][$k]['required'] = $field['required'];
+                    foreach($field as $j => $p) {
+                        if (in_array($j, self::$includeKeys)) {
+                            foreach ($tree[$nameEntity][$nameField] as $k => $f) {
+                                $tree[$nameEntity][$nameField][$k][$j] = $field[$j];
+                            }
                         }
                     }
-
                     if (isset($field['mapping'])) {
                         $tree[$nameEntity][$nameField]['id']['mapping'] = $field['mapping'];
                     }
@@ -128,7 +131,6 @@ class ConfigMapping implements ValidationInterface
                     if (!isset($field['required'])) {
                         $field['required'] = false;
                     }
-
                     $tree[$nameEntity][$nameField] = $field;
 
                     $this->addCommandFields([$nameField => $field], $nameEntity);

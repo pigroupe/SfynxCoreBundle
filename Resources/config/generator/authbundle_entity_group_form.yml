@@ -1,10 +1,10 @@
 # php vendor/bin/sfynx-ddd-generator \
-# --namespace=Sfynx\AuthBundle \
+# --namespace=Sfynx\\AuthBundle \
 # --conf-file=/var/www/app/config/generator/authbundle_entity_group_form.yml \
 # --report-template=default \
 # --report-dir=/var/www/src/generator/authbundle
 default:
-    namespace: PromotionContext
+    namespace: Sfynx\AuthBundle
     cqrs: Group\Command
     template: default
     indentation: 4
@@ -147,6 +147,7 @@ default:
                     class: Domain\Workflow\Observer\Group\Response\OBGroupCreateFormData
                     arguments:
                       - 'Sfynx\CoreBundle\Layers\Domain\Service\Request\Generalisation\RequestInterface'
+                      - 'Sfynx\AuthBundle\Domain\Service\Group\Manager\EntityManager as GroupManager'
                     construct:
                         create: true
                         body:
@@ -156,20 +157,22 @@ default:
                         implements: ~
                         uses: ['Sfynx\CoreBundle\Layers\Infrastructure\Exception\WorkflowException', 'Exception']
                         traits: ~
-                        methods:
-                          - name: 'process'
-                            comments: ['{@inheritdoc}']
-                            visibility: 'protected'
-                            returnType: 'bool'
-                            body:
-                              - 'try {'
-                              - "    $this->wfLastData->formViewData['command'] = $this->wfHandler->command;"
-                              - "    $this->wfLastData->formViewData['entity'] = $this->wfHandler->entity;"
-                              - "    $this->wfLastData->formViewData['data_class'] = get_class($this->wfHandler->command);"
-                              - '} catch (Exception $e) {'
-                              - '    throw WorkflowException::noCreatedFormData();'
-                              - '}'
-                              - 'return true;'
+                        models:
+                          - 'Sfynx\CoreBundle\Generator\Domain\Component\File\HandlerModel\Observer\FormData'
+#                        methods:
+#                          - name: 'process'
+#                            comments: ['{@inheritdoc}']
+#                            visibility: 'protected'
+#                            returnType: 'bool'
+#                            body:
+#                              - 'try {'
+#                              - "    $this->wfLastData->formViewData['command'] = $this->wfHandler->command;"
+#                              - "    $this->wfLastData->formViewData['entity'] = $this->wfHandler->entity;"
+#                              - "    $this->wfLastData->formViewData['data_class'] = get_class($this->wfHandler->command);"
+#                              - '} catch (Exception $e) {'
+#                              - '    throw WorkflowException::noCreatedFormData();'
+#                              - '}'
+#                              - 'return true;'
                 - OBGroupCreateFormBody:
                     create: true
                     class: Domain\Workflow\Observer\Group\Response\OBGroupCreateFormBody
@@ -258,6 +261,9 @@ default:
                 type: valueObject
                 voName: IdVO
                 primaryKey: true
+                mapping:
+                  targetEntity: SfynxAuthBundle\Domain\Entity\Group
+                  manager: 'Sfynx\AuthBundle\Domain\Service\Group\Manager\EntityManager as GroupManager'
               group:
                 type: valueObject
                 voName: GroupVO

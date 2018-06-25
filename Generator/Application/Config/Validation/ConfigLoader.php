@@ -9,9 +9,9 @@
 
 namespace Sfynx\CoreBundle\Generator\Application\Config\Validation;
 
+use Symfony\Component\Yaml\Yaml;
 use Sfynx\CoreBundle\Generator\Application\Config\Config;
 use Sfynx\CoreBundle\Generator\Domain\Component\Config\Loader;
-use Symfony\Component\Yaml\Yaml;
 use Sfynx\CoreBundle\Generator\Application\Config\Exception\ConfigException;
 use Sfynx\CoreBundle\Generator\Application\Config\Generalisation\ValidationInterface;
 
@@ -30,7 +30,7 @@ class ConfigLoader implements ValidationInterface
     {
         $filename = $config->get('conf-file');
 
-        if(!\file_exists($filename) ||!\is_readable($filename)) {
+        if(!file_exists($filename) || !is_readable($filename)) {
             throw new ConfigException('configuration file is not accessible');
         }
         $content = file_get_contents($filename);

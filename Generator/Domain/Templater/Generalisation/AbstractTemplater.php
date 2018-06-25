@@ -155,8 +155,9 @@ abstract class AbstractTemplater implements TemplaterInterface
         ClassHandler::addTraits($namespace, $class, $data, $index);
         ClassHandler::addArguments($namespace, $class, $data, $index);
         ClassHandler::addModels($this, $namespace, $class, $data, $index);
+        ClassHandler::createMethods($namespace, $class, $data, $index);
         ClassHandler::addConstructorMethod($namespace, $class, $data);
-        ClassHandler::addMethods($namespace, $class, $data, $index);
+        ClassHandler::addMethods($class);
 
         return ClassHandler::tabsToSpaces($namespace, $this->getIndentation()) .
                 ClassHandler::tabsToSpaces($class, $this->getIndentation());
