@@ -800,6 +800,35 @@ class ClassHandler implements SplSubject
     }
 
     /**
+     * @param stdClass $field
+     * @return string
+     */
+    public static function getValue(stdClass $field, string $defaultBoolValue = 'true')
+    {
+        // set default value
+        $value = 'null';
+        if (self::getType($field->type) == 'bool') {
+            $value =  $defaultBoolValue;
+        }
+        // set default value if specify in field
+        if (property_exists($field, 'defaultValue')) {
+            $value =  $field->defaultValue;
+        }
+
+        if (is_bool($value)) {
+            $value = (int)$value ? 'true' : 'false';
+        }
+        if ($value !== 'null'
+            && self::getType($field->type) !== 'bool'
+            && is_string($value)
+        ) {
+            $value = "'$value'";
+        }
+
+        return $value;
+    }
+
+    /**
      * @param string $value
      * @static
      * @return bool
