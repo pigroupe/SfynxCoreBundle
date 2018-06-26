@@ -24,7 +24,7 @@ class ConfigLocator implements ValidationInterface
      * List of concrete ResponseProfiler that can be built using this factory.
      * @var string[]
      */
-    private static $defaultConf = ['.dashboard.yml', '.dashboard.yml.dist', '.dashboard-dist.yml'];
+    private static $defaultConf = ['sfynx-ddd-generator.yml', 'sfynx-ddd-generator.yml.dist', 'sfynx-ddd-generator-dist.yml'];
 
     /**
      * Default files to check
@@ -34,7 +34,6 @@ class ConfigLocator implements ValidationInterface
 
     /**
      * Constructor
-     *
      * @param array $defaults
      */
     public function __construct(array $defaults = null) {
@@ -76,7 +75,7 @@ class ConfigLocator implements ValidationInterface
      */
     private function isFileAccessible($filename)
     {
-        return \file_exists($filename) && \is_readable($filename);
+        return file_exists($filename) && is_readable($filename);
     }
 
     /**

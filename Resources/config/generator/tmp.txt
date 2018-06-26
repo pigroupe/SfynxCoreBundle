@@ -1,0 +1,76 @@
+php vendor/bin/sfynx-ddd-generator \
+--namespace=PromotionContext \
+--conf-file=/var/www/app/config/generator/offer/entity_offer_1.yml \
+--report-template=default \
+--report-dir=/var/www/src/generator/FormOffer && \
+php vendor/bin/sfynx-ddd-generator \
+--namespace=PromotionContext \
+--conf-file=/var/www/app/config/generator/offer/entity_offer_2.yml \
+--report-template=default \
+--report-dir=/var/www/src/generator/FormOffer && \
+php vendor/bin/sfynx-ddd-generator \
+--namespace=PromotionContext \
+--conf-file=/var/www/app/config/generator/offer/entity_offer_3.yml \
+--report-template=default \
+--report-dir=/var/www/src/generator/FormOffer && \
+php vendor/bin/sfynx-ddd-generator \
+--namespace=PromotionContext \
+--conf-file=/var/www/app/config/generator/offer/entity_offer_4.yml \
+--report-template=default \
+--report-dir=/var/www/src/generator/FormOffer && \
+php vendor/bin/sfynx-ddd-generator \
+--namespace=PromotionContext \
+--conf-file=/var/www/app/config/generator/offer/entity_offer_5.yml \
+--report-template=default \
+--report-dir=/var/www/src/generator/FormOffer && \
+php vendor/bin/sfynx-ddd-generator \
+--namespace=PromotionContext \
+--conf-file=/var/www/app/config/generator/offer/entity_offer_6.yml \
+--report-template=default \
+--report-dir=/var/www/src/generator/FormOffer && \
+php vendor/bin/sfynx-ddd-generator \
+--namespace=PromotionContext \
+--conf-file=/var/www/app/config/generator/entity_project.yml \
+--report-template=default \
+--report-dir=/var/www/src/generator/FormProject
+
+
+php vendor/bin/sfynx-ddd-generator \
+--namespace=AdminContext \
+--conf-file=/var/www/app/config/generator/models/entity_admin_date_list.yml \
+--report-template=default \
+--report-dir=/var/www/src/generator/FormAdmin && \
+php vendor/bin/sfynx-ddd-generator \
+--namespace=PromotionContext \
+--conf-file=/var/www/app/config/generator/models/action_go_premise_request.yml \
+--report-template=default \
+--report-dir=/var/www/src/generator/FormAction && \
+php vendor/bin/sfynx-ddd-generator \
+--namespace=MyContext \
+--conf-file=/var/www/app/config/generator/models/sfynx-ddd-generator.yml \
+--report-template=default \
+--report-dir=/var/www/src/generator/MyContext
+
+
+php vendor/bin/sfynx-ddd-generator \
+--namespace=Sfynx\\AuthBundle \
+--conf-file=/var/www/app/config/generator/auth/authbundle_entity_group_form.yml \
+--report-template=default \
+--report-dir=/var/www/src/generator/authbundle && \
+php vendor/bin/sfynx-ddd-generator \
+--namespace=Sfynx\\AuthBundle \
+--conf-file=/var/www/app/config/generator/auth/authbundle_entity_role_form.yml \
+--report-template=default \
+--report-dir=/var/www/src/generator/authbundle && \
+php vendor/bin/sfynx-ddd-generator \
+--namespace=Sfynx\\AuthBundle \
+--conf-file=/var/www/app/config/generator/auth/authbundle_entity_permission_form.yml \
+--report-template=default \
+--report-dir=/var/www/src/generator/authbundle
+
+
+php vendor/bin/sfynx-ddd-generator \
+--namespace=Sfynx\\AuthBundle \
+--conf-dir=/var/www/app/config/generator/auth \
+--report-template=default \
+--report-dir=/var/www/src/generator/authbundle

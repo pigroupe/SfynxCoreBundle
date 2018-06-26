@@ -1,6 +1,7 @@
 <?php
 namespace Sfynx\CoreBundle\Generator\Application;
 
+use Sfynx\CoreBundle\Generator\Application\Config\Config;
 use Sfynx\CoreBundle\Generator\Application\Config\Validator;
 use Sfynx\CoreBundle\Generator\Application\Config\Parser;
 use Sfynx\CoreBundle\Generator\Application\Config\Exception\ConfigException;
@@ -42,6 +43,36 @@ class Application
         // config
         $config = (new Parser())->parse($argv);
 
+        if ($config->has('conf-dir')) {
+            $finder = new Finder(['yml']);
+            $files = $finder->fetch(explode(',', $config->get('conf-dir')));
+
+            foreach ($files as $file) {
+                $config->set('conf-file', $file);
+
+                $configNew = clone($config);
+                $this->_run($output, $issuer, $configNew);
+            }
+        } elseif ($config->has('conf-file')) {
+            $this->_run($output, $issuer, $config);
+        }
+
+        $endTime = microtime(true);
+        // end
+
+        $output->writeln('');
+        $output->writeln(sprintf('<info>++</info> generated in (%ss) times', round($endTime - $startTime, 3)));
+        $output->writeln('');
+        $output->clearln();
+    }
+
+    /**
+     * @param CliOutput $output
+     * @param Issuer $issuer
+     * @param Config $config
+     */
+    protected function _run(CliOutput $output, Issuer $issuer, Config $config)
+    {
         // Set configurations and validate theme
         try {
             (new Validator())->validate($config);
@@ -76,13 +107,6 @@ class Application
             $output->writeln(sprintf('<error>%s</error>', $e->getMessage()));
             exit(1);
         }
-        $endTime = microtime(true);
-        // end
-
-        $output->writeln('');
-        $output->writeln(sprintf('<info>++</info> generated in (%ss) times', round($endTime - $startTime, 3)));
-        $output->writeln('');
-        $output->clearln();
     }
 
     /**
@@ -90,6 +114,6 @@ class Application
      */
     public function getVersion()
     {
-        return 'v1.0.0';
+        return 'v2.9.15';
     }
 }

@@ -48,4 +48,20 @@ abstract class AbstractGenerator implements GeneratorInterface
     {
         return json_decode(json_encode($data), $option);
     }
+
+    /**
+     * @return stdClass
+     */
+    public static function intitializeDataCl(): void
+    {
+        AbstractGenerator::$dataCl = [];
+    }
+
+    /**
+     * @return array
+     */
+    public static function intitializeDataArr(): void
+    {
+        AbstractGenerator::$dataArr = [];
+    }
 }

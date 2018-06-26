@@ -1,11 +1,11 @@
 # php vendor/bin/sfynx-ddd-generator \
 # --namespace=Sfynx\\AuthBundle \
-# --conf-file=/var/www/app/config/generator/authbundle_entity_role_form.yml \
+# --conf-file=/var/www/app/config/generator/auth/authbundle_entity_permission_form.yml \
 # --report-template=default \
 # --report-dir=/var/www/src/generator/authbundle
 default:
     namespace: Sfynx\AuthBundle
-    cqrs: Role\Command
+    cqrs: Permission\Command
     template: default
     indentation: 4
     widgets:
@@ -24,34 +24,34 @@ default:
                         design: 'adapter'
                         class: Sfynx\CoreBundle\Layers\Presentation\Adapter\Command\CommandAdapter
                         arguments:
-                            - 'new RoleFormCommand'
+                            - 'new PermissionFormCommand'
                         calls:
-                            - [ createCommandFromRequest, [ 'new RoleFormRequest' ] ]
+                            - [ createCommandFromRequest, [ 'new PermissionFormRequest' ] ]
                     - commandWorkflow:
                         design: 'observer'
                         class: Sfynx\CoreBundle\Layers\Application\Command\Workflow\CommandWorkflow
                         calls:
-                            - [ attach, [ 'new OBRoleEntityEdit' ] ]
-                            - [ attach, [ 'new OBRoleEntityCreate' ] ]
+                            - [ attach, [ 'new OBPermissionEntityEdit' ] ]
+                            - [ attach, [ 'new OBPermissionEntityCreate' ] ]
                     - commandHandlerResult:
                         design: 'decorator'
                         class: Sfynx\CoreBundle\Layers\Application\Command\Handler\FormCommandHandler
                         arguments:
                             - '$Commandworkflow'
-                        handlers: [ 'RoleFormCommandValidationHandler', 'RoleFormCommandSpecHandler']
+                        handlers: [ 'PermissionFormCommandValidationHandler', 'PermissionFormCommandSpecHandler']
                         calls:
                             - [ process, [ '$updateCommand' ] ]
                     - codeln1:
                         design: 'code'
-                        content: "$this->setParam('templating', '@Business/Role/edit.html.twig');"
+                        content: "$this->setParam('templating', '@Business/Permission/edit.html.twig');"
                     - workflowHandler:
                         design: 'observer'
                         class: Sfynx\CoreBundle\Layers\Application\Common\Handler\WorkflowHandler
                         calls:
-                            - [ attach, [ 'new OBRoleCreateFormData' ] ]
+                            - [ attach, [ 'new OBPermissionCreateFormData' ] ]
                             - [ attach, [ 'new OBCreateCommandFormView' ] ]
                             - [ attach, [ 'new OBInjectFormErrors' ] ]
-                            - [ attach, [ 'new OBRoleCreateFormBody' ] ]
+                            - [ attach, [ 'new OBPermissionCreateFormBody' ] ]
                             - [ attach, [ 'new OBCreateResponseHtml' ] ]
                     - responseHandlerResult:
                         design: 'handler'
@@ -64,19 +64,19 @@ default:
                         design: 'code'
                         content: "return $responseHandlerResult->getResponse();"
             widget_request:
-                class: RoleFormRequest
+                class: PermissionFormRequest
                 arguments:
                   - 'Sfynx\CoreBundle\Layers\Domain\Service\Request\Generalisation\RequestInterface'
         application:
             widget_cqrs_command:
-                class: RoleFormCommand
+                class: PermissionFormCommand
                 arguments: ~
             widget_cqrs_validator_specification:
-                class: Validation\SpecHandler\RoleFormCommandSpecHandler
+                class: Validation\SpecHandler\PermissionFormCommandSpecHandler
                 arguments:
                   - '$commandHandlerResult'
             widget_cqrs_validator_validation:
-                class: Validation\ValidationHandler\RoleFormCommandValidationHandler
+                class: Validation\ValidationHandler\PermissionFormCommandValidationHandler
                 arguments:
                   - '$commandHandlerResult'
                   - 'new SymfonyValidatorStrategy'
@@ -87,30 +87,30 @@ default:
                     class: 'Sfynx\CoreBundle\Layers\Application\Validation\Validator\SymfonyValidatorStrategy'
                     arguments: ['Symfony\Component\Validator\Validator\ValidatorInterface']
             widget_validation_type:
-                class: RoleType
+                class: PermissionType
                 arguments: ~
         domain:
             widget_entity: true
             widget_service_manager_class:
-                - RoleEntityManager:
+                - PermissionEntityManager:
                     create: true
-                    class: Role\Manager\RoleManager
+                    class: Permission\Manager\PermissionManager
                     arguments: ~
                     options:
-                        entity: 'Role'
+                        entity: 'Permission'
             widget_service_class:
-                - RoleCommandRepositoryInterface:
+                - PermissionCommandRepositoryInterface:
                     create: true
-                    class: Domain\Repository\Command\RoleCommandRepositoryInterface
+                    class: Domain\Repository\Command\PermissionCommandRepositoryInterface
                     type: interface
-                - RoleQueryRepositoryInterface:
+                - PermissionQueryRepositoryInterface:
                     create: true
-                    class: Domain\Repository\Query\RoleQueryRepositoryInterface
+                    class: Domain\Repository\Query\PermissionQueryRepositoryInterface
                     type: interface
             widget_workflow_observer_class:
-                - OBRoleEntityCreate:
+                - OBPermissionEntityCreate:
                     create: true
-                    class: OBRoleEntityCreate
+                    class: OBPermissionEntityCreate
                     arguments:
                       - 'Sfynx\CoreBundle\Layers\Domain\Service\Manager\Generalisation\Interfaces\ManagerInterface'
                       - 'Sfynx\CoreBundle\Layers\Domain\Service\Request\Generalisation\RequestInterface'
@@ -125,9 +125,9 @@ default:
                         implements: ~
                         uses: ~
                         traits: [Sfynx\CoreBundle\Layers\Domain\Workflow\Observer\Command\TraitProcess]
-                - OBRoleEntityEdit:
+                - OBPermissionEntityEdit:
                     create: true
-                    class: OBRoleEntityEdit
+                    class: OBPermissionEntityEdit
                     arguments:
                       - 'Sfynx\CoreBundle\Layers\Domain\Service\Manager\Generalisation\Interfaces\ManagerInterface'
                       - 'Sfynx\CoreBundle\Layers\Domain\Service\Request\Generalisation\RequestInterface'
@@ -142,13 +142,12 @@ default:
                         implements: ~
                         uses: ~
                         traits: [Sfynx\CoreBundle\Layers\Domain\Workflow\Observer\Command\TraitProcess]
-                - OBRoleCreateFormData:
+                - OBPermissionCreateFormData:
                     create: true
-                    class: Domain\Workflow\Observer\Role\Response\OBRoleCreateFormData
+                    class: Domain\Workflow\Observer\Permission\Response\OBPermissionCreateFormData
                     arguments:
                       - 'Sfynx\CoreBundle\Layers\Domain\Service\Request\Generalisation\RequestInterface'
-                      - 'Sfynx\AuthBundle\Domain\Service\Role\Manager\EntityManager as RoleManager'
-                      - 'Sfynx\AuthBundle\Domain\Service\Layout\Manager\EntityManager as LayoutManager'
+                      - 'Sfynx\AuthBundle\Domain\Service\Permission\Manager\EntityManager as PermissionManager'
                     construct:
                         create: true
                         body:
@@ -174,9 +173,9 @@ default:
 #                              - '    throw WorkflowException::noCreatedFormData();'
 #                              - '}'
 #                              - 'return true;'
-                - OBRoleCreateFormBody:
+                - OBPermissionCreateFormBody:
                     create: true
-                    class: Domain\Workflow\Observer\Role\Response\OBRoleCreateFormBody
+                    class: Domain\Workflow\Observer\Permission\Response\OBPermissionCreateFormBody
                     arguments:
                       - 'Sfynx\CoreBundle\Layers\Domain\Service\Request\Generalisation\RequestInterface'
                       - 'Symfony\Bundle\FrameworkBundle\Templating\EngineInterface'
@@ -213,7 +212,7 @@ default:
                       - 'Sfynx\CoreBundle\Layers\Domain\Service\Request\Generalisation\RequestInterface'
                       - 'Symfony\Component\Form\FormFactoryInterface'
 #                      - 'Sfynx\CoreBundle\Layers\Domain\Service\Form\Generalisation\Interfaces\FormTypeInterface'
-                      - 'new RoleType'
+                      - 'new PermissionType'
                 - OBInjectFormErrors:
                     create: false
                     class: Sfynx\CoreBundle\Layers\Domain\Workflow\Observer\Response\OBInjectFormErrors
@@ -228,34 +227,34 @@ default:
         infrastructure:
             widget_security_parse: true
             widget_infra_class:
-                - CommandRoleRepository:
+                - CommandPermissionRepository:
                     create: true
-                    class: Infrastructure\Persistence\Adapter\Command\Orm\RoleRepository
+                    class: Infrastructure\Persistence\Adapter\Command\Orm\PermissionRepository
                     arguments: ~
                     comments:
                       - 'This class was generated by the Doctrine ORM. Add your own custom'
                       - 'repository methods below.'
                     extends: Sfynx\CoreBundle\Layers\Infrastructure\Persistence\Adapter\Generalisation\Orm\AbstractCommandRepository
                     options:
-                        implements: ['Domain\Repository\Command\RoleCommandRepositoryInterface']
+                        implements: ['Domain\Repository\Command\PermissionCommandRepositoryInterface']
                         uses: ~
                         traits: ~
-                - QueryRoleRepository:
+                - QueryPermissionRepository:
                     create: true
-                    class: Infrastructure\Persistence\Adapter\Query\Orm\RoleRepository
+                    class: Infrastructure\Persistence\Adapter\Query\Orm\PermissionRepository
                     arguments: ~
                     comments:
                       - 'This class was generated by the Doctrine ORM. Add your own custom'
                       - 'repository methods below.'
                     extends: Sfynx\CoreBundle\Layers\Infrastructure\Persistence\Adapter\Generalisation\Orm\AbstractQueryRepository
                     options:
-                        implements: ['Domain\Repository\Query\RoleQueryRepositoryInterface']
+                        implements: ['Domain\Repository\Query\PermissionQueryRepositoryInterface']
                         uses: ~
                         traits: ~
     mapping:
         x-providers: [orm, couchdb]
         x-entities:
-          Role:
+          Permission:
             x-fields:
               id:
                 name: entityId
@@ -263,64 +262,28 @@ default:
                 voName: IdVO
                 primaryKey: true
                 mapping:
-                  targetEntity: 'SfynxAuthBundle\Domain\Entity\Role'
-                  manager: 'Sfynx\AuthBundle\Domain\Service\Role\Manager\EntityManager as RoleManager'
-              role:
+                  targetEntity: SfynxAuthBundle\Domain\Entity\Permission
+                  manager: 'Sfynx\AuthBundle\Domain\Service\Permission\Manager\EntityManager as PermissionManager'
+              permission:
                 type: valueObject
-                voName: RoleVO
-              layout:
-                type: valueObject
-                voName: IdVO
-                foreignKey: true
-                required: true
-                choice_label: Layout
-                mapping:
-                  relationship: ManyToOne
-                  targetEntity: 'SfynxAuthBundle\Domain\Entity\Layout'
-                  manager: 'Sfynx\AuthBundle\Domain\Service\Layout\Manager\EntityManager as LayoutManager'
+                voName: PermissionVO
         x-valueObjects:
           IdVO:
-            type: 'Sfynx\CoreBundle\Layers\Domain\ValueObject\IdVO'
+            type: Sfynx\CoreBundle\Layers\Domain\ValueObject\IdVO
             x-fields:
               id:
                 type: id
-          RoleVO:
-            type: 'Domain\ValueObject\RoleVO'
+          PermissionVO:
+            type: Domain\ValueObject\PermissionVO
             x-fields:
               name:
-                type: string
-                required: true
-              label:
                 type: string
                 required: true
               enabled:
                 type: boolean
                 defaultValue: true
-#                required: false
+                required: false
               comment:
                 type: textarea
                 required: false
-              heritage:
-                type: array
-                form:
-                  type: array
-                  serviceType: sfynx_security_roles
-                required: true
-                multiple: true
-                expanded: false
-              routeLogin:
-                type: string
-                form:
-                  type: array
-                  serviceType: sfynx_routes
-                required: false
-                multiple: false
-                expanded: false
-              routeLogout:
-                type: string
-                form:
-                  type: array
-                  serviceType: sfynx_routes
-                required: false
-                multiple: false
-                expanded: false
+                defaultValue: 'put yout comment'

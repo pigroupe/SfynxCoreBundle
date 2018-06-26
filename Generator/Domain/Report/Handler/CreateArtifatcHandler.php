@@ -3,6 +3,7 @@ namespace Sfynx\CoreBundle\Generator\Domain\Report\Handler;
 
 use stdClass;
 use Sfynx\CoreBundle\Generator\Domain\Report\Generalisation\Interfaces\HandlerInterface;
+use Sfynx\CoreBundle\Generator\Domain\Report\Generalisation\AbstractGenerator;
 use Sfynx\CoreBundle\Generator\Domain\Report\ReporterObservable;
 use Sfynx\CoreBundle\Generator\Domain\Component\File\RecurseCopy;
 use Sfynx\CoreBundle\Generator\Domain\Component\Output\Output;
@@ -80,6 +81,9 @@ class CreateArtifatcHandler implements HandlerInterface
                 $this->output->writeln(sprintf('<info>++</info> create file: "%s"', $file->target_path));
             }
         }
+
+        AbstractGenerator::intitializeDataCl();
+        AbstractGenerator::intitializeDataArr();
     }
 
     /**

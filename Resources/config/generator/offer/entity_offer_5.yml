@@ -1,0 +1,240 @@
+# php vendor/bin/sfynx-ddd-generator \
+# --namespace=PromotionContext \
+# --conf-file=/var/www/app/config/generator/offer/entity_offer_5.yml \
+# --report-template=default \
+# --report-dir=/var/www/src/generator/FormOffer
+default:
+    namespace: PromotionContext
+    cqrs: Offer\Command
+    template: default
+    indentation: 4
+    widgets:
+        presentation:
+            widget_coordination:
+                class: Form5Coordination
+                arguments:
+                    - '$workflowHandler'
+                extends: Sfynx\CoreBundle\Layers\Presentation\Coordination\Generalisation\AbstractFormController
+                options:
+                    implements: ~
+                    uses: ~
+                    traits: ~
+                body:
+                    - updateCommand:
+                        design: 'adapter'
+                        class: Sfynx\CoreBundle\Layers\Presentation\Adapter\Command\CommandAdapter
+                        arguments:
+                            - 'new Offer5FormCommand'
+                        calls:
+                            - [ createCommandFromRequest, [ 'new Offer5FormRequest' ] ]
+                    - commandWorkflow:
+                        design: 'observer'
+                        class: Sfynx\CoreBundle\Layers\Application\Command\Workflow\CommandWorkflow
+                        calls:
+                            - [ attach, [ 'new OBOffer5EntityEdit' ] ]
+                            - [ attach, [ 'new OBOffer5EntityCreate' ] ]
+                    - commandHandlerResult:
+                        design: 'decorator'
+                        class: Sfynx\CoreBundle\Layers\Application\Command\Handler\FormCommandHandler
+                        arguments:
+                            - '$commandWorkflow'
+                        handlers: [ 'Offer5FormCommandValidationHandler', 'Offer5FormCommandSpecHandler']
+                        calls:
+                            - [ process, [ '$updateCommand' ] ]
+                    - codeln1:
+                        design: 'code'
+                        content: "$this->setParam('templating', '@Business/Offer/edit.html.twig');"
+                    - workflowHandler:
+                        design: 'observer'
+                        class: Sfynx\CoreBundle\Layers\Application\Common\Handler\WorkflowHandler
+                        calls:
+                            - [ attach, [ 'new OBOffer5CreateFormData' ] ]
+                            - [ attach, [ 'new OBCreateCommandFormView' ] ]
+                            - [ attach, [ 'new OBInjectFormErrors' ] ]
+                            - [ attach, [ 'new OBOffer5CreateFormBody' ] ]
+                            - [ attach, [ 'new OBCreateResponseHtml' ] ]
+                    - responseHandlerResult:
+                        design: 'handler'
+                        class: Sfynx\CoreBundle\Layers\Application\Response\Handler\ResponseHandler
+                        arguments:
+                            - '$workflowHandler'
+                        calls:
+                            - [ process, [ '$commandHandlerResult' ] ]
+                    - codeln2:
+                        design: 'code'
+                        content: "return $responseHandlerResult->getResponse();"
+            widget_request:
+                class: Offer5FormRequest
+                arguments:
+                  - 'Sfynx\CoreBundle\Layers\Domain\Service\Request\Generalisation\RequestInterface'
+        application:
+            widget_cqrs_command:
+                class: Offer5FormCommand
+                arguments: ~
+            widget_cqrs_validator_specification:
+                class: Validation\SpecHandler\Offer5FormCommandSpecHandler
+                arguments:
+                  - '$commandHandlerResult'
+            widget_cqrs_validator_validation:
+                class: Validation\ValidationHandler\Offer5FormCommandValidationHandler
+                arguments:
+                  - '$commandHandlerResult'
+                  - 'new SymfonyValidatorStrategy'
+                  - 'false'
+            widget_service_app_class:
+                - SymfonyValidatorStrategy:
+                    create: false
+                    class: 'Sfynx\CoreBundle\Layers\Application\Validation\Validator\SymfonyValidatorStrategy'
+                    arguments: ['Symfony\Component\Validator\Validator\ValidatorInterface']
+            widget_validation_type:
+                class: Offer5Type
+                arguments: ~
+        domain:
+            widget_entity: true
+            widget_service_manager_class:
+                - OfferEntityManager:
+                    create: true
+                    class: Offer\Manager\Tmp5OfferManager
+                    arguments: ~
+                    options:
+                        entity: 'Offer'
+            widget_workflow_observer_class:
+                - OBOffer5EntityCreate:
+                    create: true
+                    class: OBOffer5EntityCreate
+                    arguments:
+                      - 'Sfynx\CoreBundle\Layers\Domain\Service\Manager\Generalisation\Interfaces\ManagerInterface'
+                      - 'Sfynx\CoreBundle\Layers\Domain\Service\Request\Generalisation\RequestInterface'
+                      - 'Symfony\Bundle\FrameworkBundle\Routing\Router'
+                      - 'bool $updateCommand = false'
+                    construct:
+                        create: true
+                        body:
+                          - 'parent::__construct($manager, $request, $updateCommand);'
+                    extends: Sfynx\CoreBundle\Layers\Domain\Workflow\Observer\Generalisation\Command\AbstractEntityCreateHandler
+                    options:
+                        implements: ~
+                        uses: ~
+                        traits: [Sfynx\CoreBundle\Layers\Domain\Workflow\Observer\Command\TraitProcess]
+                - OBOffer5EntityEdit:
+                    create: true
+                    class: OBOffer5EntityEdit
+                    arguments:
+                      - 'Sfynx\CoreBundle\Layers\Domain\Service\Manager\Generalisation\Interfaces\ManagerInterface'
+                      - 'Sfynx\CoreBundle\Layers\Domain\Service\Request\Generalisation\RequestInterface'
+                      - 'Symfony\Bundle\FrameworkBundle\Routing\Router'
+                      - 'bool $updateCommand = false'
+                    construct:
+                        create: true
+                        body:
+                          - 'parent::__construct($manager, $request, $updateCommand);'
+                    extends: Sfynx\CoreBundle\Layers\Domain\Workflow\Observer\Generalisation\Command\AbstractEntityEditHandler
+                    options:
+                        implements: ~
+                        uses: ~
+                        traits: [Sfynx\CoreBundle\Layers\Domain\Workflow\Observer\Command\TraitProcess]
+                - OBOffer5CreateFormData:
+                    create: true
+                    class: Domain\Workflow\Observer\Offer\Response\OBOffer5CreateFormData
+                    arguments:
+                      - 'Sfynx\CoreBundle\Layers\Domain\Service\Request\Generalisation\RequestInterface'
+                    construct:
+                        create: true
+                        body:
+                          - 'parent::__construct($request);'
+                    extends: Sfynx\CoreBundle\Layers\Domain\Workflow\Observer\Generalisation\Response\AbstractCreateFormData
+                    options:
+                        implements: ~
+                        uses: ['Sfynx\CoreBundle\Layers\Infrastructure\Exception\WorkflowException', 'Exception']
+                        methods:
+                          - name: 'process'
+                            comments: ['{@inheritdoc}']
+                            visibility: 'protected'
+                            returnType: 'bool'
+                            body:
+                              - 'try {'
+                              - "    $this->wfLastData->formViewData['command'] = $this->wfHandler->command;"
+                              - "    $this->wfLastData->formViewData['entity'] = $this->wfHandler->entity;"
+                              - "    $this->wfLastData->formViewData['data_class'] = get_class($this->wfHandler->command);"
+                              - '} catch (Exception $e) {'
+                              - '    throw WorkflowException::noCreatedFormData();'
+                              - '}'
+                              - 'return true;'
+                - OBOffer5CreateFormBody:
+                    create: true
+                    class: Domain\Workflow\Observer\Offer\Response\OBOffer5CreateFormBody
+                    arguments:
+                      - 'Sfynx\CoreBundle\Layers\Domain\Service\Request\Generalisation\RequestInterface'
+                      - 'Symfony\Bundle\FrameworkBundle\Templating\EngineInterface'
+                      - '$this->param'
+                    extends: Sfynx\CoreBundle\Layers\Domain\Workflow\Observer\Generalisation\Response\AbstractCreateFormBody
+                    options:
+                        implements: ~
+                        uses: ['Sfynx\CoreBundle\Layers\Infrastructure\Exception\WorkflowException', 'Exception']
+                        traits: ~
+                        methods:
+                          - name: 'process'
+                            comments: ['{@inheritdoc}']
+                            visibility: 'protected'
+                            returnType: 'bool'
+                            body:
+                              - "$this->wfLastData->body = '';"
+                              - 'try {'
+                              - "    $this->wfLastData->body = $this->templating->render("
+                              - "        $this->param->templating,"
+                              - '        ['
+                              - "           'entity' => $this->wfHandler->entity,"
+                              - "           'edit_form' => $this->wfLastData->form->createView(),"
+                              - "           'errors_form' => $this->wfHandler->errors"
+                              - '        ]'
+                              - '    );'
+                              - '} catch (Exception $e) {'
+                              - '    throw WorkflowException::noCreatedViewForm();'
+                              - '}'
+                              - 'return true;'
+                - OBCreateCommandFormView:
+                    create: false
+                    class: Sfynx\CoreBundle\Layers\Domain\Workflow\Observer\Response\OBCreateCommandFormView
+                    arguments:
+                      - 'Sfynx\CoreBundle\Layers\Domain\Service\Request\Generalisation\RequestInterface'
+                      - 'Symfony\Component\Form\FormFactoryInterface'
+                      - 'Sfynx\CoreBundle\Layers\Domain\Service\Form\Generalisation\Interfaces\FormTypeInterface'
+#                      - 'new Offer5Type'
+                - OBInjectFormErrors:
+                    create: false
+                    class: Sfynx\CoreBundle\Layers\Domain\Workflow\Observer\Response\OBInjectFormErrors
+                    arguments:
+                      - 'Sfynx\CoreBundle\Layers\Domain\Service\Request\Generalisation\RequestInterface'
+                      - 'Symfony\Component\Translation\TranslatorInterface'
+                - OBCreateResponseHtml:
+                    create: false
+                    class: Sfynx\CoreBundle\Layers\Domain\Workflow\Observer\Response\OBCreateResponseHtml
+                    arguments:
+                      - 'Sfynx\CoreBundle\Layers\Domain\Service\Request\Generalisation\RequestInterface'
+        infrastructure:
+            widget_security_parse: true
+    mapping:
+        x-providers: [orm, couchdb]
+        x-entities:
+          Offer:
+            x-fields:
+              id:
+                name: entityId
+                type: valueObject
+                voName: IdVO
+                primaryKey: true
+              sendingMode:
+                type: array
+                required: true
+                expanded: true
+                multiple: true
+              sendingDate:
+                type: datetime
+                nullable: true
+                required: false
+        x-valueObjects:
+          IdVO:
+            type: Sfynx\CoreBundle\Layers\Domain\ValueObject\IdVO
+            x-fields:
+              id:
+                type: id

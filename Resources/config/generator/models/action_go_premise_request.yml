@@ -1,11 +1,11 @@
 # php vendor/bin/sfynx-ddd-generator \
-# --namespace=Sfynx\\AuthBundle \
-# --conf-file=/var/www/app/config/generator/authbundle_entity_permission_form.yml \
+# --namespace=PromotionContext \
+# --conf-file=/var/www/app/config/generator/models/action_go_premise_request.yml \
 # --report-template=default \
-# --report-dir=/var/www/src/generator/authbundle
+# --report-dir=/var/www/src/generator/FormAction
 default:
-    namespace: Sfynx\AuthBundle
-    cqrs: Permission\Command
+    namespace: PromotionContext
+    cqrs: Activity\Command
     template: default
     indentation: 4
     widgets:
@@ -17,66 +17,67 @@ default:
                 extends: Sfynx\CoreBundle\Layers\Presentation\Coordination\Generalisation\AbstractFormController
                 options:
                     implements: ~
-                    uses: ~
-                    traits: ~
+                    uses:
+                      - 'ProfilContext\Domain\Service\Entity\Profil\ProfilManager'
+                    traits:
+                      - 'Sfynx\CoreBundle\Layers\Presentation\Coordination\Generalisation\Traits\TraitParam'
                 body:
                     - updateCommand:
                         design: 'adapter'
                         class: Sfynx\CoreBundle\Layers\Presentation\Adapter\Command\CommandAdapter
                         arguments:
-                            - 'new PermissionFormCommand'
+                            - 'new GoPromiseRequestFormCommand'
                         calls:
-                            - [ createCommandFromRequest, [ 'new PermissionFormRequest' ] ]
+                            - [ createCommandFromRequest, [ 'new GoPromiseRequestFormRequest' ] ]
                     - commandWorkflow:
                         design: 'observer'
                         class: Sfynx\CoreBundle\Layers\Application\Command\Workflow\CommandWorkflow
                         calls:
-                            - [ attach, [ 'new OBPermissionEntityEdit' ] ]
-                            - [ attach, [ 'new OBPermissionEntityCreate' ] ]
+                            - [ attach, [ 'new OBGoPromiseRequestCreate' ] ]
                     - commandHandlerResult:
                         design: 'decorator'
                         class: Sfynx\CoreBundle\Layers\Application\Command\Handler\FormCommandHandler
                         arguments:
-                            - '$Commandworkflow'
-                        handlers: [ 'PermissionFormCommandValidationHandler', 'PermissionFormCommandSpecHandler']
+                            - '$commandWorkflow'
+                        handlers: [ 'GoPromiseRequestFormCommandValidationHandler', 'GoPromiseRequestFormCommandSpecHandler']
                         calls:
                             - [ process, [ '$updateCommand' ] ]
                     - codeln1:
                         design: 'code'
-                        content: "$this->setParam('templating', '@Business/Permission/edit.html.twig');"
+                        content: "$this->setParam('templating', '@Business/Action/actionFormDemandeGoPromesse.html.twig');"
                     - workflowHandler:
                         design: 'observer'
                         class: Sfynx\CoreBundle\Layers\Application\Common\Handler\WorkflowHandler
                         calls:
-                            - [ attach, [ 'new OBPermissionCreateFormData' ] ]
+                            - [ attach, [ 'new OBGoPromiseRequestFormData' ] ]
                             - [ attach, [ 'new OBCreateCommandFormView' ] ]
                             - [ attach, [ 'new OBInjectFormErrors' ] ]
-                            - [ attach, [ 'new OBPermissionCreateFormBody' ] ]
+                            - [ attach, [ 'new OBGoPromiseRequestFormBody' ] ]
                             - [ attach, [ 'new OBCreateResponseHtml' ] ]
                     - responseHandlerResult:
                         design: 'handler'
                         class: Sfynx\CoreBundle\Layers\Application\Response\Handler\ResponseHandler
                         arguments:
-                            - '$Workflowhandler'
+                            - '$workflowHandler'
                         calls:
                             - [ process, [ '$commandHandlerResult' ] ]
                     - codeln2:
                         design: 'code'
                         content: "return $responseHandlerResult->getResponse();"
             widget_request:
-                class: PermissionFormRequest
+                class: GoPromiseRequestFormRequest
                 arguments:
                   - 'Sfynx\CoreBundle\Layers\Domain\Service\Request\Generalisation\RequestInterface'
         application:
             widget_cqrs_command:
-                class: PermissionFormCommand
+                class: GoPromiseRequestFormCommand
                 arguments: ~
             widget_cqrs_validator_specification:
-                class: Validation\SpecHandler\PermissionFormCommandSpecHandler
+                class: Validation\SpecHandler\GoPromiseRequestFormCommandSpecHandler
                 arguments:
                   - '$commandHandlerResult'
             widget_cqrs_validator_validation:
-                class: Validation\ValidationHandler\PermissionFormCommandValidationHandler
+                class: Validation\ValidationHandler\GoPromiseRequestFormCommandValidationHandler
                 arguments:
                   - '$commandHandlerResult'
                   - 'new SymfonyValidatorStrategy'
@@ -87,67 +88,53 @@ default:
                     class: 'Sfynx\CoreBundle\Layers\Application\Validation\Validator\SymfonyValidatorStrategy'
                     arguments: ['Symfony\Component\Validator\Validator\ValidatorInterface']
             widget_validation_type:
-                class: PermissionType
+                class: Action\GoPromiseRequestType
                 arguments: ~
         domain:
             widget_entity: true
             widget_service_manager_class:
-                - PermissionEntityManager:
+                - ActivityEntityManager:
                     create: true
-                    class: Permission\Manager\PermissionManager
+                    class: Activity\Manager\ActivityManager
                     arguments: ~
                     options:
-                        entity: 'Permission'
+                        entity: 'Activity'
             widget_service_class:
-                - PermissionCommandRepositoryInterface:
-                    create: true
-                    class: Domain\Repository\Command\PermissionCommandRepositoryInterface
-                    type: interface
-                - PermissionQueryRepositoryInterface:
-                    create: true
-                    class: Domain\Repository\Query\PermissionQueryRepositoryInterface
-                    type: interface
+#                - ActivityCommandRepositoryInterface:
+#                    create: true
+#                    class: Domain\Repository\Command\ActivityCommandRepositoryInterface
+#                    type: interface
+#                - ActivityQueryRepositoryInterface:
+#                    create: true
+#                    class: Domain\Repository\Query\ActivityQueryRepositoryInterface
+#                    type: interface
             widget_workflow_observer_class:
-                - OBPermissionEntityCreate:
+                - OBGoPromiseRequestCreate:
                     create: true
-                    class: OBPermissionEntityCreate
+                    class: OBGoPromiseRequestCreate
                     arguments:
-                      - 'Sfynx\CoreBundle\Layers\Domain\Service\Manager\Generalisation\Interfaces\ManagerInterface'
                       - 'Sfynx\CoreBundle\Layers\Domain\Service\Request\Generalisation\RequestInterface'
                       - 'Symfony\Bundle\FrameworkBundle\Routing\Router'
-                      - 'bool $updateCommand = false'
+                      - 'PromotionContext\Domain\Service\Entity\Activity\Manager\ActivityManager'
+                      - 'PromotionContext\Domain\Service\Entity\Period\Manager\EntityManager'
+                      - 'DocContext\Domain\Service\Entity\Media\MediaManager'
                     construct:
                         create: true
                         body:
-                          - 'parent::__construct($manager, $request, $updateCommand);'
-                    extends: Sfynx\CoreBundle\Layers\Domain\Workflow\Observer\Generalisation\Command\AbstractEntityCreateHandler
+                          - 'parent::__construct($request);'
+                    extends: Sfynx\CoreBundle\Layers\Domain\Workflow\Observer\Generalisation\Command\AbstractCreateHandler
                     options:
                         implements: ~
                         uses: ~
                         traits: [Sfynx\CoreBundle\Layers\Domain\Workflow\Observer\Command\TraitProcess]
-                - OBPermissionEntityEdit:
+                - OBGoPromiseRequestFormData:
                     create: true
-                    class: OBPermissionEntityEdit
-                    arguments:
-                      - 'Sfynx\CoreBundle\Layers\Domain\Service\Manager\Generalisation\Interfaces\ManagerInterface'
-                      - 'Sfynx\CoreBundle\Layers\Domain\Service\Request\Generalisation\RequestInterface'
-                      - 'Symfony\Bundle\FrameworkBundle\Routing\Router'
-                      - 'bool $updateCommand = false'
-                    construct:
-                        create: true
-                        body:
-                          - 'parent::__construct($manager, $request, $updateCommand);'
-                    extends: Sfynx\CoreBundle\Layers\Domain\Workflow\Observer\Generalisation\Command\AbstractEntityEditHandler
-                    options:
-                        implements: ~
-                        uses: ~
-                        traits: [Sfynx\CoreBundle\Layers\Domain\Workflow\Observer\Command\TraitProcess]
-                - OBPermissionCreateFormData:
-                    create: true
-                    class: Domain\Workflow\Observer\Permission\Response\OBPermissionCreateFormData
+                    class: Domain\Workflow\Observer\Activity\Response\OBGoPromiseRequestFormData
                     arguments:
                       - 'Sfynx\CoreBundle\Layers\Domain\Service\Request\Generalisation\RequestInterface'
-                      - 'Sfynx\AuthBundle\Domain\Service\Permission\Manager\EntityManager as PermissionManager'
+                      - 'UserContext\Domain\Service\Entity\User\UserManager'
+                      - 'DocContext\Domain\Service\Entity\Media\MediaManager'
+                      - 'DocContext\Domain\Service\Entity\DocTopicWorkflow\DocTopicWorkflowManager'
                     construct:
                         create: true
                         body:
@@ -157,25 +144,23 @@ default:
                         implements: ~
                         uses: ['Sfynx\CoreBundle\Layers\Infrastructure\Exception\WorkflowException', 'Exception']
                         traits: ~
-                        models:
-                          - 'Sfynx\CoreBundle\Generator\Domain\Component\File\HandlerModel\Observer\FormData'
-#                        methods:
-#                          - name: 'process'
-#                            comments: ['{@inheritdoc}']
-#                            visibility: 'protected'
-#                            returnType: 'bool'
-#                            body:
-#                              - 'try {'
-#                              - "    $this->wfLastData->formViewData['command'] = $this->wfHandler->command;"
-#                              - "    $this->wfLastData->formViewData['entity'] = $this->wfHandler->entity;"
-#                              - "    $this->wfLastData->formViewData['data_class'] = get_class($this->wfHandler->command);"
-#                              - '} catch (Exception $e) {'
-#                              - '    throw WorkflowException::noCreatedFormData();'
-#                              - '}'
-#                              - 'return true;'
-                - OBPermissionCreateFormBody:
+                        methods:
+                          - name: 'process'
+                            comments: ['{@inheritdoc}']
+                            visibility: 'protected'
+                            returnType: 'bool'
+                            body:
+                              - 'try {'
+                              - "    $this->wfLastData->formViewData['command'] = $this->wfHandler->command;"
+                              - "    $this->wfLastData->formViewData['entity'] = $this->wfHandler->entity;"
+                              - "    $this->wfLastData->formViewData['data_class'] = get_class($this->wfHandler->command);"
+                              - '} catch (Exception $e) {'
+                              - '    throw WorkflowException::noCreatedFormData();'
+                              - '}'
+                              - 'return true;'
+                - OBGoPromiseRequestFormBody:
                     create: true
-                    class: Domain\Workflow\Observer\Permission\Response\OBPermissionCreateFormBody
+                    class: Domain\Workflow\Observer\Activity\Response\OBGoPromiseRequestFormBody
                     arguments:
                       - 'Sfynx\CoreBundle\Layers\Domain\Service\Request\Generalisation\RequestInterface'
                       - 'Symfony\Bundle\FrameworkBundle\Templating\EngineInterface'
@@ -211,8 +196,8 @@ default:
                     arguments:
                       - 'Sfynx\CoreBundle\Layers\Domain\Service\Request\Generalisation\RequestInterface'
                       - 'Symfony\Component\Form\FormFactoryInterface'
-#                      - 'Sfynx\CoreBundle\Layers\Domain\Service\Form\Generalisation\Interfaces\FormTypeInterface'
-                      - 'new PermissionType'
+                      - 'Sfynx\CoreBundle\Layers\Domain\Service\Form\Generalisation\Interfaces\FormTypeInterface'
+#                      - 'new GoPromiseRequestType'
                 - OBInjectFormErrors:
                     create: false
                     class: Sfynx\CoreBundle\Layers\Domain\Workflow\Observer\Response\OBInjectFormErrors
@@ -227,63 +212,123 @@ default:
         infrastructure:
             widget_security_parse: true
             widget_infra_class:
-                - CommandPermissionRepository:
+                - CommandActivityRepository:
                     create: true
-                    class: Infrastructure\Persistence\Adapter\Command\Orm\PermissionRepository
+                    class: Infrastructure\Persistence\Adapter\Command\Orm\ActivityRepository
                     arguments: ~
                     comments:
                       - 'This class was generated by the Doctrine ORM. Add your own custom'
                       - 'repository methods below.'
                     extends: Sfynx\CoreBundle\Layers\Infrastructure\Persistence\Adapter\Generalisation\Orm\AbstractCommandRepository
                     options:
-                        implements: ['Domain\Repository\Command\PermissionCommandRepositoryInterface']
+                        implements: ['Domain\Repository\Command\ActivityCommandRepositoryInterface']
                         uses: ~
                         traits: ~
-                - QueryPermissionRepository:
+                - QueryActivityRepository:
                     create: true
-                    class: Infrastructure\Persistence\Adapter\Query\Orm\PermissionRepository
+                    class: Infrastructure\Persistence\Adapter\Query\Orm\ActivityRepository
                     arguments: ~
                     comments:
                       - 'This class was generated by the Doctrine ORM. Add your own custom'
                       - 'repository methods below.'
                     extends: Sfynx\CoreBundle\Layers\Infrastructure\Persistence\Adapter\Generalisation\Orm\AbstractQueryRepository
                     options:
-                        implements: ['Domain\Repository\Query\PermissionQueryRepositoryInterface']
+                        implements: ['Domain\Repository\Query\ActivityQueryRepositoryInterface']
                         uses: ~
                         traits: ~
     mapping:
         x-providers: [orm, couchdb]
         x-entities:
-          Permission:
+#          Activity:
+#            x-fields:
+#              documents:
+#                type: array
+#                required: true
+#                multiple: true
+#                properties: ['name', 'date']
+#                mapping:
+#                  relationship: ManyToMany
+#                  targetEntity: DocContext\Domain\Entity\Media
+#              applicantProfil:
+#                type: id
+#                foreignKey: true
+#                required: true
+#                mapping:
+#                  relationship: ManyToOne
+#                  targetEntity: UserContext\Domain\Entity\User
+          Activity:
             x-fields:
-              id:
-                name: entityId
+              documents:
+                name: documents
+                type: array
+                required: true
+                multiple: true
+                properties: ['nom']
+                mapping:
+                  relationship: ManyToMany
+                  targetEntity: DocContext\Domain\Entity\Media
+              business:
+                name: business
                 type: valueObject
                 voName: IdVO
-                primaryKey: true
+                foreignKey: true
+                required: true
                 mapping:
-                  targetEntity: SfynxAuthBundle\Domain\Entity\Permission
-                  manager: 'Sfynx\AuthBundle\Domain\Service\Permission\Manager\EntityManager as PermissionManager'
-              permission:
+                  relationship: ManyToOne
+                  targetEntity: PromotionContext\Domain\Entity\Business
+              activityGoPromiseId:
+                name: activityGoPromise
                 type: valueObject
-                voName: PermissionVO
+                voName: IdVO
+                foreignKey: true
+                required: true
+                mapping:
+                  relationship: ManyToOne
+                  targetEntity: PromotionContext\Domain\Entity\Activity
+              profil:
+                name: profil
+                type: valueObject
+                voName: IdVO
+                foreignKey: true
+                required: true
+                mapping:
+                  relationship: ManyToOne
+                  targetEntity: ProfilContext\Domain\Entity\Profil
+              assigmentProfil:
+                name: assigmentProfil
+                type: valueObject
+                voName: IdVO
+                foreignKey: true
+                required: true
+                choice_label: Destinataire
+                mapping:
+                  relationship: ManyToOne
+                  targetEntity: UserContext\Domain\Entity\User
+              applicantProfil:
+                name: applicantProfil
+                type: valueObject
+                voName: IdVO
+                foreignKey: true
+                required: true
+                mapping:
+                  relationship: ManyToOne
+                  targetEntity: UserContext\Domain\Entity\User
+              businessTypeName:
+                name: businessTypeName
+                type: string
+                required: true
+              objectifPeriod:
+                name: objectifPeriod
+                type: datetime
+                required: true
+                label: Objectif de date
+              comment:
+                name: comment
+                type: textarea
+                required: false
         x-valueObjects:
           IdVO:
             type: Sfynx\CoreBundle\Layers\Domain\ValueObject\IdVO
             x-fields:
               id:
                 type: id
-          PermissionVO:
-            type: Domain\ValueObject\PermissionVO
-            x-fields:
-              name:
-                type: string
-                required: true
-              enabled:
-                type: boolean
-                defaultValue: true
-                required: false
-              comment:
-                type: textarea
-                required: false
-                defaultValue: 'put yout comment'
