@@ -1,11 +1,11 @@
 # php vendor/bin/sfynx-ddd-generator \
-# --namespace=PromotionContext \
-# --conf-file=/var/www/app/config/generator/action_go_premise_request.yml \
+# --namespace=Sfynx\\AuthBundle \
+# --conf-file=/var/www/app/config/generator/auth/authbundle_entity_group_form.yml \
 # --report-template=default \
-# --report-dir=/var/www/src/generator/FormAction
+# --report-dir=/var/www/src/generator/authbundle
 default:
-    namespace: PromotionContext
-    cqrs: Activity\Command
+    namespace: Sfynx\AuthBundle
+    cqrs: Group\Command
     template: default
     indentation: 4
     widgets:
@@ -17,67 +17,66 @@ default:
                 extends: Sfynx\CoreBundle\Layers\Presentation\Coordination\Generalisation\AbstractFormController
                 options:
                     implements: ~
-                    uses:
-                      - 'ProfilContext\Domain\Service\Entity\Profil\ProfilManager'
-                    traits:
-                      - 'Sfynx\CoreBundle\Layers\Presentation\Coordination\Generalisation\Traits\TraitParam'
+                    uses: ~
+                    traits: ~
                 body:
                     - updateCommand:
                         design: 'adapter'
                         class: Sfynx\CoreBundle\Layers\Presentation\Adapter\Command\CommandAdapter
                         arguments:
-                            - 'new GoPromiseRequestFormCommand'
+                            - 'new GroupFormCommand'
                         calls:
-                            - [ createCommandFromRequest, [ 'new GoPromiseRequestFormRequest' ] ]
+                            - [ createCommandFromRequest, [ 'new GroupFormRequest' ] ]
                     - commandWorkflow:
                         design: 'observer'
                         class: Sfynx\CoreBundle\Layers\Application\Command\Workflow\CommandWorkflow
                         calls:
-                            - [ attach, [ 'new OBGoPromiseRequestCreate' ] ]
+                            - [ attach, [ 'new OBGroupEntityEdit' ] ]
+                            - [ attach, [ 'new OBGroupEntityCreate' ] ]
                     - commandHandlerResult:
                         design: 'decorator'
                         class: Sfynx\CoreBundle\Layers\Application\Command\Handler\FormCommandHandler
                         arguments:
-                            - '$commandWorkflow'
-                        handlers: [ 'GoPromiseRequestFormCommandValidationHandler', 'GoPromiseRequestFormCommandSpecHandler']
+                            - '$Commandworkflow'
+                        handlers: [ 'GroupFormCommandValidationHandler', 'GroupFormCommandSpecHandler']
                         calls:
                             - [ process, [ '$updateCommand' ] ]
                     - codeln1:
                         design: 'code'
-                        content: "$this->setParam('templating', '@Business/Action/actionFormDemandeGoPromesse.html.twig');"
+                        content: "$this->setParam('templating', '@Business/Group/edit.html.twig');"
                     - workflowHandler:
                         design: 'observer'
                         class: Sfynx\CoreBundle\Layers\Application\Common\Handler\WorkflowHandler
                         calls:
-                            - [ attach, [ 'new OBGoPromiseRequestFormData' ] ]
+                            - [ attach, [ 'new OBGroupCreateFormData' ] ]
                             - [ attach, [ 'new OBCreateCommandFormView' ] ]
                             - [ attach, [ 'new OBInjectFormErrors' ] ]
-                            - [ attach, [ 'new OBGoPromiseRequestFormBody' ] ]
+                            - [ attach, [ 'new OBGroupCreateFormBody' ] ]
                             - [ attach, [ 'new OBCreateResponseHtml' ] ]
                     - responseHandlerResult:
                         design: 'handler'
                         class: Sfynx\CoreBundle\Layers\Application\Response\Handler\ResponseHandler
                         arguments:
-                            - '$workflowHandler'
+                            - '$Workflowhandler'
                         calls:
                             - [ process, [ '$commandHandlerResult' ] ]
                     - codeln2:
                         design: 'code'
                         content: "return $responseHandlerResult->getResponse();"
             widget_request:
-                class: GoPromiseRequestFormRequest
+                class: GroupFormRequest
                 arguments:
                   - 'Sfynx\CoreBundle\Layers\Domain\Service\Request\Generalisation\RequestInterface'
         application:
             widget_cqrs_command:
-                class: GoPromiseRequestFormCommand
+                class: GroupFormCommand
                 arguments: ~
             widget_cqrs_validator_specification:
-                class: Validation\SpecHandler\GoPromiseRequestFormCommandSpecHandler
+                class: Validation\SpecHandler\GroupFormCommandSpecHandler
                 arguments:
                   - '$commandHandlerResult'
             widget_cqrs_validator_validation:
-                class: Validation\ValidationHandler\GoPromiseRequestFormCommandValidationHandler
+                class: Validation\ValidationHandler\GroupFormCommandValidationHandler
                 arguments:
                   - '$commandHandlerResult'
                   - 'new SymfonyValidatorStrategy'
@@ -88,53 +87,67 @@ default:
                     class: 'Sfynx\CoreBundle\Layers\Application\Validation\Validator\SymfonyValidatorStrategy'
                     arguments: ['Symfony\Component\Validator\Validator\ValidatorInterface']
             widget_validation_type:
-                class: Action\GoPromiseRequestType
+                class: GroupType
                 arguments: ~
         domain:
             widget_entity: true
             widget_service_manager_class:
-                - ActivityEntityManager:
+                - GroupEntityManager:
                     create: true
-                    class: Activity\Manager\ActivityManager
+                    class: Group\Manager\GroupManager
                     arguments: ~
                     options:
-                        entity: 'Activity'
+                        entity: 'Group'
             widget_service_class:
-#                - ActivityCommandRepositoryInterface:
-#                    create: true
-#                    class: Domain\Repository\Command\ActivityCommandRepositoryInterface
-#                    type: interface
-#                - ActivityQueryRepositoryInterface:
-#                    create: true
-#                    class: Domain\Repository\Query\ActivityQueryRepositoryInterface
-#                    type: interface
-            widget_workflow_observer_class:
-                - OBGoPromiseRequestCreate:
+                - GroupCommandRepositoryInterface:
                     create: true
-                    class: OBGoPromiseRequestCreate
+                    class: Domain\Repository\Command\GroupCommandRepositoryInterface
+                    type: interface
+                - GroupQueryRepositoryInterface:
+                    create: true
+                    class: Domain\Repository\Query\GroupQueryRepositoryInterface
+                    type: interface
+            widget_workflow_observer_class:
+                - OBGroupEntityCreate:
+                    create: true
+                    class: OBGroupEntityCreate
                     arguments:
+                      - 'Sfynx\CoreBundle\Layers\Domain\Service\Manager\Generalisation\Interfaces\ManagerInterface'
                       - 'Sfynx\CoreBundle\Layers\Domain\Service\Request\Generalisation\RequestInterface'
                       - 'Symfony\Bundle\FrameworkBundle\Routing\Router'
-                      - 'PromotionContext\Domain\Service\Entity\Activity\Manager\ActivityManager'
-                      - 'PromotionContext\Domain\Service\Entity\Period\Manager\EntityManager'
-                      - 'DocContext\Domain\Service\Entity\Media\MediaManager'
+                      - 'bool $updateCommand = false'
                     construct:
                         create: true
                         body:
-                          - 'parent::__construct($request);'
-                    extends: Sfynx\CoreBundle\Layers\Domain\Workflow\Observer\Generalisation\Command\AbstractCreateHandler
+                          - 'parent::__construct($manager, $request, $updateCommand);'
+                    extends: Sfynx\CoreBundle\Layers\Domain\Workflow\Observer\Generalisation\Command\AbstractEntityCreateHandler
                     options:
                         implements: ~
                         uses: ~
                         traits: [Sfynx\CoreBundle\Layers\Domain\Workflow\Observer\Command\TraitProcess]
-                - OBGoPromiseRequestFormData:
+                - OBGroupEntityEdit:
                     create: true
-                    class: Domain\Workflow\Observer\Activity\Response\OBGoPromiseRequestFormData
+                    class: OBGroupEntityEdit
+                    arguments:
+                      - 'Sfynx\CoreBundle\Layers\Domain\Service\Manager\Generalisation\Interfaces\ManagerInterface'
+                      - 'Sfynx\CoreBundle\Layers\Domain\Service\Request\Generalisation\RequestInterface'
+                      - 'Symfony\Bundle\FrameworkBundle\Routing\Router'
+                      - 'bool $updateCommand = false'
+                    construct:
+                        create: true
+                        body:
+                          - 'parent::__construct($manager, $request, $updateCommand);'
+                    extends: Sfynx\CoreBundle\Layers\Domain\Workflow\Observer\Generalisation\Command\AbstractEntityEditHandler
+                    options:
+                        implements: ~
+                        uses: ~
+                        traits: [Sfynx\CoreBundle\Layers\Domain\Workflow\Observer\Command\TraitProcess]
+                - OBGroupCreateFormData:
+                    create: true
+                    class: Domain\Workflow\Observer\Group\Response\OBGroupCreateFormData
                     arguments:
                       - 'Sfynx\CoreBundle\Layers\Domain\Service\Request\Generalisation\RequestInterface'
-                      - 'UserContext\Domain\Service\Entity\User\UserManager'
-                      - 'DocContext\Domain\Service\Entity\Media\MediaManager'
-                      - 'DocContext\Domain\Service\Entity\DocTopicWorkflow\DocTopicWorkflowManager'
+                      - 'Sfynx\AuthBundle\Domain\Service\Group\Manager\EntityManager as GroupManager'
                     construct:
                         create: true
                         body:
@@ -144,23 +157,25 @@ default:
                         implements: ~
                         uses: ['Sfynx\CoreBundle\Layers\Infrastructure\Exception\WorkflowException', 'Exception']
                         traits: ~
-                        methods:
-                          - name: 'process'
-                            comments: ['{@inheritdoc}']
-                            visibility: 'protected'
-                            returnType: 'bool'
-                            body:
-                              - 'try {'
-                              - "    $this->wfLastData->formViewData['command'] = $this->wfHandler->command;"
-                              - "    $this->wfLastData->formViewData['entity'] = $this->wfHandler->entity;"
-                              - "    $this->wfLastData->formViewData['data_class'] = get_class($this->wfHandler->command);"
-                              - '} catch (Exception $e) {'
-                              - '    throw WorkflowException::noCreatedFormData();'
-                              - '}'
-                              - 'return true;'
-                - OBGoPromiseRequestFormBody:
+                        models:
+                          - 'Sfynx\CoreBundle\Generator\Domain\Component\File\HandlerModel\Observer\FormData'
+#                        methods:
+#                          - name: 'process'
+#                            comments: ['{@inheritdoc}']
+#                            visibility: 'protected'
+#                            returnType: 'bool'
+#                            body:
+#                              - 'try {'
+#                              - "    $this->wfLastData->formViewData['command'] = $this->wfHandler->command;"
+#                              - "    $this->wfLastData->formViewData['entity'] = $this->wfHandler->entity;"
+#                              - "    $this->wfLastData->formViewData['data_class'] = get_class($this->wfHandler->command);"
+#                              - '} catch (Exception $e) {'
+#                              - '    throw WorkflowException::noCreatedFormData();'
+#                              - '}'
+#                              - 'return true;'
+                - OBGroupCreateFormBody:
                     create: true
-                    class: Domain\Workflow\Observer\Activity\Response\OBGoPromiseRequestFormBody
+                    class: Domain\Workflow\Observer\Group\Response\OBGroupCreateFormBody
                     arguments:
                       - 'Sfynx\CoreBundle\Layers\Domain\Service\Request\Generalisation\RequestInterface'
                       - 'Symfony\Bundle\FrameworkBundle\Templating\EngineInterface'
@@ -196,8 +211,8 @@ default:
                     arguments:
                       - 'Sfynx\CoreBundle\Layers\Domain\Service\Request\Generalisation\RequestInterface'
                       - 'Symfony\Component\Form\FormFactoryInterface'
-                      - 'Sfynx\CoreBundle\Layers\Domain\Service\Form\Generalisation\Interfaces\FormTypeInterface'
-#                      - 'new GoPromiseRequestType'
+#                      - 'Sfynx\CoreBundle\Layers\Domain\Service\Form\Generalisation\Interfaces\FormTypeInterface'
+                      - 'new GroupType'
                 - OBInjectFormErrors:
                     create: false
                     class: Sfynx\CoreBundle\Layers\Domain\Workflow\Observer\Response\OBInjectFormErrors
@@ -212,123 +227,71 @@ default:
         infrastructure:
             widget_security_parse: true
             widget_infra_class:
-                - CommandActivityRepository:
+                - CommandGroupRepository:
                     create: true
-                    class: Infrastructure\Persistence\Adapter\Command\Orm\ActivityRepository
+                    class: Infrastructure\Persistence\Adapter\Command\Orm\GroupRepository
                     arguments: ~
                     comments:
                       - 'This class was generated by the Doctrine ORM. Add your own custom'
                       - 'repository methods below.'
                     extends: Sfynx\CoreBundle\Layers\Infrastructure\Persistence\Adapter\Generalisation\Orm\AbstractCommandRepository
                     options:
-                        implements: ['Domain\Repository\Command\ActivityCommandRepositoryInterface']
+                        implements: ['Domain\Repository\Command\GroupCommandRepositoryInterface']
                         uses: ~
                         traits: ~
-                - QueryActivityRepository:
+                - QueryGroupRepository:
                     create: true
-                    class: Infrastructure\Persistence\Adapter\Query\Orm\ActivityRepository
+                    class: Infrastructure\Persistence\Adapter\Query\Orm\GroupRepository
                     arguments: ~
                     comments:
                       - 'This class was generated by the Doctrine ORM. Add your own custom'
                       - 'repository methods below.'
                     extends: Sfynx\CoreBundle\Layers\Infrastructure\Persistence\Adapter\Generalisation\Orm\AbstractQueryRepository
                     options:
-                        implements: ['Domain\Repository\Query\ActivityQueryRepositoryInterface']
+                        implements: ['Domain\Repository\Query\GroupQueryRepositoryInterface']
                         uses: ~
                         traits: ~
     mapping:
         x-providers: [orm, couchdb]
         x-entities:
-#          Activity:
-#            x-fields:
-#              documents:
-#                type: array
-#                required: true
-#                multiple: true
-#                properties: ['name', 'date']
-#                mapping:
-#                  relationship: ManyToMany
-#                  targetEntity: DocContext\Domain\Entity\Media
-#              applicantProfil:
-#                type: id
-#                foreignKey: true
-#                required: true
-#                mapping:
-#                  relationship: ManyToOne
-#                  targetEntity: UserContext\Domain\Entity\User
-          Activity:
+          Group:
             x-fields:
-              documents:
-                name: documents
-                type: array
-                required: true
-                multiple: true
-                properties: ['nom']
-                mapping:
-                  relationship: ManyToMany
-                  targetEntity: DocContext\Domain\Entity\Media
-              business:
-                name: business
+              id:
+                name: entityId
                 type: valueObject
                 voName: IdVO
-                foreignKey: true
-                required: true
+                primaryKey: true
                 mapping:
-                  relationship: ManyToOne
-                  targetEntity: PromotionContext\Domain\Entity\Business
-              activityGoPromiseId:
-                name: activityGoPromise
+                  targetEntity: SfynxAuthBundle\Domain\Entity\Group
+                  manager: 'Sfynx\AuthBundle\Domain\Service\Group\Manager\EntityManager as GroupManager'
+              group:
                 type: valueObject
-                voName: IdVO
-                foreignKey: true
-                required: true
-                mapping:
-                  relationship: ManyToOne
-                  targetEntity: PromotionContext\Domain\Entity\Activity
-              profil:
-                name: profil
-                type: valueObject
-                voName: IdVO
-                foreignKey: true
-                required: true
-                mapping:
-                  relationship: ManyToOne
-                  targetEntity: ProfilContext\Domain\Entity\Profil
-              assigmentProfil:
-                name: assigmentProfil
-                type: valueObject
-                voName: IdVO
-                foreignKey: true
-                required: true
-                choice_label: Destinataire
-                mapping:
-                  relationship: ManyToOne
-                  targetEntity: UserContext\Domain\Entity\User
-              applicantProfil:
-                name: applicantProfil
-                type: valueObject
-                voName: IdVO
-                foreignKey: true
-                required: true
-                mapping:
-                  relationship: ManyToOne
-                  targetEntity: UserContext\Domain\Entity\User
-              businessTypeName:
-                name: businessTypeName
-                type: string
-                required: true
-              objectifPeriod:
-                name: objectifPeriod
-                type: datetime
-                required: true
-                label: Objectif de date
-              comment:
-                name: comment
-                type: textarea
-                required: false
+                voName: GroupVO
         x-valueObjects:
           IdVO:
             type: Sfynx\CoreBundle\Layers\Domain\ValueObject\IdVO
             x-fields:
               id:
                 type: id
+          GroupVO:
+            type: Domain\ValueObject\GroupVO
+            x-fields:
+              name:
+                type: string
+                required: true
+              roles:
+                type: array
+                form:
+                  type: array
+                  serviceType: sfynx_security_roles
+                required: true
+                multiple: true
+                expanded: false
+              permissions:
+                type: array
+                form:
+                  type: array
+                  serviceType: sfynx_security_permissions
+                required: true
+                multiple: true
+                expanded: false

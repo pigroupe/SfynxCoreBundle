@@ -1,9 +1,19 @@
 <?php
 namespace Sfynx\CoreBundle\Generator\Application\Config;
 
+use Sfynx\CoreBundle\Generator\Application\Config\Config;
+
+/**
+ * Class Parser
+ * @package Sfynx\CoreBundle\Generator\Application\Config
+ */
 class Parser
 {
-    public function parse($argv)
+    /**
+     * @param $argv
+     * @return Config
+     */
+    public function parse($argv): Config
     {
         $config = new Config();
 

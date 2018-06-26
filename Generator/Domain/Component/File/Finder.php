@@ -55,7 +55,7 @@ class Finder
      * @param string $excludedDirs regex of directories to exclude
      * @param integer $flags
      */
-    public function __construct(array $extensions = ['php'], array $excludedDirs = [], $flags = null)
+    public function __construct(array $extensions = ['yml'], array $excludedDirs = [], $flags = null)
     {
         $this->extensions = $extensions;
         $this->excludedDirs = $excludedDirs;

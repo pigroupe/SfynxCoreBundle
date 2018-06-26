@@ -1,6 +1,6 @@
 # php vendor/bin/sfynx-ddd-generator \
 # --namespace=PromotionContext \
-# --conf-file=/var/www/app/config/generator/entity_offer_1.yml \
+# --conf-file=/var/www/app/config/generator/offer/entity_offer_1.yml \
 # --report-template=default \
 # --report-dir=/var/www/src/generator/FormOffer
 default:

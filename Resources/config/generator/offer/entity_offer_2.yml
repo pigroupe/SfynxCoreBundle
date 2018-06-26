@@ -1,17 +1,17 @@
 # php vendor/bin/sfynx-ddd-generator \
-# --namespace=Sfynx\\AuthBundle \
-# --conf-file=/var/www/app/config/generator/authbundle_entity_group_form.yml \
+# --namespace=PromotionContext \
+# --conf-file=/var/www/app/config/generator/offer/entity_offer_2.yml \
 # --report-template=default \
-# --report-dir=/var/www/src/generator/authbundle
+# --report-dir=/var/www/src/generator/FormOffer
 default:
-    namespace: Sfynx\AuthBundle
-    cqrs: Group\Command
+    namespace: PromotionContext
+    cqrs: Offer\Command
     template: default
     indentation: 4
     widgets:
         presentation:
             widget_coordination:
-                class: FormCoordination
+                class: Form2Coordination
                 arguments:
                     - '$workflowHandler'
                 extends: Sfynx\CoreBundle\Layers\Presentation\Coordination\Generalisation\AbstractFormController
@@ -24,59 +24,59 @@ default:
                         design: 'adapter'
                         class: Sfynx\CoreBundle\Layers\Presentation\Adapter\Command\CommandAdapter
                         arguments:
-                            - 'new GroupFormCommand'
+                            - 'new Offer2FormCommand'
                         calls:
-                            - [ createCommandFromRequest, [ 'new GroupFormRequest' ] ]
+                            - [ createCommandFromRequest, [ 'new Offer2FormRequest' ] ]
                     - commandWorkflow:
                         design: 'observer'
                         class: Sfynx\CoreBundle\Layers\Application\Command\Workflow\CommandWorkflow
                         calls:
-                            - [ attach, [ 'new OBGroupEntityEdit' ] ]
-                            - [ attach, [ 'new OBGroupEntityCreate' ] ]
+                            - [ attach, [ 'new OBOffer2EntityEdit' ] ]
+                            - [ attach, [ 'new OBOffer2EntityCreate' ] ]
                     - commandHandlerResult:
                         design: 'decorator'
                         class: Sfynx\CoreBundle\Layers\Application\Command\Handler\FormCommandHandler
                         arguments:
-                            - '$Commandworkflow'
-                        handlers: [ 'GroupFormCommandValidationHandler', 'GroupFormCommandSpecHandler']
+                            - '$commandWorkflow'
+                        handlers: [ 'Offer2FormCommandValidationHandler', 'Offer2FormCommandSpecHandler']
                         calls:
                             - [ process, [ '$updateCommand' ] ]
                     - codeln1:
                         design: 'code'
-                        content: "$this->setParam('templating', '@Business/Group/edit.html.twig');"
+                        content: "$this->setParam('templating', '@Business/Offer/edit.html.twig');"
                     - workflowHandler:
                         design: 'observer'
                         class: Sfynx\CoreBundle\Layers\Application\Common\Handler\WorkflowHandler
                         calls:
-                            - [ attach, [ 'new OBGroupCreateFormData' ] ]
+                            - [ attach, [ 'new OBOffer2CreateFormData' ] ]
                             - [ attach, [ 'new OBCreateCommandFormView' ] ]
                             - [ attach, [ 'new OBInjectFormErrors' ] ]
-                            - [ attach, [ 'new OBGroupCreateFormBody' ] ]
+                            - [ attach, [ 'new OBOffer2CreateFormBody' ] ]
                             - [ attach, [ 'new OBCreateResponseHtml' ] ]
                     - responseHandlerResult:
                         design: 'handler'
                         class: Sfynx\CoreBundle\Layers\Application\Response\Handler\ResponseHandler
                         arguments:
-                            - '$Workflowhandler'
+                            - '$workflowHandler'
                         calls:
                             - [ process, [ '$commandHandlerResult' ] ]
                     - codeln2:
                         design: 'code'
                         content: "return $responseHandlerResult->getResponse();"
             widget_request:
-                class: GroupFormRequest
+                class: Offer2FormRequest
                 arguments:
                   - 'Sfynx\CoreBundle\Layers\Domain\Service\Request\Generalisation\RequestInterface'
         application:
             widget_cqrs_command:
-                class: GroupFormCommand
+                class: Offer2FormCommand
                 arguments: ~
             widget_cqrs_validator_specification:
-                class: Validation\SpecHandler\GroupFormCommandSpecHandler
+                class: Validation\SpecHandler\Offer2FormCommandSpecHandler
                 arguments:
                   - '$commandHandlerResult'
             widget_cqrs_validator_validation:
-                class: Validation\ValidationHandler\GroupFormCommandValidationHandler
+                class: Validation\ValidationHandler\Offer2FormCommandValidationHandler
                 arguments:
                   - '$commandHandlerResult'
                   - 'new SymfonyValidatorStrategy'
@@ -87,30 +87,21 @@ default:
                     class: 'Sfynx\CoreBundle\Layers\Application\Validation\Validator\SymfonyValidatorStrategy'
                     arguments: ['Symfony\Component\Validator\Validator\ValidatorInterface']
             widget_validation_type:
-                class: GroupType
+                class: Offer2Type
                 arguments: ~
         domain:
             widget_entity: true
             widget_service_manager_class:
-                - GroupEntityManager:
+                - OfferEntityManager:
                     create: true
-                    class: Group\Manager\GroupManager
+                    class: Offer\Manager\Tmp2OfferManager
                     arguments: ~
                     options:
-                        entity: 'Group'
-            widget_service_class:
-                - GroupCommandRepositoryInterface:
-                    create: true
-                    class: Domain\Repository\Command\GroupCommandRepositoryInterface
-                    type: interface
-                - GroupQueryRepositoryInterface:
-                    create: true
-                    class: Domain\Repository\Query\GroupQueryRepositoryInterface
-                    type: interface
+                        entity: 'Offer'
             widget_workflow_observer_class:
-                - OBGroupEntityCreate:
+                - OBOffer2EntityCreate:
                     create: true
-                    class: OBGroupEntityCreate
+                    class: OBOffer2EntityCreate
                     arguments:
                       - 'Sfynx\CoreBundle\Layers\Domain\Service\Manager\Generalisation\Interfaces\ManagerInterface'
                       - 'Sfynx\CoreBundle\Layers\Domain\Service\Request\Generalisation\RequestInterface'
@@ -125,9 +116,9 @@ default:
                         implements: ~
                         uses: ~
                         traits: [Sfynx\CoreBundle\Layers\Domain\Workflow\Observer\Command\TraitProcess]
-                - OBGroupEntityEdit:
+                - OBOffer2EntityEdit:
                     create: true
-                    class: OBGroupEntityEdit
+                    class: OBOffer2EntityEdit
                     arguments:
                       - 'Sfynx\CoreBundle\Layers\Domain\Service\Manager\Generalisation\Interfaces\ManagerInterface'
                       - 'Sfynx\CoreBundle\Layers\Domain\Service\Request\Generalisation\RequestInterface'
@@ -142,12 +133,11 @@ default:
                         implements: ~
                         uses: ~
                         traits: [Sfynx\CoreBundle\Layers\Domain\Workflow\Observer\Command\TraitProcess]
-                - OBGroupCreateFormData:
+                - OBOffer2CreateFormData:
                     create: true
-                    class: Domain\Workflow\Observer\Group\Response\OBGroupCreateFormData
+                    class: Domain\Workflow\Observer\Offer\Response\OBOffer2CreateFormData
                     arguments:
                       - 'Sfynx\CoreBundle\Layers\Domain\Service\Request\Generalisation\RequestInterface'
-                      - 'Sfynx\AuthBundle\Domain\Service\Group\Manager\EntityManager as GroupManager'
                     construct:
                         create: true
                         body:
@@ -157,25 +147,23 @@ default:
                         implements: ~
                         uses: ['Sfynx\CoreBundle\Layers\Infrastructure\Exception\WorkflowException', 'Exception']
                         traits: ~
-                        models:
-                          - 'Sfynx\CoreBundle\Generator\Domain\Component\File\HandlerModel\Observer\FormData'
-#                        methods:
-#                          - name: 'process'
-#                            comments: ['{@inheritdoc}']
-#                            visibility: 'protected'
-#                            returnType: 'bool'
-#                            body:
-#                              - 'try {'
-#                              - "    $this->wfLastData->formViewData['command'] = $this->wfHandler->command;"
-#                              - "    $this->wfLastData->formViewData['entity'] = $this->wfHandler->entity;"
-#                              - "    $this->wfLastData->formViewData['data_class'] = get_class($this->wfHandler->command);"
-#                              - '} catch (Exception $e) {'
-#                              - '    throw WorkflowException::noCreatedFormData();'
-#                              - '}'
-#                              - 'return true;'
-                - OBGroupCreateFormBody:
+                        methods:
+                          - name: 'process'
+                            comments: ['{@inheritdoc}']
+                            visibility: 'protected'
+                            returnType: 'bool'
+                            body:
+                              - 'try {'
+                              - "    $this->wfLastData->formViewData['command'] = $this->wfHandler->command;"
+                              - "    $this->wfLastData->formViewData['entity'] = $this->wfHandler->entity;"
+                              - "    $this->wfLastData->formViewData['data_class'] = get_class($this->wfHandler->command);"
+                              - '} catch (Exception $e) {'
+                              - '    throw WorkflowException::noCreatedFormData();'
+                              - '}'
+                              - 'return true;'
+                - OBOffer2CreateFormBody:
                     create: true
-                    class: Domain\Workflow\Observer\Group\Response\OBGroupCreateFormBody
+                    class: Domain\Workflow\Observer\Offer\Response\OBOffer2CreateFormBody
                     arguments:
                       - 'Sfynx\CoreBundle\Layers\Domain\Service\Request\Generalisation\RequestInterface'
                       - 'Symfony\Bundle\FrameworkBundle\Templating\EngineInterface'
@@ -211,8 +199,8 @@ default:
                     arguments:
                       - 'Sfynx\CoreBundle\Layers\Domain\Service\Request\Generalisation\RequestInterface'
                       - 'Symfony\Component\Form\FormFactoryInterface'
-#                      - 'Sfynx\CoreBundle\Layers\Domain\Service\Form\Generalisation\Interfaces\FormTypeInterface'
-                      - 'new GroupType'
+                      - 'Sfynx\CoreBundle\Layers\Domain\Service\Form\Generalisation\Interfaces\FormTypeInterface'
+#                      - 'new Offer2Type'
                 - OBInjectFormErrors:
                     create: false
                     class: Sfynx\CoreBundle\Layers\Domain\Workflow\Observer\Response\OBInjectFormErrors
@@ -226,72 +214,40 @@ default:
                       - 'Sfynx\CoreBundle\Layers\Domain\Service\Request\Generalisation\RequestInterface'
         infrastructure:
             widget_security_parse: true
-            widget_infra_class:
-                - CommandGroupRepository:
-                    create: true
-                    class: Infrastructure\Persistence\Adapter\Command\Orm\GroupRepository
-                    arguments: ~
-                    comments:
-                      - 'This class was generated by the Doctrine ORM. Add your own custom'
-                      - 'repository methods below.'
-                    extends: Sfynx\CoreBundle\Layers\Infrastructure\Persistence\Adapter\Generalisation\Orm\AbstractCommandRepository
-                    options:
-                        implements: ['Domain\Repository\Command\GroupCommandRepositoryInterface']
-                        uses: ~
-                        traits: ~
-                - QueryGroupRepository:
-                    create: true
-                    class: Infrastructure\Persistence\Adapter\Query\Orm\GroupRepository
-                    arguments: ~
-                    comments:
-                      - 'This class was generated by the Doctrine ORM. Add your own custom'
-                      - 'repository methods below.'
-                    extends: Sfynx\CoreBundle\Layers\Infrastructure\Persistence\Adapter\Generalisation\Orm\AbstractQueryRepository
-                    options:
-                        implements: ['Domain\Repository\Query\GroupQueryRepositoryInterface']
-                        uses: ~
-                        traits: ~
     mapping:
         x-providers: [orm, couchdb]
         x-entities:
-          Group:
+#          Offer:
+#            x-fields:
+#              id:
+#                name: entityId
+#                type: id
+#                primaryKey: true
+#              template:
+#                type: id
+#                foreignKey: true
+#                required: true
+#                mapping:
+#                  relationship: ManyToOne
+#                  targetEntity: PromotionContext\Domain\Entity\Template
+          Offer:
             x-fields:
               id:
                 name: entityId
                 type: valueObject
                 voName: IdVO
                 primaryKey: true
-                mapping:
-                  targetEntity: SfynxAuthBundle\Domain\Entity\Group
-                  manager: 'Sfynx\AuthBundle\Domain\Service\Group\Manager\EntityManager as GroupManager'
-              group:
+              template:
                 type: valueObject
-                voName: GroupVO
+                voName: IdVO
+                foreignKey: true
+                required: true
+                mapping:
+                  relationship: ManyToOne
+                  targetEntity: PromotionContext\Domain\Entity\Template
         x-valueObjects:
           IdVO:
             type: Sfynx\CoreBundle\Layers\Domain\ValueObject\IdVO
             x-fields:
               id:
                 type: id
-          GroupVO:
-            type: Domain\ValueObject\GroupVO
-            x-fields:
-              name:
-                type: string
-                required: true
-              roles:
-                type: array
-                form:
-                  type: array
-                  serviceType: sfynx_security_roles
-                required: true
-                multiple: true
-                expanded: false
-              permissions:
-                type: array
-                form:
-                  type: array
-                  serviceType: sfynx_security_permissions
-                required: true
-                multiple: true
-                expanded: false

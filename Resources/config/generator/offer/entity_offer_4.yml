@@ -1,6 +1,6 @@
 # php vendor/bin/sfynx-ddd-generator \
 # --namespace=PromotionContext \
-# --conf-file=/var/www/app/config/generator/entity_offer_2.yml \
+# --conf-file=/var/www/app/config/generator/offer/entity_offer_4.yml \
 # --report-template=default \
 # --report-dir=/var/www/src/generator/FormOffer
 default:
@@ -11,7 +11,7 @@ default:
     widgets:
         presentation:
             widget_coordination:
-                class: Form2Coordination
+                class: Form4Coordination
                 arguments:
                     - '$workflowHandler'
                 extends: Sfynx\CoreBundle\Layers\Presentation\Coordination\Generalisation\AbstractFormController
@@ -24,21 +24,21 @@ default:
                         design: 'adapter'
                         class: Sfynx\CoreBundle\Layers\Presentation\Adapter\Command\CommandAdapter
                         arguments:
-                            - 'new Offer2FormCommand'
+                            - 'new Offer4FormCommand'
                         calls:
-                            - [ createCommandFromRequest, [ 'new Offer2FormRequest' ] ]
+                            - [ createCommandFromRequest, [ 'new Offer4FormRequest' ] ]
                     - commandWorkflow:
                         design: 'observer'
                         class: Sfynx\CoreBundle\Layers\Application\Command\Workflow\CommandWorkflow
                         calls:
-                            - [ attach, [ 'new OBOffer2EntityEdit' ] ]
-                            - [ attach, [ 'new OBOffer2EntityCreate' ] ]
+                            - [ attach, [ 'new OBOffer4EntityEdit' ] ]
+                            - [ attach, [ 'new OBOffer4EntityCreate' ] ]
                     - commandHandlerResult:
                         design: 'decorator'
                         class: Sfynx\CoreBundle\Layers\Application\Command\Handler\FormCommandHandler
                         arguments:
                             - '$commandWorkflow'
-                        handlers: [ 'Offer2FormCommandValidationHandler', 'Offer2FormCommandSpecHandler']
+                        handlers: [ 'Offer4FormCommandValidationHandler', 'Offer4FormCommandSpecHandler']
                         calls:
                             - [ process, [ '$updateCommand' ] ]
                     - codeln1:
@@ -48,10 +48,10 @@ default:
                         design: 'observer'
                         class: Sfynx\CoreBundle\Layers\Application\Common\Handler\WorkflowHandler
                         calls:
-                            - [ attach, [ 'new OBOffer2CreateFormData' ] ]
+                            - [ attach, [ 'new OBOffer4CreateFormData' ] ]
                             - [ attach, [ 'new OBCreateCommandFormView' ] ]
                             - [ attach, [ 'new OBInjectFormErrors' ] ]
-                            - [ attach, [ 'new OBOffer2CreateFormBody' ] ]
+                            - [ attach, [ 'new OBOffer4CreateFormBody' ] ]
                             - [ attach, [ 'new OBCreateResponseHtml' ] ]
                     - responseHandlerResult:
                         design: 'handler'
@@ -64,19 +64,19 @@ default:
                         design: 'code'
                         content: "return $responseHandlerResult->getResponse();"
             widget_request:
-                class: Offer2FormRequest
+                class: Offer4FormRequest
                 arguments:
                   - 'Sfynx\CoreBundle\Layers\Domain\Service\Request\Generalisation\RequestInterface'
         application:
             widget_cqrs_command:
-                class: Offer2FormCommand
+                class: Offer4FormCommand
                 arguments: ~
             widget_cqrs_validator_specification:
-                class: Validation\SpecHandler\Offer2FormCommandSpecHandler
+                class: Validation\SpecHandler\Offer4FormCommandSpecHandler
                 arguments:
                   - '$commandHandlerResult'
             widget_cqrs_validator_validation:
-                class: Validation\ValidationHandler\Offer2FormCommandValidationHandler
+                class: Validation\ValidationHandler\Offer4FormCommandValidationHandler
                 arguments:
                   - '$commandHandlerResult'
                   - 'new SymfonyValidatorStrategy'
@@ -87,21 +87,21 @@ default:
                     class: 'Sfynx\CoreBundle\Layers\Application\Validation\Validator\SymfonyValidatorStrategy'
                     arguments: ['Symfony\Component\Validator\Validator\ValidatorInterface']
             widget_validation_type:
-                class: Offer2Type
+                class: Offer4Type
                 arguments: ~
         domain:
             widget_entity: true
             widget_service_manager_class:
                 - OfferEntityManager:
                     create: true
-                    class: Offer\Manager\Tmp2OfferManager
+                    class: Offer\Manager\Tmp4OfferManager
                     arguments: ~
                     options:
                         entity: 'Offer'
             widget_workflow_observer_class:
-                - OBOffer2EntityCreate:
+                - OBOffer4EntityCreate:
                     create: true
-                    class: OBOffer2EntityCreate
+                    class: OBOffer4EntityCreate
                     arguments:
                       - 'Sfynx\CoreBundle\Layers\Domain\Service\Manager\Generalisation\Interfaces\ManagerInterface'
                       - 'Sfynx\CoreBundle\Layers\Domain\Service\Request\Generalisation\RequestInterface'
@@ -116,9 +116,9 @@ default:
                         implements: ~
                         uses: ~
                         traits: [Sfynx\CoreBundle\Layers\Domain\Workflow\Observer\Command\TraitProcess]
-                - OBOffer2EntityEdit:
+                - OBOffer4EntityEdit:
                     create: true
-                    class: OBOffer2EntityEdit
+                    class: OBOffer4EntityEdit
                     arguments:
                       - 'Sfynx\CoreBundle\Layers\Domain\Service\Manager\Generalisation\Interfaces\ManagerInterface'
                       - 'Sfynx\CoreBundle\Layers\Domain\Service\Request\Generalisation\RequestInterface'
@@ -133,9 +133,9 @@ default:
                         implements: ~
                         uses: ~
                         traits: [Sfynx\CoreBundle\Layers\Domain\Workflow\Observer\Command\TraitProcess]
-                - OBOffer2CreateFormData:
+                - OBOffer4CreateFormData:
                     create: true
-                    class: Domain\Workflow\Observer\Offer\Response\OBOffer2CreateFormData
+                    class: Domain\Workflow\Observer\Offer\Response\OBOffer4CreateFormData
                     arguments:
                       - 'Sfynx\CoreBundle\Layers\Domain\Service\Request\Generalisation\RequestInterface'
                     construct:
@@ -161,9 +161,9 @@ default:
                               - '    throw WorkflowException::noCreatedFormData();'
                               - '}'
                               - 'return true;'
-                - OBOffer2CreateFormBody:
+                - OBOffer4CreateFormBody:
                     create: true
-                    class: Domain\Workflow\Observer\Offer\Response\OBOffer2CreateFormBody
+                    class: Domain\Workflow\Observer\Offer\Response\OBOffer4CreateFormBody
                     arguments:
                       - 'Sfynx\CoreBundle\Layers\Domain\Service\Request\Generalisation\RequestInterface'
                       - 'Symfony\Bundle\FrameworkBundle\Templating\EngineInterface'
@@ -200,7 +200,7 @@ default:
                       - 'Sfynx\CoreBundle\Layers\Domain\Service\Request\Generalisation\RequestInterface'
                       - 'Symfony\Component\Form\FormFactoryInterface'
                       - 'Sfynx\CoreBundle\Layers\Domain\Service\Form\Generalisation\Interfaces\FormTypeInterface'
-#                      - 'new Offer2Type'
+#                      - 'new Offer4Type'
                 - OBInjectFormErrors:
                     create: false
                     class: Sfynx\CoreBundle\Layers\Domain\Workflow\Observer\Response\OBInjectFormErrors
