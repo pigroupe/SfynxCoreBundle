@@ -55,6 +55,23 @@
             }
         }
     }
+
+    $count = 0;
+    $content = '[';
+    if(!empty($fieldsEntityList)) {
+        $count++;
+        foreach ($fieldsEntityList as $field) {
+            $content .= PHP_EOL . "            '" . lcfirst($field->name) . "',";
+        }
+    }
+    if ($count == 0) {
+        $endContent1 = $content . ']);' . PHP_EOL;
+        $endContent2 = $content . '], $updateCommand);' . PHP_EOL;
+    }
+    if ($count == 1) {
+        $endContent1 = $content . PHP_EOL . '        ]);' . PHP_EOL;
+        $endContent2 = $content . PHP_EOL . '        ], $updateCommand);' . PHP_EOL;
+    }
 ?>
 namespace <?php echo $templater->getTargetNamespace(); ?>;
 
@@ -99,12 +116,7 @@ class <?php echo $templater->getTargetClassname(); ?> extends AbstractManager
     public function newFromCommand(CommandInterface $command): object
     {
         $class = $this->getClass();
-        $entity = $class::newFromCommand($command, [
-<?php foreach ($fieldsEntityList as $field): ?>
-                '<?php echo lcfirst($field->name); ?>',
-<?php endforeach; ?>
-            ]
-        );
+        $entity = $class::newFromCommand($command, <?php echo $endContent1; ?>
         $this->transformEntity($entity, $command);
 
         return $entity;
@@ -116,13 +128,7 @@ class <?php echo $templater->getTargetClassname(); ?> extends AbstractManager
     public function buildFromCommand(object $entity, CommandInterface $command, bool $updateCommand = false): object
     {
         $class = $this->getClass();
-        $entity = $class::buildFromCommand($entity, $command, [
-<?php foreach ($fieldsEntityList as $field): ?>
-                '<?php echo lcfirst($field->name); ?>',
-<?php endforeach; ?>
-            ],
-            $updateCommand
-        );
+        $entity = $class::buildFromCommand($entity, $command, <?php echo $endContent2; ?>
         $this->transformEntity($entity, $command);
 
         return $entity;

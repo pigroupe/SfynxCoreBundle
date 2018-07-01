@@ -20,6 +20,9 @@ default:
                     uses: ~
                     traits: ~
                 body:
+                    - codeComment1:
+                        design: 'code'
+                        content: "// 1. Transform options to Command."
                     - updateCommand:
                         design: 'adapter'
                         class: Sfynx\CoreBundle\Layers\Presentation\Adapter\Command\CommandAdapter
@@ -27,12 +30,18 @@ default:
                             - 'new GroupFormCommand'
                         calls:
                             - [ createCommandFromRequest, [ 'new GroupFormRequest' ] ]
+                    - codeComment2:
+                        design: 'code'
+                        content: "// 2. Implement the command workflow"
                     - commandWorkflow:
                         design: 'observer'
                         class: Sfynx\CoreBundle\Layers\Application\Command\Workflow\CommandWorkflow
                         calls:
                             - [ attach, [ 'new OBGroupEntityEdit' ] ]
                             - [ attach, [ 'new OBGroupEntityCreate' ] ]
+                    - codeComment3:
+                        design: 'code'
+                        content: "// 3. Implement decorator to apply the command workflow from the command"
                     - commandHandlerResult:
                         design: 'decorator'
                         class: Sfynx\CoreBundle\Layers\Application\Command\Handler\FormCommandHandler
@@ -41,6 +50,9 @@ default:
                         handlers: [ 'GroupFormCommandValidationHandler', 'GroupFormCommandSpecHandler']
                         calls:
                             - [ process, [ '$updateCommand' ] ]
+                    - codeComment4:
+                        design: 'code'
+                        content: "// 4. Implement the Response workflow"
                     - codeln1:
                         design: 'code'
                         content: "$this->setParam('templating', '@Business/Group/edit.html.twig');"
