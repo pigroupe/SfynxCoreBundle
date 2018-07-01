@@ -29,6 +29,7 @@ interface RequestInterface
 
     /**
      * get Query
+     * @return \Symfony\Component\HttpFoundation\HeaderBag
      */
     public function getQuery();
 
@@ -39,6 +40,7 @@ interface RequestInterface
 
     /**
      * get Header
+     * @return \Symfony\Component\HttpFoundation\HeaderBag
      */
     public function getHeader();
 

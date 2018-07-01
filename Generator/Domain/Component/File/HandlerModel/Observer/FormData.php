@@ -26,7 +26,6 @@ class FormData implements HandlerModelInterface
             . "    \$this->wfLastData->formViewData['command'] = \$this->wfHandler->command;" . PHP_EOL
             . "    \$this->wfLastData->formViewData['entity'] = \$this->wfHandler->entity;" . PHP_EOL
             . "    \$this->wfLastData->formViewData['data_class'] = get_class(\$this->wfHandler->command);" . PHP_EOL
-            . '' . PHP_EOL
             . $content
             . '' . PHP_EOL
             . '} catch (Exception $e) {' . PHP_EOL
@@ -81,10 +80,9 @@ class FormData implements HandlerModelInterface
                     ClassHandler::setArgClassResult($subject->event->namespace, $field->mapping->manager, $subject->event->index, $info['value'], $info['basename'], true);
                 }
 
-                $content .= '    $this->wfLastData->formViewData[\'' . lcfirst($field->name) . "List'] = \$this->{$managerName}". PHP_EOL;
+                $content .= PHP_EOL . '    $this->wfLastData->formViewData[\'' . lcfirst($field->name) . "List'] = \$this->{$managerName}". PHP_EOL;
                 $content .= '       ->getQueryRepository()' . PHP_EOL;
-                $content .= '       ->findAll()' . PHP_EOL;
-                $content .= '    ;' . PHP_EOL;
+                $content .= '       ->findAll();';
             }
         }
 

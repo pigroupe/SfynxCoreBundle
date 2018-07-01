@@ -143,7 +143,9 @@ abstract class AbstractTemplater implements TemplaterInterface
         if (property_exists($data, 'type') && ($data->type == 'interface')) {
             $class->setType(ClassType::TYPE_INTERFACE);
         }
-
+        if (property_exists($data, 'type') && ($data->type == 'trait')) {
+            $class->setType(ClassType::TYPE_TRAIT);
+        }
         if (property_exists($data, 'type') && ($data->type == 'abstract')) {
             $class->setAbstract(true);
         }

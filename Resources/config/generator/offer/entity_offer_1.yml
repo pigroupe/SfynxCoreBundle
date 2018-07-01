@@ -20,6 +20,9 @@ default:
                     uses: ~
                     traits: ~
                 body:
+                    - codeComment1:
+                        design: 'code'
+                        content: "// 1. Transform options to Command."
                     - updateCommand:
                         design: 'adapter'
                         class: Sfynx\CoreBundle\Layers\Presentation\Adapter\Command\CommandAdapter
