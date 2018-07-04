@@ -101,15 +101,19 @@ EOT;
                 $code_design = $pattern->design;
 
                 if (($code_design == 'code')
-                    && (property_exists($pattern, 'content'))
+                    && (\property_exists($pattern, 'content'))
                 ) {
-                    $body .= "$pattern->content" . PHP_EOL;
+                    $content = $pattern->content;
+                    if (\is_array($pattern->content)) {
+                        $content = implode(PHP_EOL, $pattern->content);
+                    }
+                    $body .= "$content" . PHP_EOL;
                 } elseif (property_exists($pattern, 'class')) {
                     $code_class = ClassHandler::getClassNameFromNamespace($pattern->class);
                     $code_arg = $arg;
 
                     $finalClassArgs = '';
-                    if (property_exists($pattern, 'arguments')
+                    if (\property_exists($pattern, 'arguments')
                         && $pattern->arguments
                     ) {
                         $finalClassArgs = ClassHandler::setArgs($namespace, $pattern->arguments, $index);
@@ -117,17 +121,17 @@ EOT;
 
                     $body .= "\$$code_arg = new " . $code_class . "($finalClassArgs);" . PHP_EOL;
 
-                    if (property_exists($pattern, 'calls')
+                    if (\property_exists($pattern, 'calls')
                         && !empty($pattern->calls)
                     ) {
                         foreach ($pattern->calls as $call) {
                             list($methodName, $methodArgs) = $call;
                             $finalArgs = ClassHandler::setArgs($namespace, $methodArgs, $index);
 
-                            if (in_array($code_design, ['adapter', 'handler'])) {
+                            if (\in_array($code_design, ['adapter', 'handler'])) {
                                 $body .= "\$$arg = \$$code_arg->$methodName($finalArgs);" . PHP_EOL;
-                            } elseif (in_array($code_design, ['decorator'])
-                                && property_exists($pattern, 'handlers') && $pattern->handlers
+                            } elseif (\in_array($code_design, ['decorator'])
+                                && \property_exists($pattern, 'handlers') && $pattern->handlers
                             ) {
                                 foreach ($pattern->handlers as $handler) {
                                     $functionResult = ClassHandler::setArgNewResult($namespace, $handler, $index, $handler);

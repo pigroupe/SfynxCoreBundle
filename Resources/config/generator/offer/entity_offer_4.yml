@@ -46,7 +46,9 @@ default:
                             - [ process, [ '$updateCommand' ] ]
                     - codeln1:
                         design: 'code'
-                        content: "$this->setParam('templating', '@Business/Offer/edit.html.twig');"
+                        content:
+                          - "// 4. Implement the Response workflow"
+                          - "$this->setParam('templating', '@Business/Offer/edit.html.twig');"
                     - workflowHandler:
                         design: 'observer'
                         class: Sfynx\CoreBundle\Layers\Application\Common\Handler\WorkflowHandler
@@ -141,6 +143,7 @@ default:
                     class: Domain\Workflow\Observer\Offer\Response\OBOffer4CreateFormData
                     arguments:
                       - 'Sfynx\CoreBundle\Layers\Domain\Service\Request\Generalisation\RequestInterface'
+                      - 'PromotionContext\Domain\Service\Entity\Template\TemplateManager'
                     construct:
                         create: true
                         body:
@@ -150,20 +153,8 @@ default:
                         implements: ~
                         uses: ['Sfynx\CoreBundle\Layers\Infrastructure\Exception\WorkflowException', 'Exception']
                         traits: ~
-                        methods:
-                          - name: 'process'
-                            comments: ['{@inheritdoc}']
-                            visibility: 'protected'
-                            returnType: 'bool'
-                            body:
-                              - 'try {'
-                              - "    $this->wfLastData->formViewData['command'] = $this->wfHandler->command;"
-                              - "    $this->wfLastData->formViewData['entity'] = $this->wfHandler->entity;"
-                              - "    $this->wfLastData->formViewData['data_class'] = get_class($this->wfHandler->command);"
-                              - '} catch (Exception $e) {'
-                              - '    throw WorkflowException::noCreatedFormData();'
-                              - '}'
-                              - 'return true;'
+                        models:
+                          - 'Sfynx\CoreBundle\Generator\Domain\Component\File\HandlerModel\Observer\FormData'
                 - OBOffer4CreateFormBody:
                     create: true
                     class: Domain\Workflow\Observer\Offer\Response\OBOffer4CreateFormBody
@@ -248,6 +239,7 @@ default:
                 mapping:
                   relationship: ManyToOne
                   targetEntity: PromotionContext\Domain\Entity\Template
+                  manager: 'PromotionContext\Domain\Service\Entity\Template\TemplateManager'
         x-valueObjects:
           IdVO:
             type: Sfynx\CoreBundle\Layers\Domain\ValueObject\IdVO
