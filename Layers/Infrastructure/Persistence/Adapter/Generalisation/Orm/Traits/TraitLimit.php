@@ -9,7 +9,7 @@ use Sfynx\CoreBundle\Presentation\Adapter\Limit;
  *
  * @category Sfynx\CoreBundle
  * @package Infrastructure
- * @subpackage Persistence\Generalisation\Orm
+ * @subpackage Persistence\Generalisation\Orm\Traits
  */
 trait TraitLimit
 {

@@ -1,5 +1,5 @@
 <?php
-namespace Sfynx\CoreBundle\Layers\Infrastructure\Persistence\Factory\Generalisation;
+namespace Sfynx\CoreBundle\Layers\Infrastructure\Persistence\Factory\Generalisation\Interfaces;
 
 use Sfynx\CoreBundle\Layers\Domain\Repository\Query\QueryRepositoryInterface;
 use Sfynx\CoreBundle\Layers\Domain\Repository\Command\CommandRepositoryInterface;
@@ -9,7 +9,7 @@ use Sfynx\CoreBundle\Layers\Domain\Repository\Command\CommandRepositoryInterface
  *
  * @category   Sfynx\CoreBundle\Layers
  * @package    Infrastructure
- * @subpackage Persistence\Factory\Generalisation
+ * @subpackage Persistence\Factory\Generalisation\Interfaces
  * @author     Etienne de Longeaux <etienne.delongeaux@gmail.com>
  * @copyright  2015 PI-GROUPE
  * @license    http://opensource.org/licenses/gpl-license.php GNU Public License
@@ -20,12 +20,16 @@ use Sfynx\CoreBundle\Layers\Domain\Repository\Command\CommandRepositoryInterface
 interface AdapterFactoryInterface
 {
     /**
+     * @param string|null $className
+     * @param array $args
      * @return QueryRepositoryInterface
      */
-    public function getQueryRepository();
+    public function getQueryRepository(string $className = null, array $args = []): QueryRepositoryInterface;
 
     /**
+     * @param string|null $className
+     * @param array $args
      * @return CommandRepositoryInterface
      */
-    public function getCommandRepository();
+    public function getCommandRepository(string $className = null, array $args = []): CommandRepositoryInterface;
 }

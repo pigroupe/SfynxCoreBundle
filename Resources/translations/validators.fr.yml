@@ -1,0 +1,19 @@
+erreur.nom.minlength: Le nom doit avoir au moins {{ limit }} caractères
+erreur.slug.minlength: Le slug name doit avoir au moins {{ limit }} caractères
+erreur.email.unique: L'adresse email est déjà utilisée
+
+erreur.langstatus.notblank: Vous devez renseigner un statut de langue
+erreur.status.notblank: Vous devez renseigner un statut
+erreur.typology.notblank: Vous devez renseigner une typologie
+erreur.slug.notblank: Vous devez renseigner un slug
+erreur.title.notblank: Vous devez renseigner un titre
+erreur.metacontenttype.notblank: Vous devez renseigner un content-type
+error.password.confirmation: Le mot de passe de confirmation ne correspond pas avec le mot de passe
+
+erreur.regex.email: Vous devez renseigner un mail
+erreur.regex.cp: Vous devez renseigner un code postal
+erreur.regex.date: Vous devez renseigner une date au bon format
+erreur.regex.name: Vous devez renseigner un nom
+erreur.regex.nickname: Vous devez renseigner un prénom
+erreur.regex.phone: Vous devez renseigner un numéro de téléphone
+erreur.regex.text: Vous devez renseigner du text avec chiffre uniquement

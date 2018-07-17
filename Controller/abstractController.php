@@ -399,15 +399,15 @@ abstract class abstractController extends Controller
             }
             // result
             $entities = $em->getRepository($this->_entityName)
-                ->findTranslationsByQuery($locale, $query, 'object', false);
-            $tab      = $this->renderselectajaxQuery($entities, $locale);
+                           ->findTranslationsByQuery($locale, $query, 'object', false);
+            $tab = $this->renderselectajaxQuery($entities, $locale);
             // response
             $response = new Response(json_encode($tab));
             $response->headers->set('Content-Type', 'application/json');
 
             return $response;
         }
-        throw ControllerException::callAjaxOnlySupported(' selectajax');
+        throw ControllerException::callAjaxOnlySupported('selectajax');
     }
 
     /**

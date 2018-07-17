@@ -52,16 +52,20 @@ interface ManagerInterface
     /**
      * Returns the user's command repository
      *
+     * @param string|null $className
+     * @param array $args
      * @return CommandRepositoryInterface
      */
-    public function getCommandRepository(): CommandRepositoryInterface;
+    public function getCommandRepository(string $className = null, array $args = []): CommandRepositoryInterface;
 
     /**
      * Returns the user's query repository
      *
+     * @param string|null $className
+     * @param array $args
      * @return QueryRepositoryInterface
      */
-    public function getQueryRepository(): QueryRepositoryInterface;
+    public function getQueryRepository(string $className = null, array $args = []): QueryRepositoryInterface;
 
     /**
      * Build and return a new instance of entity from command

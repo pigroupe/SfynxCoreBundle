@@ -35,8 +35,12 @@ use Symfony\Component\HttpKernel\DependencyInjection\Extension,
  * @link       http://opensource.org/licenses/gpl-license.php
  * @since      2015-02-16
  */
-class SfynxCoreExtension extends Extension{
-
+class SfynxCoreExtension extends Extension
+{
+    /**
+     * @param array $config
+     * @param ContainerBuilder $container
+     */
     public function load(array $config, ContainerBuilder $container)
     {
         // we load all services
@@ -104,10 +108,12 @@ class SfynxCoreExtension extends Extension{
         	}
         }          
     }
-    
+
+    /**
+     * @return string
+     */
     public function getAlias()
     {
     	return 'sfynx_core';
     }
-        
 }

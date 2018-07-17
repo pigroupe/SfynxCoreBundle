@@ -1,0 +1,322 @@
+# grid
+pi.grid.action.trans: Liste des traductions
+pi.grid.action.title: Actions
+pi.grid.action.show: Voir
+pi.grid.action.edit: Editer
+pi.grid.action.upload: Télécharger
+pi.grid.action.update: Modifier
+pi.grid.action.save: Sauvegarder
+pi.grid.action.delete: Supprimer
+pi.grid.action.delete.confirmation.title: Confirmation de suppression
+pi.grid.action.delete.confirmation.message: Cette entitée sera définitivement supprimé et ne peut pas être récupéré. Etes-vous sûr?
+pi.grid.action.create: Créer
+pi.grid.action.validate: Valider
+pi.grid.action.back-to-the-list: Retour à la liste
+pi.grid.action.add-tab: Ajouter onglet
+pi.grid.action.add-picture: Ajouter une image
+pi.grid.action.add-question: Ajouter une question
+pi.grid.action.add-test: Ajouter un test
+pi.grid.action.add-deafult: Ajouter
+pi.grid.action.copy: Copie presse-papiers
+pi.grid.action.print: Impression
+pi.grid.action.export: Exporter
+pi.grid.action.search: Rechercher
+pi.grid.action.first: Premier
+pi.grid.action.previous: Précédent
+pi.grid.action.next: Suivant
+pi.grid.action.last: Dernier
+pi.grid.action.lenghtmenu: Afficher _MENU_ enregistrements par page
+pi.grid.action.info: Affichage de _START_ à _END_ de _TOTAL_ enregistrements
+pi.grid.action.info.empty: Affichage de 0 à 0 de 0 enregistrement
+pi.grid.action.info.filtered: (filtré à partir de _MAX_ enregistrements au total)
+pi.grid.action.waiting: Veuillez patienter pendant le chargement du tableau !
+pi.grid.action.activation.waiting: En attente d'activation
+pi.grid.action.activation: Activation
+pi.grid.action.active: Actif
+pi.grid.action.row_enabled: Activer
+pi.grid.action.row_disable: Désactiver
+pi.grid.action.row_delete: Supprimer
+pi.grid.action.row_deleted: Supprimé
+pi.grid.action.row_archive: Archiver
+pi.grid.action.row_archived: Archivé
+pi.grid.action.row_deletcache: Vider cache
+pi.grid.action.select_all: Sélectionner
+pi.grid.action.select_none: Désélectionner
+
+pi.grid.action.enabled_paiementstatus.sButtonText: Activer Paiement
+pi.grid.action.enabled_paiementstatus.questionTitle: Activation de paiement d'un adhérent
+pi.grid.action.enabled_paiementstatus.questionText: êtes-vous sûr de vouloir activer le paiement de(s) adhérent(s) ?
+
+pi.grid.action.disable_paiementstatus.sButtonText: Désactiver Paiement
+pi.grid.action.disable_paiementstatus.questionTitle: Désactivation de paiement d'un adhérent
+pi.grid.action.disable_paiementstatus.questionText: êtes-vous sûr de vouloir désactiver le paiement de(s) adhérent(s) ?
+
+#form
+pi.form.tab.box.close: Fermer
+pi.form.tab.box.title: Ajouter l'onglet
+pi.form.tab.box.click: Cliquez pour ajouter un nouvel onglet !
+pi.form.tab.box.add: Ajouter
+pi.form.tab.box.cancel: Annuler
+pi.form.tab.box.delete: Supprimer
+pi.form.title.default.create: Formulaire de création
+pi.form.title.default.update: Formulaire de modification
+
+pi.form.label.role: Rôle
+pi.form.label.role_subscriber: Abonné
+pi.form.label.role_member: Membre
+pi.form.label.role_user: Utilisateur
+pi.form.label.role_provider: Prestataire
+pi.form.label.role_customer: Client
+pi.form.label.role_editor: Editeur
+pi.form.label.role_admin: Administrateur
+pi.form.label.role_super_admin: Super-administrateur
+
+pi.form.label.date.publication: Date de publication
+pi.form.label.date.creation: Date de création
+pi.form.label.date.updating: Date de modification
+pi.form.label.date.archivage: Date d'archivage
+pi.form.label.date.expired: Date d'expiration
+pi.form.label.date.start: Date de début
+pi.form.label.date.end: Date de fin
+
+pi.form.label.media.picture.no-format: Aucune image pour ce format
+pi.form.label.media.picture: Image
+pi.form.label.media.picture.miniature: Miniature
+pi.form.label.media.file: Fichier
+pi.form.label.media.download: Télécharger
+
+pi.form.label.field.other: Autre
+pi.form.label.field.or: Ou
+pi.form.label.field.yes: Oui
+pi.form.label.field.no: Non
+pi.form.label.field.perhaps: Peut-être
+pi.form.label.field.potential: Potentiel
+
+pi.form.label.field.enabled: Activé
+pi.form.label.field.language: Langue
+pi.form.label.field.category: Catégorie
+pi.form.label.field.title: Titre
+pi.form.label.field.subtitle: Sous-titre
+pi.form.label.field.description: Description
+pi.form.label.field.content: Contenu
+pi.form.label.field.content.detail: Détail du contenu
+pi.form.label.field.website: Site web
+pi.form.label.field.url: Lien
+pi.form.label.field.blank: Lien HTML vierge
+pi.form.label.field.choice: Choix
+pi.form.label.field.type: Type
+pi.form.label.field.tag: Tag
+pi.form.label.field.topic: Rubrique
+pi.form.label.field.author: Auteur
+pi.form.label.field.group: Groupe
+pi.form.label.field.user: Utilisateur
+pi.form.label.field.user.account: Comptes utilisateurs
+
+pi.form.label.field.civility: Civilité
+pi.form.label.field.civility.type.mr: M.
+pi.form.label.field.civility.type.mme: Mme
+pi.form.label.field.civility.type.mlle: Mlle
+
+pi.form.label.field.profile: Profil
+pi.form.label.field.profile.type.customer: Client
+pi.form.label.field.profile.type.provider: Prestataire
+pi.form.label.field.profile.type.provider.tic: Fournisseur TIC
+pi.form.label.field.profile.type.user: Utilisateur
+pi.form.label.field.profile.type.user.tic: Utilisateur TIC
+pi.form.label.field.profile.type.cadre: Cadre
+pi.form.label.field.profile.type.cadre.salarie: Cadre salarié
+pi.form.label.field.profile.type.salarie: Salarié
+pi.form.label.field.profile.type.autoentrepreneur: Auto-entrepreneur
+pi.form.label.field.profile.type.other.adherent.individual: Autres adhérents individuels
+
+pi.form.label.field.name: Nom
+pi.form.label.field.username: Nom d'utilisateur
+pi.form.label.field.usergroup: Groupe d'utilisateur
+pi.form.label.field.nickname: Prénom
+pi.form.label.field.sponsor: Sponsor
+
+pi.form.label.field.meta_title: Titre meta
+pi.form.label.field.meta_keywords: Mots-clés meta
+pi.form.label.field.meta_description: Description meta
+
+pi.form.label.field.adress.main: Adresse
+pi.form.label.field.adress.coordinates: Coordonnées
+pi.form.label.field.adress.phone: Téléphone
+pi.form.label.field.adress.fax: Fax
+pi.form.label.field.adress.cp: Code postal
+pi.form.label.field.adress.city: Ville
+pi.form.label.field.adress.country: Pays
+pi.form.label.field.adress.department: Département
+pi.form.label.field.adress.location: Lieu
+
+pi.form.label.field.email: E-mail
+pi.form.label.field.email.perso: E-mail personnelle
+pi.form.label.field.email.subject: Objet
+pi.form.label.field.email.body: Corps
+pi.form.label.field.email.cc: Cc
+pi.form.label.field.email.bcc: Cci
+
+pi.form.label.field.employment.job: Emploi
+pi.form.label.field.employment.company: Entreprise
+pi.form.label.field.employment.activity: Activité
+pi.form.label.field.employment.engineering: Ingénierie
+
+pi.form.label.field.corporation.name: Nom de la société
+pi.form.label.field.corporation.name.commercial: Nom commercial de la société
+
+pi.form.label.field.corporation.activity: Activité
+pi.form.label.field.corporation.detailactivity: Détail de l'activité
+pi.form.label.field.corporation.activity.tic: TIC
+pi.form.label.field.corporation.activity.admin: Administration/Audit/Conseil
+pi.form.label.field.corporation.activity.aero: Aéronautique
+pi.form.label.field.corporation.activity.agro: Agro-alimentaire
+pi.form.label.field.corporation.activity.bank: Banque/Finance
+pi.form.label.field.corporation.activity.biens: Biens de consommation
+pi.form.label.field.corporation.activity.chimie: Chimie/Pharma/Biotechnologies
+pi.form.label.field.corporation.activity.com: Communication/Médias
+pi.form.label.field.corporation.activity.divert: Divertissement
+pi.form.label.field.corporation.activity.env: Environnement
+pi.form.label.field.corporation.activity.fab: Fabrication produits
+pi.form.label.field.corporation.activity.elect: Electronique
+pi.form.label.field.corporation.activity.indus.def: Industrie Défense/Spatial
+pi.form.label.field.corporation.activity.auto: Automobile
+pi.form.label.field.corporation.activity.distrib: Distribution
+pi.form.label.field.corporation.activity.loisir: Loisirs/Tourisme
+pi.form.label.field.corporation.activity.assur: Assurances
+pi.form.label.field.corporation.activity.sante: Santé/Hôpitaux
+pi.form.label.field.corporation.activity.educ: Education
+pi.form.label.field.corporation.activity.ing: Ingénierie
+pi.form.label.field.corporation.activity.asso: Associatif
+pi.form.label.field.corporation.activity.indus: Industrie
+pi.form.label.field.corporation.activity.energie: Energie
+pi.form.label.field.corporation.activity.public: Secteur public
+pi.form.label.field.corporation.activity.rd: R & D
+pi.form.label.field.corporation.activity.btp: BTP
+pi.form.label.field.corporation.activity.service: Service à la personne
+pi.form.label.field.corporation.activity.rh: Ressources Humaines
+pi.form.label.field.corporation.activity.service.pro: Services aux entreprises
+pi.form.label.field.corporation.activity.techno: Technologie
+pi.form.label.field.corporation.activity.trans: Transport et logistique
+
+pi.form.label.field.corporation.engineering: Ingénierie
+pi.form.label.field.corporation.engineering.telecom: Télécom
+pi.form.label.field.corporation.engineering.info.service: Services en informatique
+pi.form.label.field.corporation.engineering.rh: Ressources humaines
+pi.form.label.field.corporation.engineering.ingenierie.savoirs: Ingénierie des savoirs et de la connaissance
+pi.form.label.field.corporation.engineering.infra: Infrastructures et reseaux
+pi.form.label.field.corporation.engineering.info.tech: Informatique technique et métiers
+pi.form.label.field.corporation.engineering.info.gestion: Informatique de gestion
+pi.form.label.field.corporation.engineering.form: Formation recherche et développement
+pi.form.label.field.corporation.engineering.finance: Financement
+pi.form.label.field.corporation.engineering.entreprise.tic: Entreprise TIC et information sur les TIC
+pi.form.label.field.corporation.engineering.editeur: Editeur de logiciel
+pi.form.label.field.corporation.engineering.dev.web: Développement web
+pi.form.label.field.corporation.engineering.multimedia: Contenu multimédia
+pi.form.label.field.corporation.engineering.materiel.constr.dest: Constructeur et distributeur de matériel
+pi.form.label.field.corporation.engineering.conseil: Conseil
+
+pi.form.label.field.corporation.legalform: Forme juridique
+pi.form.label.field.corporation.legalform.type.scop: SCOP ou assimilés
+pi.form.label.field.corporation.legalform.type.syndicat: Syndicat
+pi.form.label.field.corporation.legalform.type.sa: SA
+pi.form.label.field.corporation.legalform.type.sarl: SARL
+pi.form.label.field.corporation.legalform.type.sas: SAS
+pi.form.label.field.corporation.legalform.type.etabl.public: Etablissement public
+pi.form.label.field.corporation.legalform.type.entr.indiv: Entreprise individuelle
+pi.form.label.field.corporation.legalform.type.assoc: Association
+
+pi.form.label.field.corporation.effectif.national: Effective national
+pi.form.label.field.corporation.effectif.regional: Effective régional
+pi.form.label.field.corporation.code.naf: Code NAF
+pi.form.label.field.corporation.siret: SIRET
+pi.form.label.field.corporation.ca.national: CA national
+pi.form.label.field.corporation.argument.commercial: Argument commecial
+pi.form.label.field.corporation.expertise: Expertise
+pi.form.label.field.corporation.speaker: Conférencier
+
+pi.form.label.field.corporation.origin.contact: Origine de contact
+pi.form.label.field.corporation.origin.contact.type.campagne: Campagne adhésion
+pi.form.label.field.corporation.origin.contact.type.spontane: Contact spontané
+pi.form.label.field.corporation.origin.contact.type.historique: Historique
+pi.form.label.field.corporation.origin.contact.type.motivation: Motivation inscription à une commission
+pi.form.label.field.corporation.origin.contact.type.sponsor: Parrainage
+pi.form.label.field.corporation.origin.contact.type.partenaire: Partenaire
+pi.form.label.field.corporation.origin.contact.type.visiteur: Visiteur
+pi.form.label.field.corporation.origin.contact.type.visiteur.event: Visiteur évènement
+pi.form.label.field.corporation.origin.contact.sponsor: Origine de contact du sponsor
+
+pi.form.label.field.social.facebook: Facebook
+pi.form.label.field.social.googleplus: GooglePlus
+pi.form.label.field.social.twitter:  Twitter
+pi.form.label.field.social.linkedin: LinkedIn
+pi.form.label.field.social.viadeo: Viadeo
+
+pi.form.label.field.scoopit.id: Identifiant scoop-it
+pi.form.label.field.scoopit.format: Format
+pi.form.label.field.scoopit.format.full.image: Image pleine
+pi.form.label.field.scoopit.format.with.description: Avec descriptif
+pi.form.label.field.scoopit.number: Nombre de slide
+pi.form.label.field.scoopit.title: Titre
+pi.form.label.field.scoopit.mode: Slider
+pi.form.label.field.scoopit.mode.dynamic: Dynamique
+pi.form.label.field.scoopit.mode.static: statique
+pi.form.label.field.scoopit.speed: Vitesse
+pi.form.label.field.scoopit.width: Largeur
+
+pi.form.label.field.price: Tarif
+pi.form.label.field.paiement: Paiement
+pi.form.label.field.paiement.type.1: Payant
+pi.form.label.field.paiement.type.0: Gratuit
+pi.form.label.field.modepaiement: Mode de paiement
+pi.form.label.field.modepaiement.type.1: Paypal
+pi.form.label.field.modepaiement.type.2: Sur place
+pi.form.label.field.modepaiement.type.3: Par chèque
+
+pi.form.label.select.choose.option: Choisissez une option
+pi.form.label.select.choose.options: Sélectionnez les options
+pi.form.label.select.choose.type: Choisissez un type
+pi.form.label.select.choose.category: Choisissez une catégorie
+pi.form.label.select.choose.template: Choisissez un template
+pi.form.label.select.choose.css: Choisissez une liste de fichiers css
+pi.form.label.select.choose.block: Choisissez un bloc
+pi.form.label.select.choose.content: Choisissez un contenu
+pi.form.label.select.choose.snippet: Choisissez un snippet (extrait)
+pi.form.label.select.choose.typologie: Choisissez une typologie
+pi.form.label.select.choose.activity: Choisissez une activité
+pi.form.label.select.choose.civility: Choisissez une civilité
+pi.form.label.select.choose.profile: Choisissez un profil
+pi.form.label.select.choose.date: Choisissez une date
+pi.form.label.select.choose.hour: Choisissez une heure
+pi.form.label.select.choose.media: Choisissez un média
+
+# Footer
+pi.footer.copyright: Tous droits réservés
+
+# session flash
+pi.session.flash.title: Un message de confirmation 
+pi.session.flash.form.errors: Vous avez des erreurs de validation !
+pi.session.flash.welcom: Bienvenue! Vous vous êtes connecté avec succès.
+pi.session.flash.right.undelete: Vous n'avez pas les droits de suppression ! Veuillez contacter votre administrateur.
+pi.session.flash.right.delete: Vous avez supprimé le champs avec succès!
+pi.session.flash.wrong.undelete: La suppression n'a pu s'effectuer avec succès! Veuillez contacter votre administrateur.
+pi.session.flash.right.unupdate: Vous n'avez pas les droits de modification ! Veuillez contacter votre administrateur.
+pi.session.flash.right.update: Les informations ont été mises à jour !
+pi.session.flash.right.uncreate: Vous n'avez pas les droits de création ! Veuillez contacter votre administrateur.
+pi.session.flash.right.create: Le nouvel élément a été créé !
+pi.session.flash.right.anonymous: En tant qu'utilisateur anonyme, vous n'avez pas les droits de suppression.
+pi.session.flash.right.homepage.undelete: Vous n'avez pas la permission de supprimer la Home Page !
+pi.session.flash.right.homepage.notchange:  Vous n'avez pas la permission de modifier le Route de la Home Page !
+pi.session.flash.right.page.management_by_user_only: Vous n'avez pas la permission de manager cette page !
+pi.session.flash.page.slug.exist: L'adresse {{ url }} existe déjà !
+pi.session.flash.page.notexist: vous n'avez pas appelé une page qui existe !
+pi.session.flash.page.notpermission: vous n'avez pas la permission d'accéder à cette page!
+pi.session.flash.layout.notexist : le layout renseigné n'existe pas
+pi.session.flash.rolecache.created: Le fichier d'héritage a bien été généré dans le cache
+pi.session.flash.resetting.success: Votre demande a bien été enregistrée avec votre nouveau mot de passe
+pi.session.flash.resetting.error: Le mot de passe de confirmation doit être identique au nouveau mot de passe
+pi.session.flash.type.permission: Permission
+pi.session.flash.type.success: Succès
+pi.session.flash.type.notice: Notification
+pi.session.flash.type.warning: Avertissement
+pi.session.flash.type.error: Erreurs
+pi.session.flash.type.errorform: Erreurs de formulaire

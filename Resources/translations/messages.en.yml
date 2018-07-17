@@ -1,0 +1,322 @@
+# grid
+pi.grid.action.trans: List of translations
+pi.grid.action.title: Actions
+pi.grid.action.show: Show
+pi.grid.action.edit: Edit
+pi.grid.action.upload: Upload
+pi.grid.action.update: Update
+pi.grid.action.save: Save
+pi.grid.action.delete: Delete
+pi.grid.action.delete.confirmation.title: Delete Confirmation
+pi.grid.action.delete.confirmation.message: This item will be permanently deleted and cannot be recovered. Are you sure?
+pi.grid.action.create: Create
+pi.grid.action.validate: Validate
+pi.grid.action.back-to-the-list: Back to List
+pi.grid.action.add-tab: Add tab
+pi.grid.action.add-picture: Add a picture
+pi.grid.action.add-question: Add a question
+pi.grid.action.add test: Add a test
+pi.grid.action.add-deafult: Add
+pi.grid.action.copy: Copy to clipboard
+pi.grid.action.print: Print table
+pi.grid.action.export: Export
+pi.grid.action.search: Search
+pi.grid.action.first: First
+pi.grid.action.previous: Previous
+pi.grid.action.next: Next
+pi.grid.action.last: Last
+pi.grid.action.lenghtmenu: Display _MENU_ records per page
+pi.grid.action.info: Showing _START_ to _END_ of _TOTAL_ records
+pi.grid.action.info.empty: Showing 0 to 0 of 0 records
+pi.grid.action.info.filtered: (filtered from _MAX_ total records)
+pi.grid.action.waiting: Please wait while loading the table
+pi.grid.action.activation.waiting: Waiting for activation
+pi.grid.action.activation: Activation
+pi.grid.action.active: Active
+pi.grid.action.row_enabled: Enabled
+pi.grid.action.row_disable: Disable
+pi.grid.action.row_delete: Delete
+pi.grid.action.row_deleted: Deleted
+pi.grid.action.row_archive: Archive
+pi.grid.action.row_archived: Archived
+pi.grid.action.row_deletcache: Clear cache
+pi.grid.action.select_all: Select
+pi.grid.action.select_none: Deselect
+
+pi.grid.action.enabled_paiementstatus.sButtonText: Enable Payment
+pi.grid.action.enabled_paiementstatus.questionTitle: Payment Activation of a member
+pi.grid.action.enabled_paiementstatus.questionText: Are you sure you want to enable the payment (s) member (s)?
+
+pi.grid.action.disable_paiementstatus.sButtonText: Disable Payment
+pi.grid.action.disable_paiementstatus.questionTitle: Disable payment of a Participant
+pi.grid.action.disable_paiementstatus.questionText: Are you sure you want to disable the payment (s) member (s)?
+
+#form
+pi.form.tab.box.close: Close
+pi.form.tab.box.title: Add tab
+pi.form.tab.box.click: Click to add a new tab !
+pi.form.tab.box.add: Add
+pi.form.tab.box.cancel: Cancel
+pi.form.tab.box.delete: Delete
+pi.form.title.default.create: Create form
+pi.form.title.default.update: Update form
+
+pi.form.label.role: Role
+pi.form.label.role_subscriber: Subscriber
+pi.form.label.role_member: Member
+pi.form.label.role_user: User
+pi.form.label.role_provider: Provider
+pi.form.label.role_customer: Customer
+pi.form.label.role_editor: Editor
+pi.form.label.role_admin: Administrator
+pi.form.label.role_super_admin: Super administrator
+
+pi.form.label.date.publication: Publication date
+pi.form.label.date.creation: Created date
+pi.form.label.date.updating: Updated date
+pi.form.label.date.archivage: Archive date
+pi.form.label.date.expired: Expiration date
+pi.form.label.date.start: Start Date
+pi.form.label.date.end: End Date
+
+pi.form.label.media.picture.no-format: No image for this format
+pi.form.label.media.picture: Picture
+pi.form.label.media.picture.miniature: Miniature
+pi.form.label.media.file: File
+pi.form.label.media.download: Download
+
+pi.form.label.field.other: Other
+pi.form.label.field.or: Or
+pi.form.label.field.yes: Yes
+pi.form.label.field.no: No
+pi.form.label.field.perhaps: Perhaps
+pi.form.label.field.potential: Potential
+
+pi.form.label.field.enabled: Enabled
+pi.form.label.field.language: Language
+pi.form.label.field.category: Category
+pi.form.label.field.title: Title
+pi.form.label.field.subtitle: Subtitle
+pi.form.label.field.description: Description
+pi.form.label.field.content: Content
+pi.form.label.field.content.detail: Content detail
+pi.form.label.field.website: Website
+pi.form.label.field.url: Link
+pi.form.label.field.blank: Blank link HTML
+pi.form.label.field.choice: Choice
+pi.form.label.field.type: Type
+pi.form.label.field.tag: Tag
+pi.form.label.field.topic: Topic
+pi.form.label.field.author: Author
+pi.form.label.field.group: Group
+pi.form.label.field.user: User
+pi.form.label.field.user.account: User accounts
+
+pi.form.label.field.civility: Civility
+pi.form.label.field.civility.type.mr: Mr
+pi.form.label.field.civility.type.mme: Ms
+pi.form.label.field.civility.type.mlle: Miss
+
+pi.form.label.field.profile: Profile
+pi.form.label.field.profile.type.customer: Customer
+pi.form.label.field.profile.type.provider: Provider
+pi.form.label.field.profile.type.provider.tic: ICT Provider
+pi.form.label.field.profile.type.user: User
+pi.form.label.field.profile.type.user.tic: User ICT
+pi.form.label.field.profile.type.cadre: Excecutive
+pi.form.label.field.profile.type.cadre.salarie: Excecutive employee
+pi.form.label.field.profile.type.salarie: Employee
+pi.form.label.field.profile.type.autoentrepreneur: Auto-entrepreneur
+pi.form.label.field.profile.type.other.adherent.individual: Other individual members
+
+pi.form.label.field.name: Name
+pi.form.label.field.username: User name
+pi.form.label.field.usergroup: User Group
+pi.form.label.field.nickname: Nickname
+pi.form.label.field.sponsor: Sponsor
+
+pi.form.label.field.meta_title: Meta Title
+pi.form.label.field.meta_keywords: Meta keywords
+pi.form.label.field.meta_description: Meta description
+
+pi.form.label.field.adress.main: Address
+pi.form.label.field.adress.coordinates: Coordinates
+pi.form.label.field.adress.phone: Phone
+pi.form.label.field.adress.fax: Fax
+pi.form.label.field.adress.cp: Postcode
+pi.form.label.field.adress.city: City
+pi.form.label.field.adress.country: Country
+pi.form.label.field.adress.department: Department
+pi.form.label.field.adress.location: Location
+
+pi.form.label.field.email: Email
+pi.form.label.field.email.perso: Personal e-mail
+pi.form.label.field.email.subject: Subject
+pi.form.label.field.email.body: Body
+pi.form.label.field.email.cc: Cc
+pi.form.label.field.email.bcc: Bcc
+
+pi.form.label.field.employment.job: Job
+pi.form.label.field.employment.company: Company
+pi.form.label.field.employment.activity: Activity
+pi.form.label.field.employment.engineering: Engineering
+
+pi.form.label.field.corporation.name: Company Name
+pi.form.label.field.corporation.name.commercial: Commercial company Name
+
+pi.form.label.field.corporation.activity: Activity
+pi.form.label.field.corporation.detailactivity: Activity Detail
+pi.form.label.field.corporation.activity.tic: ICT
+pi.form.label.field.corporation.activity.admin: Administration / Audit / Consulting
+pi.form.label.field.corporation.activity.aero: Aerospace
+pi.form.label.field.corporation.activity.agro: Food
+pi.form.label.field.corporation.activity.bank: Banking / Finance
+pi.form.label.field.corporation.activity.biens: Consumer Goods
+pi.form.label.field.corporation.activity.chimie: Chemical / Pharma / Biotech
+pi.form.label.field.corporation.activity.com: Communication / Media
+pi.form.label.field.corporation.activity.divert: Entertainment
+pi.form.label.field.corporation.activity.env: Environment
+pi.form.label.field.corporation.activity.fab: Manufacture products
+pi.form.label.field.corporation.activity.elect: Electronics
+pi.form.label.field.corporation.activity.indus.def: Industry Defence / Aerospace
+pi.form.label.field.corporation.activity.auto: Automotive
+pi.form.label.field.corporation.activity.distrib: Distribution
+pi.form.label.field.corporation.activity.loisir: Leisure / Tourism
+pi.form.label.field.corporation.activity.assur: Insurance
+pi.form.label.field.corporation.activity.sante: Health / Hospitals
+pi.form.label.field.corporation.activity.educ: Education
+pi.form.label.field.corporation.activity.ing: Engineering
+pi.form.label.field.corporation.activity.asso: Associative
+pi.form.label.field.corporation.activity.indus: Industry
+pi.form.label.field.corporation.activity.energie: Energy
+pi.form.label.field.corporation.activity.public: Public Sector
+pi.form.label.field.corporation.activity.rd: R & D
+pi.form.label.field.corporation.activity.btp: BTP
+pi.form.label.field.corporation.activity.service: Service person
+pi.form.label.field.corporation.activity.rh: Human Resources
+pi.form.label.field.corporation.activity.service.pro: Business Services
+pi.form.label.field.corporation.activity.techno: Technology
+pi.form.label.field.corporation.activity.trans: Transportation and Logistics
+
+pi.form.label.field.corporation.engineering: Engineering
+pi.form.label.field.corporation.engineering.telecom: Telecom
+pi.form.label.field.corporation.engineering.info.service: Computer Services
+pi.form.label.field.corporation.engineering.rh: Human Resources
+pi.form.label.field.corporation.engineering.ingenierie.savoirs: Engineering of knowledge
+pi.form.label.field.corporation.engineering.infra: Infrastructure and Networks
+pi.form.label.field.corporation.engineering.info.tech: Trades and Technical Information
+pi.form.label.field.corporation.engineering.info.gestion: Information Management
+pi.form.label.field.corporation.engineering.form: Training Research and Development
+pi.form.label.field.corporation.engineering.finance: Financing
+pi.form.label.field.corporation.engineering.entreprise.tic: Company information ICTs and ICT
+pi.form.label.field.corporation.engineering.editeur: Editor Software
+pi.form.label.field.corporation.engineering.dev.web: Web Development
+pi.form.label.field.corporation.engineering.multimedia: Multimedia Content
+pi.form.label.field.corporation.engineering.materiel.constr.dest: Manufacturer and distributor of equipment
+pi.form.label.field.corporation.engineering.conseil: Council
+
+pi.form.label.field.corporation.legalform: Legal
+pi.form.label.field.corporation.legalform.type.scop: SCOP or similar
+pi.form.label.field.corporation.legalform.type.syndicat: Union
+pi.form.label.field.corporation.legalform.type.sa: SA
+pi.form.label.field.corporation.legalform.type.sarl: SARL
+pi.form.label.field.corporation.legalform.type.sas: SAS
+pi.form.label.field.corporation.legalform.type.etabl.public: public institution
+pi.form.label.field.corporation.legalform.type.entr.indiv: Sole Proprietorship
+pi.form.label.field.corporation.legalform.type.assoc: Association
+
+pi.form.label.field.corporation.effectif.national: Effective national
+pi.form.label.field.corporation.effectif.regional: Effective regional
+pi.form.label.field.corporation.code.naf: NAF Code
+pi.form.label.field.corporation.siret: SIRET
+pi.form.label.field.corporation.ca.national: National Turnover
+pi.form.label.field.corporation.argument.commercial: Argument compmecial
+pi.form.label.field.corporation.expertise: Expertise
+pi.form.label.field.corporation.speaker: Speaker
+
+pi.form.label.field.corporation.origin.contact: Origin Contact
+pi.form.label.field.corporation.origin.contact.type.campagne: Membership Campaign
+pi.form.label.field.corporation.origin.contact.type.spontane: Spontaneous contact 
+pi.form.label.field.corporation.origin.contact.type.historique: History
+pi.form.label.field.corporation.origin.contact.type.motivation: Motivation inscription to a committee
+pi.form.label.field.corporation.origin.contact.type.sponsor: Sponsorship
+pi.form.label.field.corporation.origin.contact.type.partenaire: Partner
+pi.form.label.field.corporation.origin.contact.type.visiteur: Guest
+pi.form.label.field.corporation.origin.contact.type.visiteur.event: Guest event
+pi.form.label.field.corporation.origin.contact.sponsor: Origin of contact sponsor
+
+pi.form.label.field.social.facebook: Facebook
+pi.form.label.field.social.googleplus: GooglePlus
+pi.form.label.field.social.twitter:  Twitter
+pi.form.label.field.social.linkedin: LinkedIn
+pi.form.label.field.social.viadeo: Viadeo
+
+pi.form.label.field.scoopit.id: Login scoop-it
+pi.form.label.field.scoopit.format: Format
+pi.form.label.field.scoopit.format.full.image: Full Image
+pi.form.label.field.scoopit.format.with.description: With Description
+pi.form.label.field.scoopit.number: Number of Scoops
+pi.form.label.field.scoopit.title: Title
+pi.form.label.field.scoopit.mode: Slider
+pi.form.label.field.scoopit.mode.dynamic: Dynamic
+pi.form.label.field.scoopit.mode.static: Static
+pi.form.label.field.scoopit.speed: Speed
+pi.form.label.field.scoopit.width: Width
+
+pi.form.label.field.price: Price
+pi.form.label.field.paiement: Payment
+pi.form.label.field.paiement.type.1: Paying
+pi.form.label.field.paiement.type.0: Free
+pi.form.label.field.modepaiement: Payment
+pi.form.label.field.modepaiement.type.1: Paypal
+pi.form.label.field.modepaiement.type.2: On site
+pi.form.label.field.modepaiement.type.3: By check
+
+pi.form.label.select.choose.option: Choose an option
+pi.form.label.select.choose.options: Select options
+pi.form.label.select.choose.type: Choose a type
+pi.form.label.select.choose.category: Choose a category
+pi.form.label.select.choose.template: Choose a template
+pi.form.label.select.choose.css: Choose a list of css files
+pi.form.label.select.choose.block: Choose a block
+pi.form.label.select.choose.content: Choose a content
+pi.form.label.select.choose.snippet: Choose a snippet
+pi.form.label.select.choose.typologie: Choose a typology
+pi.form.label.select.choose.activity: Choose an activity
+pi.form.label.select.choose.civility: Choose a civility
+pi.form.label.select.choose.profile: Choose a profile
+pi.form.label.select.choose.date: Choose a date
+pi.form.label.select.choose.hour: Choose a time
+pi.form.label.select.choose.media: Choose a media
+
+# Footer
+pi.footer.copyright: Copyright
+
+# session flash
+pi.session.flash.title: Confirmation message
+pi.session.flash.form.errors: Validation error, check form!
+pi.session.flash.welcom: Welcome! Your login was successful.
+pi.session.flash.right.undelete: You do not have permission to delete ! Please contact your administrator.
+pi.session.flash.right.delete: You have deleted the field successfully !
+pi.session.flash.wrong.undelete: Deletion was unable to complete successfully ! Please contact your administrator.
+pi.session.flash.right.unupdate: You do not have permission to update ! Please contact your administrator.
+pi.session.flash.right.update: The information has been updated !
+pi.session.flash.right.uncreate: You do not have permission to create ! Please contact your administrator.
+pi.session.flash.right.create: The new item has been created !
+pi.session.flash.right.anonymous: As an anonymous user, you do not have delete rights.
+pi.session.flash.right.homepage.undelete: You do not have permission to delete the home page !
+pi.session.flash.right.homepage.notchange:  You do not have permission to update the Route name of the home page
+pi.session.flash.right.page.management_by_user_only: You do not have permission to manager this page !
+pi.session.flash.page.slug.exist: The url {{ url }} already existed ! 
+pi.session.flash.page.notexist: you did not call a page that exists !
+pi.session.flash.page.notpermission: you don't have permission to view this page!
+pi.session.flash.layout.notexist : the layout specified does not exist
+pi.session.flash.rolecache.created: The file inheritance has been generated in the cache
+pi.session.flash.resetting.success: The reset is completed successfully
+pi.session.flash.resetting.error:  Your words-password do not match!
+pi.session.flash.type.permission: Permission
+pi.session.flash.type.success: Success
+pi.session.flash.type.notice: Notification
+pi.session.flash.type.warning: Warning
+pi.session.flash.type.error: Errors
+pi.session.flash.type.errorform: Form errors

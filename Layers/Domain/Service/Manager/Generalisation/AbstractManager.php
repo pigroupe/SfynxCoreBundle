@@ -5,7 +5,7 @@ use Sfynx\CoreBundle\Layers\Application\Command\Generalisation\Interfaces\Comman
 use Sfynx\CoreBundle\Layers\Domain\Service\Manager\Generalisation\Interfaces\ManagerInterface;
 use Sfynx\CoreBundle\Layers\Domain\Repository\Query\QueryRepositoryInterface;
 use Sfynx\CoreBundle\Layers\Domain\Repository\Command\CommandRepositoryInterface;
-use Sfynx\CoreBundle\Layers\Infrastructure\Persistence\Factory\Generalisation\AdapterFactoryInterface;
+use Sfynx\CoreBundle\Layers\Infrastructure\Persistence\Factory\Generalisation\Interfaces\AdapterFactoryInterface;
 
 /**
  * Class AbstractManager
@@ -74,17 +74,17 @@ abstract class AbstractManager implements ManagerInterface
     /**
      * {@inheritDoc}
      */
-    public function getCommandRepository(): CommandRepositoryInterface
+    public function getCommandRepository(string $className = null, array $args = []): CommandRepositoryInterface
     {
-        return $this->factory->getCommandRepository();
+        return $this->factory->getCommandRepository($className, $args);
     }
 
     /**
      * {@inheritDoc}
      */
-    public function getQueryRepository(): QueryRepositoryInterface
+    public function getQueryRepository(string $className = null, array $args = []): QueryRepositoryInterface
     {
-        return $this->factory->getQueryRepository();
+        return $this->factory->getQueryRepository($className, $args);
     }
 
     /**

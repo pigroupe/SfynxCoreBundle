@@ -6,6 +6,7 @@ use Doctrine\ORM\Query;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\QueryBuilder;
 
+use Sfynx\CoreBundle\Layers\Domain\Repository\ResultFunctionRepositoryInterface;
 use Sfynx\CoreBundle\Layers\Domain\Repository\Query\GeneralRepositoryInterface;
 use Sfynx\CoreBundle\Layers\Domain\Repository\Query\TranslationRepositoryInterface;
 use Sfynx\CoreBundle\Layers\Infrastructure\Persistence\Adapter\Generalisation\Interfaces\ResultInterface;
@@ -24,7 +25,7 @@ use Sfynx\CoreBundle\Layers\Infrastructure\Cache\CacheQuery;
  * @link       http://opensource.org/licenses/gpl-license.php
  * @since      2015-02-16
  */
-interface QueryRepositoryInterface extends GeneralRepositoryInterface,TranslationRepositoryInterface,ObjectRepository
+interface QueryRepositoryInterface extends ResultFunctionRepositoryInterface, GeneralRepositoryInterface, TranslationRepositoryInterface, ObjectRepository
 {
     /**
      * @return ResultInterface
