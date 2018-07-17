@@ -62,4 +62,14 @@ class WorkflowException extends Exception
     {
         return new static('Instances of Entity have not been listed');
     }
+
+    /**
+     * Returns the <No Created View Form> Exception.
+     *
+     * @return WorkflowException
+     */
+    public static function noBodyJsonImplementCorrectly(): WorkflowException
+    {
+        return new static('Json body has not been implement correctly');
+    }
 }

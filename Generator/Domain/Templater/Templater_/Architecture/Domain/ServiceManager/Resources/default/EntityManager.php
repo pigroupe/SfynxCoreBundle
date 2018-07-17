@@ -95,19 +95,23 @@ use Sfynx\CoreBundle\Layers\Domain\Repository\Query\QueryRepositoryInterface;
 class <?php echo $templater->getTargetClassname(); ?> extends AbstractManager
 {
     /**
-     * {@inheritdoc}
+     * @param string|null $className
+     * @param array $args
+     * @return QueryRepositoryInterface
      */
-    public function getQueryRepository(): QueryRepositoryInterface
+    public function getQueryRepository(string $className = null, array $args = []): QueryRepositoryInterface
     {
-        return parent::getQueryRepository();
+        return parent::getQueryRepository($className, $args);
     }
 
     /**
-     * {@inheritdoc}
+     * @param string|null $className
+     * @param array $args
+     * @return CommandRepositoryInterface
      */
-    public function getCommandRepository(): CommandRepositoryInterface
+    public function getCommandRepository(string $className = null, array $args = []): CommandRepositoryInterface
     {
-        return parent::getCommandRepository();
+        return parent::getCommandRepository($className, $args);
     }
 
     /**

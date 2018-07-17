@@ -25,7 +25,7 @@
 	{{ "{% endif %}" }}
 	{% endif %}
 
-	{% include getParameter('sfynx.template.theme.layout.admin.pc')|replace({'::': ':'})~"Crud:index-header.html.twig" %}
+	{% include getParameter('sfynx.template.theme.layout.admin.pc')~"Crud/index-header.html.twig" %}
 	<table id="grid_{{ entity|lower|replace({"\\": '_'}) }}" class="grid" >
 	    <thead>
 	        <tr>
@@ -109,7 +109,7 @@
 	    {{ "{% endif %}" }}
 	    </tbody>
 	</table>
-	{{ '{% include getParameter('sfynx.template.theme.layout.admin.pc')|replace({'::': ':'})~"Crud:index-footer.html.twig" %}' }}
+	{{ '{% include getParameter('sfynx.template.theme.layout.admin.pc')~"Crud/index-footer.html.twig" %}' }}
 	
 {{ '{% endblock %}' }}
 

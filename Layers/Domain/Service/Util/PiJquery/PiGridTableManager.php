@@ -65,63 +65,57 @@ class PiGridTableManager extends PiJqueryExtension
      *
      * <code>
      *
-     * 	{% set options_gridtabale = {'grid-name': 'grid', 'grid-type':'simple',
+     *     {% set options_gridtabale = {'grid-name': 'grid', 'grid-type':'simple',
      *      'grid-server-side': true,
      *      'grid-state-save': false,
      *      'grid-pagination-type': 'full_numbers',
-     * 		'grid-paginate': true'
+     *      'grid-paginate': true'
      *      'grid-paginate-top': false,
-     * 		'grid-LengthMenu': 10,
+     *      'grid-LengthMenu': 10,
      *      'grid-row-select': 'multi',
      *      'grid-filters-tfoot-up': false,
-     * 		'grid-filters-active': true,
+     *      'grid-filters-active': true,
      *      'grid-filters': {
-     *           	'4':'Prénom',
-     *           	'5':'Nom',
-     *           	'6':'Email',
+     *          '4':'Prénom',
+     *          '5':'Nom',
+     *          '6':'Email',
      *      },
      *      'grid-filter-date': {
-     * 			'0': {'column' : 7, 'title-start': 'date min crea. ', 'title-end': 'date max crea. ', 'right':'449', 'width':'197', 'format' : 'yy-mm-dd', 'idMin':'minc', 'idMax':'maxc'},
+     *          '0': {'column' : 7, 'title-start': 'date min crea. ', 'title-end': 'date max crea. ', 'right':'449', 'width':'197', 'format' : 'yy-mm-dd', 'idMin':'minc', 'idMax':'maxc'},
      *          '1': {'column' : 8, 'title-start': 'date min mod. ', 'title-end': 'date max mod. ', 'right':'291', 'width':'179', 'format' : 'yy-mm-dd', 'idMin':'minu', 'idMax':'maxu'},
      *      },
-     * 		'grid-filters-select': ['0','4','5', '6'],
-     * 		'grid-filters': {
-     * 				'1':'Identifiant',
-     * 			},
-     * 		'grid-sorting': {
-     * 				'1':'desc',
-     * 			},
+     *      'grid-filters-select': ['0','4','5', '6'],
+     *      'grid-filters': {
+     *          '1':'Identifiant',
+     *       },
+     *      'grid-sorting': {
+     *          '1':'desc',
+     *       },
      *      'grid-columns': {
-     *              '0': { "bSortable": true },
-     *              '1': { "bSortable": true },
-     *          },
-     * 		'grid-visible': {
-     * 				'0': false,
-     * 			},
-     * 		'grid-actions': {
-     * 				'select_all': {'sButtonText':'pi.grid.action.select_all'},
-     * 				'select_none': {'sButtonText':'pi.grid.action.select_none'},
-     * 				'rows_enabled': {'sButtonText':'pi.grid.action.row_enabled', 'route':'sfynx_layout_enabledentity_ajax'},
-     * 				'rows_disable': {'sButtonText':'pi.grid.action.row_disable', 'route':'sfynx_layout_disablentity_ajax'},
-     * 				'rows_delete': {'sButtonText':'pi.grid.action.row_delete', 'route':'sfynx_layout_deletentity_ajax'},
-     *              'rows_archive': {'sButtonText':'pi.grid.action.row_archive', 'route':'sfynx_layout_archiventity_ajax', 'reload':true},
-     *
-     * 				'copy': {'sButtonText':'pi.grid.action.copy'},
-     * 				'print': {'sButtonText':'pi.grid.action.print'},
-     * 				'export_pdf': {'sButtonText':'pi.grid.action.export'},
-     * 				'export_csv': {'sButtonText':'pi.grid.action.export'},
-     * 				'export_xls': {'sButtonText':'pi.grid.action.export'},
-     *
-     *              'rows_text_test': {'sButtonText':'test', 'route':'sfynx_layout_enabledentity_ajax', 'questionTitle':'Titre de mon action', 'questionText':'Etes-vous sûr de vouloir activer toutes les lignes suivantes ?', 'typeResponse':'ajaxResult', 'responseText':'Operation successfully'},
-     *
-     *              'rows_grouping': {'Collapsible':'false',
-						'GroupBy':'name', 'columnIndex':2, 'HideColumn':'true', 'SortDirection':'desc',
-					},
-     *              'rows_position': {'route':'sfynx_layout_position_ajax',},
-     * 			}
-     * 		}
-     * 	%}
-     * 	{{ renderJquery('GRID', 'grid-table', options_gridtabale )|raw }}
+     *          '0': { "bSortable": true },
+     *          '1': { "bSortable": true },
+     *       },
+     *       'grid-visible': {
+     *          '0': false,
+     *       },
+     *      'grid-actions': {
+     *           'select_all': {'sButtonText':'pi.grid.action.select_all'},
+     *           'select_none': {'sButtonText':'pi.grid.action.select_none'},
+     *           'rows_enabled': {'sButtonText':'pi.grid.action.row_enabled', 'route':'sfynx_layout_enabledentity_ajax'},
+     *           'rows_disable': {'sButtonText':'pi.grid.action.row_disable', 'route':'sfynx_layout_disablentity_ajax'},
+     *           'rows_delete': {'sButtonText':'pi.grid.action.row_delete', 'route':'sfynx_layout_deletentity_ajax'},
+     *           'rows_archive': {'sButtonText':'pi.grid.action.row_archive', 'route':'sfynx_layout_archiventity_ajax', 'reload':true},
+     *           'copy': {'sButtonText':'pi.grid.action.copy'},
+     *           'print': {'sButtonText':'pi.grid.action.print'},
+     *           'export_pdf': {'sButtonText':'pi.grid.action.export'},
+     *           'export_csv': {'sButtonText':'pi.grid.action.export'},
+     *           'export_xls': {'sButtonText':'pi.grid.action.export'},
+     *           'rows_text_test': {'sButtonText':'test', 'route':'sfynx_layout_enabledentity_ajax', 'questionTitle':'Titre de mon action', 'questionText':'Etes-vous sûr de vouloir activer toutes les lignes suivantes ?', 'typeResponse':'ajaxResult', 'responseText':'Operation successfully'},
+     *           'rows_grouping': {'Collapsible':'false', 'GroupBy':'name', 'columnIndex':2, 'HideColumn':'true', 'SortDirection':'desc'},
+     *           'rows_position': {'route':'sfynx_layout_position_ajax',
+     *       }
+     *     %}
+     *     {{ renderJquery('GRID', 'grid-table', options_gridtabale )|raw }}
      *
      * </code>
      *
@@ -171,7 +165,7 @@ class PiGridTableManager extends PiJqueryExtension
         $locale = strtolower(substr($this->request->getLocale(), 0, 2));
         $root_file = realpath($this->container->getParameter("kernel.root_dir") . "/../web/bundles/sfynxtemplate/js/ui/i18n/jquery.ui.datepicker-{$locale}.js");
         if (!$root_file) {
-        	$locale = "en-GB";
+            $locale = "en-GB";
         }
         $this->container->get('sfynx.tool.twig.extension.layouthead')->addJsFile("bundles/sfynxtemplate/js/ui/i18n/jquery.ui.datepicker-{$locale}.js");
         //http://datatables.net/forums/discussion/12443/scroller-extra-w-server-side-processing/p1
@@ -198,9 +192,9 @@ class PiGridTableManager extends PiJqueryExtension
             $options['grid-paginate'] = true;
         }
         if ( $options['grid-type'] == "simple" ) {
-        	return $this->gridSimple($options);
+            return $this->gridSimple($options);
         } elseif( $options['grid-type'] == "bootstrap" ) {
-        	return $this->gridBootstrap($options);
+            return $this->gridBootstrap($options);
         }
     }
 
@@ -238,7 +232,7 @@ class PiGridTableManager extends PiJqueryExtension
         $locale = strtolower(substr($this->request->getLocale(), 0, 2));
         $root_file    = realpath($this->container->getParameter("kernel.root_dir") . "/../web/bundles/sfynxtemplate/js/ui/i18n/jquery.ui.datepicker-{$locale}.js");
         if (!$root_file) {
-        	$locale = "en-GB";
+            $locale = "en-GB";
         }
         // set the csrf token
         $csrfToken = $this->securityManager->getToken('grid-action');
@@ -299,17 +293,17 @@ class PiGridTableManager extends PiJqueryExtension
                                 var title = $(this).data('title');
                                 var ajaxsearch = $(this).data('ajaxsearch');
                                 if (column != undefined) {
-                                	<?php if(isset($options['grid-filter-date'])): ?>
-                    				    <?php foreach($options['grid-filter-date'] as $id => $gridDateFilter) : ?>
-                        				    var <?php echo $gridDateFilter['idMin']; ?>DateFilter;
-                        				    var <?php echo $gridDateFilter['idMax']; ?>DateFilter;
-                            				$("table th").each( function ( i ) {
+                                    <?php if(isset($options['grid-filter-date'])): ?>
+                                        <?php foreach($options['grid-filter-date'] as $id => $gridDateFilter) : ?>
+                                            var <?php echo $gridDateFilter['idMin']; ?>DateFilter;
+                                            var <?php echo $gridDateFilter['idMax']; ?>DateFilter;
+                                            $("table th").each( function ( i ) {
                                                 var column = $(this).data('search');
                                                 if (column == <?php echo $gridDateFilter['column']; ?>) {
                                                     $(this).html('<div id="filter-grid-date-<?php echo $id; ?>" ><input class="form-control form-control-inline input-medium default-date-picker" type="text" id="<?php echo $gridDateFilter['idMin']; ?>" name="<?php echo $gridDateFilter['idMin']; ?>"><input type="text" class="form-control form-control-inline input-medium default-date-picker" id="<?php echo $gridDateFilter['idMax']; ?>" name="<?php echo $gridDateFilter['idMax']; ?>"></div>');
                                                 }
-                            				});
-                            				$("#<?php echo $gridDateFilter['idMax']; ?>").datepicker({
+                                            });
+                                            $("#<?php echo $gridDateFilter['idMax']; ?>").datepicker({
                                                 changeMonth: true,
                                                 changeYear: true,
                                                 yearRange: "-71:+11",
@@ -328,20 +322,20 @@ class PiGridTableManager extends PiJqueryExtension
                                                 showOn: "focus",
                                                 buttonImage: "/bundles/sfynxtemplate/images/icons/form/picto-calendar.png",
                                                 onSelect: function(date) {
-                                                	<?php echo $gridDateFilter['idMax']; ?>DateFilter = new Date(date).getTime();
+                                                    <?php echo $gridDateFilter['idMax']; ?>DateFilter = new Date(date).getTime();
                                                     <?php echo $options['grid-name']; ?>oTable.fnDraw();
                                                     $(this).datepicker('hide');
                                                 }
                                             }).keyup( function () {
-                                            	<?php echo $gridDateFilter['idMax']; ?>DateFilter = new Date(this.value).getTime();
+                                                <?php echo $gridDateFilter['idMax']; ?>DateFilter = new Date(this.value).getTime();
                                                 <?php echo $options['grid-name']; ?>oTable.fnDraw();
                                                 $(this).datepicker('hide');
                                             }).on('changeDate', function(ev){
-                                            	<?php echo $gridDateFilter['idMax']; ?>DateFilter = new Date(ev.date).getTime();
+                                                <?php echo $gridDateFilter['idMax']; ?>DateFilter = new Date(ev.date).getTime();
                                                 <?php echo $options['grid-name']; ?>oTable.fnDraw();
                                                 $(this).datepicker('hide');
                                             });
-                            				$("#<?php echo $gridDateFilter['idMin']; ?>").datepicker({
+                                            $("#<?php echo $gridDateFilter['idMin']; ?>").datepicker({
                                                 changeMonth: true,
                                                 changeYear: true,
                                                 yearRange: "-71:+11",
@@ -360,23 +354,23 @@ class PiGridTableManager extends PiJqueryExtension
                                                 showOn: "focus",
                                                 buttonImage: "/bundles/sfynxtemplate/images/icons/form/picto-calendar.png",
                                                 onSelect: function(date) {
-                                                	<?php echo $gridDateFilter['idMin']; ?>DateFilter = new Date(date).getTime();
+                                                    <?php echo $gridDateFilter['idMin']; ?>DateFilter = new Date(date).getTime();
                                                     <?php echo $options['grid-name']; ?>oTable.fnDraw();
                                                     $(this).datepicker('hide');
                                                   }
                                             }).keyup( function () {
-                                            	<?php echo $gridDateFilter['idMin']; ?>DateFilter = new Date(this.value).getTime();
+                                                <?php echo $gridDateFilter['idMin']; ?>DateFilter = new Date(this.value).getTime();
                                                 <?php echo $options['grid-name']; ?>oTable.fnDraw();
                                                 $(this).datepicker('hide');
                                             }).on('changeDate', function(ev){
                                                 <!-- http://bootstrap-datepicker.readthedocs.org/en/release/methods.html#setdate -->
-                                            	<?php echo $gridDateFilter['idMax']; ?>DateFilter = new Date(ev.date).getTime();
+                                                <?php echo $gridDateFilter['idMax']; ?>DateFilter = new Date(ev.date).getTime();
                                                 <?php echo $options['grid-name']; ?>oTable.fnDraw();
                                                 $(this).datepicker('hide');
                                             });
-                            				$.datepicker.setDefaults( $.datepicker.regional[ "<?php echo $locale; ?>" ] );
-                            			<?php endforeach; ?>
-                            		<?php endif; ?>
+                                            $.datepicker.setDefaults( $.datepicker.regional[ "<?php echo $locale; ?>" ] );
+                                        <?php endforeach; ?>
+                                    <?php endif; ?>
                                     if (values == undefined) {
                                         values = <?php echo $options['grid-name']; ?>oTable.fnGetColumnData(column)
                                     }
@@ -403,10 +397,10 @@ class PiGridTableManager extends PiJqueryExtension
                                                 e.preventDefault();
                                                 var keyword = $('.ui-multiselect-filter:visible').find('input').val();
                                                 if ( (ajaxsearch === true) || (ajaxsearch === 'true') ) {
-                                                	if(keyword != $(e.target).data('keyword')) {
-                                                    	<?php echo $options['grid-name']; ?>oTable.fnFilter( keyword, column, true );
-                                                	}
-                                            	}
+                                                    if(keyword != $(e.target).data('keyword')) {
+                                                        <?php echo $options['grid-name']; ?>oTable.fnFilter( keyword, column, true );
+                                                    }
+                                                }
                                             }
                                         });
                                     } else {
@@ -468,150 +462,150 @@ class PiGridTableManager extends PiJqueryExtension
                         });
                     }
 
-					function fnCreateSelect( aData, title, myColumnID)
-					{
-						var mySelectID = 'select_' + myColumnID;
-    					var options = $("<select id='"+mySelectID+"' name='"+mySelectID+"' class='filtSelect' style='width:auto' multiple='multiple'  />"),
-    				    addOptions = function(opts, container){
-    						container.append($("<option />").val('').text('<?php echo $this->translator->trans('pi.page.All'); ?>'));
-    				        $.each(opts, function(i, opt) {
-    				            if(typeof(opt)=='string'){
-    				            	if(typeof(i)=='string'){
-    				                container.append($("<option />").val(i).text(opt));
-    				            	}else{
-    				            		container.append($("<option />").val(opt).text(opt));
-    				            	}
-    				            } else {
-    				                var optgr = $("<optgroup />").attr('label',i);
-    				                addOptions(opt, optgr)
-    				                container.append(optgr);
-    				            }
-    				        });
-    				    };
+                    function fnCreateSelect( aData, title, myColumnID)
+                    {
+                        var mySelectID = 'select_' + myColumnID;
+                        var options = $("<select id='"+mySelectID+"' name='"+mySelectID+"' class='filtSelect' style='width:auto' multiple='multiple'  />"),
+                        addOptions = function(opts, container){
+                            container.append($("<option />").val('').text('<?php echo $this->translator->trans('pi.page.All'); ?>'));
+                            $.each(opts, function(i, opt) {
+                                if(typeof(opt)=='string'){
+                                    if(typeof(i)=='string'){
+                                    container.append($("<option />").val(i).text(opt));
+                                    }else{
+                                        container.append($("<option />").val(opt).text(opt));
+                                    }
+                                } else {
+                                    var optgr = $("<optgroup />").attr('label',i);
+                                    addOptions(opt, optgr)
+                                    container.append(optgr);
+                                }
+                            });
+                        };
 
-    				    options.css('width', '100%')
-    					addOptions(aData,options);
-    					return options;
-					}
+                        options.css('width', '100%')
+                        addOptions(aData,options);
+                        return options;
+                    }
 
                     $.extend( $.fn.dataTableExt.oSort, {
-    				    "num-html-pre": function ( a ) {
-    				        var x = a.replace( /<.*?>/g, "" );
-    				        x = x.replace( "%", "" );
-    				        if(x == " ") { x=-1; }
-    				        return parseFloat( x );
-    				    },
-    				    "num-html-asc": function ( a, b ) {
-    				        return ((a < b) ? -1 : ((a > b) ? 1 : 0));
-    				    },
+                        "num-html-pre": function ( a ) {
+                            var x = a.replace( /<.*?>/g, "" );
+                            x = x.replace( "%", "" );
+                            if(x == " ") { x=-1; }
+                            return parseFloat( x );
+                        },
+                        "num-html-asc": function ( a, b ) {
+                            return ((a < b) ? -1 : ((a > b) ? 1 : 0));
+                        },
 
-    				    "num-html-desc": function ( a, b ) {
-    				        return ((a < b) ? 1 : ((a > b) ? -1 : 0));
-    				    }
-    				} );
+                        "num-html-desc": function ( a, b ) {
+                            return ((a < b) ? 1 : ((a > b) ? -1 : 0));
+                        }
+                    } );
 
-    				$.fn.dataTableExt.oSort['numeric-comma-asc']  = function(a,b) {
-    					var x = (a == "-") ? 0 : a.replace( /,/, "." );
-    					var y = (b == "-") ? 0 : b.replace( /,/, "." );
-    					x = parseFloat( x );
-    					y = parseFloat( y );
-    					return ((x < y) ? -1 : ((x > y) ?  1 : 0));
-    				};
+                    $.fn.dataTableExt.oSort['numeric-comma-asc']  = function(a,b) {
+                        var x = (a == "-") ? 0 : a.replace( /,/, "." );
+                        var y = (b == "-") ? 0 : b.replace( /,/, "." );
+                        x = parseFloat( x );
+                        y = parseFloat( y );
+                        return ((x < y) ? -1 : ((x > y) ?  1 : 0));
+                    };
 
-    				$.fn.dataTableExt.oSort['numeric-comma-desc'] = function(a,b) {
-    					var x = (a == "-") ? 0 : a.replace( /,/, "." );
-    					var y = (b == "-") ? 0 : b.replace( /,/, "." );
-    					x = parseFloat( x );
-    					y = parseFloat( y );
-    					return ((x < y) ?  1 : ((x > y) ? -1 : 0));
-    				};
+                    $.fn.dataTableExt.oSort['numeric-comma-desc'] = function(a,b) {
+                        var x = (a == "-") ? 0 : a.replace( /,/, "." );
+                        var y = (b == "-") ? 0 : b.replace( /,/, "." );
+                        x = parseFloat( x );
+                        y = parseFloat( y );
+                        return ((x < y) ?  1 : ((x > y) ? -1 : 0));
+                    };
 
-    				(function($) {
-    					/*
-    					 * Function: fnGetColumnData
-    					 * Purpose:  Return an array of table values from a particular column.
-    					 * Returns:  array string: 1d data array
-    					 * Inputs:   object:oSettings - dataTable settings object. This is always the last argument past to the function
-    					 *           int:iColumn - the id of the column to extract the data from
-    					 *           bool:bUnique - optional - if set to false duplicated values are not filtered out
-    					 *           bool:bFiltered - optional - if set to false all the table data is used (not only the filtered)
-    					 *           bool:bIgnoreEmpty - optional - if set to false empty values are not filtered from the result array
-    					 * Author:   Benedikt Forchhammer <b.forchhammer /AT\ mind2.de>
-    					 */
-    					$.fn.dataTableExt.oApi.fnGetColumnData = function ( oSettings, iColumn, bUnique, bFiltered, bIgnoreEmpty ) {
-    					    // check that we have a column id
-    					    if ( typeof iColumn == "undefined" ) return new Array();
+                    (function($) {
+                        /*
+                         * Function: fnGetColumnData
+                         * Purpose:  Return an array of table values from a particular column.
+                         * Returns:  array string: 1d data array
+                         * Inputs:   object:oSettings - dataTable settings object. This is always the last argument past to the function
+                         *           int:iColumn - the id of the column to extract the data from
+                         *           bool:bUnique - optional - if set to false duplicated values are not filtered out
+                         *           bool:bFiltered - optional - if set to false all the table data is used (not only the filtered)
+                         *           bool:bIgnoreEmpty - optional - if set to false empty values are not filtered from the result array
+                         * Author:   Benedikt Forchhammer <b.forchhammer /AT\ mind2.de>
+                         */
+                        $.fn.dataTableExt.oApi.fnGetColumnData = function ( oSettings, iColumn, bUnique, bFiltered, bIgnoreEmpty ) {
+                            // check that we have a column id
+                            if ( typeof iColumn == "undefined" ) return new Array();
 
-    					    // by default we only want unique data
-    					    if ( typeof bUnique == "undefined" ) bUnique = true;
+                            // by default we only want unique data
+                            if ( typeof bUnique == "undefined" ) bUnique = true;
 
-    					    // by default we do want to only look at filtered data
-    					    if ( typeof bFiltered == "undefined" ) bFiltered = true;
+                            // by default we do want to only look at filtered data
+                            if ( typeof bFiltered == "undefined" ) bFiltered = true;
 
-    					    // by default we do not want to include empty values
-    					    if ( typeof bIgnoreEmpty == "undefined" ) bIgnoreEmpty = true;
+                            // by default we do not want to include empty values
+                            if ( typeof bIgnoreEmpty == "undefined" ) bIgnoreEmpty = true;
 
-    					    // list of rows which we're going to loop through
-    					    var aiRows;
+                            // list of rows which we're going to loop through
+                            var aiRows;
 
-    					    // use only filtered rows
-    					    if (bFiltered == true) aiRows = oSettings.aiDisplay;
-    					    // use all rows
-    					    else aiRows = oSettings.aiDisplayMaster; // all row numbers
+                            // use only filtered rows
+                            if (bFiltered == true) aiRows = oSettings.aiDisplay;
+                            // use all rows
+                            else aiRows = oSettings.aiDisplayMaster; // all row numbers
 
-    					    // set up data array
-    					    var asResultData = new Array();
+                            // set up data array
+                            var asResultData = new Array();
 
-    					    for (var i=0,c=aiRows.length; i<c; i++) {
-    					        iRow = aiRows[i];
-    					        var aData = this.fnGetData(iRow);
-    					        var sValue = aData[iColumn];
+                            for (var i=0,c=aiRows.length; i<c; i++) {
+                                iRow = aiRows[i];
+                                var aData = this.fnGetData(iRow);
+                                var sValue = aData[iColumn];
 
-    					        // Error lorsque sValue = null
-								if(sValue == null) continue;
+                                // Error lorsque sValue = null
+                                if(sValue == null) continue;
 
                                 // ignore empty values?
-    					        else if (bIgnoreEmpty == true && sValue.length == 0) continue;
+                                else if (bIgnoreEmpty == true && sValue.length == 0) continue;
 
-    					        // ignore unique values?
-    					        else if (bUnique == true && jQuery.inArray(sValue, asResultData) > -1) continue;
+                                // ignore unique values?
+                                else if (bUnique == true && jQuery.inArray(sValue, asResultData) > -1) continue;
 
-    					        // else push the value onto the result data array
-    					        else asResultData.push(sValue);
-    					    }
+                                // else push the value onto the result data array
+                                else asResultData.push(sValue);
+                            }
 
-    					    return asResultData;
-    				}}(jQuery));
+                            return asResultData;
+                    }}(jQuery));
 
 
-    				<?php if(isset($options['grid-filter-date'])): ?>
-    				    <?php foreach($options['grid-filter-date'] as $id => $gridDateFilter){ ?>
-        				    // http://live.datatables.net/etewoq/4/edit#javascript,html,live
-        				    var <?php echo $gridDateFilter['idMin']; ?>DateFilter;
-        				    var <?php echo $gridDateFilter['idMax']; ?>DateFilter;
-            				<?php if(isset($options['grid-server-side']) && (($options['grid-server-side'] == 'true') || ($options['grid-server-side'] == true)) ) : ?>
-            				<?php else: ?>
-            				$.fn.dataTableExt.afnFiltering.push (
-        						  function( oSettings, aData, iDataIndex ) {
-            						    if ( typeof aData._date == 'undefined' ) {
-            						      aData._date = new Date(aData["<?php echo $gridDateFilter['column']; ?>"]).getTime();
-            						    }
-            						    if ( <?php echo $gridDateFilter['idMin']; ?>DateFilter && !isNaN(<?php echo $gridDateFilter['idMin']; ?>DateFilter) ) {
-            						      if ( aData._date < <?php echo $gridDateFilter['idMin']; ?>DateFilter ) {
-            						        return false;
-            						      }
-            						    }
-            						    if ( <?php echo $gridDateFilter['idMax']; ?>DateFilter && !isNaN(<?php echo $gridDateFilter['idMax']; ?>DateFilter) ) {
-            						      if ( aData._date > <?php echo $gridDateFilter['idMax']; ?>DateFilter ) {
-            						        return false;
-            						      }
-            						    }
-            						    return true;
-        						  }
-            				);
-            				<?php endif; ?>
-        				<?php } ?>
-    				<?php endif; ?>
+                    <?php if(isset($options['grid-filter-date'])): ?>
+                        <?php foreach ($options['grid-filter-date'] as $id => $gridDateFilter) { ?>
+                            // http://live.datatables.net/etewoq/4/edit#javascript,html,live
+                            var <?php echo $gridDateFilter['idMin']; ?>DateFilter;
+                            var <?php echo $gridDateFilter['idMax']; ?>DateFilter;
+                            <?php if(isset($options['grid-server-side']) && (($options['grid-server-side'] == 'true') || ($options['grid-server-side'] == true)) ) : ?>
+                            <?php else: ?>
+                            $.fn.dataTableExt.afnFiltering.push (
+                                  function( oSettings, aData, iDataIndex ) {
+                                        if ( typeof aData._date == 'undefined' ) {
+                                          aData._date = new Date(aData["<?php echo $gridDateFilter['column']; ?>"]).getTime();
+                                        }
+                                        if ( <?php echo $gridDateFilter['idMin']; ?>DateFilter && !isNaN(<?php echo $gridDateFilter['idMin']; ?>DateFilter) ) {
+                                          if ( aData._date < <?php echo $gridDateFilter['idMin']; ?>DateFilter ) {
+                                            return false;
+                                          }
+                                        }
+                                        if ( <?php echo $gridDateFilter['idMax']; ?>DateFilter && !isNaN(<?php echo $gridDateFilter['idMax']; ?>DateFilter) ) {
+                                          if ( aData._date > <?php echo $gridDateFilter['idMax']; ?>DateFilter ) {
+                                            return false;
+                                          }
+                                        }
+                                        return true;
+                                  }
+                            );
+                            <?php endif; ?>
+                        <?php } ?>
+                    <?php endif; ?>
 
                     var enabled;
                     var disablerow;
@@ -636,7 +630,7 @@ class PiGridTableManager extends PiJqueryExtension
                         ?>
                         $(this).attr('class', class_button + " ui-icon  " + name_button);
                         <?php } ?>
-    				});
+                    });
 
                     $("td.enabled").each(function(index) {
                         var value = $(this).html();
@@ -658,7 +652,7 @@ class PiGridTableManager extends PiJqueryExtension
                         <?php echo $options['grid-name']; ?>oTable.fnFilter( this.value, <?php echo $options['grid-name']; ?>oTable.oApi._fnVisibleToColumnIndex(
                                 <?php echo $options['grid-name']; ?>oTable.fnSettings(), $("thead input").index(this) ) );
                     } );
-					*/
+                    */
 
                     <?php if (isset($options['grid-actions']) && !empty($options['grid-actions']) && is_array($options['grid-actions'])): ?>
                         <?php foreach($options['grid-actions'] as $actionName => $params): ?>
@@ -741,31 +735,31 @@ class PiGridTableManager extends PiJqueryExtension
                         "bServerSide": true,
                         "sAjaxSource": "<?php echo $this->container->get('request_stack')->getCurrentRequest()->getRequestUri(); ?>",
                         'fnServerData' : function ( sSource, aoData, fnCallback ) {
-                        	<?php if (isset($options['grid-filter-date'])): ?>
-                            	<?php foreach($options['grid-filter-date'] as $id => $gridDateFilter){ ?>
-    						    aoData.push( { 'name' : 'date-<?php echo $gridDateFilter['idMin']; ?>', 'value' : $("#<?php echo $gridDateFilter['idMin']; ?>").val() } );
-    						    aoData.push( { 'name' : 'date-<?php echo $gridDateFilter['idMax']; ?>', 'value' : $("#<?php echo $gridDateFilter['idMax']; ?>").val() } );
-    						    <?php } ?>
-						    <?php endif; ?>
+                            <?php if (isset($options['grid-filter-date'])): ?>
+                                <?php foreach ($options['grid-filter-date'] as $id => $gridDateFilter) { ?>
+                                aoData.push( { 'name' : 'date-<?php echo $gridDateFilter['idMin']; ?>', 'value' : $("#<?php echo $gridDateFilter['idMin']; ?>").val() } );
+                                aoData.push( { 'name' : 'date-<?php echo $gridDateFilter['idMax']; ?>', 'value' : $("#<?php echo $gridDateFilter['idMax']; ?>").val() } );
+                                <?php } ?>
+                            <?php endif; ?>
 
-					        //$.getJSON( sSource, aoData, function (json) {
-					            /* Do whatever additional processing you want on the callback, then tell DataTables */
-					        //    fnCallback(json)
-					        //} );
-					        $.ajax({
-							    'dataType' : 'json',
-							    'data' : aoData,
-							    'type' : 'GET',
-							    'url' : sSource,
-							    'success' : fnCallback
-						    });
-					    },
-					    "fnRowCallback": function( nRow, aData, iDisplayIndex ) {
-							/* Append the grade to the default row class name */
-						    var id = aData[0];
-						    $(nRow).attr("id",id);
-							return nRow;
-						},
+                            //$.getJSON( sSource, aoData, function (json) {
+                                /* Do whatever additional processing you want on the callback, then tell DataTables */
+                            //    fnCallback(json)
+                            //} );
+                            $.ajax({
+                                'dataType' : 'json',
+                                'data' : aoData,
+                                'type' : 'GET',
+                                'url' : sSource,
+                                'success' : fnCallback
+                            });
+                        },
+                        "fnRowCallback": function( nRow, aData, iDisplayIndex ) {
+                            /* Append the grade to the default row class name */
+                            var id = aData[0];
+                            $(nRow).attr("id",id);
+                            return nRow;
+                        },
                         "fnInfoCallback": function( oSettings, iStart, iEnd, iMax, iTotal, sPre ) {
                             $("a.info-tooltip").tooltip({
                                 position: {
@@ -791,7 +785,7 @@ class PiGridTableManager extends PiJqueryExtension
                                 ?>
                                 $(this).attr('class', class_button + " ui-icon  " + name_button);
                                 <?php } ?>
-            				});
+                            });
 
                             /* Add a select menu for each TH element in the table footer */
                             /* http://datatables.net/forums/discussion/comment/33095 */
@@ -852,18 +846,18 @@ class PiGridTableManager extends PiJqueryExtension
                         // < and > - div elements
                         // <"class" and > - div with a class
                         // Examples: <"wrapper"flipt>, <lf<t>ip>
-                        //avec multi-filtre : "sDom": '<"block_filter"><"H"RTfr<"clear"><?php if (isset($options["grid-filters-select"])){ echo "W"; } ?>>tC<"F"lpi>',
-                        <?php if(isset($options['grid-filters']) && isset($options['grid-filters-active']) && (($options['grid-filters-active'] === 'true') || ($options['grid-filters-active'] === true)) ) : ?>
-                            <?php if((isset($options['grid-paginate-top']) && (($options['grid-paginate-top'] === 'false') || ($options['grid-paginate-top'] === false))) ) : ?>
-                            "sDom": '<"block_filter"><"H"RTfr<"clear"><?php if(isset($options["grid-filters-select"])){ echo "W"; } ?>>tC<"F"lpi>',
+                        //avec multi-filtre : "sDom": '<"block_filter"><"H"RTfr<"clear"><?php if (isset($options["grid-filters-select"])) { echo "W"; } ?>>tC<"F"lpi>',
+                        <?php if (isset($options['grid-filters']) && isset($options['grid-filters-active']) && (($options['grid-filters-active'] === 'true') || ($options['grid-filters-active'] === true)) ) : ?>
+                            <?php if ((isset($options['grid-paginate-top']) && (($options['grid-paginate-top'] === 'false') || ($options['grid-paginate-top'] === false))) ) : ?>
+                            "sDom": '<"block_filter"><"H"RTfr<"clear"><?php if(isset($options["grid-filters-select"])) { echo "W"; } ?>>tC<"F"lpi>',
                             <?php else: ?>
-                            "sDom": '<"block_filter"><"H"RTfr<"clear"><?php if(isset($options["grid-filters-select"])){ echo "W"; } ?><"clear">p<"clear">>tC<"F"lpi>',
+                            "sDom": '<"block_filter"><"H"RTfr<"clear"><?php if(isset($options["grid-filters-select"])) { echo "W"; } ?><"clear">p<"clear">>tC<"F"lpi>',
                             <?php endif; ?>
                         <?php else: ?>
-                            <?php if((isset($options['grid-paginate-top']) && (($options['grid-paginate-top'] === 'false') || ($options['grid-paginate-top'] === false))) ) : ?>
-                            "sDom": '<"H"RTfr<"clear"><?php if(isset($options["grid-filters-select"])){ echo "W"; } ?>>tC<"F"lpi>',
+                            <?php if ((isset($options['grid-paginate-top']) && (($options['grid-paginate-top'] === 'false') || ($options['grid-paginate-top'] === false))) ) : ?>
+                            "sDom": '<"H"RTfr<"clear"><?php if (isset($options["grid-filters-select"])) { echo "W"; } ?>>tC<"F"lpi>',
                             <?php else: ?>
-                            "sDom": '<"H"RTfr<"clear"><?php if(isset($options["grid-filters-select"])){ echo "W"; } ?><"clear">p<"clear">>tC<"F"lpi>',
+                            "sDom": '<"H"RTfr<"clear"><?php if (isset($options["grid-filters-select"])) { echo "W"; } ?><"clear">p<"clear">>tC<"F"lpi>',
                             <?php endif; ?>
                         <?php endif; ?>
 
@@ -1012,7 +1006,7 @@ class PiGridTableManager extends PiJqueryExtension
                                                 }
                                             },
                                     <?php elseif ($actionName == "select_all"): ?>
-                                    		<?php if (!isset($params['sButtonText']) || empty($params['sButtonText']) ) $params['sButtonText'] = 'pi.grid.action.select_all'; ?>
+                                            <?php if (!isset($params['sButtonText']) || empty($params['sButtonText']) ) $params['sButtonText'] = 'pi.grid.action.select_all'; ?>
                                             {
                                                 "sExtends": "select_all",
                                                 "sButtonText": "<img class='btn-action' src='<?php echo $select_all ?>' title='<?php echo $this->translator->trans($params['sButtonText']); ?>' alt='<?php echo $this->translator->trans($params['sButtonText']); ?>'  /><?php echo $this->translator->trans($params['sButtonText']); ?>",
@@ -1021,7 +1015,7 @@ class PiGridTableManager extends PiJqueryExtension
                                                 },
                                             },
                                     <?php elseif ($actionName == "select_none"): ?>
-                                    		<?php if (!isset($params['sButtonText']) || empty($params['sButtonText']) ) $params['sButtonText'] = 'pi.grid.action.select_none'; ?>
+                                            <?php if (!isset($params['sButtonText']) || empty($params['sButtonText']) ) $params['sButtonText'] = 'pi.grid.action.select_none'; ?>
                                             {
                                                 "sExtends": "select_none",
                                                 "sButtonText": "<img class='btn-action' src='<?php echo $select_none ?>' title='<?php echo $this->translator->trans($params['sButtonText']); ?>' alt='<?php echo $this->translator->trans($params['sButtonText']); ?>'  /><?php echo $this->translator->trans($params['sButtonText']); ?>",
@@ -1030,19 +1024,19 @@ class PiGridTableManager extends PiJqueryExtension
                                                 },
                                             },
                                     <?php elseif ($actionName == "copy"): ?>
-                                    		<?php if (!isset($params['sButtonText']) || empty($params['sButtonText']) ) $params['sButtonText'] = 'pi.grid.action.copy'; ?>
+                                            <?php if (!isset($params['sButtonText']) || empty($params['sButtonText']) ) $params['sButtonText'] = 'pi.grid.action.copy'; ?>
                                             {
                                                 "sExtends": "copy",
                                                 "sButtonText": "<img class='btn-action' src='<?php echo $copy ?>' title='<?php echo $this->translator->trans($params['sButtonText']); ?>' alt='<?php echo $this->translator->trans($params['sButtonText']); ?>'  /><?php echo $this->translator->trans($params['sButtonText']); ?>",
                                             },
                                     <?php elseif ($actionName == "print"): ?>
-                                    		<?php if (!isset($params['sButtonText']) || empty($params['sButtonText']) ) $params['sButtonText'] = 'pi.grid.action.print'; ?>
+                                            <?php if (!isset($params['sButtonText']) || empty($params['sButtonText']) ) $params['sButtonText'] = 'pi.grid.action.print'; ?>
                                             {
                                                 "sExtends": "print",
                                                 "sButtonText": "<img class='btn-action' src='<?php echo $print; ?>' title='<?php echo $this->translator->trans($params['sButtonText']); ?>' alt='<?php echo $this->translator->trans($params['sButtonText']); ?>'  /><?php echo $this->translator->trans($params['sButtonText']); ?>",
                                             },
                                     <?php elseif ($actionName == "export"): ?>
-                                    		<?php if (!isset($params['sButtonText']) || empty($params['sButtonText']) ) $params['sButtonText'] = 'pi.grid.action.export'; ?>
+                                            <?php if (!isset($params['sButtonText']) || empty($params['sButtonText']) ) $params['sButtonText'] = 'pi.grid.action.export'; ?>
                                             <?php if(!isset($params['sTitle']) || empty($params['sTitle']) ) $params['sTitle'] = 'Sfynx'; ?>
                                             {
                                                 "sExtends":    "collection",
@@ -1065,7 +1059,7 @@ class PiGridTableManager extends PiJqueryExtension
                                                  ]
                                             },
                                     <?php elseif ($actionName == "export_csv"): ?>
-                                    		<?php if (!isset($params['sButtonText']) || empty($params['sButtonText']) ) $params['sButtonText'] = 'pi.grid.action.export.csv'; ?>
+                                            <?php if (!isset($params['sButtonText']) || empty($params['sButtonText']) ) $params['sButtonText'] = 'pi.grid.action.export.csv'; ?>
                                             <?php if(!isset($params['sTitle']) || empty($params['sTitle']) ) $params['sTitle'] = 'Sfynx'; ?>
                                             {
                                                 "sExtends": "csv",
@@ -1073,7 +1067,7 @@ class PiGridTableManager extends PiJqueryExtension
                                                 "sButtonText": "<img class='btn-action' src='<?php echo $export_csv; ?>' title='<?php echo $this->translator->trans($params['sButtonText']); ?>' alt='<?php echo $this->translator->trans($params['sButtonText']); ?>'  />CSV"
                                             },
                                     <?php elseif ($actionName == "export_pdf"): ?>
-                                    		<?php if (!isset($params['sButtonText']) || empty($params['sButtonText']) ) $params['sButtonText'] = 'pi.grid.action.export.pdf'; ?>
+                                            <?php if (!isset($params['sButtonText']) || empty($params['sButtonText']) ) $params['sButtonText'] = 'pi.grid.action.export.pdf'; ?>
                                             <?php if(!isset($params['sTitle']) || empty($params['sTitle']) ) $params['sTitle'] = 'Sfynx'; ?>
                                             {
                                                 "sExtends": "pdf",
@@ -1083,7 +1077,7 @@ class PiGridTableManager extends PiJqueryExtension
                                                 "sPdfMessage": "PDF export (<?php echo date("Y/m/d"); ?>)"
                                             },
                                     <?php elseif ($actionName == "export_xls"): ?>
-                                    		<?php if (!isset($params['sButtonText']) || empty($params['sButtonText']) ) $params['sButtonText'] = 'pi.grid.action.export.xls'; ?>
+                                            <?php if (!isset($params['sButtonText']) || empty($params['sButtonText']) ) $params['sButtonText'] = 'pi.grid.action.export.xls'; ?>
                                             <?php if(!isset($params['sTitle']) || empty($params['sTitle']) ) $params['sTitle'] = 'Sfynx'; ?>
                                             {
                                                 "sExtends": "xls",
@@ -1165,7 +1159,7 @@ class PiGridTableManager extends PiJqueryExtension
                                                         <?php endif; ?>
                                                         // we run fancybox
                                                         $.fancybox({
-                                                        	'wrapCSS': 'fancybox-sfynx',
+                                                            'wrapCSS': 'fancybox-sfynx',
                                                             'content':$("#confirm-popup-grid").html(),
                                                             'autoDimensions':true,
                                                             'scrolling':'no',
@@ -1177,13 +1171,13 @@ class PiGridTableManager extends PiJqueryExtension
                                                             'height': 'auto',
                                                             'padding':0,
                                                             'type': 'inline',
-                                                            'onComplete'		: function() {
+                                                            'onComplete'        : function() {
                                                              },
-                                                            'onClosed'		: function() {
-                                                        	}
+                                                            'onClosed'        : function() {
+                                                            }
                                                         });
                                                         // we set the action button
-                                                      	<?php if (isset($params['route']) && !empty($params['route'])) : ?>
+                                                          <?php if (isset($params['route']) && !empty($params['route'])) : ?>
                                                         $("button.save").click(function(event, dataObject) {
                                                             event.preventDefault();
                                                             $.ajax( {
@@ -1193,26 +1187,26 @@ class PiGridTableManager extends PiJqueryExtension
                                                                "type": "post",
                                                                "beforeSend": function ( xhr ) {
                                                                    //xhr.overrideMimeType("text/plain; charset=x-user-defined");
-                                                               	   $('.dataTables_processing').css({'visibility':'visible'});
+                                                                      $('.dataTables_processing').css({'visibility':'visible'});
                                                                },
                                                                "statusCode": {
                                                                    404: function() {
                                                                    }
                                                                }
                                                            }).done(function ( data ) {
-                                                        	   <?php if (isset($params['typeResponse']) && ($params['typeResponse']) == "ajaxResult") : ?>
-                                                        	      $("#grid-html > div").html(data);
-                                                           	   <?php else: ?>
-                                                         	      <?php if (isset($params['responseText']) && !empty($params['responseText'])) : ?>
-                                                         	      $("#grid-html > div").html("<?php echo $params['responseText']; ?>");
-                                                           	      <?php endif; ?>
-                                                           	   <?php endif; ?>
+                                                               <?php if (isset($params['typeResponse']) && ($params['typeResponse']) == "ajaxResult") : ?>
+                                                                  $("#grid-html > div").html(data);
+                                                                  <?php else: ?>
+                                                                   <?php if (isset($params['responseText']) && !empty($params['responseText'])) : ?>
+                                                                   $("#grid-html > div").html("<?php echo $params['responseText']; ?>");
+                                                                     <?php endif; ?>
+                                                                  <?php endif; ?>
 
-                                                           	   $('.dataTables_processing').css({'visibility':'hidden'});
+                                                                  $('.dataTables_processing').css({'visibility':'hidden'});
 
-                                                        	   <?php if (isset($params['reload']) && ($params['reload']) == true) : ?>
-                                                        	   window.location.reload();
-                                                        	   <?php endif; ?>
+                                                               <?php if (isset($params['reload']) && ($params['reload']) == true) : ?>
+                                                               window.location.reload();
+                                                               <?php endif; ?>
                                                            });
                                                         });
                                                        <?php endif; ?>
@@ -1343,27 +1337,53 @@ class PiGridTableManager extends PiJqueryExtension
                     <?php endforeach; ?>
                 <?php endif; ?>
 
+                    /**
+                     * GLOBAL SEARCH CONTENT
+                     */
+                    var content = $("#<?php echo $options['grid-name']; ?>_blockglobalsearch_content").html();
+                    $("#<?php echo $options['grid-name']; ?>_filter").html(content);
+                    $(document).on('keyup', "input#<?php echo $options['grid-name']; ?>_globale_filter", function(){
+                        <?php echo $options['grid-name']; ?>oTable.fnFilter($(this).val());
+                    });
+                    $('#<?php echo $options['grid-name']; ?>_search_button').click(function() {
+                        $('.search-label').toggleClass('changed');
+                        var toggleWidth = $('.dataTables_filter [type=search]').width() == 221 ? "0px" : "221px";
+                        $('.dataTables_filter [type=search]').animate({width: toggleWidth});
+                    });
 
-                    var content = $("#blocksearch_content").html();
-                    $("#blocksearch_content").html('');
+
+                    /**
+                     * SEARCH CONTENT
+                     */
+                    var content = $("#<?php echo $options['grid-name']; ?>_blocksearch_content").html();
+                    $("#<?php echo $options['grid-name']; ?>_blocksearch_content").html('');
                     $("#<?php echo $options['grid-name']; ?>").before(content);
 
-                    $("#global_filter").keyup( fnFilterGlobal );
-                    $("#global_regex").click( fnFilterGlobal );
-                    $("#global_smart").click( fnFilterGlobal );
+                    $("#<?php echo $options['grid-name']; ?>_global_filter").keyup( fnFilterGlobal );
+                    $("#<?php echo $options['grid-name']; ?>_global_regex").click( fnFilterGlobal );
+                    $("#<?php echo $options['grid-name']; ?>_global_smart").click( fnFilterGlobal );
 
-                    <?php if (isset($options['grid-filters']) && !empty($options['grid-filters']) && is_array($options['grid-filters'])){ ?>
-                        <?php foreach($options['grid-filters'] as $id => $colName){ ?>
+                    <?php if (isset($options['grid-filters']) && !empty($options['grid-filters']) && is_array($options['grid-filters'])) { ?>
+                        <?php foreach ($options['grid-filters'] as $id => $colName) { ?>
 
-                    $("#col<?php echo $id; ?>_filter").keyup( function() { fnFilterColumn( <?php echo $id-1; ?> ); } );
-                    $("#col<?php echo $id; ?>_regex").click(  function() { fnFilterColumn( <?php echo $id-1; ?> ); } );
-                    $("#col<?php echo $id; ?>_smart").click(  function() { fnFilterColumn( <?php echo $id-1; ?> ); } );
+                    $("#<?php echo $options['grid-name']; ?>_col<?php echo $id; ?>_filter").keyup( function() { fnFilterColumn( <?php echo $id-1; ?> ); } );
+                    $("#<?php echo $options['grid-name']; ?>_col<?php echo $id; ?>_regex").click(  function() { fnFilterColumn( <?php echo $id-1; ?> ); } );
+                    $("#<?php echo $options['grid-name']; ?>_col<?php echo $id; ?>_smart").click(  function() { fnFilterColumn( <?php echo $id-1; ?> ); } );
 
                         <?php } ?>
                     <?php } ?>
 
                     $('.block_filter').click(function() {
                         $("#blocksearch").slideToggle("slow");
+                    });
+
+                    $('select', '#<?php echo $options['grid-name']; ?>').each(function(){
+                        var options = $('option',this);
+
+                        if(options.length === 2){
+                          var option = $(options[1]);
+                          option.attr('selected','true');
+                        }
                     });
 
                     <?php if (isset($options['grid-actions']['rows_position'])) : ?>
@@ -1432,7 +1452,20 @@ class PiGridTableManager extends PiJqueryExtension
                 </div>
             </div>
 
-            <div id="blocksearch_content">
+            <div id="<?php echo $options['grid-name']; ?>_blockglobalsearch_content">
+                <div class="dataTable_filter_inner_wrapper" id="filter_inner_wrapper_<?php echo $options['grid-name']; ?>">
+                    <div class="dataTables_filter search-wrapper">
+                        <label class="search-label">
+                            <input type="search" id="<?php echo $options['grid-name']; ?>_globale_filter" placeholder="Recherche rapide" aria-controls="alert_<?php echo $options['grid-name']; ?>">
+                        </label>
+                        <button class="search-button" id="<?php echo $options['grid-name']; ?>_search_button">
+                            <span class="icon icon-cross"></span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <div id="<?php echo $options['grid-name']; ?>_blocksearch_content">
                 <div id="blocksearch" style="display:none" >
                     <table class="filter">
                         <thead>
@@ -1446,17 +1479,17 @@ class PiGridTableManager extends PiJqueryExtension
                         <tbody>
                             <tr id="filter_global">
                                 <td>Global filtering</td>
-                                <td><input type="text"     name="global_filter" id="global_filter"></td>
-                                <td><input type="checkbox" name="global_regex"  id="global_regex" ></td>
-                                <td><input type="checkbox" name="global_smart"  id="global_smart"  checked></td>
+                                <td><input type="text"     name="<?php echo $options['grid-name']; ?>_global_filter" id="global_filter"></td>
+                                <td><input type="checkbox" name="<?php echo $options['grid-name']; ?>_global_regex"  id="global_regex" ></td>
+                                <td><input type="checkbox" name="<?php echo $options['grid-name']; ?>_global_smart"  id="global_smart"  checked></td>
                             </tr>
-                            <?php if (isset($options['grid-filters']) && !empty($options['grid-filters']) && is_array($options['grid-filters'])){ ?>
-                                <?php foreach($options['grid-filters'] as $id => $colName){ ?>
+                            <?php if (isset($options['grid-filters']) && !empty($options['grid-filters']) && is_array($options['grid-filters'])) { ?>
+                                <?php foreach ($options['grid-filters'] as $id => $colName) { ?>
                                     <tr id="filter_col<?php echo $id; ?>">
                                         <td><?php echo $colName; ?></td>
-                                        <td><input type="text"     name="col<?php echo $id; ?>_filter" id="col<?php echo $id; ?>_filter"></td>
-                                        <td><input type="checkbox" name="col<?php echo $id; ?>_regex"  id="col<?php echo $id; ?>_regex"></td>
-                                        <td><input type="checkbox" name="col<?php echo $id; ?>_smart"  id="col<?php echo $id; ?>_smart" checked></td>
+                                        <td><input type="text"     name="<?php echo $options['grid-name']; ?>_col<?php echo $id; ?>_filter" id="col<?php echo $id; ?>_filter"></td>
+                                        <td><input type="checkbox" name="<?php echo $options['grid-name']; ?>_col<?php echo $id; ?>_regex"  id="col<?php echo $id; ?>_regex"></td>
+                                        <td><input type="checkbox" name="<?php echo $options['grid-name']; ?>_col<?php echo $id; ?>_smart"  id="col<?php echo $id; ?>_smart" checked></td>
                                     </tr>
                                 <?php } ?>
                             <?php } ?>
@@ -1484,9 +1517,9 @@ class PiGridTableManager extends PiJqueryExtension
      */
     protected function gridBootstrap($options = null)
     {
-    	// We open the buffer.
-    	ob_start ();
-    	?>
+        // We open the buffer.
+        ob_start ();
+        ?>
             <script type="text/javascript">
             //<![CDATA[
             <?php echo $options['grid-name']; ?>oTable = $('#<?php echo $options['grid-name']; ?>').dataTable({

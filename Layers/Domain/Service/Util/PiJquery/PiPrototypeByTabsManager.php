@@ -1170,7 +1170,7 @@ class PiPrototypeByTabsManager extends PiJqueryExtension
                 };
 
                 $(document).ready(function() {
-                    <?php foreach($options['prototype-name'] as $key => $value){ ?>
+                    <?php foreach ($options['prototype-name'] as $key => $value) { ?>
                         // We run the function.
                         j_prototype_bytabs.ftc_init('<?php echo $options['prototype-idForm']; ?>', '<?php echo $value; ?>');
                     <?php } ?>

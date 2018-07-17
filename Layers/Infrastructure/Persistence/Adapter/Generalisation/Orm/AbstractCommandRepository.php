@@ -13,6 +13,7 @@ use Sfynx\CoreBundle\Layers\Infrastructure\Cache\CacheQuery;
 use Sfynx\CoreBundle\Layers\Domain\Repository\Command\CommandRepositoryInterface;
 use Sfynx\CoreBundle\Layers\Infrastructure\Persistence\Adapter\Generalisation\Orm\Traits\TraitGeneral;
 use Sfynx\CoreBundle\Layers\Infrastructure\Persistence\Adapter\Generalisation\Orm\Traits\TraitSave;
+use Sfynx\CoreBundle\Layers\Infrastructure\Persistence\Adapter\Generalisation\Orm\Traits\TraitResultFunction;
 
 /**
  * Abstract Command Repository
@@ -33,6 +34,7 @@ use Sfynx\CoreBundle\Layers\Infrastructure\Persistence\Adapter\Generalisation\Or
  */
 abstract class AbstractCommandRepository extends EntityRepository implements CommandRepositoryInterface
 {
+    use TraitResultFunction;
     use TraitSave;
     use TraitGeneral;
 
@@ -75,5 +77,26 @@ abstract class AbstractCommandRepository extends EntityRepository implements Com
     {
         $this->getClassMetadata()->setIdGenerator(new \Doctrine\ORM\Id\AssignedGenerator());
         return $this;
+    }
+
+    /**
+     * @param string $entropy
+     * @return string
+     */
+    public static function struuid(string $entropy)
+    {
+        $s = \uniqid("", $entropy);
+        $num = \hexdec(\str_replace(".","", (string)$s));
+        $index = '1234567890ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+        $base = \strlen($index);
+        $out = '';
+
+        for ($t = \floor(\log10($num) / \log10($base)); $t >= 0; $t--) {
+            $a = \floor($num / \pow($base, $t));
+            $out = $out . \substr($index, $a, 1);
+            $num = $num - ($a * \pow($base, $t));
+        }
+
+        return $out;
     }
 }

@@ -16,7 +16,7 @@
 
 	<!-- Begin tag markup -->
 	<div id="tabs">
-		{% include getParameter('sfynx.template.theme.layout.admin.pc')|replace({'::': ':'})~"Crud:edit-header.html.twig" %}
+		{% include getParameter('sfynx.template.theme.layout.admin.pc')~"Crud/edit-header.html.twig" %}
 		{{ "{% form_theme edit_form getParameter('sfynx.template.theme.layout.admin.form.template') %}" }}
 		<form class="myform" action="{{ "{{ path('"~ route_name_prefix ~"_update', { 'id': entity.id, 'NoLayout': app.request.query.get('NoLayout') }) }}" }}" method="post" {{ "{{ form_start(edit_form) }}" }} novalidate>
 		    <div id="tabs-1">
@@ -33,7 +33,7 @@
 			    </li>
 			</ul>		    		    
 		</form>
-		{% include getParameter('sfynx.template.theme.layout.admin.pc')|replace({'::': ':'})~"Crud:edit-footer.html.twig" %}
+		{% include getParameter('sfynx.template.theme.layout.admin.pc')~"Crud/edit-footer.html.twig" %}
 	</div>
 	<!-- End tag markup -->	
 	
