@@ -1,5 +1,5 @@
 <?php
-namespace Sfynx\CoreBundle\Layers\Infrastructure\Persistence\Adapter\Generalisation\Orm;
+namespace Sfynx\CoreBundle\Layers\Infrastructure\Persistence\QueryBuilder\Generalisation\Orm;
 
 use Doctrine\ORM\EntityRepository;
 
@@ -8,7 +8,7 @@ use Doctrine\ORM\EntityRepository;
  *
  * @category   Sfynx\CoreBundle\Layers
  * @package    Infrastructure
- * @subpackage Persistence\Adapter\Generalisation\Orm
+ * @subpackage Persistence\QueryBuilder\Generalisation\Orm
  * @abstract
  * @author     Etienne de Longeaux <etienne.delongeaux@gmail.com>
  * @copyright  2015 PI-GROUPE

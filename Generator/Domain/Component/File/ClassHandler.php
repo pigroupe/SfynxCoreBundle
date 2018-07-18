@@ -490,7 +490,16 @@ class ClassHandler implements SplSubject
         ) {
             $obsModel = new self($template, $namespace, $class, $data, $index);
             foreach ($data->options->models as $model) {
-                $obsModel->attach(new $model());
+                if (is_string($model)) {
+                    $obsModel->attach(new $model());
+                } elseif (is_array($model)
+                    && !empty($model['parameters'])
+                    && !empty($model['class'])
+                ) {
+                    $class = $model['class'];
+                    $parameters = $model['parameters'];
+                    $obsModel->attach(new $class($parameters));
+                }
             }
             $obsModel->notify();
         }

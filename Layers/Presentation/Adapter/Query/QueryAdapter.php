@@ -30,12 +30,6 @@ class QueryAdapter implements QueryAdapterInterface
     {
         $this->parameters = $request->getRequestParameters();
 
-//        $tab = get_object_vars($this->query);
-//        $tab = is_array($tab) ? $tab : [];
-//        foreach ($tab as $property => $value) {
-//            $this->query->{$property} = isset($this->parameters[$property]) ? $this->parameters[$property] : $this->query->{$property};
-//        }
-
         foreach ((new \ReflectionObject($this->query))->getProperties() as $oProperty) {
             $oProperty->setAccessible(true);
             $value = isset($this->parameters[$oProperty->getName()]) ? $this->parameters[$oProperty->getName()] : $oProperty->getValue($this->query);
