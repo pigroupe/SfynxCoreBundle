@@ -150,10 +150,10 @@ class <?php echo $templater->getTargetClassname(); ?> extends AbstractManager
     }
 
     /**
-    * @param object $entity
-    * @param CommandInterface $command
-    * @return <?php echo $templater->getTargetClassname(); ?>
-    */
+     * @param object $entity
+     * @param CommandInterface $command
+     * @return <?php echo $templater->getTargetClassname(); ?><?php echo PHP_EOL ?>
+     */
     protected function transformEntity(object &$entity, CommandInterface $command): <?php echo $templater->getTargetClassname(); ?><?php echo PHP_EOL ?>
     {
         // we search ManyToOne relationship

@@ -169,7 +169,7 @@ default:
                         uses: ['Sfynx\CoreBundle\Layers\Infrastructure\Exception\WorkflowException', 'Exception']
                         traits: ~
                         models:
-                          - 'Sfynx\CoreBundle\Generator\Domain\Component\File\HandlerModel\Observer\FormData'
+                          - { class: 'Sfynx\CoreBundle\Generator\Domain\Component\File\HandlerModel\Observer\FormData', parameters: []}
                 - OBGroupCreateFormBody:
                     create: true
                     class: Domain\Workflow\Observer\Group\Response\OBGroupCreateFormBody
@@ -260,7 +260,7 @@ default:
                 primaryKey: true
                 mapping:
                   targetEntity: SfynxAuthBundle\Domain\Entity\Group
-                  manager: 'Sfynx\AuthBundle\Domain\Service\Group\Manager\EntityManager as GroupManager'
+#                  manager: 'Sfynx\AuthBundle\Domain\Service\Group\Manager\EntityManager as GroupManager'
               group:
                 type: valueObject
                 voName: GroupVO

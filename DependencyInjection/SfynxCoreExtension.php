@@ -45,6 +45,7 @@ class SfynxCoreExtension extends Extension
     {
         // we load all services
         $loaderYaml = new Loader\YamlFileLoader($container, new FileLocator(__DIR__ . '/../Resources/config'));
+        $loaderYaml->load('service/services_cmd.yml');
         $loaderYaml->load('service/services_request.yml');
         $loaderYaml->load('service/services_util.yml');
         $loaderYaml->load('service/services_cmfconfig.yml');

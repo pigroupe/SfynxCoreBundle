@@ -20,7 +20,7 @@ abstract class AbstractVO implements ValueObjectInterface
     {
         $stdClass = \func_get_arg(0);
 
-        return self::build($stdClass);
+        return self::createFromNative($stdClass);
     }
 
     /**
@@ -28,11 +28,14 @@ abstract class AbstractVO implements ValueObjectInterface
      * @param \stdClass $arguments
      * @return ValueObjectInterface
      */
-    final public static function build(\stdClass $arguments): ValueObjectInterface
+    final public static function createFromNative(array $arguments): ValueObjectInterface
     {
         $oVO = new static();
-        foreach ($arguments as $propertyName => $value) {
-            $oVO->{$propertyName} = $value;
+
+        foreach ((new \ReflectionObject($oVO))->getProperties() as $oProperty) {
+            $oProperty->setAccessible(true);
+            $value = isset($arguments[$oProperty->getName()]) ? $arguments[$oProperty->getName()] : $oProperty->getValue($oVO);
+            $oProperty->setValue($oVO, $value);
         }
         $oVO->transform();
 

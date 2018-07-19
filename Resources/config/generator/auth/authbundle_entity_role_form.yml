@@ -170,7 +170,7 @@ default:
                         uses: ['Sfynx\CoreBundle\Layers\Infrastructure\Exception\WorkflowException', 'Exception']
                         traits: ~
                         models:
-                          - 'Sfynx\CoreBundle\Generator\Domain\Component\File\HandlerModel\Observer\FormData'
+                          - { class: 'Sfynx\CoreBundle\Generator\Domain\Component\File\HandlerModel\Observer\FormData', parameters: []}
                 - OBRoleCreateFormBody:
                     create: true
                     class: Domain\Workflow\Observer\Role\Response\OBRoleCreateFormBody
@@ -249,6 +249,25 @@ default:
                         implements: ['Domain\Repository\Query\RoleQueryRepositoryInterface']
                         uses: ~
                         traits: ~
+                - FindLayoutQueryBuilder:
+                    create: true
+                    class: Infrastructure\Persistence\Adapter\Query\Orm\Layout\QueryBuilder\FindLayoutQueryBuilder
+                    arguments: ~
+                    extends: Sfynx\CoreBundle\Layers\Infrastructure\Persistence\QueryBuilder\Generalisation\Orm\AbstractQueryBuilder
+                    options:
+                        uses: ['FindLayoutQueryTransfomer', 'Doctrine\ORM\QueryBuilder']
+                        models:
+                          - { class: 'Sfynx\CoreBundle\Generator\Domain\Component\File\HandlerModel\Observer\QueryBuilder', parameters: ['bool $var1 = false', 'bool $var2 = true', 'int $var3 = 0', 'array $var4 = []'] }
+                - FindLayoutQueryTransfomer:
+                    create: true
+                    class: Infrastructure\Persistence\Adapter\Query\Orm\Layout\QueryTransfomer\FindLayoutQueryTransfomer
+                    arguments: ~
+                    extends: Sfynx\CoreBundle\Layers\Infrastructure\Persistence\QueryBuilder\Generalisation\Orm\AbstractQueryBuilder
+                    options:
+                        uses: ['Sfynx\AuthBundle\Infrastructure\Persistence\Adapter\Query\Orm\Layout\QueryBuilder\FindLayoutQueryBuilder']
+                        models:
+                          - { class: 'Sfynx\CoreBundle\Generator\Domain\Component\File\HandlerModel\Observer\QueryTransformer', parameters: ['FindLayoutQueryBuilder', ['bool $var1 = false', 'bool $var2 = true', 'int $var3 = 0', 'array $var4 = []']]}
+
     mapping:
         x-providers: [orm, couchdb]
         x-entities:
@@ -261,7 +280,8 @@ default:
                 primaryKey: true
                 mapping:
                   targetEntity: 'SfynxAuthBundle\Domain\Entity\Role'
-                  manager: 'Sfynx\AuthBundle\Domain\Service\Role\Manager\EntityManager as RoleManager'
+#                  formData:
+#                      manager: 'Sfynx\AuthBundle\Domain\Service\Role\Manager\EntityManager as RoleManager'
               role:
                 type: valueObject
                 voName: RoleVO
@@ -274,7 +294,9 @@ default:
                 mapping:
                   relationship: ManyToOne
                   targetEntity: 'SfynxAuthBundle\Domain\Entity\Layout'
-                  manager: 'Sfynx\AuthBundle\Domain\Service\Layout\Manager\EntityManager as LayoutManager'
+                  formData:
+                      manager: 'Sfynx\AuthBundle\Domain\Service\Layout\Manager\EntityManager as LayoutManager'
+                      queryFunction: {class: 'FindLayoutQueryTransfomer', args: ['true', 'false', 1299, {tata: 'tataValue', tutu: 'tutuValue'} ]}
         x-valueObjects:
           IdVO:
             type: 'Sfynx\CoreBundle\Layers\Domain\ValueObject\IdVO'

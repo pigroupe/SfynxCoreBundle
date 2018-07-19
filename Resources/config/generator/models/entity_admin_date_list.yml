@@ -197,7 +197,7 @@ default:
                         uses: ['Sfynx\CoreBundle\Layers\Infrastructure\Exception\WorkflowException', 'Exception']
                         traits: ~
                         models:
-                          - 'Sfynx\CoreBundle\Generator\Domain\Component\File\HandlerModel\Observer\FormData'
+                          - { class: 'Sfynx\CoreBundle\Generator\Domain\Component\File\HandlerModel\Observer\FormData', parameters: []}
                 - OBDateListCreateFormBody:
                     create: true
                     class: Domain\Workflow\Observer\DateList\Response\OBDateListCreateFormBody

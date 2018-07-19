@@ -88,10 +88,9 @@ abstract class AbstractEntityCreateHandler extends AbstractObserver
     }
 
     /**
-     * This method implements the process in the end of the process if no started
-     * @return void
+     * This method implements the process if the request is validate
      */
-    protected function onEnd(): void
+    protected function onContinue(): void
     {}
 
     /**
@@ -100,6 +99,13 @@ abstract class AbstractEntityCreateHandler extends AbstractObserver
      * @return void
      */
     abstract protected function onSuccess(): void;
+
+    /**
+     * This method implements the process in the end of the process if no started
+     * @return void
+     */
+    protected function onEnd(): void
+    {}
 
     /**
      * Prepare object attributs values used by class specifications
@@ -149,6 +155,7 @@ abstract class AbstractEntityCreateHandler extends AbstractObserver
             $this->onStart();
             return false;
         }
+        $this->onContinue();
         // validate process when post form
         $specs = (new SpecIsValidRequest())->AndSpec(new SpecIsValidCommand());
         if ($specs->isSatisfiedBy($this->object)) {

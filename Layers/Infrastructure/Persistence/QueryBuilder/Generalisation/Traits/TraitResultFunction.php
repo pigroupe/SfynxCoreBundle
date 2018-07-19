@@ -1,5 +1,5 @@
 <?php
-namespace Sfynx\CoreBundle\Layers\Infrastructure\Persistence\Adapter\Generalisation\Orm\Traits;
+namespace Sfynx\CoreBundle\Layers\Infrastructure\Persistence\QueryBuilder\Generalisation\Traits;
 
 use Doctrine\ORM\EntityRepository;
 
@@ -8,19 +8,16 @@ use Doctrine\ORM\EntityRepository;
  *
  * @category Sfynx\CoreBundle
  * @package Infrastructure
- * @subpackage Persistence\Generalisation\Orm\Traits
+ * @subpackage Persistence\Generalisation\Traits
  *
  * <code>
- *      $this->wfLastData->query = $this->manager->getQueryRepository(
- *      'FindAllByCategoryQueryBuilder',
- *      [
- *      $this->wfQuery->getCategory(),
- *      null,
- *      '',
- *      '',
- *      false
- *      ]
- *      )->getResultBuilder();
+ *      $this->wfLastData->query = $this->manager->getQueryRepository('FindAllByCategoryQueryBuilder', [
+ *          $this->wfQuery->getCategory(),
+ *          null,
+ *          '',
+ *          '',
+ *          false
+ *      ])->getResultBuilder();
  *
  * <code>
  */

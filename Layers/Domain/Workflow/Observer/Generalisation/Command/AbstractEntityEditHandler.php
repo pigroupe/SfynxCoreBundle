@@ -89,13 +89,6 @@ abstract class AbstractEntityEditHandler extends AbstractObserver
     }
 
     /**
-     * This method implements the process in the end of the process if no started
-     * @return void
-     */
-    protected function onEnd(): void
-    {}
-
-    /**
      * This method implements the process if the request is validate
      */
     protected function onContinue(): void
@@ -111,6 +104,13 @@ abstract class AbstractEntityEditHandler extends AbstractObserver
      * @return void
      */
     abstract protected function onSuccess(): void;
+
+    /**
+     * This method implements the process in the end of the process if no started
+     * @return void
+     */
+    protected function onEnd(): void
+    {}
 
     /**
      * Prepare object attributs values used by class specifications

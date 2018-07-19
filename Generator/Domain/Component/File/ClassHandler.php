@@ -10,6 +10,7 @@ use Nette\PhpGenerator\ClassType;
 use Nette\PhpGenerator\Method;
 use Sfynx\CoreBundle\Generator\Domain\Templater\Generalisation\Interfaces\TemplaterInterface;
 use Sfynx\CoreBundle\Generator\Domain\Component\File\HandlerModel\Observer\FormData;
+use Sfynx\CoreBundle\Generator\Domain\Report\Generalisation\AbstractGenerator;
 
 /**
  * File finder
@@ -210,7 +211,7 @@ class ClassHandler implements SplSubject
      */
     public static function addComments(ClassType $class, stdClass $data): void
     {
-        if (property_exists($data, 'comments')
+        if (\property_exists($data, 'comments')
             && !empty($data->comments)
         ) {
             foreach ($data->comments as $comment) {
@@ -230,7 +231,7 @@ class ClassHandler implements SplSubject
      */
     public static function setExtends(PhpNamespace $namespace, ClassType $class, stdClass $data, ?array $index = [], string $context = ''): void
     {
-        if (property_exists($data, 'extends')
+        if (\property_exists($data, 'extends')
             && !empty($data->extends)
         ) {
             $class->setExtends(self::getClassNameFromNamespace($data->extends));
@@ -248,8 +249,8 @@ class ClassHandler implements SplSubject
      */
     public static function addUses(PhpNamespace $namespace, stdClass $data, ?array $index = [], string $context = ''): void
     {
-        if (property_exists($data, 'options')
-            && property_exists($data->options, 'uses')
+        if (\property_exists($data, 'options')
+            && \property_exists($data->options, 'uses')
             && !empty($data->options->uses)
         ) {
             foreach ($data->options->uses as $use) {
@@ -300,8 +301,8 @@ class ClassHandler implements SplSubject
      */
     public static function addImplements(PhpNamespace $namespace, ClassType $class, stdClass $data, ?array $index = [], string $context = ''): void
     {
-        if (property_exists($data, 'options')
-            && property_exists($data->options, 'implements')
+        if (\property_exists($data, 'options')
+            && \property_exists($data->options, 'implements')
             && !empty($data->options->implements)
         ) {
             foreach ($data->options->implements as $implement) {
@@ -322,8 +323,8 @@ class ClassHandler implements SplSubject
      */
     public static function addTraits(PhpNamespace $namespace, ClassType $class, stdClass $data, ?array $index = [], string $context = ''): void
     {
-        if (property_exists($data, 'options')
-            && property_exists($data->options, 'traits')
+        if (\property_exists($data, 'options')
+            && \property_exists($data->options, 'traits')
             && !empty($data->options->traits)
         ) {
             foreach ($data->options->traits as $trait) {
@@ -345,7 +346,7 @@ class ClassHandler implements SplSubject
      */
     public static function addArguments(PhpNamespace $namespace, ClassType $class, stdClass $data, ?array $index = [], string $context = '', bool $addConstruct = true): void
     {
-        if (property_exists($data, 'arguments')
+        if (\property_exists($data, 'arguments')
             && !empty($data->arguments)
         ) {
             foreach ($data->arguments as $argument) {
@@ -353,9 +354,9 @@ class ClassHandler implements SplSubject
                 $info = self::getArgResult($namespace, $argument, [], false);
 
                 if (!is_null($data)
-                    && property_exists($data, 'construct') && !empty($data->construct)
-                    && property_exists($data->construct, 'create') && ($data->construct->create == true)
-                    && property_exists($data->construct, 'body')
+                    && \property_exists($data, 'construct') && !empty($data->construct)
+                    && \property_exists($data->construct, 'create') && ($data->construct->create == true)
+                    && \property_exists($data->construct, 'body')
                     && !empty($data->construct->body)
                 ) {
                     if (in_array($info['type'], ['interface', 'class'])) {
@@ -378,12 +379,12 @@ class ClassHandler implements SplSubject
      */
     public static function createMethods(PhpNamespace $namespace, ClassType $class, stdClass $data, ?array $index = []): void
     {
-        if (property_exists($data, 'options')
-            && property_exists($data->options, 'methods')
+        if (\property_exists($data, 'options')
+            && \property_exists($data->options, 'methods')
             && !empty($data->options->methods)
         ) {
             foreach ($data->options->methods as $name => $method) {
-                if (property_exists($method, 'name')) {
+                if (\property_exists($method, 'name')) {
                     // set default values
                     $methodArgs = '';
                     $body = '';
@@ -392,29 +393,32 @@ class ClassHandler implements SplSubject
                     $methodClass = $class->addMethod($method->name);
 
                     // set Method values
-                    if (property_exists($method, 'comments') && !empty($method->comments)) {
+                    if (\property_exists($method, 'comments') && !empty($method->comments)) {
                         foreach ($method->comments as $comment) {
                             $methodClass->addComment($comment);
                         }
                     }
-                    if (property_exists($method, 'arguments') && !empty($method->arguments)) {
+                    if (\property_exists($method, 'arguments') && !empty($method->arguments)) {
                         $methodArgs = self::setArgs($namespace, $method->arguments, $index, false);
 
                         foreach ($method->arguments as $argument) {
                             $info = self::getArgResult($namespace, $argument, [], false);
-                            if ('interface' == $info['type']) {
+                            $type = $info['type'];
+                            $arg = $info['value'];
+
+                            if ('interface' == $type) {
                                 $methodClass->addParameter($info['value'])->setTypeHint($info['basename']);
                             }
 
-                            $newArgument = trim(str_replace(' $', ' ', trim($argument), $countSpace));
+                            $newArgument = \trim(\str_replace(' $', ' ', \trim($argument), $countSpace));
                             if (1 == $countSpace) {
-                                $info = explode(' ', $newArgument);
+                                $info = \explode(' ', $newArgument);
                                 $type = $info[0];
                                 $arg = $info[1];
 
-                                str_replace('=', ' ', trim($argument), $countDefaultValue);
+                                \str_replace('=', ' ', \trim($argument), $countDefaultValue);
                                 if (1 == $countDefaultValue) {
-                                    $defaultValue = end($info);
+                                    $defaultValue = \end($info);
                                     $defaultValue = ($defaultValue == 'false') ? false : $defaultValue;
                                     $defaultValue = ($defaultValue == 'true') ? true : $defaultValue;
                                     $methodClass->addParameter($arg)->setTypeHint($type)->setDefaultValue($defaultValue);
@@ -422,31 +426,34 @@ class ClassHandler implements SplSubject
                                     $methodClass->addParameter($arg)->setTypeHint($type);
                                 }
                             } else {
-                                $newArgument = str_replace('$', '', trim($argument), $countSpace);
+                                $newArgument = \str_replace('$', '', \trim($argument), $countSpace);
                                 if (1 == $countSpace) {
                                     $methodClass->addParameter($newArgument);
                                 }
                             }
+                            // add phpdocumentor argument value
+                            $methodClass->addComment(sprintf('@param %s $%s', $type, $arg));
                         }
                     }
-                    if (property_exists($method, 'visibility') && !empty($method->visibility)) {
+                    if (\property_exists($method, 'visibility') && !empty($method->visibility)) {
                         $methodClass->setVisibility($method->visibility);
                     }
-                    if (property_exists($method, 'returnType')  && !empty($method->returnType)) {
+                    if (\property_exists($method, 'returnType')  && !empty($method->returnType)) {
                         $info = self::getArgResult($namespace, $method->returnType, [], false);
                         $methodClass->setReturnType($info['basename']);
+                        $methodClass->addComment(sprintf('@return %s', $info['basename']));
                     }
 
                     // set Body of the method
-                    if (property_exists($method, 'body') && !empty($method->body)) {
+                    if (\property_exists($method, 'body') && !empty($method->body)) {
                         foreach ($method->body as $line) {
                             $body .= $line . PHP_EOL;
                         }
                     }
-                    if (property_exists($method, 'returnParent') && !empty($method->returnParent)) {
+                    if (\property_exists($method, 'returnParent') && !empty($method->returnParent)) {
                         $body .= "return parent::$method->name($methodArgs);" . PHP_EOL;
                     }
-                    if (property_exists($method, 'insertParent') && !empty($method->insertParent)) {
+                    if (\property_exists($method, 'insertParent') && !empty($method->insertParent)) {
                         $body .= "parent::$method->name($methodArgs);" . PHP_EOL;
                     }
 
@@ -484,13 +491,23 @@ class ClassHandler implements SplSubject
      */
     public static function addModels(TemplaterInterface $template, PhpNamespace $namespace, ClassType $class, stdClass $data, ?array $index = []): void
     {
-        if (property_exists($data, 'options')
-            && property_exists($data->options, 'models')
+        if (\property_exists($data, 'options')
+            && \property_exists($data->options, 'models')
             && !empty($data->options->models)
         ) {
             $obsModel = new self($template, $namespace, $class, $data, $index);
             foreach ($data->options->models as $model) {
-                $obsModel->attach(new $model());
+                if (\is_string($model)) {
+                    $obsModel->attach(new $model());
+                } elseif (\property_exists($model, 'class')) {
+                    $class = $model->class;
+                    if (\property_exists($model, 'parameters')) {
+                        $arrayParameters = AbstractGenerator::transform($model->parameters, true);
+                        $obsModel->attach(new $class($arrayParameters));
+                    } else {
+                        $obsModel->attach(new $class());
+                    }
+                }
             }
             $obsModel->notify();
         }
@@ -525,28 +542,28 @@ class ClassHandler implements SplSubject
             foreach (self::$constructorArguments as $value => $attribute) {
                 $defaultValue = null;
 
-                if (is_array($attribute) && isset($attribute['basename'])) {
-                    $value = preg_replace('!\s+!', ' ', $attribute['basename']);
-                    list($type, $arg) = explode(' ', $value);
+                if (\is_array($attribute) && isset($attribute['basename'])) {
+                    $value = \preg_replace('!\s+!', ' ', $attribute['basename']);
+                    list($type, $arg) = \explode(' ', $value);
 
-                    str_replace('=', '=', $value, $countEgual);
+                    \str_replace('=', '=', $value, $countEgual);
                     if (1 == $countEgual) {
                         list($content, $defaultValue) = explode('=', $value);
-                        $defaultValue = trim($defaultValue);
+                        $defaultValue = \trim($defaultValue);
                         $defaultValue = ($defaultValue == "false") ? false : $defaultValue;
                         $defaultValue = ($defaultValue == "true") ? true : $defaultValue;
                     }
                 } else {
-                    $arg = lcfirst(str_replace('Interface', '', $value));
+                    $arg = \lcfirst(str_replace('Interface', '', $value));
                     $body .= "$attribute = \$$arg;" . PHP_EOL;
                     $type = $value;
                 }
-                $type = trim($type);
-                $value = trim($value);
-                $arg = trim(str_replace('$', '', $arg));
+                $type = \trim($type);
+                $value = \trim($value);
+                $arg = \trim(\str_replace('$', '', $arg));
 
                 $Parameter = $method->addParameter($arg)->setTypeHint($type);
-                if (!is_null($defaultValue)) {
+                if (!\is_null($defaultValue)) {
                     $Parameter->setDefaultValue($defaultValue);
                 }
 
@@ -555,10 +572,10 @@ class ClassHandler implements SplSubject
             }
             self::$constructorArguments = [];
 
-            if (!is_null($data)
-                && property_exists($data, 'construct') && !empty($data->construct)
-                && property_exists($data->construct, 'create') && ($data->construct->create == true)
-                && property_exists($data->construct, 'body')
+            if (!\is_null($data)
+                && \property_exists($data, 'construct') && !empty($data->construct)
+                && \property_exists($data->construct, 'create') && ($data->construct->create == true)
+                && \property_exists($data->construct, 'body')
                 && !empty($data->construct->body)
             ) {
                 $body .= PHP_EOL;
@@ -596,17 +613,17 @@ class ClassHandler implements SplSubject
      * @param bool $addConstruct
      * @return string
      */
-    public static function setArgs(PhpNamespace $namespace, array $arguments, ?array $index = [], bool $addConstruct = true): string
+    public static function setArgs(PhpNamespace $namespace, array $arguments, ?array $index = [], bool $addConstruct = true, string $infoKey = 'argument'): string
     {
         $result = [];
         if (!empty($arguments)) {
             foreach ($arguments as $argument) {
                 $info = self::getArgResult($namespace, $argument, $index, $addConstruct);
-                $result[] = $info['argument'];
+                $result[] = $info[$infoKey];
             }
         }
 
-        return implode(', ', $result);
+        return \implode(', ', $result);
     }
 
     /**
@@ -618,50 +635,54 @@ class ClassHandler implements SplSubject
      */
     public static function getArgResult(PhpNamespace $namespace, string $argument, ?array $index = [], bool $addConstruct = true): array
     {
-        $argument = trim(preg_replace('!\s+!', ' ', $argument));
+        $argument = \trim(preg_replace('!\s+!', ' ', $argument));
 
         $basename = ClassHandler::getClassNameFromNamespace($argument);
         $argResult = $argument;
         $type = 'default';
         $value = $argument;
 
-        $className = trim(str_replace('new', '', $argument, $countNew));
+        $className = \trim(str_replace('new', '', $argument, $countNew));
         if (1 == $countNew) {
             $argResult = self::setArgNewResult($namespace, $argument, $index, $className);
             $type = 'new';
             $value = $className;
         }
 
-        $interfaceName = lcfirst(str_replace('Interface', '', $basename, $countInterface));
+        $interfaceName = \lcfirst(str_replace('Interface', '', $basename, $countInterface));
         if (1 == $countInterface) {
             $argResult = self::setArgClassResult($namespace, $argument, $index, $interfaceName, $basename, $addConstruct);
             $type = 'interface';
             $value = $interfaceName;
         }
 
-        $asClassArgument = str_replace(' as ', ' as ', $argument, $countAs);
+        $asClassArgument = \str_replace(' as ', ' as ', $argument, $countAs);
         if ((1 <= $countAs) && (0 == $countInterface)) {
-            list($content, $defaultValue) = explode(' as ', $argument);
+            list($content, $defaultValue) = \explode(' as ', $argument);
             $type = 'class';
             $value = $defaultValue;
             $basename = $defaultValue;
-            $argResult = self::setArgClassResult($namespace, $argument, $index, trim($value), $basename, $addConstruct);
+            $argResult = self::setArgClassResult($namespace, $argument, $index, \trim($value), $basename, $addConstruct);
         }
 
-        $classArgument = str_replace('\\', '\\', $argument, $countArg);
+        $classArgument = \str_replace('\\', '\\', $argument, $countArg);
         if ((0 == $countAs) && (1 <= $countArg) && (0 == $countInterface)) {
             $argResult = self::setArgClassResult($namespace, $argument, $index, $basename, $basename, $addConstruct);
             $type = 'class';
             $value = $basename;
         }
 
-        $newArgument = str_replace(' ', ' ', $argument, $countVar);
-        str_replace('=', '=', $argument, $countEgual);
+        $newArgument = \str_replace(' ', ' ', $argument, $countVar);
+        \str_replace('=', '=', $argument, $countEgual);
         if ((0 == $countAs) && (1 == $countEgual)) {
-            list($content, $defaultValue) = explode('=', $argument);
-            $argResult = trim($defaultValue);
+            list($content, $defaultValue) = \explode('=', $argument);
+            $argResult = \trim($defaultValue);
             $type = 'var';
             $value = $content;
+
+            if (3 == $countVar) {
+                list($type, $argResult, $value) = \explode(' ', $argument);
+            }
         } elseif ((0 == $countAs) && (1 <= $countVar) && (0 == $countNew)) {
             $argResult = self::setArgVarResult($newArgument);
             $type = 'var';
@@ -690,7 +711,7 @@ class ClassHandler implements SplSubject
                     $info = self::getArgResult($namespace, $arg, $index);
                     $newArgs[] = $info['argument'];
                 }
-                $newArgs = implode(', ', $newArgs);
+                $newArgs = \implode(', ', $newArgs);
             }
         }
         self::addUse($namespace, $className, $index);
@@ -717,7 +738,7 @@ class ClassHandler implements SplSubject
     ): string {
         self::addUse($namespace, $argument, $index);
 
-        $value = lcfirst($value);
+        $value = \lcfirst($value);
         $attribute = "\$$value";
         if ($addConstruct) {
             $attribute = "\$this->$value";
@@ -733,7 +754,7 @@ class ClassHandler implements SplSubject
      */
     public static function setArgVarResult(string $argument): string
     {
-        list($type, $arg) = explode(' ', $argument);
+        list($type, $arg) = \explode(' ', $argument);
 
         return $arg;
     }
@@ -746,8 +767,8 @@ class ClassHandler implements SplSubject
      */
     public static function createNamespaceEntity(TemplaterInterface $templater, string $entityName): string
     {
-        if (!strrpos($entityName, '\\')) {
-            $entityName = sprintf('%s\%s', $templater->namespace, 'Domain\\Service\\Entity\\' . $entityName);
+        if (!\strrpos($entityName, '\\')) {
+            $entityName = \sprintf('%s\%s', $templater->namespace, 'Domain\\Service\\Entity\\' . $entityName);
         }
 
         return $entityName;
@@ -785,8 +806,8 @@ class ClassHandler implements SplSubject
                 break;
             case self::TYPE_ARRAY:
                 $newType = 'array';
-                if (!is_null($options)
-                    && property_exists($options, 'multiple')
+                if (!\is_null($options)
+                    && \property_exists($options, 'multiple')
                     && !$options->multiple
                 ) {
                     $newType = 'int';
@@ -811,16 +832,16 @@ class ClassHandler implements SplSubject
             $value =  $defaultBoolValue;
         }
         // set default value if specify in field
-        if (property_exists($field, 'defaultValue')) {
+        if (\property_exists($field, 'defaultValue')) {
             $value =  $field->defaultValue;
         }
 
-        if (is_bool($value)) {
+        if (\is_bool($value)) {
             $value = (int)$value ? 'true' : 'false';
         }
         if ($value !== 'null'
             && self::getType($field->type) !== 'bool'
-            && is_string($value)
+            && \is_string($value)
         ) {
             $value = "'$value'";
         }
@@ -835,8 +856,8 @@ class ClassHandler implements SplSubject
      */
     public static function isIntType(string $value)
     {
-        if ((strpos(strtolower($value), 'int') !== false)
-            || (strpos(strtolower($value), 'id') !== false)
+        if ((\strpos(\strtolower($value), 'int') !== false)
+            || (\strpos(\strtolower($value), 'id') !== false)
         ) {
             return true;
         }
@@ -850,9 +871,32 @@ class ClassHandler implements SplSubject
      */
     public static function isDateType(string $value)
     {
-        if (strpos(strtolower($value), 'date') !== false) {
+        if (\strpos(\strtolower($value), 'date') !== false) {
             return true;
         }
         return false;
+    }
+
+    /**
+     * Convert a php array to a string array
+     *
+     * @param array $args
+     * @param string $result
+     * @static
+     * @return string
+     */
+    public static function recursiveArrayToString(array $args = [], string $result = '')
+    {
+        $result .= '[';
+        foreach ($args as $k => $value) {
+            $k = \is_string($k) ? "'$k'" : $k;
+            $value = \is_string($value) ? "'$value'" : $value;
+            $value = \is_array($value) ? self::recursiveArrayToString($value): $value;
+
+            $result .= "$k => " . $value . ', ';
+        }
+        $result .= ']';
+
+        return $result;
     }
 }

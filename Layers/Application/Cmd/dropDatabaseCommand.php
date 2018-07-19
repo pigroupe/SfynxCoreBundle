@@ -1,6 +1,6 @@
 <?php
 
-namespace Sfynx\CoreBundle\Layers\Infrastructure\Command;
+namespace Sfynx\CoreBundle\Layers\Application\Cmd;
 
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand as containerAwareCommand;
 use Symfony\Component\Console\Input\InputInterface;

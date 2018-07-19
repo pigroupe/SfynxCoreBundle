@@ -12,19 +12,6 @@ parameters:
 
 services:
     #
-    # commands services
-    #
-    sfynx.core.command.crud:
-        class: Sfynx\CoreBundle\Layers\Infrastructure\Command\DoctrineCrudCommand
-        tags:
-            - { name: console.command }
-
-    sfynx.core.command.database.drop:
-        class: Sfynx\CoreBundle\Layers\Infrastructure\Command\dropDatabaseCommand
-        tags:
-            - { name: console.command }
-
-    #
     # MONOLOG:::configuration of the socket monolog processor
     #
     sfynx.core.monolog.handler.socket:
