@@ -3,7 +3,7 @@ namespace Sfynx\CoreBundle\Generator\Domain\Component\File\HandlerModel\Observer
 
 use stdClass;
 use SplSubject;
-use Sfynx\CoreBundle\Generator\Domain\Component\File\HandlerModel\Generalisation\HandlerModelInterface;
+use Sfynx\CoreBundle\Generator\Domain\Component\File\HandlerModel\Generalisation\AbstractHandlerModel;
 use Sfynx\CoreBundle\Generator\Domain\Component\File\ClassHandler;
 use Sfynx\CoreBundle\Generator\Domain\Report\Generalisation\AbstractGenerator;
 
@@ -12,7 +12,7 @@ use Sfynx\CoreBundle\Generator\Domain\Report\Generalisation\AbstractGenerator;
  *
  * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
  */
-class FormData implements HandlerModelInterface
+class FormData extends AbstractHandlerModel
 {
     /**
      * {@inheritdoc}
@@ -66,23 +66,37 @@ class FormData implements HandlerModelInterface
         foreach ($templater->getTargetCommandFields() as $field) {
             if ($field->type == ClassHandler::TYPE_ENTITY
                 || ($field->type == ClassHandler::TYPE_ARRAY
-                    && property_exists($field, 'mapping')
+                    && \property_exists($field, 'mapping')
                 )
             ) {
                 $managerName = 'manager';
-                if (property_exists($field, 'mapping')
-                    && property_exists($field->mapping, 'manager')
+                if (\property_exists($field, 'mapping')
+                    && \property_exists($field->mapping, 'formData')
+                    && \property_exists($field->mapping->formData, 'manager')
                 ) {
-                    $managerName = lcfirst(ClassHandler::getClassNameFromNamespace($field->mapping->manager));
+                    $formData = $field->mapping->formData;
+                    $managerName = \lcfirst(ClassHandler::getClassNameFromNamespace($formData->manager));
 
-                    $info = ClassHandler::getArgResult($subject->event->namespace, $field->mapping->manager, [], false);
-                    $managerName = lcfirst($info['value']);
-                    ClassHandler::setArgClassResult($subject->event->namespace, $field->mapping->manager, $subject->event->index, $info['value'], $info['basename'], true);
+                    $info = ClassHandler::getArgResult($subject->event->namespace, $formData->manager, [], false);
+                    $managerName = \lcfirst($info['value']);
+                    ClassHandler::setArgClassResult($subject->event->namespace, $formData->manager, $subject->event->index, $info['value'], $info['basename'], true);
+
+                    if (!\property_exists($formData, 'queryFunction')) {
+                        $content .= PHP_EOL . '    $this->wfLastData->formViewData[\'' . \lcfirst($field->name) . "List'] = \$this->{$managerName}" . PHP_EOL;
+                        $content .= '       ->getQueryRepository()' . PHP_EOL;
+                        $content .= '       ->findAll();';
+                    } elseif (\property_exists($formData->queryFunction, 'class')
+                        && \property_exists($formData->queryFunction, 'args')
+                    ) {
+                        $class = $formData->queryFunction->class;
+                        $args = AbstractGenerator::transform($formData->queryFunction->args, true);
+                        $argsResult = ClassHandler::recursiveArrayToString($args);
+
+                        $content .= PHP_EOL . '    $this->wfLastData->formViewData[\'' . \lcfirst($field->name) . "List'] = \$this->{$managerName}" . PHP_EOL;
+                        $content .= '       ->getQueryRepository(\''. $class .'\', ' . $argsResult . ')' . PHP_EOL;
+                        $content .= '       ->getResultBuilder();';
+                    }
                 }
-
-                $content .= PHP_EOL . '    $this->wfLastData->formViewData[\'' . lcfirst($field->name) . "List'] = \$this->{$managerName}". PHP_EOL;
-                $content .= '       ->getQueryRepository()' . PHP_EOL;
-                $content .= '       ->findAll();';
             }
         }
 

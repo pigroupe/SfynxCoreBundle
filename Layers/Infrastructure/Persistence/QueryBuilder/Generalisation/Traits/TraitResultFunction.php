@@ -11,16 +11,13 @@ use Doctrine\ORM\EntityRepository;
  * @subpackage Persistence\Generalisation\Traits
  *
  * <code>
- *      $this->wfLastData->query = $this->manager->getQueryRepository(
- *      'FindAllByCategoryQueryBuilder',
- *      [
- *      $this->wfQuery->getCategory(),
- *      null,
- *      '',
- *      '',
- *      false
- *      ]
- *      )->getResultBuilder();
+ *      $this->wfLastData->query = $this->manager->getQueryRepository('FindAllByCategoryQueryBuilder', [
+ *          $this->wfQuery->getCategory(),
+ *          null,
+ *          '',
+ *          '',
+ *          false
+ *      ])->getResultBuilder();
  *
  * <code>
  */

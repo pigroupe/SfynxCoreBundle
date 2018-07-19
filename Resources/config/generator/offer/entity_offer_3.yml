@@ -154,7 +154,7 @@ default:
                         uses: ['Sfynx\CoreBundle\Layers\Infrastructure\Exception\WorkflowException', 'Exception']
                         traits: ~
                         models:
-                          - 'Sfynx\CoreBundle\Generator\Domain\Component\File\HandlerModel\Observer\FormData'
+                          - { class: 'Sfynx\CoreBundle\Generator\Domain\Component\File\HandlerModel\Observer\FormData', parameters: []}
                 - OBOffer3CreateFormBody:
                     create: true
                     class: Domain\Workflow\Observer\Offer\Response\OBOffer3CreateFormBody

@@ -111,14 +111,14 @@ default:
                     options:
                         entity: 'Activity'
             widget_service_class:
-#                - ActivityCommandRepositoryInterface:
-#                    create: true
-#                    class: Domain\Repository\Command\ActivityCommandRepositoryInterface
-#                    type: interface
-#                - ActivityQueryRepositoryInterface:
-#                    create: true
-#                    class: Domain\Repository\Query\ActivityQueryRepositoryInterface
-#                    type: interface
+                - ActivityCommandRepositoryInterface:
+                    create: true
+                    class: Domain\Repository\Command\ActivityCommandRepositoryInterface
+                    type: interface
+                - ActivityQueryRepositoryInterface:
+                    create: true
+                    class: Domain\Repository\Query\ActivityQueryRepositoryInterface
+                    type: interface
             widget_workflow_observer_class:
                 - OBGoPromiseRequestCreate:
                     create: true
@@ -156,7 +156,7 @@ default:
                         uses: ['Sfynx\CoreBundle\Layers\Infrastructure\Exception\WorkflowException', 'Exception']
                         traits: ~
                         models:
-                          - 'Sfynx\CoreBundle\Generator\Domain\Component\File\HandlerModel\Observer\FormData'
+                          - { class: 'Sfynx\CoreBundle\Generator\Domain\Component\File\HandlerModel\Observer\FormData', parameters: []}
                 - OBGoPromiseRequestFormBody:
                     create: true
                     class: Domain\Workflow\Observer\Activity\Response\OBGoPromiseRequestFormBody
@@ -275,6 +275,11 @@ default:
                 mapping:
                   relationship: ManyToOne
                   targetEntity: PromotionContext\Domain\Entity\Business
+                  formData:
+                      manager: 'PromotionContext\Domain\Service\Business\Manager\BusinessManager'
+                      queryFunction:
+                          class: 'FindBusinessQueryTransfomer'
+                          args: ['true', 'false', 1299, {tata: 'tataValue', tutu: 'tutuValue'} ]
               activityGoPromiseId:
                 name: activityGoPromise
                 type: valueObject
@@ -284,6 +289,11 @@ default:
                 mapping:
                   relationship: ManyToOne
                   targetEntity: PromotionContext\Domain\Entity\Activity
+                  formData:
+                      manager: 'PromotionContext\Domain\Service\Activity\Manager\ActivityManager'
+                      queryFunction:
+                          class: 'FindActivityQueryTransfomer'
+                          args: {tata: 'tataValue', tutu: 'tutuValue'}
               profil:
                 name: profil
                 type: valueObject
@@ -293,6 +303,9 @@ default:
                 mapping:
                   relationship: ManyToOne
                   targetEntity: ProfilContext\Domain\Entity\Profil
+                  formData:
+                      manager: 'UserContext\Domain\Service\Profil\Manager\ProfilManager'
+                      queryFunction: {class: 'FindProfilQueryTransfomer', args: []}
               assigmentProfil:
                 name: assigmentProfil
                 type: valueObject
@@ -303,6 +316,9 @@ default:
                 mapping:
                   relationship: ManyToOne
                   targetEntity: UserContext\Domain\Entity\User
+                  formData:
+                      manager: 'UserContext\Domain\Service\User\Manager\UserManager'
+                      queryFunction: {class: 'FindUserQueryTransfomer', args: []}
               applicantProfil:
                 name: applicantProfil
                 type: valueObject
@@ -312,6 +328,9 @@ default:
                 mapping:
                   relationship: ManyToOne
                   targetEntity: UserContext\Domain\Entity\User
+                  formData:
+                      manager: 'UserContext\Domain\Service\User\Manager\UserManager'
+                      queryFunction: {class: 'FindUserQueryTransfomer', args: []}
               businessTypeName:
                 name: businessTypeName
                 type: string

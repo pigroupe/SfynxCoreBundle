@@ -1,5 +1,5 @@
 <?php
-namespace Sfynx\CoreBundle\Layers\Infrastructure\Command;
+namespace Sfynx\CoreBundle\Layers\Application\Cmd;
 
 use Symfony\Component\HttpKernel\Bundle\BundleInterface;
 use Sensio\Bundle\GeneratorBundle\Generator\DoctrineCrudGenerator;

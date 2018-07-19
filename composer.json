@@ -27,6 +27,7 @@
     "stof/doctrine-extensions-bundle": "1.2.2",
     "spatie/fractalistic": "^2.5.0",
     "ramsey/uuid": "^3.7",
+    "ptrofimov/matchmaker": "*",
     "sfynx-project/tool-trigger-bundle": "^2.8",
     "sfynx-project/tool-utils-bundle": "^2.8",
     "sfynx-project/tool-specification-bundle": "^2.8"
