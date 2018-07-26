@@ -46,7 +46,7 @@ default:
                         design: 'decorator'
                         class: Sfynx\CoreBundle\Layers\Application\Command\Handler\FormCommandHandler
                         arguments:
-                            - '$Commandworkflow'
+                            - '$commandworkflow'
                         handlers: [ 'GroupFormCommandValidationHandler', 'GroupFormCommandSpecHandler']
                         calls:
                             - [ process, [ '$updateCommand' ] ]
@@ -259,7 +259,7 @@ default:
                 voName: IdVO
                 primaryKey: true
                 mapping:
-                  targetEntity: SfynxAuthBundle\Domain\Entity\Group
+                  targetEntity: Sfynx\AuthBundle\Domain\Entity\Group
 #                  manager: 'Sfynx\AuthBundle\Domain\Service\Group\Manager\EntityManager as GroupManager'
               group:
                 type: valueObject

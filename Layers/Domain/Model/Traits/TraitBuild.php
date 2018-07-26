@@ -102,20 +102,28 @@ trait TraitBuild
         CommandInterface $command,
         object $entity,
         array $excluded = [],
-        array $match = []
+        array $match = [],
+        array $toArray = []
     ): CommandInterface {
         foreach ((new ReflectionObject($entity))->getProperties() as $oProperty) {
             $oProperty->setAccessible(true);
-            if (!in_array($oProperty->getName(), $excluded)) {
+            if (!\in_array($oProperty->getName(), $excluded)) {
                 $value = $oProperty->getValue($entity);
                 $field = $oProperty->getName();
 
-                if (array_key_exists($field, $match)) {
+                if (\in_array($oProperty->getName(), $toArray)
+                    && \is_object($value)
+                    &&  \method_exists($value, '__toArray')
+                ) {
+                    $value = $value->__toArray();
+                }
+
+                if (\array_key_exists($field, $match)) {
                     $field = $match[$field];
                 }
 
-                if (property_exists($command, $field)) {
-                    $reflectionProperty = (new ReflectionClass(get_class($command)))->getProperty($field);
+                if (\property_exists($command, $field)) {
+                    $reflectionProperty = (new \ReflectionClass(\get_class($command)))->getProperty($field);
                     $reflectionProperty->setAccessible(true);
                     $reflectionProperty->setValue($command, $value);
                 }

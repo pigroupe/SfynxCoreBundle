@@ -46,7 +46,7 @@ default:
                         design: 'decorator'
                         class: Sfynx\CoreBundle\Layers\Application\Command\Handler\FormCommandHandler
                         arguments:
-                            - '$Commandworkflow'
+                            - '$commandworkflow'
                         handlers: [ 'PermissionFormCommandValidationHandler', 'PermissionFormCommandSpecHandler']
                         calls:
                             - [ process, [ '$updateCommand' ] ]
@@ -259,7 +259,7 @@ default:
                 voName: IdVO
                 primaryKey: true
                 mapping:
-                  targetEntity: SfynxAuthBundle\Domain\Entity\Permission
+                  targetEntity: Sfynx\AuthBundle\Domain\Entity\Permission
 #                  manager: 'Sfynx\AuthBundle\Domain\Service\Permission\Manager\EntityManager as PermissionManager'
               permission:
                 type: valueObject

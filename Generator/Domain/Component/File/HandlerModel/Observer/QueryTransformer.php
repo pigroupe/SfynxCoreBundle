@@ -9,6 +9,9 @@ use Sfynx\CoreBundle\Generator\Domain\Report\Generalisation\AbstractGenerator;
 
 /**
  * Class QueryTransformer
+ * @category   Sfynx\CoreBundle\Generator
+ * @package    Domain
+ * @subpackage Component\File\HandlerModel\Observer
  *
  * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
  */

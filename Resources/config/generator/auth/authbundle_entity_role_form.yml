@@ -46,7 +46,7 @@ default:
                         design: 'decorator'
                         class: Sfynx\CoreBundle\Layers\Application\Command\Handler\FormCommandHandler
                         arguments:
-                            - '$Commandworkflow'
+                            - '$commandworkflow'
                         handlers: [ 'RoleFormCommandValidationHandler', 'RoleFormCommandSpecHandler']
                         calls:
                             - [ process, [ '$updateCommand' ] ]
@@ -101,7 +101,44 @@ default:
                 class: RoleType
                 arguments: ~
         domain:
-            widget_entity: true
+            #
+            # ENTITY CLASSES
+            #
+            widget_entity_class:
+                - RoleEntity:
+                    create: true
+                    class: Domain\Entity\Role
+#                    arguments: ['Sfynx\AuthBundle\Domain\ValueObject\RoleVO']
+                    options:
+                        traits:
+                          - 'Sfynx\CoreBundle\Layers\Domain\Model\Traits\TraitBuild'
+                          - 'Sfynx\CoreBundle\Layers\Domain\Model\Traits\TraitEnabled'
+                          - 'Sfynx\CoreBundle\Layers\Domain\Model\Traits\TraitName'
+                          - 'Sfynx\CoreBundle\Layers\Domain\Model\Traits\TraitDatetime'
+                          - 'Sfynx\CoreBundle\Layers\Domain\Model\Traits\TraitHeritage'
+                          - 'Sfynx\AuthBundle\Domain\Generalisation\TraitAccessControl'
+                        models:
+#                          - { class: 'Sfynx\CoreBundle\Generator\Domain\Component\File\HandlerModel\Observer\Entity', parameters: { performMethod: ['Construct']} }
+                          0:
+                            class: 'Sfynx\CoreBundle\Generator\Domain\Component\File\HandlerModel\Observer\Entity'
+                            parameters:
+                              performMethods:
+                                - 'Sfynx\CoreBundle\Generator\Domain\Component\File\MethodModel\Construct'
+                                - 'Sfynx\CoreBundle\Generator\Domain\Component\File\MethodModel\CreateFromNative'
+                                - 'Sfynx\CoreBundle\Generator\Domain\Component\File\MethodModel\ToString'
+                                - 'Sfynx\CoreBundle\Generator\Domain\Component\File\MethodModel\ToArray'
+                                - 'Sfynx\CoreBundle\Generator\Domain\Component\File\MethodModel\Serialize'
+                                - 'Sfynx\CoreBundle\Generator\Domain\Component\File\MethodModel\Unserialize'
+                - RoleVO:
+                    create: true
+                    class: Domain\ValueObject\RoleVO
+                    extends: 'Sfynx\CoreBundle\Layers\Domain\ValueObject\Generalisation\AbstractVO'
+                    options:
+                        models:
+                          - { class: 'Sfynx\CoreBundle\Generator\Domain\Component\File\HandlerModel\Observer\ValueObject', parameters: []}
+            #
+            # MANAGER CLASSES
+            #
             widget_service_manager_class:
                 - RoleEntityManager:
                     create: true
@@ -110,6 +147,9 @@ default:
                     options:
                         entity: 'Role'
             widget_service_class:
+                #
+                # ROLE REPOSITORY INTERFACES
+                #
                 - RoleCommandRepositoryInterface:
                     create: true
                     class: Domain\Repository\Command\RoleCommandRepositoryInterface
@@ -119,6 +159,9 @@ default:
                     class: Domain\Repository\Query\RoleQueryRepositoryInterface
                     type: interface
             widget_workflow_observer_class:
+                #
+                # LOGICAL RESPONSE HANDLER
+                #
                 - OBRoleEntityCreate:
                     create: true
                     class: OBRoleEntityCreate
@@ -225,6 +268,9 @@ default:
         infrastructure:
             widget_security_parse: true
             widget_infra_class:
+                #
+                # ROLE REPOSITORIES
+                #
                 - CommandRoleRepository:
                     create: true
                     class: Infrastructure\Persistence\Adapter\Command\Orm\RoleRepository
@@ -249,13 +295,16 @@ default:
                         implements: ['Domain\Repository\Query\RoleQueryRepositoryInterface']
                         uses: ~
                         traits: ~
+                #
+                # LAYOUT TRANSFORMER/QUERY BUILDER
+                #
                 - FindLayoutQueryBuilder:
                     create: true
                     class: Infrastructure\Persistence\Adapter\Query\Orm\Layout\QueryBuilder\FindLayoutQueryBuilder
                     arguments: ~
                     extends: Sfynx\CoreBundle\Layers\Infrastructure\Persistence\QueryBuilder\Generalisation\Orm\AbstractQueryBuilder
                     options:
-                        uses: ['FindLayoutQueryTransfomer', 'Doctrine\ORM\QueryBuilder']
+                        uses: ['Doctrine\ORM\QueryBuilder']
                         models:
                           - { class: 'Sfynx\CoreBundle\Generator\Domain\Component\File\HandlerModel\Observer\QueryBuilder', parameters: ['bool $var1 = false', 'bool $var2 = true', 'int $var3 = 0', 'array $var4 = []'] }
                 - FindLayoutQueryTransfomer:
@@ -267,7 +316,27 @@ default:
                         uses: ['Sfynx\AuthBundle\Infrastructure\Persistence\Adapter\Query\Orm\Layout\QueryBuilder\FindLayoutQueryBuilder']
                         models:
                           - { class: 'Sfynx\CoreBundle\Generator\Domain\Component\File\HandlerModel\Observer\QueryTransformer', parameters: ['FindLayoutQueryBuilder', ['bool $var1 = false', 'bool $var2 = true', 'int $var3 = 0', 'array $var4 = []']]}
-
+                #
+                # RESSOURCE TRANSFORMER/QUERY BUILDER
+                #
+                - FindRessourceQueryBuilder:
+                    create: true
+                    class: Infrastructure\Persistence\Adapter\Query\Orm\Layout\QueryBuilder\FindRessourceQueryBuilder
+                    arguments: ~
+                    extends: Sfynx\CoreBundle\Layers\Infrastructure\Persistence\QueryBuilder\Generalisation\Orm\AbstractQueryBuilder
+                    options:
+                        uses: ['Doctrine\ORM\QueryBuilder']
+                        models:
+                          - { class: 'Sfynx\CoreBundle\Generator\Domain\Component\File\HandlerModel\Observer\QueryBuilder', parameters: ['bool $var1 = false', 'bool $var2 = true', 'int $var3 = 0', 'array $var4 = []'] }
+                - FindRessourceQueryTransfomer:
+                    create: true
+                    class: Infrastructure\Persistence\Adapter\Query\Orm\Layout\QueryTransfomer\FindRessourceQueryTransfomer
+                    arguments: ~
+                    extends: Sfynx\CoreBundle\Layers\Infrastructure\Persistence\QueryBuilder\Generalisation\Orm\AbstractQueryBuilder
+                    options:
+                        uses: ['Sfynx\AuthBundle\Infrastructure\Persistence\Adapter\Query\Orm\Ressource\QueryBuilder\FindRessourceQueryBuilder']
+                        models:
+                          - { class: 'Sfynx\CoreBundle\Generator\Domain\Component\File\HandlerModel\Observer\QueryTransformer', parameters: ['FindLayoutQueryBuilder', ['bool $var1 = false', 'bool $var2 = true', 'int $var3 = 0', 'array $var4 = []']]}
     mapping:
         x-providers: [orm, couchdb]
         x-entities:
@@ -279,12 +348,9 @@ default:
                 voName: IdVO
                 primaryKey: true
                 mapping:
-                  targetEntity: 'SfynxAuthBundle\Domain\Entity\Role'
+                  targetEntity: 'Sfynx\AuthBundle\Domain\Entity\Role'
 #                  formData:
 #                      manager: 'Sfynx\AuthBundle\Domain\Service\Role\Manager\EntityManager as RoleManager'
-              role:
-                type: valueObject
-                voName: RoleVO
               layout:
                 type: valueObject
                 voName: IdVO
@@ -293,18 +359,36 @@ default:
                 choice_label: Layout
                 mapping:
                   relationship: ManyToOne
-                  targetEntity: 'SfynxAuthBundle\Domain\Entity\Layout'
+                  targetEntity: 'Sfynx\AuthBundle\Domain\Entity\Layout'
+                  setter: true
                   formData:
                       manager: 'Sfynx\AuthBundle\Domain\Service\Layout\Manager\EntityManager as LayoutManager'
-                      queryFunction: {class: 'FindLayoutQueryTransfomer', args: ['true', 'false', 1299, {tata: 'tataValue', tutu: 'tutuValue'} ]}
+                      queryFunction: { class: 'FindLayoutQueryTransfomer', args: ['true', 'false', 1299, {tata: 'tataValue', tutu: 'tutuValue'}] }
+              accessControl:
+                type: valueObject
+                voName: IdVO
+                foreignKey: true
+                required: true
+                choice_label: Ressource
+                mapping:
+                  relationship: ManyToOne
+                  targetEntity: 'Sfynx\AuthBundle\Domain\Entity\Ressource'
+                  formData:
+                      manager: 'Sfynx\AuthBundle\Domain\Service\Ressource\Manager\EntityManager as RessourceManager'
+                      queryFunction: { class: 'FindRessourceQueryTransfomer', args: ['true', 'false', 1299, {tata: 'tataValue', tutu: 'tutuValue'}] }
+              role:
+                type: valueObject
+                voName: RoleVO
         x-valueObjects:
           IdVO:
             type: 'Sfynx\CoreBundle\Layers\Domain\ValueObject\IdVO'
+            create: false
             x-fields:
               id:
                 type: id
           RoleVO:
             type: 'Domain\ValueObject\RoleVO'
+            create: true
             x-fields:
               name:
                 type: string

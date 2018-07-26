@@ -45,6 +45,19 @@ class ClassHandler implements SplSubject
     const TYPE_DATE = 'datetime';
     const TYPE_SUBMIT = 'submit';
 
+    const ALL_TYPES = [
+        self::TYPE_ENTITY,
+        self::TYPE_INTEGER,
+        self::TYPE_NUMBER,
+        self::TYPE_BOOLEAN,
+        self::TYPE_ARRAY,
+        self::TYPE_TEXT,
+        self::TYPE_TEXTAREA,
+        self::TYPE_EMAIL,
+        self::TYPE_DATE,
+        self::TYPE_SUBMIT,
+    ];
+
     /**
      * @param TemplaterInterface $template
      * @param PhpNamespace $namespace
@@ -120,6 +133,8 @@ class ClassHandler implements SplSubject
     }
 
     /**
+     * Return a new instance of a namespace.
+     *
      * @param string $namespace
      * @return PhpNamespace
      * @static
@@ -130,6 +145,8 @@ class ClassHandler implements SplSubject
     }
 
     /**
+     * Return a new instance of a class.
+     *
      * @param string $class
      * @return ClassType
      * @static
@@ -179,6 +196,8 @@ class ClassHandler implements SplSubject
     }
 
     /**
+     * Set documentor of a class.
+     *
      * @param ClassType $class
      * @param TemplaterInterface $templater
      * @param stdClass $data
@@ -204,6 +223,8 @@ class ClassHandler implements SplSubject
     }
 
     /**
+     * Add comments in a class documentor.
+     *
      * @param ClassType $class
      * @param stdClass $data
      * @return void
@@ -221,6 +242,8 @@ class ClassHandler implements SplSubject
     }
 
     /**
+     * Set extends value in a class.
+     *
      * @param PhpNamespace $namespace
      * @param ClassType $class
      * @param stdClass $data
@@ -240,6 +263,8 @@ class ClassHandler implements SplSubject
     }
 
     /**
+     * Add multiple uses in a class.
+     *
      * @param PhpNamespace $namespace
      * @param stdClass $data
      * @param array|null $index
@@ -260,6 +285,8 @@ class ClassHandler implements SplSubject
     }
 
     /**
+     * Add use in a class.
+     *
      * @param PhpNamespace $namespace
      * @param string $use
      * @param array|null $index
@@ -271,8 +298,7 @@ class ClassHandler implements SplSubject
     {
         if (!empty($index)) {
             foreach ($index as $class => $arguments) {
-                str_replace($use, $use, $class, $count);
-
+                \str_replace($use, $use, $class, $count);
                 if ($count
                     && (self::getClassNameFromNamespace($use) == self::getClassNameFromNamespace($class))
                 ) {
@@ -280,17 +306,21 @@ class ClassHandler implements SplSubject
                 }
             }
         }
-        str_replace('$', '$', $use, $countVar);
+        \str_replace('$', '$', $use, $countVar);
         if (0 == $countVar) {
-            str_replace($context, $context, $use, $countContext);
+            \str_replace($context, $context, $use, $countContext);
             if (!empty($context) && (0 == $countContext)) {
                 $use = $context . '\\' . $use;
             }
-            $namespace->addUse($use);
+            if (!\in_array($use, self::ALL_TYPES)) {
+                $namespace->addUse($use);
+            }
         }
     }
 
     /**
+     * Add interfaces in a class.
+     *
      * @param PhpNamespace $namespace
      * @param ClassType $class
      * @param stdClass $data
@@ -313,6 +343,8 @@ class ClassHandler implements SplSubject
     }
 
     /**
+     * Addd traits in a class.
+     *
      * @param PhpNamespace $namespace
      * @param ClassType $class
      * @param stdClass $data
@@ -335,6 +367,8 @@ class ClassHandler implements SplSubject
     }
 
     /**
+     * Add arguments of the __construct method of a class.
+     *
      * @param PhpNamespace $namespace
      * @param ClassType $class
      * @param stdClass $data
@@ -359,9 +393,9 @@ class ClassHandler implements SplSubject
                     && \property_exists($data->construct, 'body')
                     && !empty($data->construct->body)
                 ) {
-                    if (in_array($info['type'], ['interface', 'class'])) {
+                    if (\in_array($info['type'], ['interface', 'class'])) {
                         self::setArgClassResult($namespace, $argument, $index, $info['value'], $info['basename'], $addConstruct);
-                    } elseif ($addConstruct && in_array($info['type'], ['var'])) {
+                    } elseif ($addConstruct && \in_array($info['type'], ['var'])) {
                         self::addConstructorArgument($info['argument'], $info);
                     }
                 }
@@ -370,6 +404,8 @@ class ClassHandler implements SplSubject
     }
 
     /**
+     * Create multiple methods in a class.
+     *
      * @param PhpNamespace $namespace
      * @param ClassType $class
      * @param stdClass $data
@@ -437,6 +473,9 @@ class ClassHandler implements SplSubject
                     }
                     if (\property_exists($method, 'visibility') && !empty($method->visibility)) {
                         $methodClass->setVisibility($method->visibility);
+                    }
+                    if (\property_exists($method, 'static') && true == $method->static) {
+                        $methodClass->setStatic($method->static);
                     }
                     if (\property_exists($method, 'returnType')  && !empty($method->returnType)) {
                         $info = self::getArgResult($namespace, $method->returnType, [], false);
@@ -611,14 +650,15 @@ class ClassHandler implements SplSubject
      * @param array $arguments
      * @param array|null $index
      * @param bool $addConstruct
+     * @param int $test
      * @return string
      */
-    public static function setArgs(PhpNamespace $namespace, array $arguments, ?array $index = [], bool $addConstruct = true, string $infoKey = 'argument'): string
+    public static function setArgs(PhpNamespace $namespace, array $arguments, ?array $index = [], bool $addConstruct = true, string $infoKey = 'argument', int $test = 0): string
     {
         $result = [];
         if (!empty($arguments)) {
             foreach ($arguments as $argument) {
-                $info = self::getArgResult($namespace, $argument, $index, $addConstruct);
+                $info = self::getArgResult($namespace, $argument, $index, $addConstruct, $test);
                 $result[] = $info[$infoKey];
             }
         }
@@ -631,9 +671,10 @@ class ClassHandler implements SplSubject
      * @param string $argument
      * @param array|null $index
      * @param bool $addConstruct
+     * @param int $test
      * @return array
      */
-    public static function getArgResult(PhpNamespace $namespace, string $argument, ?array $index = [], bool $addConstruct = true): array
+    public static function getArgResult(PhpNamespace $namespace, string $argument, ?array $index = [], bool $addConstruct = true, int $test = 0): array
     {
         $argument = \trim(preg_replace('!\s+!', ' ', $argument));
 
@@ -644,7 +685,7 @@ class ClassHandler implements SplSubject
 
         $className = \trim(str_replace('new', '', $argument, $countNew));
         if (1 == $countNew) {
-            $argResult = self::setArgNewResult($namespace, $argument, $index, $className);
+            $argResult = self::setArgNewResult($namespace, $argument, $index, $className, $addConstruct, $test);
             $type = 'new';
             $value = $className;
         }
@@ -697,18 +738,21 @@ class ClassHandler implements SplSubject
      * @param string $argument
      * @param array|null $index
      * @param string $className
+     * @param bool $addConstruct
+     * @param int $test
      * @return string
      */
-    public static function setArgNewResult(PhpNamespace $namespace, string $argument, ?array $index = [], string $className): string
+    public static function setArgNewResult(PhpNamespace $namespace, string $argument, ?array $index = [], string $className, bool $addConstruct = true, int $test = 0): string
     {
         $newArgs = null;
         foreach ($index as $class => $args) {
             $namespaceClass = self::getClassNameFromNamespace($class);
-            if (($namespaceClass == $className)
+
+            if ($namespaceClass == $className
                 && !empty($args)
             ) {
                 foreach ($args as $arg) {
-                    $info = self::getArgResult($namespace, $arg, $index);
+                    $info = self::getArgResult($namespace, $arg, $index, $addConstruct, 2);
                     $newArgs[] = $info['argument'];
                 }
                 $newArgs = \implode(', ', $newArgs);
@@ -775,13 +819,23 @@ class ClassHandler implements SplSubject
     }
 
     /**
+     * Return the field type value.
+     *
      * @param string $type
-     * @param object $options
+     * @param stdClass|null $field
      * @static
      * @return mixed
      */
-    public static function getType(string $type, object $options = null)
+    public static function getType(string $type, stdClass $field = null, bool $withTargetEntity = false)
     {
+        if ($withTargetEntity
+            && !\is_null($field)
+            && \property_exists($field, 'mapping')
+            && \property_exists($field->mapping, 'targetEntity')
+        ) {
+            $type = $field->mapping->targetEntity;
+        }
+
         switch ($type) {
             case self::TYPE_ENTITY:
                 $newType = 'int';
@@ -806,9 +860,9 @@ class ClassHandler implements SplSubject
                 break;
             case self::TYPE_ARRAY:
                 $newType = 'array';
-                if (!\is_null($options)
-                    && \property_exists($options, 'multiple')
-                    && !$options->multiple
+                if (!\is_null($field)
+                    && \property_exists($field, 'multiple')
+                    && !$field->multiple
                 ) {
                     $newType = 'int';
                 }
@@ -850,6 +904,8 @@ class ClassHandler implements SplSubject
     }
 
     /**
+     * Return true if the string value is composed inside with the 'int' or 'id' pattern.
+     *
      * @param string $value
      * @static
      * @return bool
@@ -865,6 +921,8 @@ class ClassHandler implements SplSubject
     }
 
     /**
+     * Return true if the string value is composed inside with the 'date' pattern.
+     *
      * @param string $value
      * @static
      * @return bool
@@ -885,17 +943,23 @@ class ClassHandler implements SplSubject
      * @static
      * @return string
      */
-    public static function recursiveArrayToString(array $args = [], string $result = '')
+    public static function recursiveArrayToString(array $args = [], string $result = '', string $tab = '            ')
     {
         $result .= '[';
         foreach ($args as $k => $value) {
-            $k = \is_string($k) ? "'$k'" : $k;
-            $value = \is_string($value) ? "'$value'" : $value;
-            $value = \is_array($value) ? self::recursiveArrayToString($value): $value;
+            \str_replace('$', '$', $value, $countVar);
+            $value = \is_string($value) && (0 == $countVar) ? "'$value'" : $value;
+            $value = \is_array($value) ? self::recursiveArrayToString($value, '', $tab . '    '): $value;
 
-            $result .= "$k => " . $value . ', ';
+            $k = \is_string($k) ? "'$k'" : $k;
+
+            $result .= PHP_EOL . $tab . "$k => " . $value . ', ';
         }
-        $result .= ']';
+        if (!empty($args)) {
+            $result .= PHP_EOL . substr($tab, 0, -4) . ']';
+        } else {
+            $result .=  ']';
+        }
 
         return $result;
     }

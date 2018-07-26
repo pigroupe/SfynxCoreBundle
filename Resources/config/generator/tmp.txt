@@ -12,16 +12,12 @@ php vendor/bin/sfynx-ddd-generator \
 --namespace=MyContext \
 --conf-file=/var/www/app/config/generator/models/sfynx-ddd-generator.yml \
 --report-template=default \
---report-dir=/var/www/src/generator/MyContext
-
-
+--report-dir=/var/www/src/generator/MyContext && \
 php vendor/bin/sfynx-ddd-generator \
 --namespace=PromotionContext \
 --conf-dir=/var/www/app/config/generator/offer \
 --report-template=default \
---report-dir=/var/www/src/generator/FormOffer
-
-
+--report-dir=/var/www/src/generator/FormOffer && \
 php vendor/bin/sfynx-ddd-generator \
 --namespace=Sfynx\\AuthBundle \
 --conf-dir=/var/www/app/config/generator/auth \
