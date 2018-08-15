@@ -45,6 +45,7 @@ class WidgetParser
     {
         return [
             Architecture\Infrastructure\Service\ServiceInfrastructureWidget::TAG => new Architecture\Infrastructure\Service\ServiceInfrastructureWidget(),
+            Architecture\Domain\Entity\EntityDomainWidget::TAG => new Architecture\Domain\Entity\EntityDomainWidget(),
             Architecture\Domain\Service\ManagerServiceDomainWidget::TAG => new Architecture\Domain\Service\ManagerServiceDomainWidget(),
             Architecture\Domain\Service\ServiceDomainWidget::TAG => new Architecture\Domain\Service\ServiceDomainWidget(),
             Architecture\Domain\Workflow\WorkflowObserverDomainWidget::TAG => new Architecture\Domain\Workflow\WorkflowObserverDomainWidget(),

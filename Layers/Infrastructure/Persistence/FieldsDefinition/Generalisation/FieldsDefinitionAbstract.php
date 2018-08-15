@@ -47,14 +47,14 @@ abstract class FieldsDefinitionAbstract
      */
     public function getFlipField(string $field): string
     {
-        if(is_null($this->flipFields)) {
+        if(\is_null($this->flipFields)) {
             $this->flip();
         }
         if (isset($this->flipFields[$field])) {
             return $this->flipFields[$field];
         }
 
-        throw InvalidArgumentException::invalidField($field, array_keys($this->flipFields));
+        throw InvalidArgumentException::invalidField($field, \array_keys($this->flipFields));
     }
 
     /**

@@ -28,13 +28,11 @@ abstract class AbstractFormRequest implements CommandRequestInterface
     /** @var array */
     protected $allowedValues = [];
     /** @var array */
-    protected $requestParameters;
+    protected $requestParameters = [];
     /** @var array */
     protected $options;
     /** @var array */
     protected $parameters;
-    /** @var OptionsResolverInterface */
-    protected $resolver;
     /** @var RequestInterface */
     protected $request;
     /** @var stdClass */
@@ -50,7 +48,6 @@ abstract class AbstractFormRequest implements CommandRequestInterface
         $this->request  = $request;
         $this->parameters  = $parameters;
         $this->object = new stdClass();
-        $this->resolver = new OptionsResolver();
 
         $this->execute();
     }
@@ -116,23 +113,15 @@ abstract class AbstractFormRequest implements CommandRequestInterface
                 $this->$attribut[$mt] = $this->$attribut[$this->$attribut[$mt]];
             }
         }
-
+        /* set default values */
         $this->defaults['_token'] = null;
         $this->allowedTypes['_token'] = ['string', 'null'];
 
-        $this->resolver->setDefaults($this->defaults);
-        $this->resolver->setRequired($this->required);
+        /* multidimensional resolver */
+        $this->multidimensionalOtionResolver($this->requestParameters, $this->options, $this->defaults, $this->allowedTypes, $this->allowedValues);
 
-        foreach ($this->allowedTypes as $optionName => $optionTypes) {
-            $this->resolver->setAllowedTypes($optionName, $optionTypes);
-        }
-        foreach ($this->allowedValues as $optionName => $optionValues) {
-            $this->resolver->setAllowedValues($optionName, $optionValues);
-        }
-        foreach ($this->getNormalizers() as $optionName => $optionValues) {
-            $this->resolver->setNormalizer($optionName, $optionValues);
-        }
-        $this->requestParameters = $this->resolver->resolve($this->options);
+        /* main resolver */
+        $this->mainOptionResolver($this->requestParameters);
     }
 
     /**
@@ -150,5 +139,87 @@ abstract class AbstractFormRequest implements CommandRequestInterface
     {
         $this->options = json_decode($this->request->getContent(), true);
         $this->options = (null !== $this->options) ? $this->options : [];
+    }
+
+    /**
+     * @param array $requestParameters
+     */
+    protected function multidimensionalOtionResolver(
+        array &$requestParameters,
+        array &$options,
+        array &$defaults = [],
+        array &$allowedTypes = [],
+        array &$allowedValues = []
+    ): void {
+        $multidimensionalDefaults = [];
+        $multidimensionalAllowedType = [];
+        $multidimensionalAllowedValues = [];
+        foreach ($defaults as $field => $optionDefault) {
+            if (\is_array($optionDefault)) {
+                $requestParameters[$field] = $requestParameters[$field] ?? [];
+                $options[$field] = $options[$field] ?? [];
+                $defaults[$field] = $defaults[$field] ?? [];
+                $allowedTypes[$field] = $allowedTypes[$field] ?? [];
+                $allowedValues[$field] = $allowedValues[$field] ?? [];
+                $this->multidimensionalOtionResolver(
+                    $requestParameters[$field],
+                    $options[$field],
+                    $defaults[$field],
+                    $allowedTypes[$field] ,
+                    $allowedValues[$field]
+                );
+
+                $multidimensionalDefaults[$field] = $optionDefault;
+                $defaults[$field] = null;
+
+                if (isset($allowedTypes[$field])) {
+                    $multidimensionalAllowedType[$field] = $allowedTypes[$field];
+                    $allowedTypes[$field] = ['array', 'null'];
+                }
+                if (isset($allowedValues[$field])) {
+                    $multidimensionalAllowedValues[$field] = $allowedValues[$field];
+                    unset($allowedValues[$field]);
+                }
+            }
+        }
+        foreach ($multidimensionalDefaults as $field => $optionDefault) {
+            $fieldResolver = new OptionsResolver();
+            $fieldResolver->setDefaults($optionDefault);
+
+            if (!empty($multidimensionalAllowedType[$field])) {
+                foreach ($multidimensionalAllowedType[$field] as $optionName => $optionTypes) {
+                    $fieldResolver->setAllowedTypes($optionName, $optionTypes);
+                }
+            }
+            if (!empty($multidimensionalAllowedValues[$field])) {
+                foreach ($multidimensionalAllowedValues[$field] as $optionName => $optionTypes) {
+                    $fieldResolver->setAllowedValues($optionName, $optionTypes);
+                }
+            }
+
+            $options[$field] = $options[$field] ?? [];
+            $requestParameters[$field] = $fieldResolver->resolve($options[$field]);
+        }
+    }
+
+    /**
+     * @param array $requestParameters
+     */
+    protected function mainOptionResolver(array &$requestParameters): void
+    {
+        $resolver = new OptionsResolver();
+        $resolver->setDefaults($this->defaults);
+        $resolver->setRequired($this->required);
+
+        foreach ($this->allowedTypes as $optionName => $optionTypes) {
+            $resolver->setAllowedTypes($optionName, $optionTypes);
+        }
+        foreach ($this->allowedValues as $optionName => $optionValues) {
+            $resolver->setAllowedValues($optionName, $optionValues);
+        }
+        foreach ($this->getNormalizers() as $optionName => $optionValues) {
+            $resolver->setNormalizer($optionName, $optionValues);
+        }
+        $requestParameters = array_merge($resolver->resolve($this->options), $requestParameters);
     }
 }

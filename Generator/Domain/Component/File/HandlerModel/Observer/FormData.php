@@ -9,6 +9,9 @@ use Sfynx\CoreBundle\Generator\Domain\Report\Generalisation\AbstractGenerator;
 
 /**
  * Class FormData
+ * @category   Sfynx\CoreBundle\Generator
+ * @package    Domain
+ * @subpackage Component\File\HandlerModel\Observer
  *
  * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
  */
@@ -51,7 +54,7 @@ class FormData extends AbstractHandlerModel
             $subject->event->index
         );
 
-        return false;
+        return true;
     }
 
     /**

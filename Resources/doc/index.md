@@ -1,13 +1,25 @@
-#SfynxCoreBundle 
+# SfynxCoreBundle documentation
 
 This bundle is responsible to :
+* provide abstract classes to compose with a DDD (Domain-driven design) applicative architecture
+* provide a command to generate complexe DDD models of classes (include adapter, observer and decorator design patterns)
+* provide a compilerPass to generate manager with distinct Query and Command repositories
 * provide models of classes allowing to work and develop with Gedmo translation and Gedmo tree
-* provide a command to generate Sfynx bundle with a CRUD system
 * include system of permissions Event
 * the implementation of full table with DataTable
 * the implementation of management of complete multi-forms with multiselect and pagination and search ajax, etc.
-* define cookies, type form, and template
 
 The following documents are available:
 
-* [Configuration reference](https://github.com/pigroupe/cmf-sfynx/tree/master/vendor/sfynx-project/core-bundle/Sfynx/CoreBundle/Resources/doc/configuration_reference.md)
+- [Reference Configuration](configuration_reference.md)
+- [DDD Generator Command](command_generator.md)
+- [ChangeLog](#changelog)
+- [Todo](#todo)
+
+## ChangeLog
+
+| Date | Version | Auteur | Description |
+| ------ | ----------- | ---- | ----------- |
+| 20/07/2018   | 1.0.0 | EDL | documentation initialization|
+
+## Todo

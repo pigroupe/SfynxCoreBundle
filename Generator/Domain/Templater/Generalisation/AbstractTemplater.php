@@ -178,7 +178,7 @@ abstract class AbstractTemplater implements TemplaterInterface
      *
      * @return array|null
      */
-    protected function updateIndex(): ?array
+    protected function updateIndex(bool $test = false): ?array
     {
         $index = $this->widget->getParser()->getConfig()->get('conf-index');
         $classname = $this->getTargetClassname();
@@ -188,8 +188,9 @@ abstract class AbstractTemplater implements TemplaterInterface
         foreach ($index as $class => $arguments) {
             $oldkey = $class;
             $newkey = $class;
-            str_replace($classname, $classname, $class, $count1);
 
+//            str_replace($classname, $classname, $class, $count1); OLD
+            str_replace($class, $class, $namespace . '\\' . $classname, $count1);
             if ($count1) {
                 if (array_key_exists($oldkey, $index)) {
                     $newkey = $namespace . '\\' . $classname;

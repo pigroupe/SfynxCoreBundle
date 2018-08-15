@@ -39,6 +39,46 @@ class Configuration implements ConfigurationInterface
 
         return $treeBuilder;
     }
+
+    /**
+     * Mapping config
+     *
+     * @param $rootNode \Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition
+     *
+     * @return void
+     * @access protected
+     *
+     * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
+     */
+    public static function addMappingConfig(ArrayNodeDefinition $rootNode)
+    {
+        $rootNode
+        ->children()
+            ->arrayNode('mapping')
+                ->addDefaultsIfNotSet()
+                ->children()
+
+                    ->arrayNode('entities')
+                    ->isRequired()
+                        ->prototype('array')
+                            ->children()
+                                ->scalarNode('class')->cannotBeEmpty()->isRequired()->end()
+                                ->scalarNode('provider')->defaultValue('')->end()
+                                ->scalarNode('provider_command')->cannotBeEmpty()->isRequired()->end()
+                                ->scalarNode('provider_query')->cannotBeEmpty()->isRequired()->end()
+                                ->scalarNode('em')->defaultValue('')->end()
+                                ->scalarNode('em_command')->cannotBeEmpty()->isRequired()->end()
+                                ->scalarNode('em_query')->cannotBeEmpty()->isRequired()->end()
+                                ->scalarNode('repository_command')->cannotBeEmpty()->isRequired()->end()
+                                ->scalarNode('repository_query')->cannotBeEmpty()->isRequired()->end()
+                            ->end()
+                        ->end()
+                    ->end()
+
+                ->end()
+            ->end()
+        ->end();
+    }
     
     /**
      * Admin config

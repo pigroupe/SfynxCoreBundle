@@ -40,7 +40,7 @@ default:
                         design: 'decorator'
                         class: Sfynx\CoreBundle\Layers\Application\Command\Handler\FormCommandHandler
                         arguments:
-                            - '$Commandworkflow'
+                            - '$commandworkflow'
                         handlers: [ 'Offer1FormCommandValidationHandler', 'Offer1FormCommandSpecHandler']
                         calls:
                             - [ process, [ '$updateCommand' ] ]

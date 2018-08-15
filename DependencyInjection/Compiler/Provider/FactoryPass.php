@@ -1,9 +1,7 @@
 <?php
 namespace Sfynx\CoreBundle\DependencyInjection\Compiler\Provider;
 
-use Sfynx\CoreBundle\DependencyInjection\Compiler\Provider\Generalisation\FactoryPassInterface;
-use Sfynx\CoreBundle\DependencyInjection\Compiler\Provider\Handler\HandlerOrmFactoryPass;
-use Sfynx\CoreBundle\DependencyInjection\Compiler\Provider\Handler\HandlerGeneralFactoryPass;
+use Sfynx\CoreBundle\DependencyInjection\Compiler\Provider\Handler\HandlerFactoryPass;
 
 /**
  * Class FactoryPass
@@ -18,27 +16,18 @@ use Sfynx\CoreBundle\DependencyInjection\Compiler\Provider\Handler\HandlerGenera
  * @link       http://opensource.org/licenses/gpl-license.php
  * @since      2015-02-16
  */
-class FactoryPass implements FactoryPassInterface
+class FactoryPass
 {
-    protected static $mapping = [
-        self::ORM_DATABASE_TYPE => HandlerOrmFactoryPass::class,
-        self::ODM_DATABASE_TYPE => HandlerOdmFactoryPass::class,
-        self::COUCHDB_DATABASE_TYPE => HandlerCouchdbFactoryPass::class
-    ];
-
     /**
      * Create the class that will change the factory class regarding the provider type.
      *
-     * @param string $type Database used
      * @param string $entity Entity name
      * @param string $alias Alias name
+     * @param bool $multiple
      * @return FactoryPassInterface
      */
-    public static function create($type, $entity, $alias, bool $multiple = true)
+    public static function create($entity, $alias, array $parameters, bool $multiple = true)
     {
-        if (array_key_exists($type, self::$mapping)) {
-            return new self::$mapping[$type]($entity, $alias, $multiple);
-        }
-        return new HandlerGeneralFactoryPass($type, $entity, $alias, $multiple);
+        return new HandlerFactoryPass($entity, $alias, $parameters, $multiple);
     }
 }

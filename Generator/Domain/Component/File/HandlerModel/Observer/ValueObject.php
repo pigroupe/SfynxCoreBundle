@@ -8,14 +8,14 @@ use Sfynx\CoreBundle\Generator\Domain\Component\File\ClassHandler;
 use Sfynx\CoreBundle\Generator\Domain\Report\Generalisation\AbstractGenerator;
 
 /**
- * Class QueryBuilder
+ * Class ValueObject
  * @category   Sfynx\CoreBundle\Generator
  * @package    Domain
  * @subpackage Component\File\HandlerModel\Observer
  *
  * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
  */
-class QueryBuilder extends AbstractHandlerModel
+class ValueObject extends AbstractHandlerModel
 {
     /**
      * {@inheritdoc}
@@ -23,6 +23,7 @@ class QueryBuilder extends AbstractHandlerModel
     public function update(SplSubject $subject)
     {
         $args = $this->getArgs($subject);
+        $parameters = $this->parameters;
 
         $body = '' . PHP_EOL
             . "\$query = \$this->entityRepository->createQueryBuilder('a')" . PHP_EOL

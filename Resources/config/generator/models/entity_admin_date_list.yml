@@ -101,7 +101,40 @@ default:
                 class: DateListType
                 arguments: ~
         domain:
-            widget_entity: true
+            #
+            # ACTIVITY ENTITY CLASSES
+            #
+            widget_entity_class:
+                - DateListEntity:
+                    create: true
+                    class: Domain\Entity\DateList
+#                    arguments: ['Sfynx\AuthBundle\Domain\ValueObject\DateListVO']
+                    options:
+                        traits:
+                          - 'Sfynx\CoreBundle\Layers\Domain\Model\Traits\TraitBuild'
+                          - 'Sfynx\CoreBundle\Layers\Domain\Model\Traits\TraitEnabled'
+                        models:
+#                          - { class: 'Sfynx\CoreBundle\Generator\Domain\Component\File\HandlerModel\Observer\Entity', parameters: { performMethod: ['Sfynx\CoreBundle\Generator\Domain\Component\File\MethodModel\Construct']} }
+                          0:
+                            class: 'Sfynx\CoreBundle\Generator\Domain\Component\File\HandlerModel\Observer\Entity'
+                            parameters:
+                              performMethods:
+                                - 'Sfynx\CoreBundle\Generator\Domain\Component\File\MethodModel\Construct'
+                                - 'Sfynx\CoreBundle\Generator\Domain\Component\File\MethodModel\CreateFromNative'
+                                - 'Sfynx\CoreBundle\Generator\Domain\Component\File\MethodModel\ToString'
+                                - 'Sfynx\CoreBundle\Generator\Domain\Component\File\MethodModel\ToArray'
+                                - 'Sfynx\CoreBundle\Generator\Domain\Component\File\MethodModel\Serialize'
+                                - 'Sfynx\CoreBundle\Generator\Domain\Component\File\MethodModel\Unserialize'
+                - DateListVO:
+                    create: true
+                    class: Domain\ValueObject\DateListVO
+                    extends: 'Sfynx\CoreBundle\Layers\Domain\ValueObject\Generalisation\AbstractVO'
+                    options:
+                        models:
+                          - { class: 'Sfynx\CoreBundle\Generator\Domain\Component\File\HandlerModel\Observer\ValueObject', parameters: []}
+            #
+            # MANAGER CLASSES
+            #
             widget_service_manager_class:
                 - DateListEntityManager:
                     create: true
@@ -109,6 +142,9 @@ default:
                     arguments: ~
                     options:
                       entity: 'DateList'
+            #
+            # SERVICES CLASSES
+            #
             widget_service_class:
 #                - EntityManager:
 #                    create: true
@@ -147,6 +183,9 @@ default:
                     create: true
                     class: Domain\Repository\Query\DateListQueryRepositoryInterface
                     type: interface
+            #
+            # OBSERVER CLASSES
+            #
             widget_workflow_observer_class:
                 - OBDateListEntityCreate:
                     create: true
@@ -285,6 +324,62 @@ default:
                 name: entityId
                 type: id
                 primaryKey: true
+              phase:
+                type: id
+                foreignKey: true
+                required: true
+                mapping:
+                  relationship: ManyToOne
+                  targetEntity: PromotionContext\Domain\Entity\PhaseWorkflow
+              business:
+                type: id
+                foreignKey: true
+                required: true
+                mapping:
+                  relationship: ManyToOne
+                  targetEntity: PromotionContext\Domain\Entity\Typelist
+              offerStatus:
+                type: id
+                foreignKey: true
+                required: true
+                mapping:
+                  relationship: ManyToOne
+                  targetEntity: PromotionContext\Domain\Entity\Typelist
+              offerType:
+                type: id
+                foreignKey: true
+                required: true
+                mapping:
+                  relationship: ManyToOne
+                  targetEntity: PromotionContext\Domain\Entity\Typelist
+              dationType:
+                type: id
+                foreignKey: true
+                required: false
+                mapping:
+                  relationship: ManyToOne
+                  targetEntity: PromotionContext\Domain\Entity\Typelist
+              mailTemplate:
+                type: id
+                foreignKey: true
+                required: true
+                mapping:
+                  relationship: ManyToOne
+                  targetEntity: BusinessContext\Domain\Entity\MailTemplate
+              media:
+                type: id
+                foreignKey: true
+                required: true
+                mapping:
+                  relationship: ManyToOne
+                  targetEntity: DocContext\Domain\Entity\Media
+              parentDateList:
+                type: id
+                foreignKey: true
+                required: true
+                mapping:
+                  relationship: ManyToOne
+                  targetEntity: PromotionCOntext\Domain\Entity\DateList
               name:
                 type: string
                 required: true
@@ -294,13 +389,6 @@ default:
               position:
                 type: integer
                 required: false
-              phase:
-                type: id
-                foreignKey: true
-                required: true
-                mapping:
-                  relationship: ManyToOne
-                  targetEntity: PromotionContext\Domain\Entity\PhaseWorkflow
               displayOnWallet:
                 type: boolean
                 required: false
@@ -313,129 +401,78 @@ default:
               helpLabel:
                 type: text
                 required: false
-                
-              
-#              business:
-#                type: id
-#                foreignKey: true
-#                required: true
-#                mapping:
-#                  relationship: ManyToOne
-#                  targetEntity: PromotionContext\Domain\Entity\Typelist
-#              offerStatus:
-#                type: id
-#                foreignKey: true
-#                required: true
-#                mapping:
-#                  relationship: ManyToOne
-#                  targetEntity: PromotionContext\Domain\Entity\Typelist
-#              offerType:
-#                type: id
-#                foreignKey: true
-#                required: true
-#                mapping:
-#                  relationship: ManyToOne
-#                  targetEntity: PromotionContext\Domain\Entity\Typelist
-#              dationType:
-#                type: id
-#                foreignKey: true
-#                required: false
-#                mapping:
-#                  relationship: ManyToOne
-#                  targetEntity: PromotionContext\Domain\Entity\Typelist
-#              mailTemplate:
-#                type: id
-#                foreignKey: true
-#                required: true
-#                mapping:
-#                  relationship: ManyToOne
-#                  targetEntity: BusinessContext\Domain\Entity\MailTemplate
-#              media:
-#                type: id
-#                foreignKey: true
-#                required: true
-#                mapping:
-#                  relationship: ManyToOne
-#                  targetEntity: DocContext\Domain\Entity\Media
-#              parentDateList:
-#                type: id
-#                foreignKey: true
-#                required: true
-#                mapping:
-#                  relationship: ManyToOne
-#                  targetEntity: PromotionCOntext\Domain\Entity\DateList
-#              offerNumber:
-#                type: float
-#                required: true
-#              lastStep:
-#                type: integer
-#                required: true
-#              title:
-#                type: string
-#                required: true
-#              priceTTC:
-#                type: float
-#                required: true
-#              floorArea:
-#                type: float
-#                required: false
-#              percentageSocialHousing:
-#                type: float
-#                required: false
-#              dationEstimatedAmount:
-#                type: float
-#                required: false
-#              dationEstimatedAmount:
-#                type: float
-#                required: false
-#              dationComment:
-#                type: text
-#                required: false
-#              durationValidity:
-#                type: integer
-#                required: true
-#                defaultValue: 2
-#              suspensiveConditionDurationValidity:
-#                type: integer
-#                required: true
-#                defaultValue: 5
-#              maximumDelayPCDeposit:
-#                type: integer
-#                required: true
-#                defaultValue: 5
-#              durationAfterPromise:
-#                type: integer
-#                required: true
-#                defaultValue: 15
-#              durationAfterPurgePC:
-#                type: integer
-#                required: true
-#                defaultValue: 5
-#              indemnityCompensationAmount:
-#                type: float
-#                required: false
-#                nullable: true
-#              indemnityCompensationPercentage:
-#                type: float
-#                required: false
-#                nullable: true
-#                defaultValue: 5
-#              content:
-#                type: text
-#                required: false
-#                nullable: true
-#              sentByMail:
-#                type: boolean
-#                defaultValue: false
-#                required: false
-#              sendByMailDate:
-#                type: datetime
-#                nullable: true
-#                required: false
-#              sendByMailDate:
-#                type: datetime
-#                nullable: true
-#                required: false
+              offerNumber:
+                type: float
+                required: true
+              lastStep:
+                type: integer
+                required: true
+              title:
+                type: string
+                required: true
+              priceTTC:
+                type: float
+                required: true
+              floorArea:
+                type: float
+                required: false
+              percentageSocialHousing:
+                type: float
+                required: false
+              dationEstimatedAmount:
+                type: float
+                required: false
+              dationEstimatedAmount:
+                type: float
+                required: false
+              dationComment:
+                type: text
+                required: false
+              durationValidity:
+                type: integer
+                required: true
+                defaultValue: 2
+              suspensiveConditionDurationValidity:
+                type: integer
+                required: true
+                defaultValue: 5
+              maximumDelayPCDeposit:
+                type: integer
+                required: true
+                defaultValue: 5
+              durationAfterPromise:
+                type: integer
+                required: true
+                defaultValue: 15
+              durationAfterPurgePC:
+                type: integer
+                required: true
+                defaultValue: 5
+              indemnityCompensationAmount:
+                type: float
+                required: false
+                nullable: true
+              indemnityCompensationPercentage:
+                type: float
+                required: false
+                nullable: true
+                defaultValue: 5
+              content:
+                type: text
+                required: false
+                nullable: true
+              sentByMail:
+                type: boolean
+                defaultValue: false
+                required: false
+              sendByMailDate:
+                type: datetime
+                nullable: true
+                required: false
+              sendByMailDate:
+                type: datetime
+                nullable: true
+                required: false
 #          DateList:
 #            x-fields:
 #              id:

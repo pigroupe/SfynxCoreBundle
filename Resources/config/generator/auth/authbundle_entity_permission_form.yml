@@ -46,7 +46,7 @@ default:
                         design: 'decorator'
                         class: Sfynx\CoreBundle\Layers\Application\Command\Handler\FormCommandHandler
                         arguments:
-                            - '$Commandworkflow'
+                            - '$commandworkflow'
                         handlers: [ 'PermissionFormCommandValidationHandler', 'PermissionFormCommandSpecHandler']
                         calls:
                             - [ process, [ '$updateCommand' ] ]
@@ -101,7 +101,43 @@ default:
                 class: PermissionType
                 arguments: ~
         domain:
-            widget_entity: true
+            #
+            # ENTITY CLASSES
+            #
+            widget_entity_class:
+                - PermissionEntity:
+                    create: true
+                    class: Domain\Entity\Permission
+#                    arguments: ['Sfynx\AuthBundle\Domain\ValueObject\PermissionVO']
+                    options:
+                        mapping: 'Permission'
+                        traits:
+                          - 'Sfynx\CoreBundle\Layers\Domain\Model\Traits\TraitBuild'
+                          - 'Sfynx\CoreBundle\Layers\Domain\Model\Traits\TraitEnabled'
+                          - 'Sfynx\CoreBundle\Layers\Domain\Model\Traits\TraitName'
+                          - 'Sfynx\CoreBundle\Layers\Domain\Model\Traits\TraitDatetime'
+                        models:
+#                          - { class: 'Sfynx\CoreBundle\Generator\Domain\Component\File\HandlerModel\Observer\Entity', parameters: { performMethod: ['Sfynx\CoreBundle\Generator\Domain\Component\File\MethodModel\Construct']} }
+                          0:
+                            class: 'Sfynx\CoreBundle\Generator\Domain\Component\File\HandlerModel\Observer\Entity'
+                            parameters:
+                              performMethods:
+                                - 'Sfynx\CoreBundle\Generator\Domain\Component\File\MethodModel\Construct'
+                                - 'Sfynx\CoreBundle\Generator\Domain\Component\File\MethodModel\CreateFromNative'
+                                - 'Sfynx\CoreBundle\Generator\Domain\Component\File\MethodModel\ToString'
+                                - 'Sfynx\CoreBundle\Generator\Domain\Component\File\MethodModel\ToArray'
+                                - 'Sfynx\CoreBundle\Generator\Domain\Component\File\MethodModel\Serialize'
+                                - 'Sfynx\CoreBundle\Generator\Domain\Component\File\MethodModel\Unserialize'
+                - PermissionVO:
+                    create: true
+                    class: Domain\ValueObject\PermissionVO
+                    extends: 'Sfynx\CoreBundle\Layers\Domain\ValueObject\Generalisation\AbstractVO'
+                    options:
+                        models:
+                          - { class: 'Sfynx\CoreBundle\Generator\Domain\Component\File\HandlerModel\Observer\ValueObject', parameters: []}
+            #
+            # MANAGER CLASSES
+            #
             widget_service_manager_class:
                 - PermissionEntityManager:
                     create: true
@@ -109,6 +145,9 @@ default:
                     arguments: ~
                     options:
                         entity: 'Permission'
+            #
+            # SERVICES CLASSES
+            #
             widget_service_class:
                 - PermissionCommandRepositoryInterface:
                     create: true
@@ -118,6 +157,9 @@ default:
                     create: true
                     class: Domain\Repository\Query\PermissionQueryRepositoryInterface
                     type: interface
+            #
+            # OBSERVER CLASSES
+            #
             widget_workflow_observer_class:
                 - OBPermissionEntityCreate:
                     create: true
@@ -259,8 +301,9 @@ default:
                 voName: IdVO
                 primaryKey: true
                 mapping:
-                  targetEntity: SfynxAuthBundle\Domain\Entity\Permission
-#                  manager: 'Sfynx\AuthBundle\Domain\Service\Permission\Manager\EntityManager as PermissionManager'
+                  targetEntity: Sfynx\AuthBundle\Domain\Entity\Permission
+#                  formData:
+#                      manager: 'Sfynx\AuthBundle\Domain\Service\Permission\Manager\EntityManager as PermissionManager'
               permission:
                 type: valueObject
                 voName: PermissionVO

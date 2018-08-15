@@ -179,9 +179,10 @@ EOT;
             }
         }
 
-        $content .= '        ])';
         if ($isEndLine) {
             $content .= '        ]);';
+        } else {
+            $content .= '        ])';
         }
 
         return $content;

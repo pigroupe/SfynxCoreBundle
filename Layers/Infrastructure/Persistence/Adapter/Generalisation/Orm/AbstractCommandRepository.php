@@ -13,6 +13,7 @@ use Sfynx\CoreBundle\Layers\Infrastructure\Cache\CacheQuery;
 use Sfynx\CoreBundle\Layers\Domain\Repository\Command\CommandRepositoryInterface;
 use Sfynx\CoreBundle\Layers\Infrastructure\Persistence\Adapter\Generalisation\Orm\Traits\TraitGeneral;
 use Sfynx\CoreBundle\Layers\Infrastructure\Persistence\Adapter\Generalisation\Orm\Traits\TraitSave;
+use Sfynx\CoreBundle\Layers\Infrastructure\Persistence\Adapter\Generalisation\Orm\Traits\TraitProvider;
 use Sfynx\CoreBundle\Layers\Infrastructure\Persistence\QueryBuilder\Generalisation\Traits\TraitResultFunction;
 
 /**
@@ -35,6 +36,7 @@ use Sfynx\CoreBundle\Layers\Infrastructure\Persistence\QueryBuilder\Generalisati
 abstract class AbstractCommandRepository extends EntityRepository implements CommandRepositoryInterface
 {
     use TraitResultFunction;
+    use TraitProvider;
     use TraitSave;
     use TraitGeneral;
 

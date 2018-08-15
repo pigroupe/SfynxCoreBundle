@@ -20,5 +20,4 @@ use Symfony\Component\DependencyInjection\ContainerBuilder;
  */
 interface HandlerPassInterface extends CompilerPassInterface
 {
-    public function process(ContainerBuilder $container);
 }

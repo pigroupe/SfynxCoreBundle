@@ -218,13 +218,12 @@ trait TraitGeneral
         if (!empty($orderby)) {
             $query->orderBy("a.$orderby", 'ASC');
         }
-        $query->getQuery();
 
         if (!is_null($MaxResults)) {
             $query->setMaxResults($MaxResults);
         }
 
-        return $this->findTranslationsByQuery($locale, $query, $result, $INNER_JOIN, $FALLBACK, $lazy_loading);
+        return $this->findTranslationsByQuery($locale, $query->getQuery(), $result, $INNER_JOIN, $FALLBACK, $lazy_loading);
     }
 
     /**

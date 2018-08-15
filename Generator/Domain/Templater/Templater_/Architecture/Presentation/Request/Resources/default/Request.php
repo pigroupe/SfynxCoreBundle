@@ -83,38 +83,44 @@ class <?php echo $templater->getTargetClassname(); ?> extends AbstractFormReques
             $this->parameters
         );
 
-        // boolean transformation
-        $dataBool = [
+        /* boolean transformation */
+        foreach ([
 <?php foreach ($templater->getTargetCommandFields() as $field): ?>
 <?php if (strpos(strtolower($field->type), 'bool') !== false): ?>
             '<?php echo lcfirst($field->name) ?>',
 <?php endif; ?>
 <?php endforeach; ?>
-        ];
-
-        foreach ($dataBool as $data) {
+        ] as $data) {
             if (isset($this->options[$data])) {
-                $this->options[$data] = (int)$this->options[$data] ? true : false;
+                $this->options[$data] = (boolean)$this->options[$data];
             }
         }
 
-        // identifier transformation
+        /* identifier transformation */
+        foreach ([
 <?php foreach ($templater->getTargetCommandFields() as $field): ?>
-<?php if (ClassHandler::isIntType($field->type)): ?>
-        //$<?php echo lcfirst($field->name) ?> = $this->request->get('<?php echo lcfirst($field->name) ?>', '');
-        //$this->options['<?php echo lcfirst($field->name) ?>'] = ('' !== $<?php echo lcfirst($field->name) ?>) ? (int)$<?php echo lcfirst($field->name) ?> : null;
-        if (!empty($this->options['<?php echo lcfirst($field->name) ?>'])) {
-            $this->options['<?php echo lcfirst($field->name) ?>'] = (int)$this->options['<?php echo lcfirst($field->name) ?>'];
+<?php if (ClassHandler::isIntType($field->type)) : ?>
+            '<?php echo lcfirst($field->name) ?>',
+<?php endif; ?>
+<?php endforeach; ?>
+        ] as $data) {
+            //$$data = $this->request->get($data, '');
+            //$this->options[$data] = ('' !== $$data) ? (int)$$data : null;
+            if (isset($this->options[$data])) {
+                $this->options[$data] = (int)$this->options[$data];
+            }
         }
-<?php endif; ?>
-<?php endforeach; ?>
 
-        // datetime transformation
+        /* datetime transformation */
+        foreach ([
 <?php foreach ($templater->getTargetCommandFields() as $field): ?>
-<?php if (ClassHandler::isDateType($field->type)): ?>
-        $this->options['<?php echo lcfirst($field->name) ?>'] = (!empty($this->options['<?php echo lcfirst($field->name) ?>'])) ? new \DateTime($this->options['<?php echo lcfirst($field->name) ?>']) : new \DateTime('now');
+<?php if (ClassHandler::isDateType($field->type)) : ?>
+            '<?php echo lcfirst($field->name) ?>',
 <?php endif; ?>
 <?php endforeach; ?>
+        ] as $data) {
+            $this->options[$data] = !empty($this->options[$data]) ? new \DateTime($this->options[$data]) : new \DateTime();
+        }
 
         $this->options = (null !== $this->options) ? $this->options : [];
     }
