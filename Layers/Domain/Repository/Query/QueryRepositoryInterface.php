@@ -7,6 +7,7 @@ use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\QueryBuilder;
 
 use Sfynx\CoreBundle\Layers\Domain\Repository\ResultFunctionRepositoryInterface;
+use Sfynx\CoreBundle\Layers\Domain\Repository\ProviderRepositoryInterface;
 use Sfynx\CoreBundle\Layers\Domain\Repository\Query\GeneralRepositoryInterface;
 use Sfynx\CoreBundle\Layers\Domain\Repository\Query\TranslationRepositoryInterface;
 use Sfynx\CoreBundle\Layers\Infrastructure\Persistence\Adapter\Generalisation\Interfaces\ResultInterface;
@@ -25,7 +26,7 @@ use Sfynx\CoreBundle\Layers\Infrastructure\Cache\CacheQuery;
  * @link       http://opensource.org/licenses/gpl-license.php
  * @since      2015-02-16
  */
-interface QueryRepositoryInterface extends ResultFunctionRepositoryInterface, GeneralRepositoryInterface, TranslationRepositoryInterface, ObjectRepository
+interface QueryRepositoryInterface extends ResultFunctionRepositoryInterface, ProviderRepositoryInterface, GeneralRepositoryInterface, TranslationRepositoryInterface, ObjectRepository
 {
     /**
      * @return ResultInterface
@@ -64,5 +65,17 @@ interface QueryRepositoryInterface extends ResultFunctionRepositoryInterface, Ge
      * @param $refValue
      * @return QueryBuilder
      */
-    public function clauseAndWhere($query, $dbRef, $refValue): QueryBuilder;
+    public function clauseAndWhere(QueryBuilder $query, $dbRef, $refValue): QueryBuilder;
+
+    /**
+     * @param QueryBuilder $query
+     * @return mixed
+     */
+    public function execute(QueryBuilder $query);
+
+    /**
+     * @param string $entropy
+     * @return string
+     */
+    public static function struuid(string $entropy);
 }

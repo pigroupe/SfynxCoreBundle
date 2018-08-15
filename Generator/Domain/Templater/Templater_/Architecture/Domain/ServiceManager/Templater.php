@@ -21,8 +21,8 @@ class Templater extends AbstractTemplater implements TemplaterInterface
     /** @var array */
     const TARGET_ATTRIBUTS = [
         'conf-mapping' => 'commandFields',
-        'conf-widget',
         'conf-options' => 'options',
+        'conf-widget',
         'conf-cqrs'
     ];
 

@@ -38,7 +38,8 @@ class Construct
         $arguments = [];
         $fieldContent = '';
         foreach ($fields as $field) {
-            if ('entityId' != $field->name) {
+            \str_replace('entityid', 'entityid', \strtolower($field->name), $isFieldEntity);
+            if (!$isFieldEntity) {
                 $propertyFieldName = \lcfirst($field->name);
                 $fieldContent .= sprintf("\$this->%s = \$%s;", $propertyFieldName, $propertyFieldName) . PHP_EOL;
 

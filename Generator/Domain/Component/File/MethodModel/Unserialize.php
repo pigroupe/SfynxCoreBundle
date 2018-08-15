@@ -37,6 +37,10 @@ class Unserialize
         $fieldContent = '$unserializedData = \unserialize($data);' . PHP_EOL;
         foreach ($fields as $field) {
             $propertyFieldName = \lcfirst($field->name);
+            \str_replace('entityid', 'entityid', \strtolower($field->name), $isFieldEntity);
+            if ($isFieldEntity) {
+                $propertyFieldName = 'id';
+            }
             $fieldContent .= sprintf("\$this->%s = \$unserializedData['%s'];", $propertyFieldName, $propertyFieldName) . PHP_EOL;
         }
 

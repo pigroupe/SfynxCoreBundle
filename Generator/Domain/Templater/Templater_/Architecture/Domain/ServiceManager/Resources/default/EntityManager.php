@@ -3,56 +3,34 @@
 
     $fieldsEntityOption = '';
     if ($templater->has('targetOptions') && !empty($templater->getTargetOptions())) {
-        $fieldsEntityOption = $templater->getTargetOptions()['entity'];
+        if (!empty($templater->getTargetOptions()['mapping'])) {
+            $fieldsEntityOption = $templater->getTargetOptions()['mapping'];
+        }
     }
 
     // we search ManyToOne relationship
     $fieldsEntityList = [];
-    if (empty($fieldsEntityOption)) {
-        foreach ($templater->getTargetCommandFields() as $field) {
-            if (($field->type == ClassHandler::TYPE_ENTITY)
-                && property_exists($field, 'mapping')
-                && (!property_exists($field, 'primaryKey') || !$field->primaryKey)
-            ) {
-                $fieldsEntityList[] = $field;
-            }
-        }
-    } else {
-        $fieldsEntityList = [];
-        foreach ($templater->getTargetCommandFields() as $field) {
-            if (($field->type == ClassHandler::TYPE_ENTITY)
-                && property_exists($field, 'mapping')
-                && (!property_exists($field, 'primaryKey') || !$field->primaryKey)
-                && ($field->entityName == $fieldsEntityOption)
-            ) {
-                $fieldsEntityList[] = $field;
-            }
+    foreach ($templater->getTargetCommandFields() as $field) {
+        if (($field->type == ClassHandler::TYPE_ENTITY)
+            && property_exists($field, 'mapping')
+            && (!property_exists($field, 'primaryKey') || !$field->primaryKey)
+            && (empty($fieldsEntityOption) || $field->entityName == $fieldsEntityOption)
+        ) {
+            $fieldsEntityList[] = $field;
         }
     }
 
+
     // we search ManyToMany  relationship
     $fieldsEntityArrayList = [];
-    if (empty($fieldsEntityOption)) {
-        foreach ($templater->getTargetCommandFields() as $field) {
-            if (($field->type == ClassHandler::TYPE_ARRAY)
-                && property_exists($field, 'mapping')
-                && property_exists($field, 'multiple') && ($field->multiple == true)
-                && (!property_exists($field, 'primaryKey') || !$field->primaryKey)
-            ) {
-                $fieldsEntityArrayList[] = $field;
-            }
-        }
-    } else {
-        $fieldsEntityArrayList = [];
-        foreach ($templater->getTargetCommandFields() as $field) {
-            if (($field->type == ClassHandler::TYPE_ARRAY)
-                && property_exists($field, 'mapping')
-                && property_exists($field, 'multiple') && ($field->multiple == true)
-                && (!property_exists($field, 'primaryKey') || !$field->primaryKey)
-                && ($field->entityName == $fieldsEntityOption)
-            ) {
-                $fieldsEntityArrayList[] = $field;
-            }
+    foreach ($templater->getTargetCommandFields() as $field) {
+        if (($field->type == ClassHandler::TYPE_ARRAY)
+            && property_exists($field, 'mapping')
+            && property_exists($field, 'multiple') && ($field->multiple == true)
+            && (!property_exists($field, 'primaryKey') || !$field->primaryKey)
+            && (empty($fieldsEntityOption) || $field->entityName == $fieldsEntityOption)
+        ) {
+            $fieldsEntityArrayList[] = $field;
         }
     }
 

@@ -37,6 +37,10 @@ class ToArray
         $args = [];
         foreach ($fields as $field) {
             $propertyFieldName = \lcfirst($field->name);
+            \str_replace('entityid', 'entityid', \strtolower($field->name), $isFieldEntity);
+            if ($isFieldEntity) {
+                $propertyFieldName = 'id';
+            }
             $args[$propertyFieldName] = sprintf("\$this->%s", $propertyFieldName);
         }
 

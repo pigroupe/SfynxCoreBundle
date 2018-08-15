@@ -39,8 +39,16 @@ class Getter
         string $propertyFieldName = ''
     ): void {
         $getterFieldName = 'get' . \ucfirst($field->name);
-        $getterFieldBody = sprintf('return $this->%s;', $propertyFieldName);
         $ClassTypeFieldName = ClassHandler::getClassNameFromNamespace($typeFieldName);
+
+        \str_replace('entityid', 'entityid', \strtolower($field->name), $isFieldEntity);
+        if ($isFieldEntity) {
+            $propertyFieldName = 'id';
+            $ClassTypeFieldName = 'int';
+            $typeFieldName = 'int';
+            $getterFieldName = 'getId';
+        }
+        $getterFieldBody = sprintf('return $this->%s;', $propertyFieldName);
 
         $comment = sprintf('@var %s $%s', $ClassTypeFieldName, $propertyFieldName);
         if (empty($typeFieldName)) {
@@ -59,7 +67,7 @@ class Getter
                 'options' => [
                     'methods' => [[
                         'name' => $getterFieldName,
-                        'comments' => ['Return the ' . $field->name],
+                        'comments' => ['Return the ' . $propertyFieldName],
                         'visibility' => 'public',
                         'returnType' => $typeFieldName,
                         'body' => [$getterFieldBody]

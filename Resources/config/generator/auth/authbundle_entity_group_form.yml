@@ -101,7 +101,45 @@ default:
                 class: GroupType
                 arguments: ~
         domain:
-            widget_entity: true
+            #
+            # ENTITY CLASSES
+            #
+            widget_entity_class:
+                - GroupEntity:
+                    create: true
+                    class: Domain\Entity\Group
+#                    arguments: ['Sfynx\AuthBundle\Domain\ValueObject\GroupVO']
+                    options:
+                        mapping: 'Group'
+                        traits:
+                          - 'Sfynx\CoreBundle\Layers\Domain\Model\Traits\TraitBuild'
+                          - 'Sfynx\CoreBundle\Layers\Domain\Model\Traits\TraitEnabled'
+                          - 'Sfynx\CoreBundle\Layers\Domain\Model\Traits\TraitName'
+                          - 'Sfynx\CoreBundle\Layers\Domain\Model\Traits\TraitDatetime'
+                          - 'Sfynx\CoreBundle\Layers\Domain\Model\Traits\TraitRoles'
+                          - 'Sfynx\CoreBundle\Layers\Domain\Model\Traits\TraitPermissions'
+                        models:
+#                          - { class: 'Sfynx\CoreBundle\Generator\Domain\Component\File\HandlerModel\Observer\Entity', parameters: { performMethod: ['Sfynx\CoreBundle\Generator\Domain\Component\File\MethodModel\Construct']} }
+                          0:
+                            class: 'Sfynx\CoreBundle\Generator\Domain\Component\File\HandlerModel\Observer\Entity'
+                            parameters:
+                              performMethods:
+                                - 'Sfynx\CoreBundle\Generator\Domain\Component\File\MethodModel\Construct'
+                                - 'Sfynx\CoreBundle\Generator\Domain\Component\File\MethodModel\CreateFromNative'
+                                - 'Sfynx\CoreBundle\Generator\Domain\Component\File\MethodModel\ToString'
+                                - 'Sfynx\CoreBundle\Generator\Domain\Component\File\MethodModel\ToArray'
+                                - 'Sfynx\CoreBundle\Generator\Domain\Component\File\MethodModel\Serialize'
+                                - 'Sfynx\CoreBundle\Generator\Domain\Component\File\MethodModel\Unserialize'
+                - GroupVO:
+                    create: true
+                    class: Domain\ValueObject\GroupVO
+                    extends: 'Sfynx\CoreBundle\Layers\Domain\ValueObject\Generalisation\AbstractVO'
+                    options:
+                        models:
+                          - { class: 'Sfynx\CoreBundle\Generator\Domain\Component\File\HandlerModel\Observer\ValueObject', parameters: []}
+            #
+            # MANAGER CLASSES
+            #
             widget_service_manager_class:
                 - GroupEntityManager:
                     create: true
@@ -109,6 +147,9 @@ default:
                     arguments: ~
                     options:
                         entity: 'Group'
+            #
+            # SERVICES CLASSES
+            #
             widget_service_class:
                 - GroupCommandRepositoryInterface:
                     create: true
@@ -118,6 +159,9 @@ default:
                     create: true
                     class: Domain\Repository\Query\GroupQueryRepositoryInterface
                     type: interface
+            #
+            # OBSERVER CLASSES
+            #
             widget_workflow_observer_class:
                 - OBGroupEntityCreate:
                     create: true
@@ -260,7 +304,8 @@ default:
                 primaryKey: true
                 mapping:
                   targetEntity: Sfynx\AuthBundle\Domain\Entity\Group
-#                  manager: 'Sfynx\AuthBundle\Domain\Service\Group\Manager\EntityManager as GroupManager'
+#                  formData:
+#                      manager: 'Sfynx\AuthBundle\Domain\Service\Group\Manager\EntityManager as GroupManager'
               group:
                 type: valueObject
                 voName: GroupVO
@@ -276,6 +321,10 @@ default:
               name:
                 type: string
                 required: true
+              enabled:
+                type: boolean
+                defaultValue: true
+#                required: false
               roles:
                 type: array
                 form:

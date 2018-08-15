@@ -101,7 +101,100 @@ default:
                 class: MovieType
                 arguments: ~
         domain:
-            widget_entity: true
+            #
+            # MOVIE ENTITY CLASSES
+            #
+            widget_entity_class:
+                - MovieEntity:
+                    create: true
+                    class: Domain\Entity\Movie
+#                    arguments: ['Sfynx\AuthBundle\Domain\ValueObject\MovieVO']
+                    options:
+                        mapping: 'Movie'
+                        traits:
+                          - 'Sfynx\CoreBundle\Layers\Domain\Model\Traits\TraitBuild'
+                          - 'Sfynx\CoreBundle\Layers\Domain\Model\Traits\TraitEnabled'
+                        models:
+#                          - { class: 'Sfynx\CoreBundle\Generator\Domain\Component\File\HandlerModel\Observer\Entity', parameters: { performMethod: ['Sfynx\CoreBundle\Generator\Domain\Component\File\MethodModel\Construct']} }
+                          0:
+                            class: 'Sfynx\CoreBundle\Generator\Domain\Component\File\HandlerModel\Observer\Entity'
+                            parameters:
+                              performMethods:
+                                - 'Sfynx\CoreBundle\Generator\Domain\Component\File\MethodModel\Construct'
+                                - 'Sfynx\CoreBundle\Generator\Domain\Component\File\MethodModel\CreateFromNative'
+                                - 'Sfynx\CoreBundle\Generator\Domain\Component\File\MethodModel\ToString'
+                                - 'Sfynx\CoreBundle\Generator\Domain\Component\File\MethodModel\ToArray'
+                                - 'Sfynx\CoreBundle\Generator\Domain\Component\File\MethodModel\Serialize'
+                                - 'Sfynx\CoreBundle\Generator\Domain\Component\File\MethodModel\Unserialize'
+                - MovieVO:
+                    create: true
+                    class: Domain\ValueObject\MovieVO
+                    extends: 'Sfynx\CoreBundle\Layers\Domain\ValueObject\Generalisation\AbstractVO'
+                    options:
+                        models:
+                          - { class: 'Sfynx\CoreBundle\Generator\Domain\Component\File\HandlerModel\Observer\ValueObject', parameters: []}
+            #
+            # PRICE ENTITY CLASSES
+            #
+                - PriceEntity:
+                    create: true
+                    class: Domain\Entity\Price
+#                    arguments: ['Sfynx\AuthBundle\Domain\ValueObject\PriceVO']
+                    options:
+                        mapping: 'Price'
+                        traits:
+                          - 'Sfynx\CoreBundle\Layers\Domain\Model\Traits\TraitBuild'
+                          - 'Sfynx\CoreBundle\Layers\Domain\Model\Traits\TraitEnabled'
+                        models:
+#                          - { class: 'Sfynx\CoreBundle\Generator\Domain\Component\File\HandlerModel\Observer\Entity', parameters: { performMethod: ['Sfynx\CoreBundle\Generator\Domain\Component\File\MethodModel\Construct']} }
+                          0:
+                            class: 'Sfynx\CoreBundle\Generator\Domain\Component\File\HandlerModel\Observer\Entity'
+                            parameters:
+                              performMethods:
+                                - 'Sfynx\CoreBundle\Generator\Domain\Component\File\MethodModel\Construct'
+                                - 'Sfynx\CoreBundle\Generator\Domain\Component\File\MethodModel\CreateFromNative'
+                                - 'Sfynx\CoreBundle\Generator\Domain\Component\File\MethodModel\ToString'
+                                - 'Sfynx\CoreBundle\Generator\Domain\Component\File\MethodModel\ToArray'
+                                - 'Sfynx\CoreBundle\Generator\Domain\Component\File\MethodModel\Serialize'
+                                - 'Sfynx\CoreBundle\Generator\Domain\Component\File\MethodModel\Unserialize'
+                - PriceVO:
+                    create: true
+                    class: Domain\ValueObject\PriceVO
+                    extends: 'Sfynx\CoreBundle\Layers\Domain\ValueObject\Generalisation\AbstractVO'
+                    options:
+                        models:
+                          - { class: 'Sfynx\CoreBundle\Generator\Domain\Component\File\HandlerModel\Observer\ValueObject', parameters: []}
+            #
+            # GENRE ENTITY CLASSES
+            #
+                - GenreEntity:
+                    create: true
+                    class: Domain\Entity\Genre
+#                    arguments: ['Sfynx\AuthBundle\Domain\ValueObject\GenreVO']
+                    options:
+                        mapping: 'Genre'
+                        traits:
+                          - 'Sfynx\CoreBundle\Layers\Domain\Model\Traits\TraitBuild'
+                          - 'Sfynx\CoreBundle\Layers\Domain\Model\Traits\TraitEnabled'
+                        models:
+#                          - { class: 'Sfynx\CoreBundle\Generator\Domain\Component\File\HandlerModel\Observer\Entity', parameters: { performMethod: ['Sfynx\CoreBundle\Generator\Domain\Component\File\MethodModel\Construct']} }
+                          0:
+                            class: 'Sfynx\CoreBundle\Generator\Domain\Component\File\HandlerModel\Observer\Entity'
+                            parameters:
+                              performMethods:
+                                - 'Sfynx\CoreBundle\Generator\Domain\Component\File\MethodModel\Construct'
+                                - 'Sfynx\CoreBundle\Generator\Domain\Component\File\MethodModel\CreateFromNative'
+                                - 'Sfynx\CoreBundle\Generator\Domain\Component\File\MethodModel\ToString'
+                                - 'Sfynx\CoreBundle\Generator\Domain\Component\File\MethodModel\ToArray'
+                                - 'Sfynx\CoreBundle\Generator\Domain\Component\File\MethodModel\Serialize'
+                                - 'Sfynx\CoreBundle\Generator\Domain\Component\File\MethodModel\Unserialize'
+                - GenreVO:
+                    create: true
+                    class: Domain\ValueObject\GenreVO
+                    extends: 'Sfynx\CoreBundle\Layers\Domain\ValueObject\Generalisation\AbstractVO'
+                    options:
+                        models:
+                          - { class: 'Sfynx\CoreBundle\Generator\Domain\Component\File\HandlerModel\Observer\ValueObject', parameters: []}
             #
             # MANAGER CLASSES
             #
@@ -111,19 +204,22 @@ default:
                     class: Movie\Manager\MovieManager
                     arguments: ~
                     options:
-                        entity: 'Movie'
+                        mapping: 'Movie'
                 - PriceEntityManager:
                     create: true
                     class: Price\Manager\PriceManager
                     arguments: ~
                     options:
-                        entity: 'Price'
+                        mapping: 'Price'
                 - GenreEntityManager:
                     create: true
                     class: Genre\Manager\GenreManager
                     arguments: ~
                     options:
-                        entity: 'Genre'
+                        mapping: 'Genre'
+            #
+            # SERVICES CLASSES
+            #
             widget_service_class:
 #                - EntityManager:
 #                    create: true
@@ -154,6 +250,9 @@ default:
 #                            visibility: 'public'
 #                            returnType: 'Sfynx\CoreBundle\Layers\Application\Command\Generalisation\Interfaces\CommandInterface'
 #                            returnParent: true
+                #
+                # REPOSITORY INTERFACES
+                #
                 - MovieCommandRepositoryInterface:
                     create: true
                     class: Domain\Repository\Command\MovieCommandRepositoryInterface
@@ -178,6 +277,9 @@ default:
                     create: true
                     class: Domain\Repository\Query\PriceQueryRepositoryInterface
                     type: interface
+            #
+            # OBSERVER CLASSES
+            #
             widget_workflow_observer_class:
                 - OBMovieEntityCreate:
                     create: true
@@ -351,7 +453,7 @@ default:
                     options:
                         implements: ['Domain\Repository\Query\GenreQueryRepositoryInterface']
                 #
-                # LAYOUT TRANSFORMER/QUERY BUILDER
+                # MOVIE TRANSFORMER/QUERY BUILDER
                 #
                 - FindMovieQueryBuilder:
                     create: true
@@ -362,15 +464,58 @@ default:
                         uses: ['Doctrine\ORM\QueryBuilder']
                         models:
                           - { class: 'Sfynx\CoreBundle\Generator\Domain\Component\File\HandlerModel\Observer\QueryBuilder', parameters: ['bool $var1 = false', 'bool $var2 = true', 'int $var3 = 0', 'array $var4 = []'] }
-                - FindMovieQueryTransfomer:
+                - FindMovieQueryTransformer:
                     create: true
-                    class: Infrastructure\Persistence\Adapter\Query\Orm\Movie\QueryTransfomer\FindMovieQueryTransfomer
+                    class: Infrastructure\Persistence\Adapter\Query\Orm\Movie\QueryTransformer\FindMovieQueryTransformer
                     arguments: ~
                     extends: Sfynx\CoreBundle\Layers\Infrastructure\Persistence\QueryBuilder\Generalisation\Orm\AbstractQueryBuilder
                     options:
-                        uses: ['MyContext\Infrastructure\Persistence\Adapter\Query\Orm\Layout\QueryBuilder\FindMovieQueryBuilder']
+                        uses: ['MyContext\Infrastructure\Persistence\Adapter\Query\Orm\Movie\QueryBuilder\FindMovieQueryBuilder']
                         models:
                           - { class: 'Sfynx\CoreBundle\Generator\Domain\Component\File\HandlerModel\Observer\QueryTransformer', parameters: ['FindMovieQueryBuilder', ['bool $var1 = false', 'bool $var2 = true', 'int $var3 = 0', 'array $var4 = []']]}
+                #
+                # GENRE TRANSFORMER/QUERY BUILDER
+                #
+                - FindGenreQueryBuilder:
+                    create: true
+                    class: Infrastructure\Persistence\Adapter\Query\Orm\Genre\QueryBuilder\FindGenreQueryBuilder
+                    arguments: ~
+                    extends: Sfynx\CoreBundle\Layers\Infrastructure\Persistence\QueryBuilder\Generalisation\Orm\AbstractQueryBuilder
+                    options:
+                        uses: ['Doctrine\ORM\QueryBuilder']
+                        models:
+                          - { class: 'Sfynx\CoreBundle\Generator\Domain\Component\File\HandlerModel\Observer\QueryBuilder', parameters: ['bool $var1 = false', 'bool $var2 = true', 'int $var3 = 0', 'array $var4 = []'] }
+                - FindGenreQueryTransformer:
+                    create: true
+                    class: Infrastructure\Persistence\Adapter\Query\Orm\Genre\QueryTransformer\FindGenreQueryTransformer
+                    arguments: ~
+                    extends: Sfynx\CoreBundle\Layers\Infrastructure\Persistence\QueryBuilder\Generalisation\Orm\AbstractQueryBuilder
+                    options:
+                        uses: ['MyContext\Infrastructure\Persistence\Adapter\Query\Orm\Genre\QueryBuilder\FindGenreQueryBuilder']
+                        models:
+                          - { class: 'Sfynx\CoreBundle\Generator\Domain\Component\File\HandlerModel\Observer\QueryTransformer', parameters: ['FindMovieQueryBuilder', ['bool $var1 = false', 'bool $var2 = true', 'int $var3 = 0', 'array $var4 = []']]}
+                #
+                # DOCUMENT TRANSFORMER/QUERY BUILDER
+                #
+                - FindDocumentQueryBuilder:
+                    create: true
+                    class: Infrastructure\Persistence\Adapter\Query\Orm\Document\QueryBuilder\FindDocumentQueryBuilder
+                    arguments: ~
+                    extends: Sfynx\CoreBundle\Layers\Infrastructure\Persistence\QueryBuilder\Generalisation\Orm\AbstractQueryBuilder
+                    options:
+                        uses: ['Doctrine\ORM\QueryBuilder']
+                        models:
+                          - { class: 'Sfynx\CoreBundle\Generator\Domain\Component\File\HandlerModel\Observer\QueryBuilder', parameters: ['bool $var1 = false', 'bool $var2 = true', 'int $var3 = 0', 'array $var4 = []'] }
+                - FindDocumentQueryTransformer:
+                    create: true
+                    class: Infrastructure\Persistence\Adapter\Query\Orm\Document\QueryTransformer\FindDocumentQueryTransformer
+                    arguments: ~
+                    extends: Sfynx\CoreBundle\Layers\Infrastructure\Persistence\QueryBuilder\Generalisation\Orm\AbstractQueryBuilder
+                    options:
+                        uses: ['MyContext\Infrastructure\Persistence\Adapter\Query\Orm\Document\QueryBuilder\FindDocumentQueryBuilder']
+                        models:
+                          - { class: 'Sfynx\CoreBundle\Generator\Domain\Component\File\HandlerModel\Observer\QueryTransformer', parameters: ['FindMovieQueryBuilder', ['bool $var1 = false', 'bool $var2 = true', 'int $var3 = 0', 'array $var4 = []']]}
+
     mapping:
         x-providers: [orm, couchdb]
         x-entities:
@@ -449,7 +594,8 @@ default:
                 primaryKey: true
                 mapping:
                   targetEntity: 'MyContext\Domain\Entity\Movie'
-                  manager: 'MyContext\Domain\Service\Entity\Movie\Manager\MovieManager'
+#                  formData:
+#                      manager: 'MyContext\Domain\Service\Entity\Movie\Manager\MovieManager'
               documents:
                 type: array
                 required: true
@@ -458,7 +604,9 @@ default:
                 mapping:
                   relationship: ManyToMany
                   targetEntity: 'Sfynx\MediaBundle\Layers\Domain\Entity\Mediatheque'
-                  manager: 'Sfynx\MediaBundle\Layers\Domain\Service\Mediatheque\Manager\EntityManager as MediathequeManager'
+                  formData:
+                      manager: 'Sfynx\MediaBundle\Layers\Domain\Service\Mediatheque\Manager\EntityManager as MediathequeManager'
+                      queryFunction: { class: 'FindDocumentQueryTransformer', args: ['true', 'false', 1299, {tata: 'tataValue', tutu: 'tutuValue'}] }
               comments:
                 type: array
                 required: true
@@ -474,16 +622,20 @@ default:
                 mapping:
                   relationship: ManyToOne
                   targetEntity: Genre
-                  manager: 'MyContext\Domain\Service\Entity\Genre\Manager\GenreManager'
+                  formData:
+                      manager: 'MyContext\Domain\Service\Entity\Genre\Manager\GenreManager'
+                      queryFunction: { class: 'FindGenreQueryTransformer', args: ['true', 'false', 1299, {tata: 'tataValue', tutu: 'tutuValue'}] }
           Price:
             x-fields:
               id:
+                name: PriceEntityId
                 type: valueObject
                 voName: IdVO
                 primaryKey: true
                 mapping:
                   targetEntity: 'MyContext\Domain\Entity\Price'
-                  manager: 'MyContext\Domain\Service\Entity\Price\Manager\PriceManager'
+#                  formData:
+#                      manager: 'MyContext\Domain\Service\Entity\Price\Manager\PriceManager'
               price:
                 type: valueObject
                 voName: PriceVO
@@ -495,16 +647,20 @@ default:
                 mapping:
                   relationship: ManyToOne
                   targetEntity: Movie
-                  manager: 'MyContext\Domain\Service\Entity\Movie\Manager\MovieManager'
+                  formData:
+                      manager: 'MyContext\Domain\Service\Entity\Movie\Manager\MovieManager'
+                      queryFunction: { class: 'FindMovieQueryTransformer', args: ['true', 'false', 1299, {tata: 'tataValue', tutu: 'tutuValue'}] }
           Genre:
             x-fields:
               id:
+                name: GenreEntityId
                 type: valueObject
                 voName: IdVO
                 primaryKey: true
                 mapping:
                   targetEntity: 'MyContext\Domain\Entity\Genre'
-                  manager: 'MyContext\Domain\Service\Entity\Genre\Manager\GenreManager'
+#                  formData:
+#                      manager: 'MyContext\Domain\Service\Entity\Genre\Manager\GenreManager'
               label:
                 type: string
                 required: true

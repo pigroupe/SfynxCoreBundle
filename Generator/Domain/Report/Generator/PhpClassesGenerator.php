@@ -33,6 +33,10 @@ class PhpClassesGenerator extends AbstractGenerator
 
             $templater->targetClassname = $config['class'];
 
+            if (!empty($config['options'])) {
+                $templater->targetOptions = $config['options'];
+            }
+
             $namespace = '';
             if (!strrpos($templater->targetClassname, '\\')) {
                 $scriptList = $templater::scriptList('');

@@ -38,7 +38,8 @@ class CreateFromNative
         $fieldContent = 'return new self(';
         $count = 0;
         foreach ($fields as $field) {
-            if ('entityId' != $field->name) {
+            \str_replace('entityid', 'entityid', \strtolower($field->name), $isFieldEntity);
+            if (!$isFieldEntity) {
                 $propertyFieldName = \lcfirst($field->name);
 
                 $prefix = (0 == $count) ? '' : ',';
@@ -64,7 +65,7 @@ class CreateFromNative
                 'options' => [
                     'methods' => [[
                         'name' => 'createFromNative',
-                        'comments' => [sprintf('%s constructor.', $class->getName())],
+                        'comments' => [sprintf('%s new instance.', $class->getName())],
                         'visibility' => 'public',
                         'arguments' => $arguments,
                         'returnType' => 'self',

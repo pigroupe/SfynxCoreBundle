@@ -53,7 +53,16 @@ class Entity extends AbstractHandlerModel
      */
     protected function createBody(SplSubject $subject)
     {
+        $fieldAll = [];
+        $fieldsEntityOption = '';
         $templater = $subject->event->template;
+
+        if ($templater->has('targetOptions') && !empty($templater->getTargetOptions())) {
+            if (!empty($templater->getTargetOptions()['mapping'])) {
+                $fieldsEntityOption = $templater->getTargetOptions()['mapping'];
+            }
+        }
+
         foreach ($templater->getTargetCommandFields() as $field) {
             $propertyFieldName = \lcfirst($field->name);
             $typeFieldName =  ClassHandler::getType($field->type, $field, true);
@@ -62,9 +71,12 @@ class Entity extends AbstractHandlerModel
                 || $field->type == ClassHandler::TYPE_ARRAY)
                 && \property_exists($field, 'mapping')
                 && \property_exists($field->mapping, 'relationship')
+                && (empty($fieldsEntityOption) || $field->entityName == $fieldsEntityOption)
             ) {
+                $fieldAll[] = $field;
                 $this->createRelationshipMethods($subject, $field, $typeFieldName, $propertyFieldName);
-            } else {
+            } elseif(empty($fieldsEntityOption) || $field->entityName == $fieldsEntityOption) {
+                $fieldAll[] = $field;
                 $this->createDefaultMethods($subject, $field, $typeFieldName, $propertyFieldName);
             }
         }
@@ -79,7 +91,7 @@ class Entity extends AbstractHandlerModel
                 $subject->event->namespace,
                 $subject->event->class,
                 $subject->event->index,
-                $templater->getTargetCommandFields()
+                $fieldAll
             );
         }
     }

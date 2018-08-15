@@ -39,13 +39,21 @@ class Setter
         string $propertyFieldName = ''
     ): void {
         $setterFieldName = 'set' . \ucfirst($field->name);
-        $setterFieldBody = sprintf('$this->%s = $%s;', $propertyFieldName, $propertyFieldName) . PHP_EOL;
         $setterFieldBody .= 'return $this;';
         $ClassTypeFieldName = ClassHandler::getClassNameFromNamespace($typeFieldName);
 
-        $comment = sprintf('@var %s $%s', $ClassTypeFieldName, $propertyFieldName);
+        \str_replace('entityid', 'entityid', \strtolower($field->name), $isFieldEntity);
+        if ($isFieldEntity) {
+            $propertyFieldName = 'id';
+            $ClassTypeFieldName = 'int';
+            $typeFieldName = 'int';
+            $getterFieldName = 'getId';
+        }
+        $setterFieldBody = \sprintf('$this->%s = $%s;', $propertyFieldName, $propertyFieldName) . PHP_EOL;
+
+        $comment = \sprintf('@var %s $%s', $ClassTypeFieldName, $propertyFieldName);
         if (empty($typeFieldName)) {
-            $comment = sprintf('@var %s', $propertyFieldName);
+            $comment = \sprintf('@var %s', $propertyFieldName);
         }
         ClassHandler::addUse($namespace, $typeFieldName, $index);
 
@@ -60,7 +68,7 @@ class Setter
                 'options' => [
                     'methods' => [[
                         'name' => $setterFieldName,
-                        'comments' => ['Set ' . $field->name],
+                        'comments' => ['Set ' . $propertyFieldName],
                         'visibility' => 'public',
                         'arguments' => [sprintf('%s $%s', $ClassTypeFieldName, $propertyFieldName)],
                         'returnType' => 'self',
