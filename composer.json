@@ -39,7 +39,6 @@
   },
 
   "suggest": {
-    "tarifhaus/doctrine-nullable-embeddable": "^2.0"
   },
 
   "conflict": {
