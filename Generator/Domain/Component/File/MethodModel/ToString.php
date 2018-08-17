@@ -34,7 +34,7 @@ class ToString
         ?array $index = [],
         ?array $fields = []
     ): void {
-        $fieldContent = "return \implode(' ', \$this->__toArray();";
+        $fieldContent = "return \implode(' ', \$this->__toArray());";
 
         ClassHandler::createMethods(
             $namespace,
