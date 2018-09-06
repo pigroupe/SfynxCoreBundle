@@ -18,6 +18,7 @@
 
   "require": {
     "php": "^7.2",
+    "ext-dom": "*",
     "symfony/framework-bundle": "~2.8|~3.0",
     "symfony/console": "*",
     "sensio/generator-bundle": "~3.1.2",
@@ -35,7 +36,7 @@
 
   "require-dev": {
     "symfony/phpunit-bridge": "~2.7|~3.0",
-    "phpunit/phpunit": "*"
+    "phpunit/phpunit": ">=4.8.27,<=5.7.13",
   },
 
   "suggest": {

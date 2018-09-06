@@ -1,5 +1,5 @@
 <?php
-namespace Sfynx\CoreBundle\Layers\Domain\Component\Generalisation\Interfaces;
+namespace Sfynx\CoreBundle\Layers\Domain\Component\Resolver\Generalisation\Interfaces;
 
 use \stdClass;
 
@@ -8,7 +8,7 @@ use \stdClass;
  *
  * @category   Sfynx\CoreBundle\Layers
  * @package    Domain
- * @subpackage Component\Generalisation\Interfaces
+ * @subpackage Component\Resolver\Generalisation\Interfaces
  */
 interface ResolverInterface
 {

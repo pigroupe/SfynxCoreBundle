@@ -23,3 +23,11 @@ php vendor/bin/sfynx-ddd-generator \
 --conf-dir=/var/www/app/config/generator/auth \
 --report-template=default \
 --report-dir=/var/www/src/generator/authbundle
+
+
+php vendor/bin/sfynx-ddd-generator \
+--namespace=MyContext \
+--conf-file=/var/www/app/config/generator/models/sfynx-ddd-generator.yml \
+--report-xmi="--output=/var/www/src/generator/MyContext/MyContext.xmi --autoload=vendor --recursive /var/www/src/generator/MyContext" \
+--report-template=default \
+--report-dir=/var/www/src/generator/MyContext

@@ -11,6 +11,7 @@ use Sfynx\CoreBundle\Generator\Domain\Widget\WidgetParser;
 use Sfynx\CoreBundle\Generator\Domain\Component\File\Finder;
 use Sfynx\CoreBundle\Generator\Domain\Component\Output\CliOutput;
 use Sfynx\CoreBundle\Generator\Domain\Component\Issue\Issuer;
+use Sfynx\CoreBundle\Generator\Domain\Component\Xmi\Php2Xmi;
 
 /**
  * Application start
@@ -32,10 +33,10 @@ class Application
     public function run($argv)
     {
         // start
-        $startTime = microtime(true);
+        $startTime = \microtime(true);
 
         // config
-        ini_set('xdebug.max_nesting_level', 3000);
+        \ini_set('xdebug.max_nesting_level', 3000);
         // formatter
         $output = new CliOutput();
         // issues and debug
@@ -43,6 +44,14 @@ class Application
         // config
         $config = (new Parser())->parse($argv);
 
+        if ($config->has('help')) {
+            $output->writeln((new Validator())->help());
+            exit(0);
+        }
+        if ($config->has('version')) {
+            $output->writeln(sprintf("<info>++</info> Ddd Generator %s \nby PI-GROUPE <http://www.pi-groupe.net>", $this->getVersion()));
+            exit(0);
+        }
         if ($config->has('conf-dir')) {
             $finder = new Finder(['yml']);
             $files = $finder->fetch(explode(',', $config->get('conf-dir')));
@@ -57,11 +66,15 @@ class Application
             $this->_run($output, $issuer, $config);
         }
 
-        $endTime = microtime(true);
+        if ($config->has('report-xmi')) {
+            Php2Xmi::php2xmi_main($config->get('report-xmi'));
+        }
+
+        $endTime = \microtime(true);
         // end
 
         $output->writeln('');
-        $output->writeln(sprintf('<info>++</info> generated in (%ss) times', round($endTime - $startTime, 3)));
+        $output->writeln(sprintf('<info>++</info> generated in (%ss) times', \round($endTime - $startTime, 3)));
         $output->writeln('');
         $output->clearln();
     }
@@ -77,14 +90,6 @@ class Application
         try {
             (new Validator())->validate($config);
         } catch (ConfigException $e) {
-            if ($config->has('help')) {
-                $output->writeln((new Validator())->help());
-                exit(0);
-            }
-            if ($config->has('version')) {
-                $output->writeln(sprintf("<info>++</info> Ddd Generator %s \nby PI-GROUPE <http://www.pi-groupe.net>", $this->getVersion()));
-                exit(0);
-            }
             $output->writeln(sprintf("<error>%s</error>", $e->getMessage()));
             $output->writeln((new Validator())->help());
             exit(1);
@@ -114,6 +119,6 @@ class Application
      */
     public function getVersion()
     {
-        return 'v2.9.14';
+        return 'v2.9.22';
     }
 }

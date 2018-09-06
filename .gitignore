@@ -1,4 +1,5 @@
 # application
+build
 vendor
 phpunit.xml
 composer.phar
@@ -6,3 +7,4 @@ composer.lock
 
 #
 .idea
+

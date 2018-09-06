@@ -37,7 +37,7 @@ class ConfigLocator implements ValidationInterface
      * @param array $defaults
      */
     public function __construct(array $defaults = null) {
-        if(is_null($defaults)) {
+        if(\is_null($defaults)) {
             $defaults = static::$defaultConf;
         }
         $this->defaults = $defaults;
@@ -75,7 +75,7 @@ class ConfigLocator implements ValidationInterface
      */
     private function isFileAccessible($filename)
     {
-        return file_exists($filename) && is_readable($filename);
+        return \file_exists($filename) && \is_readable($filename);
     }
 
     /**
@@ -85,6 +85,6 @@ class ConfigLocator implements ValidationInterface
      */
     private function isExtensionFileAccessible($filename)
     {
-        return in_array(pathinfo($filename, PATHINFO_EXTENSION), ['yml']);
+        return \in_array(pathinfo($filename, PATHINFO_EXTENSION), ['yml']);
     }
 }
