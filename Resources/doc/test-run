@@ -1,0 +1,22 @@
+#!/bin/sh
+
+# Start Umbrelo with docker
+docker run --rm -d -u 1000:1000 \
+   -e HOME \
+   -e DISPLAY=unix:0 \
+   -e XAUTHORITY=/tmp/xauth \
+   -v $XAUTHORITY:/tmp/xauth -v $HOME:$HOME \
+   -v /etc/passwd:/etc/passwd:ro -v /etc/group:/etc/group:ro \
+   -v /tmp/.X11-unix:/tmp/.X11-unix \
+   -v $HOME/Documents:/root/Documents:rw \
+   -v $HOME/.config/umbrello:/root/.config:rw \
+   --name umbrello \
+   mrorgues/umbrello
+
+# convert xmi v1.2 to xmi v2.1
+# http://www.baptisteautin.com/projets-personnels/php_uml/convertisseur-de-fichier-xmi/lang/en/
+
+# starUml xmi execution
+# 1. download 0.9.2 xmi extension from https://github.com/staruml/staruml-xmi
+# 2. insert inside ~/.config/StarUML/extensions/user directory with staruml.xmi repository name
+# 3. restart starUml

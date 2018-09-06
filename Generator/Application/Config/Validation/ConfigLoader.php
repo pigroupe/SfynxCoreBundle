@@ -30,17 +30,17 @@ class ConfigLoader implements ValidationInterface
     {
         $filename = $config->get('conf-file');
 
-        if(!file_exists($filename) || !is_readable($filename)) {
+        if(!\file_exists($filename) || !\is_readable($filename)) {
             throw new ConfigException('configuration file is not accessible');
         }
-        $content = file_get_contents($filename);
+        $content = \file_get_contents($filename);
         $parser = new Yaml();
         $array = $parser->parse($content);
         if (null === $array) {
             throw new ConfigException('configuration file is empty');
         }
 
-        $arr = array_values($array);
-        $config->set('conf-array', array_shift($arr));
+        $arr = \array_values($array);
+        $config->set('conf-array', \array_shift($arr));
     }
 }

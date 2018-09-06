@@ -22,4 +22,5 @@ The following documents are available:
 | ------ | ----------- | ---- | ----------- |
 | 20/07/2018   | 1.0.0 | EDL | documentation initialization|
 
-## Todo
+##
+- add "tarifhaus/doctrine-nullable-embeddable": "^2.0" in 3.2 compatible symfony version

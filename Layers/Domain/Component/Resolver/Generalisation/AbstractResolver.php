@@ -1,18 +1,18 @@
 <?php
-namespace Sfynx\CoreBundle\Layers\Domain\Component\Generalisation;
+namespace Sfynx\CoreBundle\Layers\Domain\Component\Resolver\Generalisation;
 
 use \stdClass;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
-use Sfynx\CoreBundle\Layers\Domain\Component\Generalisation\Interfaces\ResolverInterface;
+use Sfynx\CoreBundle\Layers\Domain\Component\Resolver\Generalisation\Interfaces\ResolverInterface;
 
 /**
  * Class AbstractResolver
  *
  * @category   Sfynx\CoreBundle\Layers
  * @package    Domain
- * @subpackage Component\Generalisation
+ * @subpackage Component\Resolver\Generalisation
  * @abstract
  */
 abstract class AbstractResolver implements ResolverInterface

@@ -455,8 +455,10 @@ class ClassHandler implements SplSubject
                                 \str_replace('=', ' ', \trim($argument), $countDefaultValue);
                                 if (1 == $countDefaultValue) {
                                     $defaultValue = \end($info);
-                                    $defaultValue = ($defaultValue == 'false') ? false : $defaultValue;
-                                    $defaultValue = ($defaultValue == 'true') ? true : $defaultValue;
+                                    $defaultValue = ($defaultValue === 'false') ? false : $defaultValue;
+                                    $defaultValue = ($defaultValue === 'true') ? true : $defaultValue;
+                                    $defaultValue = ($defaultValue === '[]') ? [] : $defaultValue;
+                                    $defaultValue = \is_numeric($defaultValue) ? \intval($defaultValue) : $defaultValue;
                                     $methodClass->addParameter($arg)->setTypeHint($type)->setDefaultValue($defaultValue);
                                 } else {
                                     $methodClass->addParameter($arg)->setTypeHint($type);

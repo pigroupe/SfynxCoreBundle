@@ -2,7 +2,7 @@
 namespace Sfynx\CoreBundle\Generator\Domain\Templater\Generalisation\Interfaces;
 
 use \stdClass;
-use Sfynx\CoreBundle\Layers\Domain\Component\Generalisation\Interfaces\ResolverInterface;
+use Sfynx\CoreBundle\Layers\Domain\Component\Resolver\Generalisation\Interfaces\ResolverInterface;
 
 /**
  * Class ExtensionInterface

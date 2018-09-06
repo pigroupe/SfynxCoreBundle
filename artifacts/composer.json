@@ -1,0 +1,57 @@
+{
+  "name": "sfynx-project/core-bundle",
+  "type": "symfony-bundle",
+  "description": "This Bundle provides models of classes allowing to work and develop with Domain Driven Design, translation and tree doctrine abstraction, generation class system",
+  "keywords": ["DDD", "class generator", "datatableJS", "multi-forms", "tree abstraction", "translation abstraction"],
+  "homepage": "http://pigroupe.github.io/cmf-sfynx/",
+  "license": "LGPL-3.0-or-later",
+  "authors": [
+    {
+      "name": "Etienne de Longeaux",
+      "email": "etienne.delongeaux@gmail.com"
+    },
+    {
+      "name": "Sfynx Community",
+      "homepage": "https://github.com/pigroupe/SfynxCoreBundle/contributors"
+    }
+  ],
+
+  "require": {
+    "php": "^7.2",
+    "ext-dom": "*",
+    "nette/php-generator": "^3.1",
+    "spatie/fractalistic": "^2.5.0",
+    "ramsey/uuid": "^3.7",
+    "ptrofimov/matchmaker": "*",
+    "symfony/options-resolver": "^4.1",
+    "symfony/yaml": "*",
+    "sfynx-project/tool-specification-bundle": "^2.8"
+  },
+
+  "require-dev": {
+    "symfony/phpunit-bridge": "~2.7|~3.0",
+    "phpunit/phpunit": ">=4.8.27,<=5.7.13",
+    "sebastian/comparator": ">=1.2.3"
+  },
+
+  "suggest": {
+  },
+
+  "conflict": {
+  },
+
+  "autoload": {
+    "psr-0": { "Sfynx\\CoreBundle": "" }
+  },
+
+  "target-dir": "Sfynx/CoreBundle",
+
+  "extra": {
+    "branch-alias": {
+      "dev-master": "2.x-dev"
+    }
+  },
+  "bin": [
+    "Generator/Presentation/Coordination/Command/sfynx-ddd-generator"
+  ]
+}

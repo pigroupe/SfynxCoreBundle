@@ -1,0 +1,25 @@
+{
+  "package": {
+    "name": "sfynx-ddd-generator",
+    "repo": "sfynx-ddd-generator",
+    "subject": "sfynx-ddd-generator",
+    "desc": "Static generator code for PHP",
+    "website_url": "http://www.sfynx.net",
+    "issue_tracker_url": "https://github.com/pigroupe/SfynxCoreBundle/issues",
+    "vcs_url": "https://github.com/pigroupe/SfynxCoreBundle.git",
+    "licenses": ["LGPL-3.0-or-later"]
+  },
+  "version": {
+    "name": "v2.9.22",
+    "desc": "Latest version of sfynx-ddd-generator",
+    "released": "2018-09-06",
+    "vcs_tag": "v2.9.22",
+    "attributes": [],
+    "gpgSign": false
+  },
+  "files":
+  [
+    {"includePattern": "build/(sfynx-ddd-generator.*)", "uploadPattern": "/$1" }
+  ],
+  "publish": true
+}

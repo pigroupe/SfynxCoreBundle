@@ -6,7 +6,7 @@ use Symfony\Component\Form\Extension\Core\Type as TypeCore;
 use Symfony\Bridge\Doctrine\Form\Type as TypeForm;
 
 use Sfynx\CoreBundle\Generator\Domain\Templater\Generalisation\Interfaces\ExtensionInterface;
-use Sfynx\CoreBundle\Layers\Domain\Component\Generalisation\AbstractResolver;
+use Sfynx\CoreBundle\Layers\Domain\Component\Resolver\Generalisation\AbstractResolver;
 
 /**
  * TextTypeExtension class
