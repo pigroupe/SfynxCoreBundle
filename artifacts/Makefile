@@ -33,9 +33,6 @@ build-phar:
 	@cp Layers -R /tmp/sfynx-ddd-generator-build
 	@rm -Rf /tmp/sfynx-ddd-generator-build/vendor /tmp/sfynx-ddd-generator-build/composer.lock
 
-	@echo Releasing phar
-	@sed -i "s/<VERSION>/$CURRENT_TAG/g" /tmp/sfynx-ddd-generator-build/artifacts/phar/build.php
-
 	@echo Installing dependencies
 	@cp /tmp/sfynx-ddd-generator-build/artifacts/composer.json /tmp/sfynx-ddd-generator-build/composer.json
 	@cd /tmp/sfynx-ddd-generator-build && composer install --no-dev --optimize-autoloader --prefer-dist

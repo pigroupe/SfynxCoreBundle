@@ -9,6 +9,8 @@ tag: changelog-deb
 	@echo Releasing sources
 	@sed -i -r "s/(v[0-9]+\.[0-9]+\.[0-9]+)/`semver tag`/g" \
 		artifacts/bintray.json \
+		artifacts/phar/build.php \
+		Generator/Presentation/Coordination/Command/sfynx-ddd-generator \
 		Generator/Application/Application.php \
 		Resources/doc/installation.md
 	@sed -i -r "s/([0-9]{4}\-[0-9]{2}\-[0-9]{2})/`date +%Y-%m-%d`/g" artifacts/bintray.json

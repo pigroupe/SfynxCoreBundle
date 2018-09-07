@@ -54,7 +54,7 @@ class Application
         }
         if ($config->has('conf-dir')) {
             $finder = new Finder(['yml']);
-            $files = $finder->fetch(explode(',', $config->get('conf-dir')));
+            $files = $finder->fetch(\explode(',', $config->get('conf-dir')));
 
             foreach ($files as $file) {
                 $config->set('conf-file', $file);
@@ -74,7 +74,7 @@ class Application
         // end
 
         $output->writeln('');
-        $output->writeln(sprintf('<info>++</info> generated in (%ss) times', \round($endTime - $startTime, 3)));
+        $output->writeln(\sprintf('<info>++</info> generated in (%ss) times', \round($endTime - $startTime, 3)));
         $output->writeln('');
         $output->clearln();
     }
@@ -90,7 +90,7 @@ class Application
         try {
             (new Validator())->validate($config);
         } catch (ConfigException $e) {
-            $output->writeln(sprintf("<error>%s</error>", $e->getMessage()));
+            $output->writeln(\sprintf("<error>%s</error>", $e->getMessage()));
             $output->writeln((new Validator())->help());
             exit(1);
         }
@@ -102,14 +102,14 @@ class Application
         try {
             $reporter = (new WidgetParser($config, $output, $issuer))->run();
         } catch (WidgetException $e) {
-            $output->writeln(sprintf('<error>%s</error>', $e->getMessage()));
+            $output->writeln(\sprintf('<error>%s</error>', $e->getMessage()));
             exit(1);
         }
         // create artifact
         try {
             $reporter->generate();
         } catch (ReportException $e) {
-            $output->writeln(sprintf('<error>%s</error>', $e->getMessage()));
+            $output->writeln(\sprintf('<error>%s</error>', $e->getMessage()));
             exit(1);
         }
     }
