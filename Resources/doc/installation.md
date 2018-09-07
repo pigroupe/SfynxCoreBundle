@@ -44,10 +44,10 @@ sfynx-ddd-generator \
 
 ```bash
 sfynx-ddd-generator \
---namespace=MyContext \
---conf-dir=./Resources/config/generator/models \
+--namespace=Sfynx\\AuthBundle \
+--conf-dir=./Resources/config/generator/auth \
 --report-template=default \
---report-dir=build/MyContext
+--report-dir=build/authbundle
 ```
 
 > c) Add XMI generator file report
