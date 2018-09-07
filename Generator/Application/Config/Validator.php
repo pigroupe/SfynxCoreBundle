@@ -29,8 +29,8 @@ class Validator implements ValidationInterface
         7 => Validation\ConfigIndex::class,
         8 => Validation\ConfigTemplate::class,
         9 => Validation\ConfigMapping::class,
-        10 => Validation\ConfigValidator::class,
-        11 => Validation\ConfigXmi::class,
+        10 => Validation\ConfigXmi::class,
+        11 => Validation\ConfigValidator::class,
     ];
 
     /**

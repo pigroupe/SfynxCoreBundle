@@ -48,20 +48,20 @@ class ConfigIndex implements ValidationInterface
     protected function setIndex(array $widgets): void
     {
         foreach ($widgets as $widget) {
-            if (array_key_exists('class', $widget)) {
+            if (\array_key_exists('class', $widget)) {
                 $class = $widget['class'];
                 $arguments = [];
-                if (array_key_exists('arguments', $widget)) {
+                if (\array_key_exists('arguments', $widget)) {
                     $arguments = $widget['arguments'];
                 }
-                if (is_array($class)) {
+                if (\is_array($class)) {
                     foreach ($class as $cl) {
                         $this->conf[$cl] = $arguments;
                     }
                 } else {
                     $this->conf[$class] = $arguments;
                 }
-            } elseif (is_array($widget)) {
+            } elseif (\is_array($widget)) {
                 foreach ($widget as $w) {
                     $this->setIndex($w);
                 }

@@ -34,8 +34,8 @@ class ConfigWidgets implements ValidationInterface
 
         $conf = false;
         foreach (WidgetParser::handlerList($config) as $widget) {
-            if (array_key_exists($widget->getCategory(), $array['widgets'])
-                && array_key_exists($widget::TAG, $array['widgets'][$widget->getCategory()])
+            if (\array_key_exists($widget->getCategory(), $array['widgets'])
+                && \array_key_exists($widget::TAG, $array['widgets'][$widget->getCategory()])
                 && (null !== $array['widgets'][$widget->getCategory()][$widget::TAG])
             ) {
                 $conf[$widget::TAG] = $array['widgets'][$widget->getCategory()][$widget::TAG];

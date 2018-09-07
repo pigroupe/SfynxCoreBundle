@@ -105,11 +105,11 @@ class ConfigMapping implements ValidationInterface
                     $field['entityName'] = $nameEntityOverload;
                 }
 
-                if (strtolower($field['type']) == 'valueobject') {
+                if (\strtolower($field['type']) == 'valueobject') {
                     $tree[$nameEntity][$nameField] = $this->buildTree([$vo[$field['voName']]], $vo, [], $field['entityName']);
 
                     foreach($field as $j => $p) {
-                        if (in_array($j, self::$includeKeys)) {
+                        if (\in_array($j, self::$includeKeys)) {
                             foreach ($tree[$nameEntity][$nameField] as $k => $f) {
                                 $tree[$nameEntity][$nameField][$k][$j] = $field[$j];
                             }
@@ -138,7 +138,7 @@ class ConfigMapping implements ValidationInterface
             }
         }
 
-        if (array_key_exists(0, $tree)) {
+        if (\array_key_exists(0, $tree)) {
             return $tree[0];
         }
 
@@ -153,29 +153,29 @@ class ConfigMapping implements ValidationInterface
      */
     protected function addCommandFields(array $fields, string $name, string $suffix = ''): bool
     {
-        if (is_numeric($name)) {
+        if (\is_numeric($name)) {
             return false;
         }
 
         foreach ($fields as $attribut => $field) {
             $name_ = $name;
-            if (strtolower($suffix) !== strtolower($name)) {
-                $name_ = $name . ucfirst($suffix);
+            if (\strtolower($suffix) !== \strtolower($name)) {
+                $name_ = $name . \ucfirst($suffix);
             }
 
             if (isset($field['name'])) {
                 $this->commandFields[] = $field;
             } elseif (isset($field['type'])) {
-                str_replace (ucfirst($attribut), '', $name_, $count);
-                if (strtolower($attribut) !== strtolower($name_) && $count == 0) {
-                    $name_ = $name_ . ucfirst($attribut);
+                \str_replace(\ucfirst($attribut), '', $name_, $count);
+                if (\strtolower($attribut) !== \strtolower($name_) && $count == 0) {
+                    $name_ = $name_ . \ucfirst($attribut);
                 }
                 $field['name'] = $name_;
 
                 $this->commandFields[] = $field;
-            } elseif (is_array($field)) {
+            } elseif (\is_array($field)) {
                 foreach ($field as $nameChildren => $v) {
-                    if (is_array($v)) {
+                    if (\is_array($v)) {
                         $this->addCommandFields($field, $name_, $nameChildren);
                     }
                 }

@@ -127,7 +127,7 @@ class Php2Xmi
         }
 
         if (\count($files) == 0) {
-            $output->writeln(sprintf('<error>XMI</error> %s is a directory but --recursive not used', $file));
+            $output->writeln(sprintf('<error>XMI</error> %s is a directory but --recursive not used (count files = 0)', $file));
             self::xmi2php_usage();
             exit(0);
         }
