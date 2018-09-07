@@ -16,7 +16,7 @@ export PATH=~/.composer/vendor/bin:$PATH
 
 ```bash
 curl https://github.com/pigroupe/SfynxCoreBundle/blob/v2.9.22/releases/sfynx-ddd-generator.phar > /usr/local/bin/sfynx-ddd-generator
-chmod +x /usr/local/bin/sfynx-ddd-generator
+chmod +rx /usr/local/bin/sfynx-ddd-generator
 ```
 
 > c) Docker

@@ -80,7 +80,7 @@ class Php2Xmi
                 switch ($name) {
                     case '-h':
                     case '--help':
-                        $output->writeln(sprintf('<info>XMI</info> --help')));
+                        $output->writeln(sprintf('<info>XMI</info> --help'));
                         self::xmi2php_usage();
                         exit(0);
                     case '--strict':
@@ -117,7 +117,7 @@ class Php2Xmi
                         $outputFile = $value;
                         break;
                     default:
-                        $output->writeln(sprintf('<error>XMI</error> unknown parameter %s', $name)));
+                        $output->writeln(sprintf('<error>XMI</error> unknown parameter %s', $name));
                         self::xmi2php_usage();
                         exit(1);
                 }
@@ -127,7 +127,7 @@ class Php2Xmi
         }
 
         if (\count($files) == 0) {
-            $output->writeln(sprintf('<error>XMI</error> %s is a directory but --recursive not used', $file)));
+            $output->writeln(sprintf('<error>XMI</error> %s is a directory but --recursive not used', $file));
             self::xmi2php_usage();
             exit(0);
         }
@@ -137,7 +137,7 @@ class Php2Xmi
                 if ($recusive) {
                     self::xmi2php_requireDirectory($file);
                 } else {
-                    $output->writeln(sprintf('<error>XMI</error> %s is a directory but --recursive not used', $file)));
+                    $output->writeln(sprintf('<error>XMI</error> %s is a directory but --recursive not used', $file));
                     self::xmi2php_usage();
                     exit(1);
                 }
