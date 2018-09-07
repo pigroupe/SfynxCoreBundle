@@ -43,7 +43,7 @@ build-phar:
 	@echo Building phar
 	@cd /tmp/sfynx-ddd-generator-build && php artifacts/phar/build.php
 	@cp /tmp/sfynx-ddd-generator-build/build/sfynx-ddd-generator.phar ${BUILD_DIR}/sfynx-ddd-generator.phar
-	@chmod +x ${BUILD_DIR}/sfynx-ddd-generator.phar
+	@chmod +rx ${BUILD_DIR}/sfynx-ddd-generator.phar
 	@cp ${BUILD_DIR}/sfynx-ddd-generator.phar /usr/local/bin/sfynx-ddd-generator
 
 	@rm -Rf /tmp/sfynx-ddd-generator-build
