@@ -46,7 +46,7 @@ require_once 'phar://sfynx-ddd-generator.phar/vendor/autoload.php';
 
 function includeIfExists(\$file)
 {
-    if (\file_exists(\$file)) {
+    if (file_exists(\$file)) {
         return include \$file;
     }
 }
