@@ -21,7 +21,10 @@ class Parser
             return $config;
         }
 
-        if (\preg_match('!\.php$!', $argv[0]) || \preg_match('!sfynx-ddd-generator$!', $argv[0]) || \preg_match('!sfynx-ddd-generator.phar$!', $argv[0])) {
+        if (\preg_match('!\.php$!', $argv[0])
+            || \preg_match('!sfynx-ddd-generator$!', $argv[0])
+            || \preg_match('!sfynx-ddd-generator.phar$!', $argv[0])
+        ) {
             \array_shift($argv);
         }
 

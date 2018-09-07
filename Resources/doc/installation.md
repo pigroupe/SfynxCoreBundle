@@ -15,8 +15,8 @@ export PATH=~/.composer/vendor/bin:$PATH
 > b) Phar
 
 ```bash
-curl https://github.com/pigroupe/SfynxCoreBundle/releases/download/v2.9.22/sfynx-ddd-generator.phar
-chmod +x sfynx-ddd-generator.phar && cp sfynx-ddd-generator.phar /usr/local/bin/sfynx-ddd-generator
+curl https://github.com/pigroupe/SfynxCoreBundle/blob/v2.9.22/releases/sfynx-ddd-generator.phar > /usr/local/bin/sfynx-ddd-generator
+chmod +x /usr/local/bin/sfynx-ddd-generator
 ```
 
 > c) Docker
@@ -50,13 +50,29 @@ sfynx-ddd-generator \
 --report-dir=build/MyContext
 ```
 
-# Add XMI generator file report
+> c) Add XMI generator file report
 
 ```bash
 sfynx-ddd-generator \
 --namespace=MyContext \
 --conf-file=./Resources/config/generator/models/sfynx-ddd-generator.yml \
---report-xmi="--output=build/MyContext.xmi --autoload=/var/www/vendor --recursive build/MyContext" \
+--report-xmi="--output=build/MyContext.xmi --autoload=/var/www/alterway_symfony/pic/pic-ui/pi/cmf-sfynx/www/vendor --recursive build/MyContext" \
 --report-template=default \
 --report-dir=build/MyContext
 ```
+
+> d) Docker utilisation
+
+```bash
+docker run --rm \
+--volume $PWD:/var/www \
+--volume /var/www/alterway_symfony/pic/pic-ui/pi/cmf-sfynx/www:/var/app \
+sfynx/generator \
+sfynx-ddd-generator \
+    --namespace=MyContext \
+    --conf-file=/var/www/Resources/config/generator/models/sfynx-ddd-generator.yml \
+    --report-xmi="--output=/var/www/build/MyContext.xmi --autoload=/var/app/vendor --recursive /var/www/build/MyContext" \
+    --report-template=default \
+    --report-dir=/var/www/build/MyContext
+```
+

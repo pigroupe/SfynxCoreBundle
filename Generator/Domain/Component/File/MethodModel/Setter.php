@@ -50,6 +50,7 @@ class Setter
             $getterFieldName = 'getId';
         }
         $setterFieldBody = \sprintf('$this->%s = $%s;', $propertyFieldName, $propertyFieldName) . PHP_EOL;
+        $setterFieldBody .= \sprintf('return $this;') . PHP_EOL;
 
         $comment = \sprintf('@var %s $%s', $ClassTypeFieldName, $propertyFieldName);
         if (empty($typeFieldName)) {

@@ -17,6 +17,8 @@ tag: changelog-deb
 release: build
 	@git add .
 	@git commit -m "releasing `semver tag`"
+	@git tag --delete `semver tag`
+	@git push --delete origin `semver tag`
 	@git tag `semver tag`
 	@git push -u origin 2.x
 	@git push origin `semver tag`

@@ -65,7 +65,7 @@ class Php2Xmi
         $showPrivates = true;
         $showProtecteds = true;
         $showPublics = true;
-        $builtinClasses = array_merge(get_declared_classes(), get_declared_interfaces());
+        $builtinClasses = \array_merge(\get_declared_classes(), \get_declared_interfaces());
 
         foreach ($argv as $arg) {
             if ($arg[0] == '-') {
@@ -119,17 +119,18 @@ class Php2Xmi
                         exit(1);
                 }
             } else {
-                array_push($files, $arg);
+                \array_push($files, $arg);
             }
         }
 
-        if (count($files) == 0) {
+        if (\count($files) == 0) {
+            echo 'ERROR: ', $file, ' is a directory but --recursive not used', "\n";
             self::xmi2php_usage();
             exit(0);
         }
         $nsr = new XmiNameSpaceResolver();
         foreach ($files as $file) {
-            if (is_dir($file)) {
+            if (\is_dir($file)) {
                 if ($recusive) {
                     self::xmi2php_requireDirectory($file);
                 } else {
@@ -141,7 +142,7 @@ class Php2Xmi
                 require_once $file;
             }
         }
-        foreach (get_included_files() as $file) {
+        foreach (\get_included_files() as $file) {
             $nsr->addFile($file);
         }
 
@@ -161,7 +162,7 @@ class Php2Xmi
         if ($outputFile == '') {
             echo $result;
         } else {
-            file_put_contents($outputFile, $result);
+            \file_put_contents($outputFile, $result);
         }
     }
 
@@ -212,12 +213,12 @@ class XmiWriter
     public function __construct()
     {
         $this->_xmiId = self::ID_START;
-        $this->_packages = array();
-        $this->_classes = array();
-        $this->_classIds = array();
-        $this->_types = array();
-        $this->_extends = array();
-        $this->_implements = array();
+        $this->_packages = [];
+        $this->_classes = [];
+        $this->_classIds = [];
+        $this->_types = [];
+        $this->_extends = [];
+        $this->_implements = [];
         $this->_showPrivate = true;
         $this->_showProtected = true;
         $this->_showPublic = true;
@@ -227,8 +228,8 @@ class XmiWriter
 
     public function writeData()
     {
-        $args = func_get_args();
-        $this->_buffer .= implode('', $args);
+        $args = \func_get_args();
+        $this->_buffer .= \implode('', $args);
     }
 
     public function enablePrivate($bool)
@@ -280,17 +281,17 @@ class XmiWriter
 
     public function write()
     {
-        foreach ($this->_classes as $name => $false){
+        foreach ($this->_classes as $name => $false) {
             $this->prepareClass(new \ReflectionClass($name));
         }
         $this->writeHead();
         $this->writeDataTypes();
         $this->writePackages();
         $this->writeClasses();
-        foreach ($this->_extends as $ext){
+        foreach ($this->_extends as $ext) {
             $this->writeClassExtends($ext);
         }
-        foreach ($this->_implements as $ext){
+        foreach ($this->_implements as $ext) {
             $this->writeClassImplements($ext);
         }
         $this->writeFoot();
@@ -325,7 +326,7 @@ class XmiWriter
     private function prepareClass(\ReflectionClass $class)
     {
         $this->registerClass($class->getName());
-        if ($class->isInterface()){
+        if ($class->isInterface()) {
             $writer = new XmiInterfaceWriter($this, $class);
         }
         else {
@@ -337,9 +338,10 @@ class XmiWriter
 
     private function writeClasses()
     {
-        foreach ($this->_classes as $name => $classWriter){
-            if ($classWriter != null && !$classWriter->isPackaged())
+        foreach ($this->_classes as $name => $classWriter) {
+            if ($classWriter != null && !$classWriter->isPackaged()) {
                 $this->writeData($classWriter->getXmi());
+            }
         }
     }
 
@@ -366,15 +368,15 @@ class XmiWriter
 
     private function writePackages()
     {
-        foreach ($this->_packages as $name => $package){
+        foreach ($this->_packages as $name => $package) {
             $package->write();
         }
     }
 
     private function writeDataTypes()
     {
-        foreach ($this->_types as $type => $id){
-            if (!array_key_exists($type, $this->_classIds)){
+        foreach ($this->_types as $type => $id) {
+            if (!\array_key_exists($type, $this->_classIds)) {
                 $this->writeDataType($id, $type);
             }
         }
@@ -382,7 +384,7 @@ class XmiWriter
 
     public function getTypeId($type)
     {
-        if (!array_key_exists($type, $this->_types))
+        if (!\array_key_exists($type, $this->_types))
             $this->_types[$type] = $this->nextXmiId();
         return $this->_types[$type];
     }
@@ -391,13 +393,13 @@ class XmiWriter
     {
         $parts = explode('.', $name);
         $rootName = array_shift($parts);
-        if (!array_key_exists($rootName, $this->_packages)){
+        if (!\array_key_exists($rootName, $this->_packages)) {
             $this->_packages[$rootName] = new XmiPackage($this,$rootName);
         }
         $package = $this->_packages[$rootName];
 
-        foreach ($parts as $part){
-            if (!$package->hasPackage($part)){
+        foreach ($parts as $part) {
+            if (!$package->hasPackage($part)) {
                 $child = new XmiPackage($this, $part);
                 $package->addPackage($child);
             }
@@ -415,7 +417,7 @@ class XmiWriter
 
     private function writeDataType($id, $name)
     {
-        $this->writeData('<UML:DataType stereotype="',self::ID_DATATYPE,'" visibility="public" xmi.id="',$id,'" name="',htmlspecialchars($name),'"/>',"\n");
+        $this->writeData('<UML:DataType stereotype="',self::ID_DATATYPE,'" visibility="public" xmi.id="',$id,'" name="', \htmlspecialchars($name),'"/>',"\n");
     }
 
     private function writeFoot()
@@ -428,7 +430,7 @@ class XmiWriter
 
     public static function extractReturnTypeFromComment($comment)
     {
-        if (preg_match('/@return\s+(\S+)/', $comment, $m)){
+        if (\preg_match('/@return\s+(\S+)/', $comment, $m)) {
             return $m[1];
         }
         return 'void';
@@ -436,16 +438,18 @@ class XmiWriter
 
     public static function extractParamTypeFromComment($comment, $name)
     {
-        if (preg_match('/@param\s+\$?'.$name.'\s+(\S+)/', $comment, $m))
+        if (\preg_match('/@param\s+\$?'.$name.'\s+(\S+)/', $comment, $m)) {
             return $m[1];
-        if (preg_match('/@param\s+(\S+)\s+\$?'.$name.'/', $comment, $m))
+        }
+        if (\preg_match('/@param\s+(\S+)\s+\$?'.$name.'/', $comment, $m)) {
             return $m[1];
+        }
         return 'mixed';
     }
 
     public static function extractMemberTypeFromComment($comment)
     {
-        if (preg_match('/@(?:type|var)\s+(\S+)/', $comment, $m)){
+        if (\preg_match('/@(?:type|var)\s+(\S+)/', $comment, $m)) {
             return $m[1];
         }
         return 'mixed';
@@ -453,7 +457,7 @@ class XmiWriter
 
     public static function extractPackageNameFromComment($comment)
     {
-        if (preg_match('/@package\s+(\S+)/', $comment, $m)){
+        if (\preg_match('/@package\s+(\S+)/', $comment, $m)) {
             return $m[1];
         }
         return '';
@@ -475,18 +479,23 @@ class XmiWriter
 
 class XmiPackage
 {
+    private $_packages;
+    private $_classes;
+    private $_writer;
+    private $_name;
+
     public function __construct(XmiWriter $writer, $name)
     {
         $this->_writer = $writer;
         $this->_name = $name;
-        $this->_classes = array();
-        $this->_packages = array();
+        $this->_classes = [];
+        $this->_packages = [];
         $this->_parent = null;
     }
 
     public function getName()
     {
-        if ($this->_parent != null){
+        if ($this->_parent != null) {
             return $this->_parent->getName().'.'.$this->_name;
         }
         return $this->_name;
@@ -500,7 +509,7 @@ class XmiPackage
 
     public function hasPackage($name)
     {
-        return array_key_exists($name, $this->_packages);
+        return \array_key_exists($name, $this->_packages);
     }
 
     public function getPackage($name)
@@ -510,16 +519,16 @@ class XmiPackage
 
     public function addClass(XmiClassWriter $class)
     {
-        array_push($this->_classes, $class);
+        \array_push($this->_classes, $class);
     }
 
     public function write()
     {
         $this->writeHead();
-        foreach ($this->_packages as $name => $package){
+        foreach ($this->_packages as $name => $package) {
             $package->write();
         }
-        foreach ($this->_classes as $class){
+        foreach ($this->_classes as $class) {
             $this->_writer->writeData($class->getXmi());
         }
         $this->writeFoot();
@@ -527,7 +536,7 @@ class XmiPackage
 
     private function writeHead()
     {
-        $this->_writer->writeData('<UML:Package visibility="public" xmi.id="',$this->_writer->nextXmiId(),'" name="package.',htmlspecialchars($this->_name),'">',"\n");
+        $this->_writer->writeData('<UML:Package visibility="public" xmi.id="',$this->_writer->nextXmiId(),'" name="package.', \htmlspecialchars($this->_name),'">',"\n");
         $this->_writer->writeData('<UML:Namespace.ownedElement>',"\n");
     }
 
@@ -536,16 +545,15 @@ class XmiPackage
         $this->_writer->writeData('</UML:Namespace.ownedElement>',"\n");
         $this->_writer->writeData('</UML:Package>',"\n");
     }
-
-    private $_packages;
-    private $_classes;
-    private $_writer;
-    private $_name;
 }
-
 
 class XmiClassWriter
 {
+    protected $_writer;
+    protected $_class;
+    protected $_xmi;
+    protected $_packaged;
+
     public function __construct(XmiWriter $writer, \ReflectionClass $class)
     {
         $this->_writer = $writer;
@@ -554,7 +562,7 @@ class XmiClassWriter
         $this->_packaged = false;
     }
 
-    public function isPackaged(){
+    public function isPackaged() {
         return $this->_packaged;
     }
 
@@ -565,24 +573,24 @@ class XmiClassWriter
 
     protected function writeData()
     {
-        $args = func_get_args();
-        $this->_xmi .= implode('', $args);
+        $args = \func_get_args();
+        $this->_xmi .= \implode('', $args);
     }
 
     public function write()
     {
         $parentClass = $this->_class->getParentClass();
-        if ($parentClass != null){
+        if ($parentClass != null) {
             $this->_writer->addClassExtends(new XmiClassExtends($this->_class->getName(), $parentClass->getName()));
         }
-        foreach ($this->_class->getInterfaces() as $interface){
-            if ($parentClass == null || !$parentClass->implementsInterface($interface->getName())){
+        foreach ($this->_class->getInterfaces() as $interface) {
+            if ($parentClass == null || !$parentClass->implementsInterface($interface->getName())) {
                 $this->_writer->addClassImplements(new XmiClassImplements($this->_class->getName(), $interface->getName()));
             }
         }
 
         $packageName = XmiWriter::extractPackageNameFromComment($this->_class->getDocComment());
-        if ($packageName){
+        if ($packageName) {
             $package = $this->_writer->getPackage($packageName);
             $package->addClass($this);
             $this->_packaged = true;
@@ -632,7 +640,7 @@ class XmiClassWriter
 
     protected function writeMembers()
     {
-        foreach ($this->_class->getProperties() as $prop){
+        foreach ($this->_class->getProperties() as $prop) {
             $this->writeProperty($prop);
         }
     }
@@ -644,15 +652,14 @@ class XmiClassWriter
         if (!$this->_writer->acceptPublic() && $property->isPublic()) return;
 
         // ignore parent properties
-        if ($property->getDeclaringClass() != $this->_class){
+        if ($property->getDeclaringClass() != $this->_class) {
             return;
         }
 
-        if (version_compare(phpversion(), '5.1.0', '>=')){
+        if (\version_compare(\phpversion(), '5.1.0', '>=')) {
             // only for PHP 5.1.0 implements ReflectionProperty::getDocComment()
             $type = XmiWriter::extractMemberTypeFromComment($property->getDocComment());
-        }
-        else  {
+        } else  {
             $type = 'mixed'; // damn it
         }
 
@@ -660,14 +667,14 @@ class XmiClassWriter
         $id = $this->getTypeId($type);
 
 
-        $this->writeData('<UML:Attribute visibility="',$this->getVisibility($property),'" xmi.id="',$this->nextXmiId(),'" value="" type="',$id,'" name="',htmlspecialchars($property->getName()),'"');
+        $this->writeData('<UML:Attribute visibility="',$this->getVisibility($property),'" xmi.id="',$this->nextXmiId(),'" value="" type="',$id,'" name="', \htmlspecialchars($property->getName()),'"');
         if ($property->isStatic()) $this->writeData(' ownerScope="classifier"');
         $this->writeData('/>', "\n");
     }
 
     protected function writeMethods()
     {
-        foreach ($this->_class->getMethods() as $method){
+        foreach ($this->_class->getMethods() as $method) {
             $this->writeMethod($method);
         }
     }
@@ -679,7 +686,7 @@ class XmiClassWriter
         if (!$this->_writer->acceptPublic() && $method->isPublic()) return;
 
         // ignore parent methods
-        if ($method->getDeclaringClass() != $this->_class){
+        if ($method->getDeclaringClass() != $this->_class) {
             return;
         }
 
@@ -693,7 +700,7 @@ class XmiClassWriter
         $this->writeData('>', "\n");
 
         $this->writeData('<UML:BehavioralFeature.parameter>',"\n");
-        foreach ($method->getParameters() as $param){
+        foreach ($method->getParameters() as $param) {
             $this->writeMethodParam($method, $param);
         }
         $this->writeData('</UML:BehavioralFeature.parameter>',"\n");
@@ -710,33 +717,27 @@ class XmiClassWriter
         try {
             $paramClass = $param->getClass();
         }
-        catch (\ReflectionException $e){
+        catch (\ReflectionException $e) {
             // warning ? param class not included
             $paramClass = null;
         }
-        if ($paramClass != null){
+        if ($paramClass != null) {
             $type = $paramClass->getName();
-        }
-        else {
+        } else {
             $type = XmiWriter::extractParamTypeFromComment($method->getDocComment(), $param->getName());
             $type = $this->_writer->getNSResolver()->getFullyQualifiedClassName($this->_class->name, $type);
         }
         $id = $this->getTypeId($type);
-        if (is_array($default)) $default = 'array()';
-        $this->writeData('<UML:Parameter visibility="public" xmi.id="',$this->nextXmiId(),'" value="',htmlspecialchars($default),'" type="',$id,'" name="',htmlspecialchars($param->getName()),'"/>', "\n");
+        if (\is_array($default)) $default = '[]';
+        $this->writeData('<UML:Parameter visibility="public" xmi.id="',$this->nextXmiId(),'" value="', \htmlspecialchars($default),'" type="',$id,'" name="', htmlspecialchars($param->getName()),'"/>', "\n");
     }
-
-    protected $_writer;
-    protected $_class;
-    protected $_xmi;
-    protected $_packaged;
 }
 
 class XmiInterfaceWriter extends XmiClassWriter
 {
     protected function writeHead()
     {
-        $this->writeData('<UML:Interface visibility="public" xmi.id="',$this->getId(),'" isAbstract="true" name="',htmlspecialchars($this->_class->getName()),'">', "\n");
+        $this->writeData('<UML:Interface visibility="public" xmi.id="',$this->getId(),'" isAbstract="true" name="', \htmlspecialchars($this->_class->getName()),'">', "\n");
         $this->writeData('<UML:Classifier.feature>',"\n");
     }
 
@@ -749,21 +750,24 @@ class XmiInterfaceWriter extends XmiClassWriter
 
 class XmiClassExtends
 {
+    private $_childName;
+    private $_parentName;
+
     public function __construct($className, $otherClassName)
     {
         $this->_childName = $className;
         $this->_parentName = $otherClassName;
     }
 
-    public function getChild(){ return $this->_childName; }
-    public function getParent(){ return $this->_parentName; }
-
-    private $_childName;
-    private $_parentName;
+    public function getChild() { return $this->_childName; }
+    public function getParent() { return $this->_parentName; }
 }
 
 class XmiClassImplements
 {
+    private $_className;
+    private $_interfaceName;
+    
     public function __construct($className, $interfaceName)
     {
         $this->_className = $className;
@@ -771,25 +775,22 @@ class XmiClassImplements
     }
 
     public function getClassName() { return $this->_className; }
-    public function getInterfaceName(){ return $this->_interfaceName; }
-
-    private $_className;
-    private $_interfaceName;
+    public function getInterfaceName() { return $this->_interfaceName; }
 }
 
 
 class XmiNameSpaceResolver
 {
-    private $classes = array();
+    private $classes = [];
 
     public function addFile($file)
     {
         $tokens = token_get_all(file_get_contents($file));
         $count = count($tokens);
 
-        $classes = array();
+        $classes = [];
         $namespace = null;
-        $aliases = array();
+        $aliases = [];
         for ($i = 0 ; $i < $count ; $i++)
         {
             $token = $tokens[$i];
@@ -858,8 +859,7 @@ class XmiNameSpaceResolver
         }
         foreach ($classes as $class)
         {
-            if ($namespace)
-            {
+            if ($namespace) {
                 $class = $namespace . '\\' . $class;
             }
             $this->classes[$class] = array('namespace' => $namespace, 'use' => $aliases);
@@ -876,7 +876,7 @@ class XmiNameSpaceResolver
         if (!preg_match('/^(?:boolean|bool|string|str|integer|int|float|array|mixed|callback)$/i', $classname))
         {
             if ('\\' !== $classname[0]) {
-                $explode = explode('\\', $classname, 2);
+                $explode = \explode('\\', $classname, 2);
                 if (isset($this->classes[$context]['use'][$explode[0]])) {
                     $classname = $this->classes[$context]['use'][$explode[0]];
                     if (isset($explode[1])) $classname .= '\\' . $explode[1];
@@ -940,19 +940,19 @@ class autoloadManager
      * Folders that should be parsed
      * @var Array
      */
-    private $_folders = array();
+    private $_folders = [];
 
     /**
      * Excluded folders
      * @var Array
      */
-    private $_excludedFolders = array();
+    private $_excludedFolders = [];
 
     /**
      * Classes and their matching filename
      * @var Array
      */
-    private $_classes = array();
+    private $_classes = [];
 
     /**
      * Scan files matching this regex
@@ -990,8 +990,7 @@ class autoloadManager
     public function setSaveFile($pathToFile)
     {
         $this->_saveFile = $pathToFile;
-        if ($this->_saveFile && file_exists($this->_saveFile))
-        {
+        if ($this->_saveFile && \file_exists($this->_saveFile)) {
             $this->_classes = include($this->_saveFile);
         }
     }
@@ -1013,12 +1012,9 @@ class autoloadManager
      */
     public function addFolder($path)
     {
-        if ($realpath = realpath($path) and is_dir($realpath))
-        {
+        if ($realpath = \realpath($path) and \is_dir($realpath)) {
             $this->_folders[] = $realpath;
-        }
-        else
-        {
+        } else {
             throw new \Exception('Failed to open dir : ' . $path);
         }
     }
@@ -1030,12 +1026,9 @@ class autoloadManager
      */
     public function excludeFolder($path)
     {
-        if ($realpath = realpath($path) and is_dir($realpath))
-        {
+        if ($realpath = \realpath($path) and \is_dir($realpath)) {
             $this->_excludedFolders[] = $realpath . DIRECTORY_SEPARATOR;
-        }
-        else
-        {
+        } else {
             throw new \Exception('Failed to open dir : ' . $path);
         }
     }
@@ -1082,16 +1075,14 @@ class autoloadManager
     {
         // check if the class already exists in the cache file
         $loaded = $this->checkClass($className, $this->_classes);
-        if (true === $this->_regenerate || !$loaded)
-        {
+        if (true === $this->_regenerate || !$loaded) {
             // parse the folders returns the list of all the classes
             // in the application
             $this->refresh();
 
             // recheck if the class exists again in the reloaded classes
             $loaded = $this->checkClass($className, $this->_classes);
-            if (!$loaded)
-            {
+            if (!$loaded) {
                 // set it to null to flag that it was not found
                 // This behaviour fixes the problem with infinite
                 // loop if we have a class_exists() for an inexistant
@@ -1099,8 +1090,7 @@ class autoloadManager
                 $this->_classes[$className] = null;
             }
             // write to a single file
-            if ($this->getSaveFile())
-            {
+            if ($this->getSaveFile()) {
                 $this->saveToFile($this->_classes);
             }
         }
@@ -1118,16 +1108,12 @@ class autoloadManager
      */
     private function checkClass($className, array $classes)
     {
-        if (array_key_exists($className, $classes))
-        {
+        if (\array_key_exists($className, $classes)) {
             $classPath = $classes[$className];
             // return true if the
-            if (null === $classPath)
-            {
+            if (null === $classPath) {
                 return self::CLASS_IS_NULL;
-            }
-            elseif (file_exists($classPath))
-            {
+            } elseif (\file_exists($classPath)) {
                 require($classes[$className]);
                 return self::CLASS_EXISTS;
             }
@@ -1141,10 +1127,9 @@ class autoloadManager
      */
     private function parseFolders()
     {
-        $classesArray = array();
-        foreach ($this->_folders as $folder)
-        {
-            $classesArray = array_merge($classesArray, $this->parseFolder($folder));
+        $classesArray = [];
+        foreach ($this->_folders as $folder) {
+            $classesArray = \array_merge($classesArray, $this->parseFolder($folder));
         }
         return $classesArray;
     }
@@ -1157,25 +1142,19 @@ class autoloadManager
      */
     private function parseFolder($folder)
     {
-        $classes = array();
+        $classes = [];
         $files = new \RecursiveIteratorIterator(new \RecursiveDirectoryIterator($folder));
-        foreach ($files as $file)
-        {
-            if ($file->isFile() && preg_match($this->_filesRegex, $file->getFilename()))
-            {
-                foreach ($this->_excludedFolders as $folder)
-                {
+        foreach ($files as $file) {
+            if ($file->isFile() && preg_match($this->_filesRegex, $file->getFilename())) {
+                foreach ($this->_excludedFolders as $folder) {
                     $len = strlen($folder);
-                    if (0 === strncmp($folder, $file->getPathname(), $len))
-                    {
+                    if (0 === strncmp($folder, $file->getPathname(), $len)) {
                         continue 2;
                     }
                 }
 
-                if ($classNames = $this->getClassesFromFile($file->getPathname()))
-                {
-                    foreach ($classNames as $className)
-                    {
+                if ($classNames = $this->getClassesFromFile($file->getPathname())) {
+                    foreach ($classNames as $className) {
                         // Adding class to map
                         $classes[$className] = $file->getPathname();
                     }
@@ -1194,14 +1173,12 @@ class autoloadManager
     private function getClassesFromFile($file)
     {
         $namespace = null;
-        $classes = array();
+        $classes = [];
         $tokens = token_get_all(file_get_contents($file));
-        $nbtokens = count($tokens);
+        $nbtokens = \count($tokens);
 
-        for ($i = 0 ; $i < $nbtokens ; $i++)
-        {
-            switch ($tokens[$i][0])
-            {
+        for ($i = 0 ; $i < $nbtokens ; $i++) {
+            switch ($tokens[$i][0]) {
                 case T_NAMESPACE:
                     $i+=2;
                     while ($tokens[$i][0] === T_STRING || $tokens[$i][0] === T_NS_SEPARATOR)
@@ -1250,8 +1227,8 @@ class autoloadManager
         $content .= ' */ ' . PHP_EOL;
 
         // Export array
-        $content .= 'return ' . var_export($classes, true) . ';';
-        file_put_contents($this->getSaveFile(), $content);
+        $content .= 'return ' . \var_export($classes, true) . ';';
+        \file_put_contents($this->getSaveFile(), $content);
     }
 
     /**
@@ -1278,13 +1255,14 @@ class autoloadManager
     public function refresh()
     {
         $existantClasses = $this->_classes;
-        $nullClasses = array_filter($existantClasses, array('self','_getNullElements'));
+        $nullClasses = \array_filter($existantClasses, array('self','_getNullElements'));
         $newClasses = $this->parseFolders();
 
         // $newClasses will override $nullClasses if the same key exists
         // this allows new added classes (that were flagged as null) to be
         // added
-        $this->_classes = array_merge($nullClasses, $newClasses);
+        $this->_classes = \array_merge($nullClasses, $newClasses);
+
         return true;
     }
 
@@ -1295,8 +1273,7 @@ class autoloadManager
      */
     public function generate()
     {
-        if ($this->getSaveFile())
-        {
+        if ($this->getSaveFile()) {
             $this->refresh();
             $this->saveToFile($this->_classes);
         }
@@ -1318,7 +1295,7 @@ class autoloadManager
      */
     public function register()
     {
-        spl_autoload_register(array($this, 'loadClass'));
+        \spl_autoload_register([$this, 'loadClass']);
     }
 
     /**
@@ -1326,6 +1303,6 @@ class autoloadManager
      */
     public function unregister()
     {
-        spl_autoload_unregister(array($this, 'loadClass'));
+        \spl_autoload_unregister([$this, 'loadClass']);
     }
 }
