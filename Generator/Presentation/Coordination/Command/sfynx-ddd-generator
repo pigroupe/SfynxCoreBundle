@@ -1,9 +1,19 @@
 #!/usr/bin/env php
 <?php
+/*
+* This file is part of the Sfynx DDD Generator
+*
+* (c) Etienne de Longeaux
+*
+* This source file is subject to the LGPL license that is bundled
+* with this source code in the file LICENSE.
+*
+* version: v2.9.22
+*/
 
 function includeIfExists($file)
 {
-    if (file_exists($file)) {
+    if (\file_exists($file)) {
         return include $file;
     }
 }

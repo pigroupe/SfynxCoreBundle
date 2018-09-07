@@ -80,7 +80,7 @@ class Php2Xmi
                 switch ($name) {
                     case '-h':
                     case '--help':
-                        $output->writeln(sprintf('<info>XMI</info> --help'));
+                        $output->writeln(\sprintf('<info>XMI</info> --help'));
                         self::xmi2php_usage();
                         exit(0);
                     case '--strict':

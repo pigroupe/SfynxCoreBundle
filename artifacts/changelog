@@ -29,8 +29,172 @@ sfynx-ddd-generator () unstable; urgency=low
    * improve documentation 
    * improve documentation 
    * improve documentation 
+   * releasing v2.9.22 
+   * releasing v2.9.22 
+   * releasing v2.9.22 
+   * releasing v2.9.22 
+   * releasing v2.9.22 
+
+  -- Etienne de Longeaux <sfynx@pi-groupe.net>  Fri, 07 Sep 2018 19:42:31 +0200
+
+sfynx-ddd-generator () unstable; urgency=low
+   * improve ddd generator 
+   * add manager widget 
+   * improve core generator 
+   * improve core generator 
+   * improve core generator 
+   * improve core generator 
+   * improve core generator 
+   * improve core generator 
+   * add redirection system in ddd layer 
+   * add redirection system in ddd layer 
+   * debug redirection ddd system 
+   * debug generation templates 
+   * #000 improve template generator with phpcs rules implementation 
+   * debug generator 
+   * add models system in class generator 
+   * add "as" instruction in arguments 
+   * add "as" instruction in arguments 
+   * add model system from service generation 
+   * add multifiles by repositories configuration 
+   * improve phpcs result in generated files 
+   * #000 debug coordination templater 
+   * add system of repository function in unique class 
+   * add fractalistic in composer.json 
+   * improve query builder system 
+   * improve query builder system 
+   * add entity generator template 
+   * improve documentation 
+   * improve documentation 
+   * improve documentation 
+   * improve documentation 
+   * releasing v2.9.22 
+   * releasing v2.9.22 
+   * releasing v2.9.22 
+   * releasing v2.9.22 
+   * releasing v2.9.22 
+
+  -- Etienne de Longeaux <sfynx@pi-groupe.net>  Fri, 07 Sep 2018 19:41:58 +0200
+
+sfynx-ddd-generator () unstable; urgency=low
+   * improve ddd generator 
+   * add manager widget 
+   * improve core generator 
+   * improve core generator 
+   * improve core generator 
+   * improve core generator 
+   * improve core generator 
+   * improve core generator 
+   * add redirection system in ddd layer 
+   * add redirection system in ddd layer 
+   * debug redirection ddd system 
+   * debug generation templates 
+   * #000 improve template generator with phpcs rules implementation 
+   * debug generator 
+   * add models system in class generator 
+   * add "as" instruction in arguments 
+   * add "as" instruction in arguments 
+   * add model system from service generation 
+   * add multifiles by repositories configuration 
+   * improve phpcs result in generated files 
+   * #000 debug coordination templater 
+   * add system of repository function in unique class 
+   * add fractalistic in composer.json 
+   * improve query builder system 
+   * improve query builder system 
+   * add entity generator template 
+   * improve documentation 
+   * improve documentation 
+   * improve documentation 
+   * improve documentation 
+   * releasing v2.9.22 
+   * releasing v2.9.22 
+   * releasing v2.9.22 
+   * releasing v2.9.22 
+   * releasing v2.9.22 
+
+  -- Etienne de Longeaux <sfynx@pi-groupe.net>  Fri, 07 Sep 2018 19:41:37 +0200
+
+sfynx-ddd-generator () unstable; urgency=low
+   * improve ddd generator 
+   * add manager widget 
+   * improve core generator 
+   * improve core generator 
+   * improve core generator 
+   * improve core generator 
+   * improve core generator 
+   * improve core generator 
+   * add redirection system in ddd layer 
+   * add redirection system in ddd layer 
+   * debug redirection ddd system 
+   * debug generation templates 
+   * #000 improve template generator with phpcs rules implementation 
+   * debug generator 
+   * add models system in class generator 
+   * add "as" instruction in arguments 
+   * add "as" instruction in arguments 
+   * add model system from service generation 
+   * add multifiles by repositories configuration 
+   * improve phpcs result in generated files 
+   * #000 debug coordination templater 
+   * add system of repository function in unique class 
+   * add fractalistic in composer.json 
+   * improve query builder system 
+   * improve query builder system 
+   * add entity generator template 
+   * improve documentation 
+   * improve documentation 
+   * improve documentation 
+   * improve documentation 
+   * releasing v2.9.22 
+   * releasing v2.9.22 
+   * releasing v2.9.22 
+   * releasing v2.9.22 
+   * releasing v2.9.22 
+
+  -- Etienne de Longeaux <sfynx@pi-groupe.net>  Fri, 07 Sep 2018 19:41:10 +0200
+
+sfynx-ddd-generator () unstable; urgency=low
+   * improve ddd generator 
+   * add manager widget 
+   * improve core generator 
+   * improve core generator 
+   * improve core generator 
+   * improve core generator 
+   * improve core generator 
+   * improve core generator 
+   * add redirection system in ddd layer 
+   * add redirection system in ddd layer 
+   * debug redirection ddd system 
+   * debug generation templates 
+   * #000 improve template generator with phpcs rules implementation 
+   * debug generator 
+   * add models system in class generator 
+   * add "as" instruction in arguments 
+   * add "as" instruction in arguments 
+   * add model system from service generation 
+   * add multifiles by repositories configuration 
+   * improve phpcs result in generated files 
+   * #000 debug coordination templater 
+   * add system of repository function in unique class 
+   * add fractalistic in composer.json 
+   * improve query builder system 
+   * improve query builder system 
+   * add entity generator template 
+   * improve documentation 
+   * improve documentation 
+   * improve documentation 
+   * improve documentation 
 
   -- Etienne de Longeaux <sfynx@pi-groupe.net>  Thu, 06 Sep 2018 13:41:49 +0200
+
+
+
+
+
+
+
+
 
 
 
