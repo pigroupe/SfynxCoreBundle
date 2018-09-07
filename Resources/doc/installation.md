@@ -56,7 +56,7 @@ sfynx-ddd-generator \
 sfynx-ddd-generator \
 --namespace=MyContext \
 --conf-file=./Resources/config/generator/models/sfynx-ddd-generator.yml \
---report-xmi="--output=/var/www/build/MyContext.xmi|--autoload=/var/app/vendor|--recursive|/var/www/build/MyContext" \
+--report-xmi="--output=build/MyContext.xmi|--autoload=/var/www/alterway_symfony/pic/pic-ui/pi/cmf-sfynx/www/vendor|--recursive|build/MyContext" \
 --report-template=default \
 --report-dir=build/MyContext
 ```
