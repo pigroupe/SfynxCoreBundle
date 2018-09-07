@@ -22,6 +22,8 @@
 
 namespace Sfynx\CoreBundle\Generator\Domain\Component\Xmi;
 
+use Sfynx\CoreBundle\Generator\Domain\Component\Output\CliOutput;
+
 if (!defined('T_NAMESPACE'))
 {
     /**
@@ -41,23 +43,23 @@ class Php2Xmi
 {
     public static function xmi2php_requireDirectory($path)
     {
-        if ($path[strlen($path) - 1] != '/') $path .= '/';
-        $dir = dir($path);
+        if ($path[\strlen($path) - 1] != '/') $path .= '/';
+        $dir = \dir($path);
         while ($entry = $dir->read()) {
             if ($entry[0] == '.')
                 continue;
             $rp = $path . $entry;
-            if (is_file($rp) && substr($entry, -4) == '.php') {
+            if (\is_file($rp) && \substr($entry, -4) == '.php') {
                 require_once $rp;
             }
-            if (is_dir($rp)) {
+            if (\is_dir($rp)) {
                 self::xmi2php_requireDirectory($rp);
             }
         }
         $dir->close();
     }
 
-    public static function php2xmi_main(array $argv)
+    public static function php2xmi_main(CliOutput $output, array $argv)
     {
         $files = [];
         $outputFile = '';
@@ -69,7 +71,7 @@ class Php2Xmi
 
         foreach ($argv as $arg) {
             if ($arg[0] == '-') {
-                if (preg_match('/^(.*?)=(.*?)$/', $arg, $m)) {
+                if (\preg_match('/^(.*?)=(.*?)$/', $arg, $m)) {
                     list(, $name, $value) = $m;
                 } else {
                     $name = $arg;
@@ -78,10 +80,11 @@ class Php2Xmi
                 switch ($name) {
                     case '-h':
                     case '--help':
+                        $output->writeln(sprintf('<info>XMI</info> --help')));
                         self::xmi2php_usage();
                         exit(0);
                     case '--strict':
-                        error_reporting(E_ALL | E_STRICT);
+                        \error_reporting(E_ALL | E_STRICT);
                         break;
                     case '--test':
                         $writer = new XmiWriter();
@@ -114,7 +117,7 @@ class Php2Xmi
                         $outputFile = $value;
                         break;
                     default:
-                        echo 'ERROR: unknown parameter ', $name, "\n";
+                        $output->writeln(sprintf('<error>XMI</error> unknown parameter %s', $name)));
                         self::xmi2php_usage();
                         exit(1);
                 }
@@ -124,7 +127,7 @@ class Php2Xmi
         }
 
         if (\count($files) == 0) {
-            echo 'ERROR: ', $file, ' is a directory but --recursive not used', "\n";
+            $output->writeln(sprintf('<error>XMI</error> %s is a directory but --recursive not used', $file)));
             self::xmi2php_usage();
             exit(0);
         }
@@ -134,7 +137,7 @@ class Php2Xmi
                 if ($recusive) {
                     self::xmi2php_requireDirectory($file);
                 } else {
-                    echo 'ERROR: ', $file, ' is a directory but --recursive not used', "\n";
+                    $output->writeln(sprintf('<error>XMI</error> %s is a directory but --recursive not used', $file)));
                     self::xmi2php_usage();
                     exit(1);
                 }
@@ -152,8 +155,8 @@ class Php2Xmi
         $writer->enableProtected($showProtecteds);
         $writer->enablePublic($showPublics);
         $writer->setNSResolver($nsr);
-        $allclasses = array_merge(get_declared_classes(), get_declared_interfaces());
-        $userclasses = array_diff($allclasses, $builtinClasses);
+        $allclasses = \array_merge(\get_declared_classes(), \get_declared_interfaces());
+        $userclasses = \array_diff($allclasses, $builtinClasses);
         foreach ($userclasses as $className) {
             $writer->addClass($className);
         }
