@@ -67,7 +67,7 @@ class Application
         }
 
         if ($config->has('report-xmi')) {
-            Php2Xmi::php2xmi_main($config->get('report-xmi'));
+            Php2Xmi::php2xmi_main($output, $config->get('report-xmi'));
         }
 
         $endTime = \microtime(true);
