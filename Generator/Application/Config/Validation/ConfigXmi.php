@@ -26,9 +26,12 @@ class ConfigXmi implements ValidationInterface
     public function validate(Config $config)
     {
         if ($config->has('report-xmi')) {
+            echo 'report-xmi';
             $input = \preg_replace('!\s+!', ' ', $config->get('report-xmi'));
             $argv = \explode(' ', $input);
             $config->set('report-xmi', $argv);
+            echo var_export($argv);
+            print_r($config->get('report-xmi'));
         }
     }
 }
