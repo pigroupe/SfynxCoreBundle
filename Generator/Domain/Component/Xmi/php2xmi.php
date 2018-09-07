@@ -69,8 +69,6 @@ class Php2Xmi
         $showPublics = true;
         $builtinClasses = \array_merge(\get_declared_classes(), \get_declared_interfaces());
 
-        print_r($argv);
-
         foreach ($argv as $arg) {
             if ($arg[0] == '-') {
                 if (\preg_match('/^(.*?)=(.*?)$/', $arg, $m)) {
