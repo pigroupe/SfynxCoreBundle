@@ -17,6 +17,8 @@ class Parser
     {
         $config = new Config();
 
+        print_r($argv);exit;
+
         if (\sizeof($argv) === 0) {
             return $config;
         }
