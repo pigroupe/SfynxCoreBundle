@@ -75,7 +75,7 @@ sfynx-ddd-generator \
 docker run --rm \
 --volume $PWD:/var/www \
 --volume /var/www/cmf-sfynx/www:/var/app \
-sfynx/generator \
+sfynxdevops/generator \
 sfynx-ddd-generator \
     --namespace=MyContext \
     --conf-file=/var/www/Resources/config/generator/models/sfynx-ddd-generator.yml \
@@ -91,7 +91,7 @@ docker run --rm \
 -e XMI_FILE_PATH=/var/www/build/MyContext \
 --volume $PWD:/var/www \
 --volume /var/www/cmf-sfynx/www:/var/app \
-sfynx/generator \
+sfynxdevops/generator \
 sfynx-ddd-generator \
     --namespace=MyContext \
     --conf-file=/var/www/Resources/config/generator/models/sfynx-ddd-generator.yml \
