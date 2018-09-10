@@ -2,9 +2,10 @@
 
 The following documents are available :
 
-- [Installation](#Installation)
-- [Usage](#Usage)
-- [Launch XMI file with Umbrello](#launch-xmi-file-with-umbrello)
+- [Installation](#installation)
+- [Usage](#usage)
+- [Launch XMI file version 1.2 with Umbrello](#launch-xmi-file-version-1-2-with-umbrello)
+- [Launch XMI file version 2.1 with StarUml](#launch-xmi-file-version-2-1-with-struml)
 
 # Installation
 
@@ -120,7 +121,7 @@ docker run --rm -d -u 1000:1000 \
 
 After import <XmiFile>.xmi file generate from command
 
-# Launch XMI file version 2.1 with StaUml
+# Launch XMI file version 2.1 with StarUml
 
 Execute it with Doker like this
 
