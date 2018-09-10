@@ -620,8 +620,9 @@ default:
                 foreignKey: true
                 required: true
                 mapping:
+                  setter: true
                   relationship: ManyToOne
-                  targetEntity: Genre
+                  targetEntity: 'MyContext\Domain\Entity\Genre'
                   formData:
                       manager: 'MyContext\Domain\Service\Entity\Genre\Manager\GenreManager'
                       queryFunction: { class: 'FindGenreQueryTransformer', args: ['true', 'false', 1299, {tata: 'tataValue', tutu: 'tutuValue'}] }
@@ -645,8 +646,9 @@ default:
                 foreignKey: true
                 required: true
                 mapping:
+                  setter: true
                   relationship: ManyToOne
-                  targetEntity: Movie
+                  targetEntity: 'MyContext\Domain\Entity\Movie'
                   formData:
                       manager: 'MyContext\Domain\Service\Entity\Movie\Manager\MovieManager'
                       queryFunction: { class: 'FindMovieQueryTransformer', args: ['true', 'false', 1299, {tata: 'tataValue', tutu: 'tutuValue'}] }

@@ -137,7 +137,7 @@ class Entity extends AbstractHandlerModel
             && \property_exists($field->mapping, 'setter')
             && true === $field->mapping->setter
         ) {
-            array_push($methods, MethodModel\Setter::class);
+            \array_push($methods, MethodModel\Setter::class);
         }
         if (\property_exists($field, 'mapping')
             && \property_exists($field->mapping, 'getter')
