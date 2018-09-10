@@ -13,6 +13,7 @@ The following documents are available:
 
 - [Reference Configuration](configuration_reference.md)
 - [DDD Generator Command](command_generator.md)
+- [Contributing](contributing.md)
 - [ChangeLog](#changelog)
 - [Todo](#todo)
 
