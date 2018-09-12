@@ -28,7 +28,7 @@ class OBCreateResponseJson extends AbstractCreateResponseJson
     public function process(): bool
     {
         try {
-            $url = !property_exists($this->wfHandler, 'url') ? null : $this->wfHandler->url;
+            $url = !\property_exists($this->wfHandler, 'url') ? null : $this->wfHandler->url;
             $this->wfLastData->response = (new ResponseHandler(SerializerStrategy::create(), $this->request->setRequestFormat('json')))
                 ->create($this->wfLastData->rows, Response::HTTP_OK, $this->headers, $url)
                 ->getResponse();

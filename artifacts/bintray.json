@@ -10,10 +10,10 @@
     "licenses": ["LGPL-3.0-or-later"]
   },
   "version": {
-    "name": "v2.9.22",
+    "name": "v2.10.0",
     "desc": "Latest version of sfynx-ddd-generator",
-    "released": "2018-09-07",
-    "vcs_tag": "v2.9.22",
+    "released": "2018-09-12",
+    "vcs_tag": "v2.10.0",
     "attributes": [],
     "gpgSign": false
   },

@@ -1,5 +1,8 @@
 <?php
 use Sfynx\CoreBundle\Generator\Domain\Component\File\ClassHandler;
+
+$options = $templater->getTargetWidget()['options']['methods'] ?? ['GET', 'POST', 'PATCH'];
+
 ?>
 namespace <?php echo $templater->getTargetNamespace(); ?>;
 
@@ -23,22 +26,30 @@ class <?php echo $templater->getTargetClassname(); ?> extends AbstractFormReques
      * @var array $defaults List of default values for optional parameters.
      */
     protected $defaults = [
+<?php if (\in_array('GET', $options)): ?>
         'GET' => [
 <?php foreach ($templater->getTargetCommandFields() as $field): ?>
             '<?php echo lcfirst($field->name) ?>' => <?php echo ClassHandler::getValue($field, 'true'); ?>,
 <?php endforeach; ?>
         ],
+<?php endif; ?>
+<?php if (\in_array('POST', $options)): ?>
         'POST' => [
 <?php foreach ($templater->getTargetCommandFields() as $field): ?>
             '<?php echo lcfirst($field->name) ?>' => <?php echo ClassHandler::getValue($field, 'false'); ?>,
 <?php endforeach; ?>
-        ]
+        ],
+<?php endif; ?>
+<?php if (\in_array('PATCH', $options)): ?>
+        'PATCH' => 'POST',
+<?php endif; ?>
     ];
 
     /**
      * @var string[] $required List of required parameters for each methods.
      */
     protected $required = [
+<?php if (\in_array('GET', $options)): ?>
         'GET'  => [
 <?php foreach ($templater->getTargetCommandFields() as $field): ?>
 <?php if ($field->name != 'entityId'): ?>
@@ -46,18 +57,24 @@ class <?php echo $templater->getTargetClassname(); ?> extends AbstractFormReques
 <?php endif; ?>
 <?php endforeach; ?>
         ],
+<?php endif; ?>
+<?php if (\in_array('POST', $options)): ?>
         'POST'  => [
 <?php foreach ($templater->getTargetCommandFields() as $field): ?>
             '<?php echo lcfirst($field->name) ?>',
 <?php endforeach; ?>
         ],
-        'PATCH' => 'POST'
+<?php endif; ?>
+<?php if (\in_array('PATCH', $options)): ?>
+        'PATCH' => 'POST',
+<?php endif; ?>
     ];
 
     /**
      * @var array[] $allowedTypes List of allowed types for each methods.
      */
     protected $allowedTypes = [
+<?php if (\in_array('GET', $options)): ?>
         'GET' => [
 <?php foreach ($templater->getTargetCommandFields() as $field): ?>
 <?php if ($field->name != 'entityId'): ?>
@@ -65,12 +82,17 @@ class <?php echo $templater->getTargetClassname(); ?> extends AbstractFormReques
 <?php endif; ?>
 <?php endforeach; ?>
         ],
+<?php endif; ?>
+<?php if (\in_array('POST', $options)): ?>
         'POST' => [
 <?php foreach ($templater->getTargetCommandFields() as $field): ?>
             '<?php echo lcfirst($field->name) ?>' => ['<?php echo ClassHandler::getType($field->type); ?>', 'null'],
 <?php endforeach; ?>
         ],
-        'PATCH' => 'POST'
+<?php endif; ?>
+<?php if (\in_array('PATCH', $options)): ?>
+        'PATCH' => 'POST',
+<?php endif; ?>
     ];
 
     /**

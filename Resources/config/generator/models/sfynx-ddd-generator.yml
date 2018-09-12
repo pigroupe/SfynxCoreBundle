@@ -82,11 +82,11 @@ default:
             widget_cqrs_command:
                 class: MovieFormCommand
                 arguments: ~
-            widget_cqrs_validator_specification:
+            widget_cqrs_command_validator_specification:
                 class: Validation\SpecHandler\MovieFormCommandSpecHandler
                 arguments:
                   - '$commandHandlerResult'
-            widget_cqrs_validator_validation:
+            widget_cqrs_command_validator_validation:
                 class: Validation\ValidationHandler\MovieFormCommandValidationHandler
                 arguments:
                   - '$commandHandlerResult'
@@ -201,19 +201,19 @@ default:
             widget_service_manager_class:
                 - MovieEntityManager:
                     create: true
-                    class: Movie\Manager\MovieManager
+                    class: Entity\Movie\Manager\MovieManager
                     arguments: ~
                     options:
                         mapping: 'Movie'
                 - PriceEntityManager:
                     create: true
-                    class: Price\Manager\PriceManager
+                    class: Entity\Price\Manager\PriceManager
                     arguments: ~
                     options:
                         mapping: 'Price'
                 - GenreEntityManager:
                     create: true
-                    class: Genre\Manager\GenreManager
+                    class: Entity\Genre\Manager\GenreManager
                     arguments: ~
                     options:
                         mapping: 'Genre'

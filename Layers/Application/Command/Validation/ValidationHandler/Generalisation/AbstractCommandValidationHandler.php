@@ -8,7 +8,7 @@ use Symfony\Component\Validator\Constraint;
 use Sfynx\CoreBundle\Layers\Application\Command\DecoratorHandler\Generalisation\AbstractCommandDecoratorHandler;
 use Sfynx\CoreBundle\Layers\Application\Command\Handler\Generalisation\Interfaces\CommandHandlerInterface;
 use Sfynx\CoreBundle\Layers\Application\Command\Generalisation\Interfaces\CommandInterface;
-use Sfynx\CoreBundle\Layers\Application\Command\Validation\ValidationHandler\ValidationErrorHandler;
+use Sfynx\CoreBundle\Layers\Application\Common\Handler\ValidationErrorHandler;
 use Sfynx\CoreBundle\Layers\Application\Validation\Validator\Generalisation\Interfaces\ValidatorInterface;
 
 /**
@@ -55,7 +55,7 @@ abstract class AbstractCommandValidationHandler extends AbstractCommandDecorator
         if (!(count($this->errors) === 0)
             && $this->throwExceptionFromErrors
         ) {
-            throw new Exception(json_encode($this->getErrors())) ;
+            throw new Exception(\json_encode($this->getErrors())) ;
         }
         // execute next commandHandler
         $command->errors = $this->getErrors();

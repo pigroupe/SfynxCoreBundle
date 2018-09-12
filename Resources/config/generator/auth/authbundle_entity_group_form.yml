@@ -82,11 +82,11 @@ default:
             widget_cqrs_command:
                 class: GroupFormCommand
                 arguments: ~
-            widget_cqrs_validator_specification:
+            widget_cqrs_command_validator_specification:
                 class: Validation\SpecHandler\GroupFormCommandSpecHandler
                 arguments:
                   - '$commandHandlerResult'
-            widget_cqrs_validator_validation:
+            widget_cqrs_command_validator_validation:
                 class: Validation\ValidationHandler\GroupFormCommandValidationHandler
                 arguments:
                   - '$commandHandlerResult'
@@ -143,7 +143,7 @@ default:
             widget_service_manager_class:
                 - GroupEntityManager:
                     create: true
-                    class: Group\Manager\GroupManager
+                    class: Entity\Group\Manager\GroupManager
                     arguments: ~
                     options:
                         entity: 'Group'

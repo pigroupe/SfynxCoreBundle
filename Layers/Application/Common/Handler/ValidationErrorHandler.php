@@ -1,12 +1,12 @@
 <?php
-namespace Sfynx\CoreBundle\Layers\Application\Command\Validation\ValidationHandler;
+namespace Sfynx\CoreBundle\Layers\Application\Common\Handler;
 
 /**
  * Class ValidationErrorHandler
  *
  * @category Sfynx\CoreBundle\Layer
  * @package Application
- * @subpackage Validation\Generalisation\ValidationHandler
+ * @subpackage Common\Handler
  */
 class ValidationErrorHandler
 {

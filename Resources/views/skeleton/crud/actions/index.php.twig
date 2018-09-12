@@ -86,8 +86,8 @@
               	  $row[] = "";
               }
               // create enabled/disabled buttons
-              $Urlenabled  = $this->container->get('templating.helper.assets')->getUrl($this->container->getParameter('sfynx.template.theme.layout.admin.grid.img')."enabled.png");
-              $Urldisabled = $this->container->get('templating.helper.assets')->getUrl($this->container->getParameter('sfynx.template.theme.layout.admin.grid.img')."disabled.png");
+              $Urlenabled  = $this->container->get('assets.packages')->getUrl($this->container->getParameter('sfynx.template.theme.layout.admin.grid.img')."enabled.png");
+              $Urldisabled = $this->container->get('assets.packages')->getUrl($this->container->getParameter('sfynx.template.theme.layout.admin.grid.img')."disabled.png");
               if ($e->getEnabled()) {
                   $row[] = '<img width="17px" src="'.$Urlenabled.'">';
               } else {

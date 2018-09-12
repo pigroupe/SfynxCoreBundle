@@ -39,7 +39,7 @@ class Templater extends AbstractTemplater implements TemplaterInterface
     {
         return [
             '0' => [
-                'Domain\Service\Entity',
+                'Domain\Service',
                 __DIR__ . "/Resources/${template}/EntityManager.php",
             ]
         ];

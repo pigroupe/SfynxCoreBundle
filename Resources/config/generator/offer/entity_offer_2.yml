@@ -76,11 +76,11 @@ default:
             widget_cqrs_command:
                 class: Offer2FormCommand
                 arguments: ~
-            widget_cqrs_validator_specification:
+            widget_cqrs_command_validator_specification:
                 class: Validation\SpecHandler\Offer2FormCommandSpecHandler
                 arguments:
                   - '$commandHandlerResult'
-            widget_cqrs_validator_validation:
+            widget_cqrs_command_validator_validation:
                 class: Validation\ValidationHandler\Offer2FormCommandValidationHandler
                 arguments:
                   - '$commandHandlerResult'

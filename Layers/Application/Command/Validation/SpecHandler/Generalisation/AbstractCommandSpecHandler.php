@@ -66,7 +66,7 @@ abstract class AbstractCommandSpecHandler extends AbstractCommandDecoratorHandle
             $this->logger->error('error in spec handler');
             $this->logger->error($specs->getLogicalExpression());//log the profiler
             $profiler = $specs->getProfiler();
-            $this->logger->error(json_encode($profiler));//log the profiler
+            $this->logger->error(\json_encode($profiler));//log the profiler
 
             throw SpecificationException::unsatisfiedSpecification($profiler);
         }

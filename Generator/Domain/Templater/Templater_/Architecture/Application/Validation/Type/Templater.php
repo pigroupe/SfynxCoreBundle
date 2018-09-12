@@ -128,7 +128,7 @@ EOT;
         if (null === $options) {
             $options = [];
         }
-        $options = json_decode(json_encode($options), true);
+        $options = \json_decode(json_encode($options), true);
 
         if (!empty($options['form']['type'] )) {
             $type = $options['form']['type'];
@@ -136,7 +136,7 @@ EOT;
 
         // we cheick extension instance
         $instanceValue = self::$extensionList[ClassHandler::TYPE_TEXT];
-        if (array_key_exists($type, self::$extensionList)) {
+        if (\array_key_exists($type, self::$extensionList)) {
             $instanceValue = self::$extensionList[$type];
         }
 
@@ -158,9 +158,9 @@ EOT;
             $type = "'" . $resolverParametersOption['form']['serviceType'] . "'";
         }
 
-        $content = sprintf('->add(\'%s\', %s, [', $child, $type) . PHP_EOL;
+        $content = \sprintf('->add(\'%s\', %s, [', $child, $type) . PHP_EOL;
         foreach ($parameters as $k => $v) {
-            if (is_bool($v)) {
+            if (\is_bool($v)) {
                 $v = ($v === true) ? 'true' : $v;
                 $v = ($v === false) ? 'false' : $v;
                 $content .= "            '$k' => $v," . PHP_EOL;
