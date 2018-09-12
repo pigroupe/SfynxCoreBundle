@@ -17,7 +17,7 @@ use Sfynx\CoreBundle\Generator\Domain\Templater\Templater_;
 class CommandSpecHandlerApplicationWidget extends AbstractWidget implements WidgetInterface
 {
     /** @var string */
-    const TAG = 'widget_cqrs_validator_specification';
+    const TAG = 'widget_cqrs_command_validator_specification';
 
     /**
      * @inheritdoc

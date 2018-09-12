@@ -23,6 +23,9 @@ test:
 
 	@rm -Rf /tmp/sfynx-ddd-generator-build
 
+prepare-build:
+	@rm -f ${BUILD_DIR}/sfynx-ddd-generator.phar
+
 # Build phar
 build-phar:
 	@mkdir -p ${BUILD_DIR}
@@ -45,6 +48,12 @@ build-phar:
 
 	@rm -Rf /tmp/sfynx-ddd-generator-build
 
+build-docker:
+	@(docker build --build-arg ROOT_PATH='.' -t sfynxdevops/generator:latest artifacts/sfynx-generator) || true
+	@(docker push sfynxdevops/generator:latest)
+	@(docker tag sfynxdevops/generator:latest sfynxdevops/generator:`semver tag`)
+	@(docker push sfynxdevops/generator:`semver tag`)
+
 changelog-deb:
 	@echo "sfynx-ddd-generator ($(RELEASE_VERSION)) unstable; urgency=low" >/tmp/changelog
 	@echo >> artifacts/changelog
@@ -56,9 +65,3 @@ changelog-deb:
 	@# prepend to changelog
 	@cat /tmp/changelog|cat - artifacts/changelog > /tmp/out && mv /tmp/out artifacts/changelog
 	@echo >> artifacts/changelog
-
-prepare-build:
-	@rm -f ${BUILD_DIR}/sfynx-ddd-generator.phar
-
-build: prepare-build build-phar
-

@@ -22,11 +22,11 @@ class SpecIsHandlerCreatedWithEntities extends AbstractSpecification
      */
     public function isSatisfiedBy(stdClass $object): bool
     {
-        return property_exists($object->handler, 'entities') && (
+        return \property_exists($object->handler, 'entities') && (
                 null === $object->handler->entities
-                || count($object->handler->entities) == 0
+                || \count($object->handler->entities) == 0
                 || (
-                    count($object->handler->entities) > 0 && is_object($object->handler->entities[0])
+                    \count($object->handler->entities) > 0 && \is_object($object->handler->entities[0])
                 )
             );
     }

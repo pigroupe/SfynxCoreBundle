@@ -1,21 +1,14 @@
 <?php
 namespace Sfynx\CoreBundle\Layers\Presentation\Coordination\Generalisation;
 
-use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
-use Symfony\Component\Validator\Validator\ValidatorInterface as LegacyValidatorInterface;
-use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Form\Form;
 use Symfony\Bundle\FrameworkBundle\Templating\EngineInterface;
 
-use Sfynx\ToolBundle\Util\PiStringManager;
 use Sfynx\ToolBundle\Twig\Extension\PiFormExtension;
-
 use Sfynx\CoreBundle\Layers\Presentation\Coordination\Generalisation\Traits\TraitParam;
 use Sfynx\CoreBundle\Layers\Domain\Service\Manager\Generalisation\Interfaces\ManagerInterface;
 use Sfynx\CoreBundle\Layers\Domain\Service\Request\Generalisation\RequestInterface;
 use Sfynx\CoreBundle\Layers\Domain\Service\Message\Message;
-use Sfynx\CoreBundle\Layers\Infrastructure\Exception\ControllerException;
 
 /**
  * abstract Controller.

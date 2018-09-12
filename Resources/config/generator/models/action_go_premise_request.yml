@@ -83,11 +83,11 @@ default:
             widget_cqrs_command:
                 class: GoPromiseRequestFormCommand
                 arguments: ~
-            widget_cqrs_validator_specification:
+            widget_cqrs_command_validator_specification:
                 class: Validation\SpecHandler\GoPromiseRequestFormCommandSpecHandler
                 arguments:
                   - '$commandHandlerResult'
-            widget_cqrs_validator_validation:
+            widget_cqrs_command_validator_validation:
                 class: Validation\ValidationHandler\GoPromiseRequestFormCommandValidationHandler
                 arguments:
                   - '$commandHandlerResult'
@@ -107,7 +107,7 @@ default:
             widget_service_manager_class:
                 - ActivityEntityManager:
                     create: true
-                    class: Activity\Manager\ActivityManager
+                    class: Entity\Activity\Manager\ActivityManager
                     options:
                         entity: 'Activity'
             #

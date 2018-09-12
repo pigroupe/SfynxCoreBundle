@@ -35,7 +35,7 @@ class Templater extends AbstractTemplater implements TemplaterInterface
      */
     public function getName(): string
     {
-        return 'Specification Handler class';
+        return 'Command Specification Handler class';
     }
 
     /**

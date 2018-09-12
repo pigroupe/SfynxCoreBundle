@@ -86,7 +86,7 @@ abstract class AbstractTemplater implements TemplaterInterface
                 $this->$attributName = $this->widget->getConfig()->get($attribut);
             } elseif ($this->widget->getConfig()->has($source)) {
                 $this->$attributName = $this->widget->getConfig()->get($source);
-                if (array_key_exists($attribut, $this->widget->getConfig()->get($source))) {
+                if (\array_key_exists($attribut, $this->widget->getConfig()->get($source))) {
                     $this->$attributName = $this->widget->getConfig()->get($source)[$attribut];
                 }
             }
@@ -140,13 +140,13 @@ abstract class AbstractTemplater implements TemplaterInterface
         ClassHandler::addUses($namespace, $data);
 
         $class = ClassHandler::getClass($this->getTargetClassname());
-        if (property_exists($data, 'type') && ($data->type == 'interface')) {
+        if (\property_exists($data, 'type') && ($data->type == 'interface')) {
             $class->setType(ClassType::TYPE_INTERFACE);
         }
-        if (property_exists($data, 'type') && ($data->type == 'trait')) {
+        if (\property_exists($data, 'type') && ($data->type == 'trait')) {
             $class->setType(ClassType::TYPE_TRAIT);
         }
-        if (property_exists($data, 'type') && ($data->type == 'abstract')) {
+        if (\property_exists($data, 'type') && ($data->type == 'abstract')) {
             $class->setAbstract(true);
         }
 
@@ -190,9 +190,9 @@ abstract class AbstractTemplater implements TemplaterInterface
             $newkey = $class;
 
 //            str_replace($classname, $classname, $class, $count1); OLD
-            str_replace($class, $class, $namespace . '\\' . $classname, $count1);
+            \str_replace($class, $class, $namespace . '\\' . $classname, $count1);
             if ($count1) {
-                if (array_key_exists($oldkey, $index)) {
+                if (\array_key_exists($oldkey, $index)) {
                     $newkey = $namespace . '\\' . $classname;
                     $index[$newkey] = $index[$oldkey];
                     unset($index[$oldkey]);
@@ -212,15 +212,15 @@ abstract class AbstractTemplater implements TemplaterInterface
      */
     public function __call($methodName, $params = null)
     {
-        $methodPrefix = substr($methodName, 0, 3);
-        $property = lcfirst(substr($methodName, 3));
-        if($methodPrefix == 'get' && property_exists($this, $property)) {
+        $methodPrefix = \substr($methodName, 0, 3);
+        $property = \lcfirst(substr($methodName, 3));
+        if($methodPrefix == 'get' && \property_exists($this, $property)) {
             return $this->$property;
         }
         if($methodName == 'has') {
-            return property_exists($this, $params[0]);
+            return \property_exists($this, $params[0]);
         }
-        exit(sprintf( "Opps! The method %s call is not allowed!", $methodName));
+        exit(\sprintf( "Opps! The method %s call is not allowed!", $methodName));
     }
 
     /**
@@ -229,9 +229,9 @@ abstract class AbstractTemplater implements TemplaterInterface
      */
     public function __get($property)
     {
-        if(property_exists($this, $property)) {
+        if(\property_exists($this, $property)) {
             return $this->$property;
         }
-        exit(sprintf( "Opps! The property %s call is not allowed!", $property));
+        exit(\sprintf( "Opps! The property %s call is not allowed!", $property));
     }
 }

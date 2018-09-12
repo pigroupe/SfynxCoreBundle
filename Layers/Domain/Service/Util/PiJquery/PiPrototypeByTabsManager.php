@@ -105,7 +105,7 @@ class PiPrototypeByTabsManager extends PiJqueryExtension
         }
         // we set all roots
         $url_css  = '/css/layout.css';
-        $url_root = 'http://'. $this->container->get('Request')->getHttpHost() . $this->container->get('Request')->getBasePath();
+        $url_root = 'http://'. $this->container->get('request_stack')->getCurrentRequest()->getHttpHost() . $this->container->get('request_stack')->getCurrentRequest()->getBasePath();
         $url_base = $url_root . "/bundles/sfynxtemplate/js/tiny_mce";
         $root_upload = $this->container->get("kernel")->getRootDir()."/../web/uploads/tinymce/";
         $root_web = $this->container->get("kernel")->getRootDir()."/../web";
@@ -798,8 +798,8 @@ class PiPrototypeByTabsManager extends PiJqueryExtension
                                     tinymce.DOM.setHTML(tinymce.DOM.get(tinymce.activeEditor.id + '_path_row'), text);
 
                                     // limit the lenght of written
-                                    //if (strip.length > ("<?php if ($this->container->get('Request')->get('_route')== 'gedmo_admin_social_edit'){ ?>"+245+"<?php } else { ?>"+475+"<?php } ?>")) {
-                                    //      strip = strip.substring(0,("<?php if ($this->container->get('Request')->get('_route')== 'gedmo_admin_social_edit'){ ?>"+245+"<?php } else { ?>"+475+"<?php } ?>"));
+                                    //if (strip.length > ("<?php if ($this->container->get('request_stack')->getCurrentRequest()->get('_route')== 'gedmo_admin_social_edit'){ ?>"+245+"<?php } else { ?>"+475+"<?php } ?>")) {
+                                    //      strip = strip.substring(0,("<?php if ($this->container->get('request_stack')->getCurrentRequest()->get('_route')== 'gedmo_admin_social_edit'){ ?>"+245+"<?php } else { ?>"+475+"<?php } ?>"));
                                     //      tinymce.execCommand('mceSetContent',false,strip);
                                     //}
                                 });
@@ -865,8 +865,8 @@ class PiPrototypeByTabsManager extends PiJqueryExtension
                                     tinymce.DOM.setHTML(tinymce.DOM.get(tinymce.activeEditor.id + '_path_row'), text);
 
                                     // limit the lenght of written
-                                    //if (strip.length > ("<?php if ($this->container->get('Request')->get('_route')== 'gedmo_admin_social_edit'){ ?>"+245+"<?php } else { ?>"+475+"<?php } ?>")) {
-                                    //      strip = strip.substring(0,("<?php if ($this->container->get('Request')->get('_route')== 'gedmo_admin_social_edit'){ ?>"+245+"<?php } else { ?>"+475+"<?php } ?>"));
+                                    //if (strip.length > ("<?php if ($this->container->get('request_stack')->getCurrentRequest()->get('_route')== 'gedmo_admin_social_edit'){ ?>"+245+"<?php } else { ?>"+475+"<?php } ?>")) {
+                                    //      strip = strip.substring(0,("<?php if ($this->container->get('request_stack')->getCurrentRequest()->get('_route')== 'gedmo_admin_social_edit'){ ?>"+245+"<?php } else { ?>"+475+"<?php } ?>"));
                                     //      tinymce.execCommand('mceSetContent',false,strip);
                                     //}
                                 });
@@ -931,8 +931,8 @@ class PiPrototypeByTabsManager extends PiJqueryExtension
                                     tinymce.DOM.setHTML(tinymce.DOM.get(tinymce.activeEditor.id + '_path_row'), text);
 
                                     // limit the lenght of written
-                                    //if (strip.length > ("<?php if ($this->container->get('Request')->get('_route')== 'gedmo_admin_social_edit'){ ?>"+245+"<?php } else { ?>"+475+"<?php } ?>")) {
-                                    //      strip = strip.substring(0,("<?php if ($this->container->get('Request')->get('_route')== 'gedmo_admin_social_edit'){ ?>"+245+"<?php } else { ?>"+475+"<?php } ?>"));
+                                    //if (strip.length > ("<?php if ($this->container->get('request_stack')->getCurrentRequest()->get('_route')== 'gedmo_admin_social_edit'){ ?>"+245+"<?php } else { ?>"+475+"<?php } ?>")) {
+                                    //      strip = strip.substring(0,("<?php if ($this->container->get('request_stack')->getCurrentRequest()->get('_route')== 'gedmo_admin_social_edit'){ ?>"+245+"<?php } else { ?>"+475+"<?php } ?>"));
                                     //      tinymce.execCommand('mceSetContent',false,strip);
                                     //}
                                 });
@@ -997,8 +997,8 @@ class PiPrototypeByTabsManager extends PiJqueryExtension
                                     tinymce.DOM.setHTML(tinymce.DOM.get(tinymce.activeEditor.id + '_path_row'), text);
 
                                     // limit the lenght of written
-                                    //if (strip.length > ("<?php if ($this->container->get('Request')->get('_route')== 'gedmo_admin_social_edit'){ ?>"+245+"<?php } else { ?>"+475+"<?php } ?>")) {
-                                    //      strip = strip.substring(0,("<?php if ($this->container->get('Request')->get('_route')== 'gedmo_admin_social_edit'){ ?>"+245+"<?php } else { ?>"+475+"<?php } ?>"));
+                                    //if (strip.length > ("<?php if ($this->container->get('request_stack')->getCurrentRequest()->get('_route')== 'gedmo_admin_social_edit'){ ?>"+245+"<?php } else { ?>"+475+"<?php } ?>")) {
+                                    //      strip = strip.substring(0,("<?php if ($this->container->get('request_stack')->getCurrentRequest()->get('_route')== 'gedmo_admin_social_edit'){ ?>"+245+"<?php } else { ?>"+475+"<?php } ?>"));
                                     //      tinymce.execCommand('mceSetContent',false,strip);
                                     //}
                                 });

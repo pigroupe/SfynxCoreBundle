@@ -83,9 +83,9 @@ abstract class AbstractWidget implements WidgetInterface
     {
         $data = $this->getData();
 
-        $metrics = array_merge($data, [
-            WidgetInterface::KEY_CATEGORY    => $this->getCategory(),
-            WidgetInterface::KEY_NAME        => $this->getName(),
+        $metrics = \array_merge($data, [
+            WidgetInterface::KEY_CATEGORY => $this->getCategory(),
+            WidgetInterface::KEY_NAME => $this->getName(),
             WidgetInterface::KEY_DESCRIPTION => $this->getDescription(),
         ]);
         $this->getParser()->getReporter()->metrics->attach(static::TAG, $metrics);
@@ -106,7 +106,7 @@ abstract class AbstractWidget implements WidgetInterface
         $classname = $metrics[WidgetInterface::KEY_CLASSNAME];
         $namespace = $metrics[WidgetInterface::KEY_NAMESPACE];
 
-        if (array_key_exists($oldkey, $index)) {
+        if (\array_key_exists($oldkey, $index)) {
             $newkey = $namespace . '\\' . $classname;
             $index[$newkey] = $index[$oldkey];
             unset($index[$oldkey]);

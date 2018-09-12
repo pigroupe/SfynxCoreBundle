@@ -17,6 +17,15 @@ class Templater extends AbstractTemplater implements TemplaterInterface
     /** @var string */
     const TAG = 'templater_archi_pres_request';
 
+    /** @var array */
+    const TARGET_ATTRIBUTS = [
+        'conf-mapping' => 'commandFields',
+        'conf-options' => 'options',
+        'conf-widget' => 'class',
+        'conf-widget',
+        'conf-cqrs'
+    ];
+
     /**
      * @inheritdoc
      */

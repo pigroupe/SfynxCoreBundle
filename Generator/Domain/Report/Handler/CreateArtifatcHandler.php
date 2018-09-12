@@ -38,11 +38,11 @@ class CreateArtifatcHandler implements HandlerInterface
      */
     protected function objectHandler(stdClass $object): void
     {
-        if (property_exists($object, 'files')) {
+        if (\property_exists($object, 'files')) {
             $this->directoriesHandler($object);
             $this->filesHandler($object);
         } else {
-            foreach (get_object_vars($object) as $children) {
+            foreach (\get_object_vars($object) as $children) {
                 if ($children instanceof stdClass) {
                     $this->objectHandler($children);
                 }
@@ -77,7 +77,7 @@ class CreateArtifatcHandler implements HandlerInterface
                 $content = ClassHandler::getFileCommentor() . $eol . $file->target_source;
                 $content = ('php' == $file->target_extension) ? '<?php' . $eol . $content : $content;
 
-                file_put_contents($file->target_path, $content);
+                \file_put_contents($file->target_path, $content);
                 $this->output->writeln(sprintf('<info>++</info> create file: "%s"', $file->target_path));
             }
         }
@@ -92,8 +92,8 @@ class CreateArtifatcHandler implements HandlerInterface
      */
     protected function versioningFileHandler(string $path): void
     {
-        if (file_exists($path)) {
-            file_put_contents($path . '.back' . '.' . time(), file_get_contents($path));
+        if (\file_exists($path)) {
+            \file_put_contents($path . '.back' . '.' . \time(), \file_get_contents($path));
             $this->output->writeln(sprintf('<info>++</info> verioning file: "%s"', $path));
         }
     }
