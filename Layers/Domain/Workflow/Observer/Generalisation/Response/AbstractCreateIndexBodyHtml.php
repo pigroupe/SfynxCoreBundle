@@ -40,7 +40,8 @@ abstract class AbstractCreateIndexBodyHtml extends AbstractObserver
     protected $param;
 
     /**
-     * OBUserCreateBody constructor.
+     * AbstractCreateIndexBodyHtml constructor.
+     *
      * @param EngineInterface $templating
      * @param RequestInterface $request
      * @param array $param

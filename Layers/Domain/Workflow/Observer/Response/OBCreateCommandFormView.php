@@ -4,7 +4,7 @@ namespace Sfynx\CoreBundle\Layers\Domain\Workflow\Observer\Response;
 use Exception;
 use Symfony\Component\Form\FormInterface as FormViewInterface;
 use Symfony\Component\HttpKernel\Kernel;
-use Sfynx\CoreBundle\Layers\Domain\Service\Form\Generalisation\Interfaces\FormTypeInterface;
+use Sfynx\CoreBundle\Layers\Application\Validation\Type\Generalisation\Interfaces\FormTypeInterface;
 use Sfynx\CoreBundle\Layers\Domain\Workflow\Observer\Generalisation\Response\AbstractCreateFormView;
 use Sfynx\CoreBundle\Layers\Infrastructure\Exception\WorkflowException;
 
@@ -14,8 +14,8 @@ use Sfynx\CoreBundle\Layers\Infrastructure\Exception\WorkflowException;
  * @category Sfynx\CoreBundle\Layers
  * @package Domain
  * @subpackage Workflow\Observer\Response
- * @author     Etienne de Longeaux <etienne.delongeaux@gmail.com>
- * @copyright  2016 PI-GROUPE
+ * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
+ * @copyright 2016 PI-GROUPE
  */
 class OBCreateCommandFormView extends AbstractCreateFormView
 {
@@ -40,7 +40,7 @@ class OBCreateCommandFormView extends AbstractCreateFormView
      */
     protected function createForm(): FormViewInterface
     {
-        $this->formType->initData($this->wfLastData->formViewData);
+        $this->formType->setData($this->wfLastData->formViewData);
 
         if ((Kernel::MAJOR_VERSION >= 3)
             && (Kernel::MINOR_VERSION >= 3)

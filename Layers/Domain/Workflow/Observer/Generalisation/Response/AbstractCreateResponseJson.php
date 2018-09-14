@@ -32,8 +32,9 @@ abstract class AbstractCreateResponseJson extends AbstractObserver
     protected $headers;
 
     /**
-     * OBUserCreateResponse constructor.
+     * AbstractCreateResponseJson constructor.
      * @param RequestInterface $request
+     * @param array $headers
      */
     public function __construct(RequestInterface $request, array $headers = ['Cache-Control' => 'no-cache'])
     {
@@ -47,7 +48,7 @@ abstract class AbstractCreateResponseJson extends AbstractObserver
      */
     protected function getValidMethods(): array
     {
-        return ['GET'];
+        return ['GET', 'POST', 'PUT', 'PATCH', 'DELETE'];
     }
 
     /**

@@ -28,7 +28,7 @@ class FormData extends AbstractHandlerModel
             . 'try {' . PHP_EOL
             . "    \$this->wfLastData->formViewData['command'] = \$this->wfHandler->command;" . PHP_EOL
             . "    \$this->wfLastData->formViewData['entity'] = \$this->wfHandler->entity;" . PHP_EOL
-            . "    \$this->wfLastData->formViewData['data_class'] = get_class(\$this->wfHandler->command);" . PHP_EOL
+            . "    \$this->wfLastData->formViewData['dataClass'] = get_class(\$this->wfHandler->command);" . PHP_EOL
             . $content
             . '' . PHP_EOL
             . '} catch (Exception $e) {' . PHP_EOL

@@ -34,7 +34,7 @@ abstract class AbstractInjectFormErrors extends AbstractObserver
     protected $object;
 
     /**
-     * OBUserCreateFormView constructor.
+     * AbstractInjectFormErrors constructor.
      *
      * @param RequestInterface $request
      * @param TranslatorInterface $translator

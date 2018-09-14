@@ -3,7 +3,7 @@ namespace Sfynx\CoreBundle\Layers\Domain\Workflow\Observer\Generalisation\Respon
 
 use stdClass;
 use Symfony\Component\Form\FormFactoryInterface;
-use Sfynx\CoreBundle\Layers\Domain\Service\Form\Generalisation\Interfaces\FormTypeInterface;
+use Sfynx\CoreBundle\Layers\Application\Validation\Type\Generalisation\Interfaces\FormTypeInterface;
 use Sfynx\CoreBundle\Layers\Domain\Service\Request\Generalisation\RequestInterface;
 use Sfynx\CoreBundle\Layers\Domain\Specification\SpecIsValidRequest;
 use Sfynx\CoreBundle\Layers\Domain\Specification\SpecIsHandlerCreatedWithEntityInterface;
@@ -35,7 +35,7 @@ abstract class AbstractCreateFormView extends AbstractObserver
     protected $object;
 
     /**
-     * OBUserCreateFormView constructor.
+     * AbstractCreateFormView constructor.
      *
      * @param RequestInterface $request
      * @param FormFactoryInterface $formFactory

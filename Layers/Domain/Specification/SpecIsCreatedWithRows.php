@@ -22,8 +22,8 @@ class SpecIsCreatedWithRows extends AbstractSpecification
      */
     public function isSatisfiedBy(stdClass $object): bool
     {
-        return property_exists($object, 'data') &&
-            property_exists($object->data, 'rows') &&
-            is_array($object->data->rows);
+        return \property_exists($object, 'data') &&
+            \property_exists($object->data, 'rows') &&
+            \is_array($object->data->rows);
     }
 }

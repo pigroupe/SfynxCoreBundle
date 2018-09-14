@@ -46,7 +46,7 @@ class ShowQueryHandler implements QueryHandlerInterface
         // get last version of entity and errors objects
         $this->query = $query;
         $this->entity = end($this->workflowQuery->getData()->entity);
-        if (!is_object($this->entity)) {
+        if (!\is_object($this->entity)) {
             throw WorkflowException::noCreatedEntity();
         }
         return $this;

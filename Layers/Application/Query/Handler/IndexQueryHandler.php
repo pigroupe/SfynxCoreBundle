@@ -27,7 +27,6 @@ class IndexQueryHandler implements QueryHandlerInterface
     public $result;
     /** @var  array */
     public $total;
-    /** @var array */
     /** @var QueryWorkflowInterface */
     protected $workflowQuery;
 
@@ -52,14 +51,14 @@ class IndexQueryHandler implements QueryHandlerInterface
         // get last version of entity and errors objects
         $this->query = $query;
         // we create object to specification
-        if (property_exists($this->workflowQuery->getData(), 'entities')) {
-            $this->entities = end($this->workflowQuery->getData()->entities);
+        if (\property_exists($this->workflowQuery->getData(), 'entities')) {
+            $this->entities = \end($this->workflowQuery->getData()->entities);
         }
-        if (property_exists($this->workflowQuery->getData(), 'result')) {
-            $this->result = end($this->workflowQuery->getData()->result);
+        if (\property_exists($this->workflowQuery->getData(), 'result')) {
+            $this->result = \end($this->workflowQuery->getData()->result);
         }
-        if (property_exists($this->workflowQuery->getData(), 'total')) {
-            $this->total = end($this->workflowQuery->getData()->total);
+        if (\property_exists($this->workflowQuery->getData(), 'total')) {
+            $this->total = \end($this->workflowQuery->getData()->total);
         }
         // we abort if we are not in the list of entities
         $object = new stdClass();

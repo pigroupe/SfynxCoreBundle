@@ -34,7 +34,8 @@ abstract class AbstractShowBody extends AbstractObserver
     protected $param;
 
     /**
-     * OBUserCreateBody constructor.
+     * AbstractShowBody constructor.
+     *
      * @param EngineInterface $templating
      * @param RequestInterface $request
      * @param array $param

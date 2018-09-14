@@ -49,12 +49,16 @@ default:
                         handlers: [ 'GetQueryValidationHandler', 'GetQuerySpecHandler']
                         calls:
                             - [ process, [ '$updateQuery' ] ]
+                    - codeln1:
+                        design: 'code'
+                        content:
+                          - "// 4. Implement the Response workflow"
                     - workflowHandler:
                         design: 'observer'
                         class: Sfynx\CoreBundle\Layers\Application\Common\Handler\WorkflowHandler
                         calls:
-                            - [ attach, [ 'new OBApiBodyJson' ] ]
-                            - [ attach, [ 'new OBApiResponseJson' ] ]
+                            - [ attach, [ 'new OBApiJson' ] ]
+                            - [ attach, [ 'new OBCreateResponseJson' ] ]
                     - responseHandlerResult:
                         design: 'handler'
                         class: Sfynx\CoreBundle\Layers\Application\Response\Handler\ResponseHandler
@@ -153,11 +157,11 @@ default:
                 #
                 - OBApiHandler:
                     create: true
-                    class: Domain\Workflow\Observer\Role\Response\Api\OBApiHandler
+                    class: Domain\Workflow\Observer\Role\Query\Api\OBApiHandler
                     arguments:
                       - 'Sfynx\CoreBundle\Layers\Domain\Service\Manager\Generalisation\Interfaces\ManagerInterface'
                       - 'Sfynx\CoreBundle\Layers\Domain\Service\Request\Generalisation\RequestInterface'
-                    extends: Sfynx\CoreBundle\Layers\Domain\Workflow\Observer\Generalisation\Response\Api\AbstractApiHandler
+                    extends: Sfynx\CoreBundle\Layers\Domain\Workflow\Observer\Generalisation\Query\Api\AbstractApiQueryHandler
                     options:
                         implements: ~
                         uses: ['Sfynx\CoreBundle\Layers\Infrastructure\Exception\WorkflowException', 'Exception']
@@ -169,17 +173,17 @@ default:
                             returnType: 'bool'
                             body:
                               - 'try {'
-                              - "    $this->wfLastData->result = $this->manager->getQueryRepository('FindGetQueryTransformer', []);"
+                              - "    $this->wfLastData->books = $this->manager->getQueryRepository('FindGetQueryTransformer', []);"
                               - '} catch (Exception $e) {'
                               - '    throw WorkflowException::noCreatedViewForm();'
                               - '}'
                               - 'return true;'
-                - OBApiBodyJson:
+                - OBApiJson:
                     create: true
-                    class: Domain\Workflow\Observer\Role\Response\Api\OBApiBodyJson
+                    class: Domain\Workflow\Observer\Role\Response\Api\OBApiJson
                     arguments:
                       - 'Sfynx\CoreBundle\Layers\Domain\Service\Request\Generalisation\RequestInterface'
-                    extends: Sfynx\CoreBundle\Layers\Domain\Workflow\Observer\Generalisation\Response\Api\AbstractApiBodyJson
+                    extends: Sfynx\CoreBundle\Layers\Domain\Workflow\Observer\Generalisation\Response\Api\AbstractApiJson
                     options:
                         implements: ~
                         uses: ['Sfynx\CoreBundle\Layers\Infrastructure\Exception\WorkflowException', 'Exception']
@@ -191,39 +195,21 @@ default:
                             returnType: 'bool'
                             body:
                               - 'try {'
-                              - "    $this->wfLastData->body = jsonApi::transform($this->wfHandler->result);"
+                              - "    $this->wfLastData->rows = Fractal::create();"
+                              - "               ->collection($this->wfHandler->books, new RoleBookJsonApiTransformer())"
+                              - "               ->serializeWith(new JsonApiSerializer())"
+                              - "               ->paginateWith(new IlluminatePaginatorAdapter($paginator))"
+                              - "               ->toArray();"
+                              - "               "
                               - '} catch (Exception $e) {'
                               - '    throw WorkflowException::noCreatedViewForm();'
                               - '}'
                               - 'return true;'
-                - OBApiResponseJson:
-                    create: true
-                    class: Domain\Workflow\Observer\Role\Response\Api\OBApiResponseJson
+                - OBCreateResponseJson:
+                    create: false
+                    class: Sfynx\CoreBundle\Layers\Domain\Workflow\Observer\Response\OBCreateResponseJson
                     arguments:
                       - 'Sfynx\CoreBundle\Layers\Domain\Service\Request\Generalisation\RequestInterface'
-                    extends: Sfynx\CoreBundle\Layers\Domain\Workflow\Observer\Generalisation\Response\Api\AbstractApiResponseJson
-                    options:
-                        implements: ~
-                        uses:
-                          - 'Exception'
-                          - 'Sfynx\CoreBundle\Layers\Domain\Service\Response\Serializer\SerializerStrategy'
-                          - 'Sfynx\CoreBundle\Layers\Domain\Service\Response\Handler\ResponseHandler'
-                          - 'Sfynx\CoreBundle\Layers\Infrastructure\Exception\ResponseException'
-                        traits: ~
-                        methods:
-                          - name: 'process'
-                            comments: ['{@inheritdoc}']
-                            visibility: 'protected'
-                            returnType: 'bool'
-                            body:
-                              - 'try {'
-                              - "    $this->wfLastData->response = (new ResponseHandler(SerializerStrategy::create(), $this->request->setRequestFormat('json')))"
-                              - "         ->create($this->wfLastData->body, Response::HTTP_OK, $this->headers)"
-                              - "         ->getResponse();"
-                              - '} catch (Exception $e) {'
-                              - '    throw ResponseException::noCreatedResponse();'
-                              - '}'
-                              - 'return true;'
         infrastructure:
             widget_security_parse: true
             widget_infra_class:

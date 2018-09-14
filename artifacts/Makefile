@@ -49,7 +49,7 @@ build-phar:
 	@rm -Rf /tmp/sfynx-ddd-generator-build
 
 build-docker:
-	@(docker build --build-arg ROOT_PATH='.' -t sfynxdevops/generator:latest artifacts/sfynx-generator) || true
+	@(docker build --build-arg UID=1000 --build-arg GID=1000 --build-arg ROOT_PATH='.' -t sfynxdevops/generator:latest artifacts/sfynx-generator) || true
 	@(docker push sfynxdevops/generator:latest)
 	@(docker tag sfynxdevops/generator:latest sfynxdevops/generator:`semver tag`)
 	@(docker push sfynxdevops/generator:`semver tag`)
