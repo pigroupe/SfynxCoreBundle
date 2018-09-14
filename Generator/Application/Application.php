@@ -119,6 +119,6 @@ class Application
      */
     public function getVersion()
     {
-        return 'v2.10.0';
+        return 'v2.10.1';
     }
 }

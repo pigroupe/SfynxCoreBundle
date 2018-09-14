@@ -57,7 +57,7 @@ default:
                         design: 'observer'
                         class: Sfynx\CoreBundle\Layers\Application\Common\Handler\WorkflowHandler
                         calls:
-                            - [ attach, [ 'new OBApiJson' ] ]
+                            - [ attach, [ 'new OBRoleApiJson' ] ]
                             - [ attach, [ 'new OBCreateResponseJson' ] ]
                     - responseHandlerResult:
                         design: 'handler'
@@ -148,6 +148,42 @@ default:
                     create: true
                     class: Domain\Repository\Query\RoleQueryRepositoryInterface
                     type: interface
+                #
+                # ROLE JSON API
+                #
+                - RoleBookJsonApiTransformer:
+                    create: true
+                    class: Domain\Workflow\Observer\Role\Response\JsonApiTransformer\RoleBookJsonApiTransformer
+                    arguments: ~
+                    extends: 'League\Fractal\TransformerAbstract'
+                    options:
+                        implements: ~
+                        uses: ~
+                        traits: ~
+                        methods:
+                          - name: 'transform'
+                            comments: ['{@inheritdoc}']
+                            arguments: ['Domain\Workflow\Observer\Role\Response\JsonApiBook\RoleBookJsonApi']
+                            visibility: 'public'
+                            returnType: 'void'
+                            body:
+                              - 'return [];'
+#                - RoleBookJsonApi:
+#                    create: true
+#                    class: Domain\Workflow\Observer\Role\Response\JsonApiBook\RoleBookJsonApi
+#                    arguments: ~
+#                    options:
+#                        implements: ~
+#                        uses: ~
+#                        traits: ~
+#                        methods:
+#                          - name: 'transform'
+#                            comments: ['{@inheritdoc}']
+#                            arguments: ['Domain\Workflow\Observer\Role\Response\JsonApiBook\RoleBookJsonApi']
+#                            visibility: 'public'
+#                            returnType: 'void'
+#                            body:
+#                              - 'return [];'
             #
             # OBSERVER CLASSES
             #
@@ -178,15 +214,16 @@ default:
                               - '    throw WorkflowException::noCreatedViewForm();'
                               - '}'
                               - 'return true;'
-                - OBApiJson:
+                - OBRoleApiJson:
                     create: true
-                    class: Domain\Workflow\Observer\Role\Response\Api\OBApiJson
+                    class: Domain\Workflow\Observer\Role\Response\Api\OBRoleApiJson
                     arguments:
                       - 'Sfynx\CoreBundle\Layers\Domain\Service\Request\Generalisation\RequestInterface'
+                      - 'RoleBookJsonApiTransformer'
                     extends: Sfynx\CoreBundle\Layers\Domain\Workflow\Observer\Generalisation\Response\Api\AbstractApiJson
                     options:
                         implements: ~
-                        uses: ['Sfynx\CoreBundle\Layers\Infrastructure\Exception\WorkflowException', 'Exception']
+                        uses: ['Sfynx\CoreBundle\Layers\Infrastructure\Exception\WorkflowException', 'Exception', 'Spatie\Fractalistic\Fractal']
                         traits: ~
                         methods:
                           - name: 'process'
@@ -195,7 +232,7 @@ default:
                             returnType: 'bool'
                             body:
                               - 'try {'
-                              - "    $this->wfLastData->rows = Fractal::create();"
+                              - "    $this->wfLastData->rows = Fractal::create()"
                               - "               ->collection($this->wfHandler->books, new RoleBookJsonApiTransformer())"
                               - "               ->serializeWith(new JsonApiSerializer())"
                               - "               ->paginateWith(new IlluminatePaginatorAdapter($paginator))"

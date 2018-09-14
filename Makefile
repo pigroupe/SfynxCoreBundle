@@ -4,7 +4,7 @@ include artifacts/Makefile
 #   make tag VERSION=(major|minor|patch)
 # You need to install https://github.com/flazz/semver/ before
 tag: changelog-deb
-	@#semver inc $(VERSION)
+	@semver inc $(VERSION)
 	@echo "New release: `semver tag`"
 	@echo Releasing sources
 	@sed -i -r "s/(v[0-9]+\.[0-9]+\.[0-9]+)/`semver tag`/g" \

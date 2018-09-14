@@ -20,9 +20,6 @@
     "php": "^7.2",
     "ext-dom": "*",
     "nette/php-generator": "^3.1",
-    "spatie/fractalistic": "^2.5.0",
-    "ramsey/uuid": "^3.7",
-    "ptrofimov/matchmaker": "*",
     "symfony/options-resolver": "^4.1",
     "symfony/yaml": "*",
     "sfynx-project/tool-specification-bundle": "^2.8"
