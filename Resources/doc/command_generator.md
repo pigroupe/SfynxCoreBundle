@@ -69,7 +69,9 @@ sfynx-ddd-generator \
     --conf-file=./Resources/config/generator/auth/authbundle_entity_role_api.yml \
     --report-template=default \
     --report-dir=build
+```
 
+```bash
 sfynx-ddd-generator \
     --namespace=MyContext \
     --conf-file=./Resources/config/generator/models/sfynx-ddd-generator.yml \
@@ -89,7 +91,9 @@ sfynx-ddd-generator \
     --conf-file=/var/www/Resources/config/generator/auth/authbundle_entity_role_api.yml \
     --report-template=default \
     --report-dir=/var/www/build
+```
 
+```bash
 docker run --rm \
 --volume $PWD:/var/www \
 --volume /var/www/cmf-sfynx/www:/var/app \

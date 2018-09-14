@@ -37,7 +37,7 @@ abstract class AbstractCreateFormBody extends AbstractObserver
     protected $param;
 
     /**
-     * OBUserCreateBody constructor.
+     * AbstractCreateFormBody constructor.
      *
      * @param RequestInterface $request
      * @param EngineInterface $templating

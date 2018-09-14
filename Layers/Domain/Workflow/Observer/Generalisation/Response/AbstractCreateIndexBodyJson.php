@@ -6,7 +6,7 @@ use stdClass;
 use Symfony\Component\Translation\TranslatorInterface;
 use Sfynx\ToolBundle\Twig\Extension\PiToolExtension;
 use Sfynx\ToolBundle\Builder\RouteTranslatorFactoryInterface;
-use Sfynx\AuthBundle\Infrastructure\Role\Generalisation\RoleFactoryInterface;
+use Sfynx\AuthBundle\Domain\Service\Role\Generalisation\RoleFactoryInterface;
 use Sfynx\CoreBundle\Layers\Domain\Service\Request\Generalisation\RequestInterface;
 use Sfynx\CoreBundle\Layers\Domain\Specification\SpecIsObjectCreatedWithHandlerInterface;
 use Sfynx\CoreBundle\Layers\Domain\Specification\SpecIsHandlerCreatedWithQueryInterface;
@@ -47,6 +47,7 @@ abstract class AbstractCreateIndexBodyJson extends AbstractObserver
 
     /**
      * AbstractCreateIndexBodyJson constructor.
+     *
      * @param RequestInterface $request
      * @param RoleFactoryInterface $roleFactory
      * @param PiToolExtension $toolExtension

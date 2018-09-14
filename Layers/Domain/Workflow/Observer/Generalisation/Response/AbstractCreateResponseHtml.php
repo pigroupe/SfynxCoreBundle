@@ -31,7 +31,8 @@ abstract class AbstractCreateResponseHtml extends AbstractObserver
     protected $headers;
 
     /**
-     * OBUserCreateResponse constructor.
+     * AbstractCreateResponseHtml constructor.
+     *
      * @param RequestInterface $request
      * @param array $headers
      */
@@ -47,7 +48,7 @@ abstract class AbstractCreateResponseHtml extends AbstractObserver
      */
     protected function getValidMethods(): array
     {
-        return ['GET', 'POST'];
+        return ['GET', 'POST', 'PUT', 'PATCH', 'DELETE'];
     }
 
     /**

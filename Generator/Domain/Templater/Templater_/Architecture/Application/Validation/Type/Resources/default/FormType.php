@@ -32,13 +32,13 @@ class <?php echo $templater->getTargetClassname(); ?> extends AbstractDefaultTyp
     {
 <?php foreach ($templater->getTargetCommandFields() as $field): ?>
 <?php if ($field->type == ClassHandler::TYPE_ENTITY): ?>
-        $<?php echo lcfirst($field->name); ?>List = $this->data_form['<?php echo lcfirst($field->name); ?>List'];<?php echo PHP_EOL ?>
+        $<?php echo lcfirst($field->name); ?>List = $this->dataForm['<?php echo lcfirst($field->name); ?>List'];<?php echo PHP_EOL ?>
 <?php endif; ?>
 <?php endforeach; ?>
 
 <?php foreach ($templater->getTargetCommandFields() as $field): ?>
 <?php if ($field->type == ClassHandler::TYPE_ARRAY && property_exists($field, 'mapping')): ?>
-        $<?php echo lcfirst($field->name); ?>List = $this->data_form['<?php echo lcfirst($field->name); ?>List'];<?php echo PHP_EOL ?>
+        $<?php echo lcfirst($field->name); ?>List = $this->dataForm['<?php echo lcfirst($field->name); ?>List'];<?php echo PHP_EOL ?>
 <?php endif; ?>
 <?php endforeach; ?>
 
@@ -56,7 +56,7 @@ class <?php echo $templater->getTargetClassname(); ?> extends AbstractDefaultTyp
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([
-           'data_class' => $this->data_form['data_class'],
+           'data_class' => $this->dataForm['data_class'],
         ]);
     }
 

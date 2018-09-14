@@ -22,8 +22,8 @@ class SpecIsCreatedWithBody extends AbstractSpecification
      */
     public function isSatisfiedBy(stdClass $object): bool
     {
-        return property_exists($object, 'data') &&
-            property_exists($object->data, 'body')  &&
-            is_string($object->data->body);
+        return \property_exists($object, 'data') &&
+            \property_exists($object->data, 'body')  &&
+            \is_string($object->data->body);
     }
 }

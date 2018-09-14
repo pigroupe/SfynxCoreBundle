@@ -201,7 +201,7 @@ default:
                     arguments:
                       - 'Sfynx\CoreBundle\Layers\Domain\Service\Request\Generalisation\RequestInterface'
                       - 'Symfony\Component\Form\FormFactoryInterface'
-                      - 'Sfynx\CoreBundle\Layers\Domain\Service\Form\Generalisation\Interfaces\FormTypeInterface'
+                      - 'Sfynx\CoreBundle\Layers\Application\Validation\Type\Generalisation\Interfaces\FormTypeInterface'
 #                      - 'new GoPromiseRequestType'
                 - OBInjectFormErrors:
                     create: false

@@ -35,7 +35,7 @@ class OBCreateFormView extends AbstractCreateFormView
 
     protected function createForm(): FormViewInterface
     {
-        $this->formType->initData($this->wfLastData->formViewData);
+        $this->formType->setData($this->wfLastData->formViewData);
         return $this->formFactory->create($this->formType);
     }
 }

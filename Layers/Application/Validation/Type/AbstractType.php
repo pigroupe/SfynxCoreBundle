@@ -2,7 +2,7 @@
 namespace Sfynx\CoreBundle\Layers\Application\Validation\Type;
 
 use Symfony\Component\Form\AbstractType as SymfonyAbstractType;
-use Sfynx\CoreBundle\Layers\Domain\Service\Form\Generalisation\Interfaces\FormTypeInterface;
+use Sfynx\CoreBundle\Layers\Application\Validation\Type\Generalisation\Interfaces\FormTypeInterface;
 use Sfynx\CoreBundle\Layers\Domain\Service\Manager\Generalisation\Interfaces\ManagerInterface;
 
 /**
@@ -13,9 +13,9 @@ abstract class AbstractType extends SymfonyAbstractType implements FormTypeInter
     /** @var ManagerInterface */
     protected $manager;
     /** @var  string */
-    protected $data_class;
-    /** @var string */
-    protected $data_form = [];
+    protected $dataClass;
+    /** @var array */
+    protected $dataForm = [];
 
     /**
      * AbstractType constructor.
@@ -24,15 +24,15 @@ abstract class AbstractType extends SymfonyAbstractType implements FormTypeInter
     public function __construct(ManagerInterface $manager)
     {
         $this->manager = $manager;
-        $this->data_class = $manager->getClass();
+        $this->dataClass = $manager->getClass();
     }
 
     /**
      * {@inheritdoc}
      */
-    public function initData(array $data_form): FormTypeInterface
+    public function setData(array $dataForm): FormTypeInterface
     {
-        $this->data_form = $data_form;
+        $this->dataForm = $dataForm;
         return $this;
     }
 }

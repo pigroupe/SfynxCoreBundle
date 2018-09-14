@@ -134,7 +134,7 @@ class ResponseHandler implements ResponseHandlerInterface
     {
         // The $headers array must contain the "Content-Type" element.
         // Use the format of the request if not defined.
-        if (!array_key_exists('Content-Type', $headers)) {
+        if (!\array_key_exists('Content-Type', $headers)) {
             $headers['Content-Type'] = $this->getRequest()->getMimeType($this->getFormat());
         }
         $this->headers = $headers;
@@ -150,7 +150,7 @@ class ResponseHandler implements ResponseHandlerInterface
     protected function setContent($body): ResponseHandler
     {
         $this->body = $body;
-        if (null !== $body && !is_string($body)) {
+        if (null !== $body && !\is_string($body)) {
             $this->body = $this->getSerializer()->serialize($body, $this->getFormat());
         }
         return $this;

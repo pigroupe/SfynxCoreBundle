@@ -72,6 +72,7 @@ RUN apk add --no-cache --virtual .packages \
 # ADD SFYNX DDD GENERATOR
 #
 ADD https://github.com/pigroupe/SfynxCoreBundle/blob/${SFYNX_DDD_GENERATOR}/releases/sfynx-ddd-generator.phar?raw=true /usr/local/bin/sfynx-ddd-generator
+#COPY sfynx-ddd-generator.phar /usr/local/bin/sfynx-ddd-generator
 RUN chmod +rx /usr/local/bin/sfynx-ddd-generator
 
 #
