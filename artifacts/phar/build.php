@@ -37,7 +37,7 @@ $phar->setStub(<<<STUB
 * This source file is subject to the LGPL license that is bundled
 * with this source code in the file LICENSE.
 * 
-* version: v2.10.0
+* version: v2.10.1
 */
 
 Phar::mapPhar('sfynx-ddd-generator.phar');
