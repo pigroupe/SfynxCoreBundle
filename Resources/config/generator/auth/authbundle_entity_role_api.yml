@@ -11,7 +11,7 @@ default:
     widgets:
         presentation:
             widget_coordination:
-                class: GetCoordination
+                class: GetOneCoordination
                 arguments:
                     - '$workflowHandler'
                 extends: Sfynx\CoreBundle\Layers\Presentation\Coordination\Generalisation\AbstractApiController
@@ -23,11 +23,11 @@ default:
                     - codeComment1:
                         design: 'code'
                         content: "// 1. Transform options to Command."
-                    - updateQuery:
+                    - getQuery:
                         design: 'adapter'
                         class: Sfynx\CoreBundle\Layers\Presentation\Adapter\Query\QueryAdapter
                         arguments:
-                            - 'new GetRoleQuery'
+                            - 'new GetOneQuery'
                         calls:
                             - [ createQueryFromRequest, [ 'new QueryRequest' ] ]
                     - codeComment2:
@@ -48,7 +48,7 @@ default:
                             - '$queryworkflow'
                         handlers: [ 'GetQueryValidationHandler', 'GetQuerySpecHandler']
                         calls:
-                            - [ process, [ '$updateQuery' ] ]
+                            - [ process, [ '$getQuery' ] ]
                     - codeln1:
                         design: 'code'
                         content:
@@ -77,7 +77,7 @@ default:
                     methods: ['GET']
         application:
             widget_cqrs_query:
-                class: GetRoleQuery
+                class: GetOneQuery
                 arguments: ~
             widget_cqrs_query_validator_specification:
                 class: Validation\SpecHandler\GetQuerySpecHandler
