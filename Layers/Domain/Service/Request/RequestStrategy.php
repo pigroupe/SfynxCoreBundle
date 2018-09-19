@@ -154,6 +154,14 @@ class RequestStrategy extends AbstractRequest implements RequestInterface
     /**
      * {@inheritdoc}
      */
+    public function getPathInfo()
+    {
+        return $this->client->getPathInfo();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function duplicate(array $query = null, array $request = null, array $attributes = null, array $cookies = null, array $files = null, array $server = null)
     {
         return $this->client->duplicate($query, $request, $attributes, $cookies, $files, $server);

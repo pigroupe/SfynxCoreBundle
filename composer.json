@@ -19,8 +19,10 @@
   "require": {
     "php": "^7.2",
     "ext-dom": "*",
-    "symfony/framework-bundle": "~2.8|~3.0",
+    "symfony/framework-bundle": "~2.8|~3.0|~4.0",
     "symfony/console": "*",
+    "symfony/options-resolver": "^4.1",
+    "symfony/yaml": "*",
     "sensio/generator-bundle": "~3.1.2",
     "nette/php-generator": "^3.1",
     "gedmo/doctrine-extensions": "~2.4.24",
@@ -39,7 +41,7 @@
   "suggest": {
     "spatie/fractalistic": "^2.5.0",
     "ramsey/uuid": "^3.7",
-    "ptrofimov/matchmaker": "*",
+    "ptrofimov/matchmaker": "*"
   },
 
   "conflict": {

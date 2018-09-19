@@ -63,7 +63,7 @@ Optional:
     --namespace
     --report-dir=<directory>            Folder where artifact will be generated
     --report-template=<directory>       Folder name where report template files are 
-    --report-xmi="<XMIoptions>"         XMI options separeted by space. exemple --report-xmi="--output=/var/www/src/generator/MyContext/MyContext.xmi --autoload=vendor --recursive /var/www/src/generator/MyContext" 
+    --report-xmi="<XMIoptions>"         XMI options separeted by space. exemple --report-xmi="--output=/var/www/src/generator/MyContext/MyContext.xmi|--autoload=vendor|--recursive|/var/www/src/generator/MyContext" 
     --conf-file                         Complet path of the configuration file
     --conf-autoload=<filePath>          autoload.php file that you want to include           
     --quiet                             Quiet mode

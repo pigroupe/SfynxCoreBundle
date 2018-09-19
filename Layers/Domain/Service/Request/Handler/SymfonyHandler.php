@@ -300,6 +300,18 @@ class SymfonyHandler extends AbstractRequest implements HandlerInterface
     /**
      * {@inheritdoc}
      */
+    public function getPathInfo()
+    {
+        try {
+            return $this->getCurrentRequest()->getPathInfo();
+        } catch (\Exception $e) {
+            return null;
+        }
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function duplicate(array $query = null, array $request = null, array $attributes = null, array $cookies = null, array $files = null, array $server = null)
     {
         try {
