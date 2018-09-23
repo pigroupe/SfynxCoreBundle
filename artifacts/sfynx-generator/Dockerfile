@@ -10,12 +10,6 @@ ARG UID=33
 ARG GID=33
 
 #
-# ARGS
-#
-ENV TERM xterm
-ENV SFYNX_DDD_GENERATOR 'v2.10.1'
-
-#
 # INSTALL TOOLS
 # apk info -R <package> => get dependancies
 #
@@ -67,6 +61,12 @@ RUN apk add --no-cache --virtual .packages \
     rm -rf /var/lib/apt/lists/* && \
     rm -rf /var/cache/apk/* && \
     rm -fr /tmp/*
+
+#
+# ARGS
+#
+ENV TERM xterm
+ENV SFYNX_DDD_GENERATOR 'v2.10.2'
 
 #
 # ADD SFYNX DDD GENERATOR
