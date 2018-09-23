@@ -10,6 +10,7 @@ use Sfynx\CoreBundle\Generator\Domain\Report\Metrics;
 use Sfynx\CoreBundle\Generator\Domain\Report\Generator;
 use Sfynx\CoreBundle\Generator\Domain\Report\Data;
 use Sfynx\CoreBundle\Generator\Domain\Report\Handler;
+use Symfony\Component\Console\Output\OutputInterface;
 
 /**
  * Reporter Observable class
@@ -64,7 +65,7 @@ class ReporterObservable
      * @param Config $config
      * @param Output $output
      */
-    public function __construct(Config $config, Output $output)
+    public function __construct(Config $config, OutputInterface $output)
     {
         $this->config = $config;
         $this->output = $output;

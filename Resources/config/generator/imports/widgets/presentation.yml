@@ -1,0 +1,71 @@
+default:
+    widgets:
+        presentation:
+            widget_coordination:
+                class: FormCoordination
+                arguments:
+                - '$workflowHandler'
+                extends: Sfynx\CoreBundle\Layers\Presentation\Coordination\Generalisation\AbstractFormController
+                options:
+                    implements: ~
+                    uses: ~
+                    traits: ~
+                body:
+                - codeComment1:
+                      design: 'code'
+                      content: "// 1. Transform options to Command."
+                - updateCommand:
+                      design: 'adapter'
+                      class: Sfynx\CoreBundle\Layers\Presentation\Adapter\Command\CommandAdapter
+                      arguments:
+                      - 'new MovieFormCommand'
+                      calls:
+                      - [ createCommandFromRequest, [ 'new MovieFormRequest' ] ]
+                - codeComment2:
+                      design: 'code'
+                      content: "// 2. Implement the command workflow"
+                - commandWorkflow:
+                      design: 'observer'
+                      class: Sfynx\CoreBundle\Layers\Application\Command\Workflow\CommandWorkflow
+                      calls:
+                      - [ attach, [ 'new OBMovieEntityEdit' ] ]
+                      - [ attach, [ 'new OBMovieEntityCreate' ] ]
+                - codeComment3:
+                      design: 'code'
+                      content: "// 3. Implement decorator to apply the command workflow from the command"
+                - commandHandlerResult:
+                      design: 'decorator'
+                      class: Sfynx\CoreBundle\Layers\Application\Command\Handler\FormCommandHandler
+                      arguments:
+                      - '$commandWorkflow'
+                      handlers: [ 'MovieFormCommandValidationHandler', 'MovieFormCommandSpecHandler']
+                      calls:
+                      - [ process, [ '$updateCommand' ] ]
+                - codeln1:
+                      design: 'code'
+                      content:
+                      - "// 4. Implement the Response workflow"
+                      - "$this->setParam('templating', '@Business/Movie/edit.html.twig');"
+                - workflowHandler:
+                      design: 'observer'
+                      class: Sfynx\CoreBundle\Layers\Application\Common\Handler\WorkflowHandler
+                      calls:
+                      - [ attach, [ 'new OBMovieCreateFormData' ] ]
+                      - [ attach, [ 'new OBCreateCommandFormView' ] ]
+                      - [ attach, [ 'new OBInjectFormErrors' ] ]
+                      - [ attach, [ 'new OBMovieCreateFormBody' ] ]
+                      - [ attach, [ 'new OBCreateResponseHtml' ] ]
+                - responseHandlerResult:
+                      design: 'handler'
+                      class: Sfynx\CoreBundle\Layers\Application\Response\Handler\ResponseHandler
+                      arguments:
+                      - '$workflowHandler'
+                      calls:
+                      - [ process, [ '$commandHandlerResult' ] ]
+                - codeln2:
+                      design: 'code'
+                      content: "return $responseHandlerResult->getResponse();"
+            widget_request:
+                class: MovieFormRequest
+                arguments:
+                - 'Sfynx\CoreBundle\Layers\Domain\Service\Request\Generalisation\RequestInterface'

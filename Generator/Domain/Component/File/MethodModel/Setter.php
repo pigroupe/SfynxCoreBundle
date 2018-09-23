@@ -39,7 +39,6 @@ class Setter
         string $propertyFieldName = ''
     ): void {
         $setterFieldName = 'set' . \ucfirst($field->name);
-        $setterFieldBody .= 'return $this;';
         $ClassTypeFieldName = ClassHandler::getClassNameFromNamespace($typeFieldName);
 
         \str_replace('entityid', 'entityid', \strtolower($field->name), $isFieldEntity);

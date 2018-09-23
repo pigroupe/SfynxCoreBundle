@@ -9,11 +9,12 @@
 
 namespace Sfynx\CoreBundle\Generator\Application\Config\Validation;
 
-use Symfony\Component\Yaml\Yaml;
+use Symfony\Component\Config\FileLocator;
 use Sfynx\CoreBundle\Generator\Application\Config\Config;
 use Sfynx\CoreBundle\Generator\Domain\Component\Config\Loader;
 use Sfynx\CoreBundle\Generator\Application\Config\Exception\ConfigException;
 use Sfynx\CoreBundle\Generator\Application\Config\Generalisation\ValidationInterface;
+use Sfynx\CoreBundle\Generator\Application\Config\FileLoader;
 
 /**
  * Config factory
@@ -28,19 +29,22 @@ class ConfigLoader implements ValidationInterface
      */
     public function validate(Config $config)
     {
+        $configDirectories = $config->get('conf-directories');
+
+        $fileLocator = new FileLocator($configDirectories);
+
+        $loader = new FileLoader($fileLocator);
+
         $filename = $config->get('conf-file');
 
         if(!\file_exists($filename) || !\is_readable($filename)) {
             throw new ConfigException('configuration file is not accessible');
         }
-        $content = \file_get_contents($filename);
-        $parser = new Yaml();
-        $array = $parser->parse($content);
+        $array = $loader->load(realpath($filename));
         if (null === $array) {
             throw new ConfigException('configuration file is empty');
         }
 
-        $arr = \array_values($array);
-        $config->set('conf-array', \array_shift($arr));
+        $config->set('conf-array', $array['default']);
     }
 }

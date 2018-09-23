@@ -1,0 +1,256 @@
+default:
+    widgets:
+        domain:
+            #
+            # MOVIE ENTITY CLASSES
+            #
+            widget_entity_class:
+            - MovieEntity:
+                  create: true
+                  class: Domain\Entity\Movie
+                  #                    arguments: ['Sfynx\AuthBundle\Domain\ValueObject\MovieVO']
+                  options:
+                      mapping: 'Movie'
+                      traits:
+                      - 'Sfynx\CoreBundle\Layers\Domain\Model\Traits\TraitBuild'
+                      - 'Sfynx\CoreBundle\Layers\Domain\Model\Traits\TraitEnabled'
+                      models:
+                          #                          - { class: 'Sfynx\CoreBundle\Generator\Domain\Component\File\HandlerModel\Observer\Entity', parameters: { performMethod: ['Sfynx\CoreBundle\Generator\Domain\Component\File\MethodModel\Construct']} }
+                          0:
+                              class: 'Sfynx\CoreBundle\Generator\Domain\Component\File\HandlerModel\Observer\Entity'
+                              parameters:
+                                  performMethods:
+                                  - 'Sfynx\CoreBundle\Generator\Domain\Component\File\MethodModel\Construct'
+                                  - 'Sfynx\CoreBundle\Generator\Domain\Component\File\MethodModel\CreateFromNative'
+                                  - 'Sfynx\CoreBundle\Generator\Domain\Component\File\MethodModel\ToString'
+                                  - 'Sfynx\CoreBundle\Generator\Domain\Component\File\MethodModel\ToArray'
+                                  - 'Sfynx\CoreBundle\Generator\Domain\Component\File\MethodModel\Serialize'
+                                  - 'Sfynx\CoreBundle\Generator\Domain\Component\File\MethodModel\Unserialize'
+            - MovieVO:
+                  create: true
+                  class: Domain\ValueObject\MovieVO
+                  extends: 'Sfynx\CoreBundle\Layers\Domain\ValueObject\Generalisation\AbstractVO'
+                  options:
+                      models:
+                      - { class: 'Sfynx\CoreBundle\Generator\Domain\Component\File\HandlerModel\Observer\ValueObject', parameters: []}
+            #
+            # PRICE ENTITY CLASSES
+            #
+            - PriceEntity:
+                  create: true
+                  class: Domain\Entity\Price
+                  #                    arguments: ['Sfynx\AuthBundle\Domain\ValueObject\PriceVO']
+                  options:
+                      mapping: 'Price'
+                      traits:
+                      - 'Sfynx\CoreBundle\Layers\Domain\Model\Traits\TraitBuild'
+                      - 'Sfynx\CoreBundle\Layers\Domain\Model\Traits\TraitEnabled'
+                      models:
+                          #                          - { class: 'Sfynx\CoreBundle\Generator\Domain\Component\File\HandlerModel\Observer\Entity', parameters: { performMethod: ['Sfynx\CoreBundle\Generator\Domain\Component\File\MethodModel\Construct']} }
+                          0:
+                              class: 'Sfynx\CoreBundle\Generator\Domain\Component\File\HandlerModel\Observer\Entity'
+                              parameters:
+                                  performMethods:
+                                  - 'Sfynx\CoreBundle\Generator\Domain\Component\File\MethodModel\Construct'
+                                  - 'Sfynx\CoreBundle\Generator\Domain\Component\File\MethodModel\CreateFromNative'
+                                  - 'Sfynx\CoreBundle\Generator\Domain\Component\File\MethodModel\ToString'
+                                  - 'Sfynx\CoreBundle\Generator\Domain\Component\File\MethodModel\ToArray'
+                                  - 'Sfynx\CoreBundle\Generator\Domain\Component\File\MethodModel\Serialize'
+                                  - 'Sfynx\CoreBundle\Generator\Domain\Component\File\MethodModel\Unserialize'
+            - PriceVO:
+                  create: true
+                  class: Domain\ValueObject\PriceVO
+                  extends: 'Sfynx\CoreBundle\Layers\Domain\ValueObject\Generalisation\AbstractVO'
+                  options:
+                      models:
+                      - { class: 'Sfynx\CoreBundle\Generator\Domain\Component\File\HandlerModel\Observer\ValueObject', parameters: []}
+            #
+            # GENRE ENTITY CLASSES
+            #
+            - GenreEntity:
+                  create: true
+                  class: Domain\Entity\Genre
+                  #                    arguments: ['Sfynx\AuthBundle\Domain\ValueObject\GenreVO']
+                  options:
+                      mapping: 'Genre'
+                      traits:
+                      - 'Sfynx\CoreBundle\Layers\Domain\Model\Traits\TraitBuild'
+                      - 'Sfynx\CoreBundle\Layers\Domain\Model\Traits\TraitEnabled'
+                      models:
+                          #                          - { class: 'Sfynx\CoreBundle\Generator\Domain\Component\File\HandlerModel\Observer\Entity', parameters: { performMethod: ['Sfynx\CoreBundle\Generator\Domain\Component\File\MethodModel\Construct']} }
+                          0:
+                              class: 'Sfynx\CoreBundle\Generator\Domain\Component\File\HandlerModel\Observer\Entity'
+                              parameters:
+                                  performMethods:
+                                  - 'Sfynx\CoreBundle\Generator\Domain\Component\File\MethodModel\Construct'
+                                  - 'Sfynx\CoreBundle\Generator\Domain\Component\File\MethodModel\CreateFromNative'
+                                  - 'Sfynx\CoreBundle\Generator\Domain\Component\File\MethodModel\ToString'
+                                  - 'Sfynx\CoreBundle\Generator\Domain\Component\File\MethodModel\ToArray'
+                                  - 'Sfynx\CoreBundle\Generator\Domain\Component\File\MethodModel\Serialize'
+                                  - 'Sfynx\CoreBundle\Generator\Domain\Component\File\MethodModel\Unserialize'
+            - GenreVO:
+                  create: true
+                  class: Domain\ValueObject\GenreVO
+                  extends: 'Sfynx\CoreBundle\Layers\Domain\ValueObject\Generalisation\AbstractVO'
+                  options:
+                      models:
+                      - { class: 'Sfynx\CoreBundle\Generator\Domain\Component\File\HandlerModel\Observer\ValueObject', parameters: []}
+            #
+            # MANAGER CLASSES
+            #
+            widget_service_manager_class:
+            - MovieEntityManager:
+                  create: true
+                  class: Entity\Movie\Manager\MovieManager
+                  arguments: ~
+                  options:
+                      mapping: 'Movie'
+            - PriceEntityManager:
+                  create: true
+                  class: Entity\Price\Manager\PriceManager
+                  arguments: ~
+                  options:
+                      mapping: 'Price'
+            - GenreEntityManager:
+                  create: true
+                  class: Entity\Genre\Manager\GenreManager
+                  arguments: ~
+                  options:
+                      mapping: 'Genre'
+            #
+            # SERVICES CLASSES
+            #
+            widget_service_class:
+            - MovieCommandRepositoryInterface:
+                  create: true
+                  class: Domain\Repository\Command\MovieCommandRepositoryInterface
+                  type: interface
+            - MovieQueryRepositoryInterface:
+                  create: true
+                  class: Domain\Repository\Query\MovieQueryRepositoryInterface
+                  type: interface
+            - GenreCommandRepositoryInterface:
+                  create: true
+                  class: Domain\Repository\Command\GenreCommandRepositoryInterface
+                  type: interface
+            - GenreQueryRepositoryInterface:
+                  create: true
+                  class: Domain\Repository\Query\GenreQueryRepositoryInterface
+                  type: interface
+            - PriceCommandRepositoryInterface:
+                  create: true
+                  class: Domain\Repository\Command\PriceCommandRepositoryInterface
+                  type: interface
+            - PriceQueryRepositoryInterface:
+                  create: true
+                  class: Domain\Repository\Query\PriceQueryRepositoryInterface
+                  type: interface
+            #
+            # OBSERVER CLASSES
+            #
+            widget_workflow_observer_class:
+            - OBMovieEntityCreate:
+                  create: true
+                  class: OBMovieEntityCreate
+                  arguments:
+                  - 'Sfynx\CoreBundle\Layers\Domain\Service\Manager\Generalisation\Interfaces\ManagerInterface'
+                  - 'Sfynx\CoreBundle\Layers\Domain\Service\Request\Generalisation\RequestInterface'
+                  - 'Symfony\Bundle\FrameworkBundle\Routing\Router'
+                  - 'bool $updateCommand = false'
+                  construct:
+                      create: true
+                      body:
+                      - 'parent::__construct($manager, $request, $updateCommand);'
+                  extends: Sfynx\CoreBundle\Layers\Domain\Workflow\Observer\Generalisation\Command\AbstractEntityCreateHandler
+                  options:
+                      implements: ~
+                      uses: ~
+                      traits: [Sfynx\CoreBundle\Layers\Domain\Workflow\Observer\Command\TraitProcess]
+            - OBMovieEntityEdit:
+                  create: true
+                  class: OBMovieEntityEdit
+                  arguments:
+                  - 'Sfynx\CoreBundle\Layers\Domain\Service\Manager\Generalisation\Interfaces\ManagerInterface'
+                  - 'Sfynx\CoreBundle\Layers\Domain\Service\Request\Generalisation\RequestInterface'
+                  - 'Symfony\Bundle\FrameworkBundle\Routing\Router'
+                  - 'bool $updateCommand = false'
+                  construct:
+                      create: true
+                      body:
+                      - 'parent::__construct($manager, $request, $updateCommand);'
+                  extends: Sfynx\CoreBundle\Layers\Domain\Workflow\Observer\Generalisation\Command\AbstractEntityEditHandler
+                  options:
+                      implements: ~
+                      uses: ~
+                      traits: [Sfynx\CoreBundle\Layers\Domain\Workflow\Observer\Command\TraitProcess]
+            - OBMovieCreateFormData:
+                  create: true
+                  class: Domain\Workflow\Observer\Movie\Response\OBMovieCreateFormData
+                  arguments:
+                  - 'Sfynx\CoreBundle\Layers\Domain\Service\Request\Generalisation\RequestInterface'
+                  - 'MyContext\Domain\Service\Entity\Genre\Manager\GenreManager'
+                  - 'MyContext\Domain\Service\Entity\Movie\Manager\MovieManager'
+                  - 'MyContext\Domain\Service\Entity\Price\Manager\PriceManager'
+                  - 'Sfynx\MediaBundle\Layers\Domain\Service\Mediatheque\Manager\EntityManager as MediathequeManager'
+                  construct:
+                      create: true
+                      body:
+                      - 'parent::__construct($request);'
+                  extends: Sfynx\CoreBundle\Layers\Domain\Workflow\Observer\Generalisation\Response\AbstractCreateFormData
+                  options:
+                      implements: ~
+                      uses: ['Sfynx\CoreBundle\Layers\Infrastructure\Exception\WorkflowException', 'Exception']
+                      traits: ~
+                      models:
+                      - { class: 'Sfynx\CoreBundle\Generator\Domain\Component\File\HandlerModel\Observer\FormData', parameters: []}
+            - OBMovieCreateFormBody:
+                  create: true
+                  class: Domain\Workflow\Observer\Movie\Response\OBMovieCreateFormBody
+                  arguments:
+                  - 'Sfynx\CoreBundle\Layers\Domain\Service\Request\Generalisation\RequestInterface'
+                  - 'Symfony\Bundle\FrameworkBundle\Templating\EngineInterface'
+                  - '$this->param'
+                  extends: Sfynx\CoreBundle\Layers\Domain\Workflow\Observer\Generalisation\Response\AbstractCreateFormBody
+                  options:
+                      implements: ~
+                      uses: ['Sfynx\CoreBundle\Layers\Infrastructure\Exception\WorkflowException', 'Exception']
+                      traits: ~
+                      methods:
+                      - name: 'process'
+                        comments: ['{@inheritdoc}']
+                        visibility: 'protected'
+                        returnType: 'bool'
+                        body:
+                        - "$this->wfLastData->body = '';"
+                        - 'try {'
+                        - "    $this->wfLastData->body = $this->templating->render("
+                        - "        $this->param->templating,"
+                        - '        ['
+                        - "           'entity' => $this->wfHandler->entity,"
+                        - "           'edit_form' => $this->wfLastData->form->createView(),"
+                        - "           'errors_form' => $this->wfHandler->errors"
+                        - '        ]'
+                        - '    );'
+                        - '} catch (Exception $e) {'
+                        - '    throw WorkflowException::noCreatedViewForm();'
+                        - '}'
+                        - 'return true;'
+            - OBCreateCommandFormView:
+                  create: false
+                  class: Sfynx\CoreBundle\Layers\Domain\Workflow\Observer\Response\OBCreateCommandFormView
+                  arguments:
+                  - 'Sfynx\CoreBundle\Layers\Domain\Service\Request\Generalisation\RequestInterface'
+                  - 'Symfony\Component\Form\FormFactoryInterface'
+                  #                      - 'Sfynx\CoreBundle\Layers\Application\Validation\Type\Generalisation\Interfaces\FormTypeInterface'
+                  - 'new MovieType'
+            - OBInjectFormErrors:
+                  create: false
+                  class: Sfynx\CoreBundle\Layers\Domain\Workflow\Observer\Response\OBInjectFormErrors
+                  arguments:
+                  - 'Sfynx\CoreBundle\Layers\Domain\Service\Request\Generalisation\RequestInterface'
+                  - 'Symfony\Component\Translation\TranslatorInterface'
+            - OBCreateResponseHtml:
+                  create: false
+                  class: Sfynx\CoreBundle\Layers\Domain\Workflow\Observer\Response\OBCreateResponseHtml
+                  arguments:
+                  - 'Sfynx\CoreBundle\Layers\Domain\Service\Request\Generalisation\RequestInterface'

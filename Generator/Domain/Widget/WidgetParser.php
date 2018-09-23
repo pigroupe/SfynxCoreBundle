@@ -5,8 +5,7 @@ use Sfynx\CoreBundle\Generator\Application\Config\Config;
 use Sfynx\CoreBundle\Generator\Domain\Widget\Exception\WidgetException;
 use Sfynx\CoreBundle\Generator\Domain\Widget\Widget_\Architecture;
 use Sfynx\CoreBundle\Generator\Domain\Report\ReporterObservable;
-use Sfynx\CoreBundle\Generator\Domain\Component\Issue\Issuer;
-use Sfynx\CoreBundle\Generator\Domain\Component\Output\Output;
+use Symfony\Component\Console\Output\OutputInterface;
 
 /**
  * Class Analyze
@@ -16,10 +15,6 @@ use Sfynx\CoreBundle\Generator\Domain\Component\Output\Output;
  */
 class WidgetParser
 {
-    /** @var Output */
-    protected $output;
-    /** @var Issuer */
-    protected $issuer;
     /** @var Config */
     protected $config;
     /** @var ReporterObservable */
@@ -29,37 +24,38 @@ class WidgetParser
      * Analyze constructor.
      * @param OutputInterface $output
      */
-    public function __construct(Config $config, Output $output, Issuer $issuer)
+    public function __construct(Config $config, OutputInterface $output)
     {
-        $this->output = $output;
-        $this->issuer = $issuer;
         $this->config = $config;
         $this->reporter = new ReporterObservable($config, $output);
     }
 
     /**
      * List of concrete handlers that can be built using this factory.
-     * @var string[]
      */
-    public static function handlerList()
+    public function handlerList()
     {
-        return [
-            Architecture\Infrastructure\Service\ServiceInfrastructureWidget::TAG => new Architecture\Infrastructure\Service\ServiceInfrastructureWidget(),
-            Architecture\Domain\Entity\EntityDomainWidget::TAG => new Architecture\Domain\Entity\EntityDomainWidget(),
-            Architecture\Domain\Service\ManagerServiceDomainWidget::TAG => new Architecture\Domain\Service\ManagerServiceDomainWidget(),
-            Architecture\Domain\Service\ServiceDomainWidget::TAG => new Architecture\Domain\Service\ServiceDomainWidget(),
-            Architecture\Domain\Workflow\WorkflowObserverDomainWidget::TAG => new Architecture\Domain\Workflow\WorkflowObserverDomainWidget(),
-            Architecture\Application\Service\ServiceApplicationWidget::TAG => new Architecture\Application\Service\ServiceApplicationWidget(),
-            Architecture\Application\Validation\ValidationTypeApplicationWidget::TAG => new Architecture\Application\Validation\ValidationTypeApplicationWidget(),
-            Architecture\Application\Cqrs\QueryValidationHandlerApplicationWidget::TAG => new Architecture\Application\Cqrs\QueryValidationHandlerApplicationWidget(),
-            Architecture\Application\Cqrs\QuerySpecHandlerApplicationWidget::TAG => new Architecture\Application\Cqrs\QuerySpecHandlerApplicationWidget(),
-            Architecture\Application\Cqrs\QueryApplicationWidget::TAG => new Architecture\Application\Cqrs\QueryApplicationWidget(),
-            Architecture\Application\Cqrs\CommandValidationHandlerApplicationWidget::TAG => new Architecture\Application\Cqrs\CommandValidationHandlerApplicationWidget(),
-            Architecture\Application\Cqrs\CommandSpecHandlerApplicationWidget::TAG => new Architecture\Application\Cqrs\CommandSpecHandlerApplicationWidget(),
-            Architecture\Application\Cqrs\CommandApplicationWidget::TAG => new Architecture\Application\Cqrs\CommandApplicationWidget(),
-            Architecture\Presentation\RequestPresentationWidget::TAG => new Architecture\Presentation\RequestPresentationWidget(),
-            Architecture\Presentation\CoordinationtPresentationWidget::TAG => new Architecture\Presentation\CoordinationtPresentationWidget(),
+        $handlers = [
+            Architecture\Infrastructure\Service\ServiceInfrastructureWidget::class,
+            Architecture\Domain\Entity\EntityDomainWidget::class,
+            Architecture\Domain\Service\ManagerServiceDomainWidget::class,
+            Architecture\Domain\Service\ServiceDomainWidget::class,
+            Architecture\Domain\Workflow\WorkflowObserverDomainWidget::class,
+            Architecture\Application\Service\ServiceApplicationWidget::class,
+            Architecture\Application\Validation\ValidationTypeApplicationWidget::class,
+            Architecture\Application\Cqrs\QueryValidationHandlerApplicationWidget::class,
+            Architecture\Application\Cqrs\QuerySpecHandlerApplicationWidget::class,
+            Architecture\Application\Cqrs\QueryApplicationWidget::class,
+            Architecture\Application\Cqrs\CommandValidationHandlerApplicationWidget::class,
+            Architecture\Application\Cqrs\CommandSpecHandlerApplicationWidget::class,
+            Architecture\Application\Cqrs\CommandApplicationWidget::class,
+            Architecture\Presentation\RequestPresentationWidget::class,
+            Architecture\Presentation\CoordinationtPresentationWidget::class,
         ];
+
+        foreach ($handlers as $handler) {
+            yield new $handler;
+        }
     }
 
     /**
@@ -72,15 +68,13 @@ class WidgetParser
     public function run()
     {
         try {
-            foreach (static::handlerList() as $widget) {
+            foreach ($this->handlerList() as $widget) {
                 $widget->apply($this);
             }
             $this->reporter->convertDataToObject();
         } catch (WidgetException $e) {
-            $this->output->writeln(sprintf('<error>Cannot parse widgets</error>'));
+            throw new WidgetException('Cannot parse widgets', 0, $e);
         }
-        $this->output->write('<info>++</info> Executing system analyzes...');
-        $this->output->clearln();
 
         return $this->reporter;
     }

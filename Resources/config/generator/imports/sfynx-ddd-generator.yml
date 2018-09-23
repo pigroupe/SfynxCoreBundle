@@ -1,0 +1,207 @@
+imports:
+    - { resource: widgets/presentation.yml }
+    - { resource: widgets/application.yml }
+    - { resource: widgets/domain.yml }
+    - { resource: widgets/infrastructure.yml }
+
+# php vendor/bin/sfynx-ddd-generator \
+# --namespace=MyContext \
+# --conf-file=/var/www/app/config/generator/models/sfynx-ddd-generator.yml \
+# --report-template=default \
+# --report-dir=/var/www/src/generator/MyContext
+default:
+    namespace: MyContext
+    cqrs: Movie\Command
+    template: default
+    indentation: 4
+
+    mapping:
+        x-providers: [orm, couchdb]
+        x-entities:
+#          Movie:
+#            x-fields:
+#              id:
+#                name: entityId
+#                type: id
+#                primaryKey: true
+#              documents:
+#                type: array
+#                required: true
+#                multiple: true
+#                properties: ['name', 'date']
+#                mapping:
+#                  relationship: ManyToMany
+#                  targetEntity: Sfynx\MediaBundle\Layers\Domain\Entity\Mediatheque
+#              comments:
+#                type: array
+#                required: true
+#                multiple: true
+#              title:
+#                type: string
+#                required: true
+#              releaseDate:
+#                type: datetime
+#                required: false
+#              synopsis:
+#                type: string
+#                required: false
+#              reference:
+#                type: string
+#                required: true
+#              genre:
+#                type: id
+#                foreignKey: true
+#                required: true
+#                mapping:
+#                  relationship: ManyToOne
+#                  targetEntity: Genre
+#          Price:
+#            x-fields:
+#              id:
+#                type: id
+#                primaryKey: true
+#              title:
+#                type: string
+#                required: true
+#              date:
+#                type: datetime
+#                required: false
+#              reference:
+#                type: string
+#                required: true
+#              movie:
+#                type: id
+#                foreignKey: true
+#                required: true
+#                mapping:
+#                  relationship: ManyToOne
+#                  targetEntity: Movie
+#          Genre:
+#            x-fields:
+#              id:
+#                type: id
+#                primaryKey: true
+#              label:
+#                type: string
+#                required: false
+          Movie:
+            x-fields:
+              id:
+                name: entityId
+                type: valueObject
+                voName: IdVO
+                primaryKey: true
+                mapping:
+                  targetEntity: 'MyContext\Domain\Entity\Movie'
+#                  formData:
+#                      manager: 'MyContext\Domain\Service\Entity\Movie\Manager\MovieManager'
+              documents:
+                type: array
+                required: true
+                multiple: true
+                properties: ['name', 'date']
+                mapping:
+                  relationship: ManyToMany
+                  targetEntity: 'Sfynx\MediaBundle\Layers\Domain\Entity\Mediatheque'
+                  formData:
+                      manager: 'Sfynx\MediaBundle\Layers\Domain\Service\Mediatheque\Manager\EntityManager as MediathequeManager'
+                      queryFunction: { class: 'FindDocumentQueryTransformer', args: ['true', 'false', 1299, {tata: 'tataValue', tutu: 'tutuValue'}] }
+              comments:
+                type: array
+                required: true
+                multiple: true
+              movie:
+                type: valueObject
+                voName: MovieVO
+              genre:
+                type: valueObject
+                voName: IdVO
+                foreignKey: true
+                required: true
+                mapping:
+                  setter: true
+                  relationship: ManyToOne
+                  targetEntity: 'MyContext\Domain\Entity\Genre'
+                  formData:
+                      manager: 'MyContext\Domain\Service\Entity\Genre\Manager\GenreManager'
+                      queryFunction: { class: 'FindGenreQueryTransformer', args: ['true', 'false', 1299, {tata: 'tataValue', tutu: 'tutuValue'}] }
+          Price:
+            x-fields:
+              id:
+                name: PriceEntityId
+                type: valueObject
+                voName: IdVO
+                primaryKey: true
+                mapping:
+                  targetEntity: 'MyContext\Domain\Entity\Price'
+#                  formData:
+#                      manager: 'MyContext\Domain\Service\Entity\Price\Manager\PriceManager'
+              price:
+                type: valueObject
+                voName: PriceVO
+              movie:
+                type: valueObject
+                voName: IdVO
+                foreignKey: true
+                required: true
+                mapping:
+                  setter: true
+                  relationship: ManyToOne
+                  targetEntity: 'MyContext\Domain\Entity\Movie'
+                  formData:
+                      manager: 'MyContext\Domain\Service\Entity\Movie\Manager\MovieManager'
+                      queryFunction: { class: 'FindMovieQueryTransformer', args: ['true', 'false', 1299, {tata: 'tataValue', tutu: 'tutuValue'}] }
+          Genre:
+            x-fields:
+              id:
+                name: GenreEntityId
+                type: valueObject
+                voName: IdVO
+                primaryKey: true
+                mapping:
+                  targetEntity: 'MyContext\Domain\Entity\Genre'
+#                  formData:
+#                      manager: 'MyContext\Domain\Service\Entity\Genre\Manager\GenreManager'
+              label:
+                type: string
+                required: true
+        x-valueObjects:
+          IdVO:
+            type: Sfynx\CoreBundle\Layers\Domain\ValueObject\IdVO
+            x-fields:
+              id:
+                type: id
+          MovieVO:
+            type: \Domain\ValueObject\MovieVO
+            x-fields:
+              title:
+                type: valueObject
+                voName: TitleVO
+                required: true
+              releaseDate:
+                type: datetime
+                required: false
+              synopsis:
+                type: string
+                required: false
+              reference:
+                type: string
+                required: true
+          PriceVO:
+            type: \Domain\ValueObject\PriceVO
+            x-fields:
+              title:
+                type: valueObject
+                voName: TitleVO
+                required: true
+              date:
+                type: datetime
+                required: false
+              reference:
+                type: string
+                required: true
+          TitleVO:
+            type: \Domain\ValueObject\TitleVO
+            x-fields:
+              title:
+                type: string
