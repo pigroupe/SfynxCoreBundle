@@ -1,5 +1,7 @@
 include artifacts/Makefile
 
+export RELEASE_REMOTE ?=origin
+
 # Publish new release. Usage:
 #   make tag VERSION=(major|minor|patch)
 # You need to install https://github.com/flazz/semver/ before
@@ -23,6 +25,6 @@ release: prepare-build build-phar
 	@(git tag --delete `semver tag`) || true
 	@(git push --delete origin `semver tag`) || true
 	@git tag `semver tag`
-	@git push -u origin 2.x
 	@git push origin `semver tag`
+	@GIT_CB=$(git symbolic-ref --short HEAD) && git push -u ${RELEASE_REMOTE} $(GIT_CB)
 	@make build-docker

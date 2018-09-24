@@ -23,6 +23,7 @@
     "symfony/console": "*",
     "symfony/options-resolver": "*",
     "symfony/yaml": "*",
+    "sensio/generator-bundle": "~3.1.2",
     "nette/php-generator": "^3.1",
     "sfynx-project/tool-trigger-bundle": "^2.8",
     "sfynx-project/tool-utils-bundle": "^2.8",
