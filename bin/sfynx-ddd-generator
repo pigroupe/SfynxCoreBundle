@@ -28,5 +28,5 @@ if ($isAutoloadFound === false) {
     ));
 }
 
-$application = new \Sfynx\CoreBundle\Generator\Presentation\Console\Application('DDD Generator', '2.11.0');
+$application = new \Sfynx\CoreBundle\Generator\Presentation\Console\Application('DDD Generator', 'v2.11.0');
 $application->run();

@@ -8,10 +8,16 @@ use Symfony\Component\Finder\Finder;
 use Sfynx\CoreBundle\Generator\Domain\Report\Exception\ReportException;
 use Sfynx\CoreBundle\Generator\Domain\Widget\Exception\WidgetException;
 use Sfynx\CoreBundle\Generator\Domain\Widget\WidgetParser;
+use Sfynx\CoreBundle\Generator\Application\Config\Config;
 use Sfynx\CoreBundle\Generator\Application\Config\Validator;
 use Sfynx\CoreBundle\Generator\Application\Config\Exception\ConfigException;
 use Sfynx\CoreBundle\Generator\Application\Config\Parser;
+use Sfynx\CoreBundle\Generator\Domain\Component\Xmi\Php2Xmi;
 
+/**
+ * Class GenerateConsoleCommand
+ * @package Sfynx\CoreBundle\Generator\Application\Command
+ */
 class GenerateConsoleCommand implements ConsoleCommandInterface
 {
     /** @var array  */
@@ -20,15 +26,33 @@ class GenerateConsoleCommand implements ConsoleCommandInterface
     /** @var OutputInterface */
     protected $output;
 
+    /** @var Config */
+    protected $config;
+
+    /**
+     * GenerateConsoleCommand constructor.
+     * @param array $args
+     * @param OutputInterface $output
+     */
     public function __construct(array $args, OutputInterface $output)
     {
         $this->arguments = $args;
         $this->output = $output;
     }
 
-    public function process()
+    /**
+     * @return array
+     */
+    public function process(): array
     {
+        // initialize parameters
+        $isFolderScan = true;
+        $confFile = null;
+        $confFiles = [];
         $confDir = $this->arguments['conf-dir'];
+
+        // initialize Config instance
+        $this->config = (new Parser())->parse($this->arguments);
 
         if (empty($confDir)) {
             // use only a single file
@@ -42,58 +66,34 @@ class GenerateConsoleCommand implements ConsoleCommandInterface
 
             $confDir = dirname($confFile);
             $isFolderScan = false;
-        } else {
-            // scan a folder to search for yaml configuration file(s)
-            if (!is_dir($confDir) || !file_exists($confDir)) {
-                throw new \InvalidArgumentException(
-                    sprintf('Configuration folder %s does not exists or is not readable.', $confFolder)
-                );
-            }
-            $isFolderScan = true;
         }
 
-        $additionalDir = $confDir . 'widgets';
-        $configDirectories = array_map('realpath', [$confDir, $additionalDir]);
+        // initialize directories path to parse
+        $configDirectories = array_map('realpath', explode(',', $confDir));
+        $this->config->set('conf-directories', $configDirectories);
 
-        $confFiles = [];
+        // run parse file for all directories
+        foreach ($configDirectories as $confDir) {
+            foreach ($this->fileProvider($confDir, $confFile) as $yamlFile) {
+                $confFiles[] = $yamlFile;
 
-        $confFile = $isFolderScan ? null : $confFile;
-
-        $config = (new Parser())->parse($this->arguments);
-        $config->set('conf-directories', $configDirectories);
-
-
-        foreach ($this->fileProvider($configDirectories[0], $confFile) as $yamlFile) {
-            $confFiles[] = $yamlFile;
-
-            try {
-                (new Validator())->validate($config);
-            } catch (ConfigException $e) {
-                $this->output->writeln(\sprintf("<error>%s</error>", $e->getMessage()));
-                exit(1);
+                $this->run($yamlFile);
             }
+        }
 
-            // parse widgets
-            try {
-                $reporter = (new WidgetParser($config, $this->output))->run();
-            } catch (WidgetException $e) {
-                $this->output->writeln(\sprintf('<error>%s</error>', $e->getMessage()));
-                exit(1);
-            }
-            $this->output->writeln('<info>++</info> Executing system analyzes...');
-
-            // create artifact
-            try {
-                $reporter->generate();
-            } catch (ReportException $e) {
-                $this->output->writeln(\sprintf('<error>%s</error>', $e->getMessage()));
-                exit(1);
-            }
+        // generate xmi if wanted
+        if ($this->config->has('report-xmi')) {
+            Php2Xmi::php2xmi_main($this->output, $this->config->get('report-xmi'));
         }
 
         return $confFiles;
     }
 
+    /**
+     * @param $configDirectory
+     * @param null $confFile
+     * @return \Generator
+     */
     protected function fileProvider($configDirectory, $confFile = null)
     {
         if (empty($confFile)) {
@@ -111,6 +111,41 @@ class GenerateConsoleCommand implements ConsoleCommandInterface
             }
         } else {
             yield $confFile;
+        }
+    }
+
+    /**
+     * @param string $file
+     * @return void
+     */
+    protected function run(string $file): void
+    {
+        // initialize conf-file
+        $this->config->set('conf-file', $file);
+
+        // parse validators
+        try {
+            (new Validator())->validate($this->config);
+        } catch (ConfigException $e) {
+            $this->output->writeln(\sprintf("<error>%s</error>", $e->getMessage()));
+            exit(1);
+        }
+
+        // parse widgets
+        try {
+            $reporter = (new WidgetParser($this->config, $this->output))->run();
+        } catch (WidgetException $e) {
+            $this->output->writeln(\sprintf('<error>%s</error>', $e->getMessage()));
+            exit(1);
+        }
+        $this->output->writeln('<info>++</info> Executing system analyzes...');
+
+        // create artifact
+        try {
+            $reporter->generate();
+        } catch (ReportException $e) {
+            $this->output->writeln(\sprintf('<error>%s</error>', $e->getMessage()));
+            exit(1);
         }
     }
 }

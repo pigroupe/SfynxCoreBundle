@@ -1,5 +1,7 @@
 include artifacts/Makefile
 
+export RELEASE_REMOTE ?=origin
+
 # Publish new release. Usage:
 #   make tag VERSION=(major|minor|patch)
 # You need to install https://github.com/flazz/semver/ before
@@ -8,11 +10,11 @@ tag: changelog-deb
 	@echo "New release: `semver tag`"
 	@echo Releasing sources
 	@sed -i -r "s/(v[0-9]+\.[0-9]+\.[0-9]+)/`semver tag`/g" \
+	    bin/sfynx-ddd-generator \
 		artifacts/bintray.json \
 		artifacts/phar/build.php \
 		artifacts/sfynx-generator/Dockerfile \
-		Generator/Presentation/Coordination/Command/sfynx-ddd-generator \
-		Generator/Application/Application.php \
+		Generator/Presentation/Console/Application.php \
 		Resources/doc/command_generator.md
 	@sed -i -r "s/([0-9]{4}\-[0-9]{2}\-[0-9]{2})/`date +%Y-%m-%d`/g" artifacts/bintray.json
 
@@ -23,6 +25,6 @@ release: prepare-build build-phar
 	@(git tag --delete `semver tag`) || true
 	@(git push --delete origin `semver tag`) || true
 	@git tag `semver tag`
-	@git push -u origin 2.x
 	@git push origin `semver tag`
+	@GIT_CB=$(git symbolic-ref --short HEAD) && git push -u ${RELEASE_REMOTE} $(GIT_CB)
 	@make build-docker

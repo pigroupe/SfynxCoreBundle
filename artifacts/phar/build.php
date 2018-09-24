@@ -29,6 +29,8 @@ $phar->setStub(<<<STUB
 #!/usr/bin/env php
 <?php
 
+declare(strict_types=1);
+
 /*
 * This file is part of the Sfynx DDD Generator
 *
@@ -37,12 +39,14 @@ $phar->setStub(<<<STUB
 * This source file is subject to the LGPL license that is bundled
 * with this source code in the file LICENSE.
 * 
-* version: v2.10.2
+* version: v2.11.0
 */
 
 Phar::mapPhar('sfynx-ddd-generator.phar');
 
 require_once 'phar://sfynx-ddd-generator.phar/vendor/autoload.php';
+
+gc_disable(); // performance boost
 
 function includeIfExists(\$file)
 {
@@ -52,7 +56,8 @@ function includeIfExists(\$file)
 }
 \$loader = includeIfExists('/var/www-app/vendor/autoload.php');
 
-(new \Sfynx\CoreBundle\Generator\Application\Application())->run(\$argv);
+\$application = new \Sfynx\CoreBundle\Generator\Presentation\Console\Application('DDD Generator', 'v2.11.0');
+\$application->run();
 
 __HALT_COMPILER();
 STUB

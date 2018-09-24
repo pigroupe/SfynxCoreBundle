@@ -20,8 +20,11 @@
     "php": "^7.2",
     "ext-dom": "*",
     "nette/php-generator": "^3.1",
-    "symfony/options-resolver": "^4.1",
+    "symfony/console": "*",
     "symfony/yaml": "*",
+    "symfony/config": "^3.4",
+    "symfony/finder": "*",
+    "symfony/options-resolver": "^4.1",
     "sfynx-project/tool-specification-bundle": "^2.8"
   },
 

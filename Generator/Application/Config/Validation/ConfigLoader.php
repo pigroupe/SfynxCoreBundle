@@ -29,17 +29,14 @@ class ConfigLoader implements ValidationInterface
      */
     public function validate(Config $config)
     {
-        $configDirectories = $config->get('conf-directories');
-
-        $fileLocator = new FileLocator($configDirectories);
-
-        $loader = new FileLoader($fileLocator);
-
         $filename = $config->get('conf-file');
-
         if(!\file_exists($filename) || !\is_readable($filename)) {
             throw new ConfigException('configuration file is not accessible');
         }
+
+        $configDirectories = $config->get('conf-directories');
+        $loader = new FileLoader(new FileLocator($configDirectories));
+
         $array = $loader->load(realpath($filename));
         if (null === $array) {
             throw new ConfigException('configuration file is empty');
