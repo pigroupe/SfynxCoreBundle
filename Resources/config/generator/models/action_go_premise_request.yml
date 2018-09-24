@@ -336,7 +336,6 @@ default:
 #                  targetEntity: UserContext\Domain\Entity\User
           Activity:
             x-fields:
-
               documents:
                 name: documents
                 type: array

@@ -10,6 +10,9 @@ use Symfony\Component\Yaml\Command\LintCommand;
  */
 class Application extends \Symfony\Component\Console\Application
 {
+    /**
+     * @return array
+     */
     protected function getDefaultCommands(): array
     {
         $defaultCommands = parent::getDefaultCommands();
@@ -22,6 +25,9 @@ class Application extends \Symfony\Component\Console\Application
         return $defaultCommands;
     }
 
+    /**
+     * @return string
+     */
     public function getLongVersion(): string
     {
         if ('UNKNOWN' !== $this->getName()) {
@@ -38,5 +44,13 @@ class Application extends \Symfony\Component\Console\Application
         }
 
         return 'Console Tool';
+    }
+
+    /**
+     * @return string
+     */
+    public function getVersion()
+    {
+        return 'v2.11.0';
     }
 }

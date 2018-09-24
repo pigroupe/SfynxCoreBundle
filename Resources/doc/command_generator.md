@@ -26,7 +26,7 @@ export PATH=~/.composer/vendor/bin:$PATH
 > b) Phar
 
 ```bash
-sudo sh -c "curl -L https://github.com/pigroupe/SfynxCoreBundle/blob/v2.10.2/releases/sfynx-ddd-generator.phar?raw=true > /usr/local/bin/sfynx-ddd-generator"
+sudo sh -c "curl -L https://github.com/pigroupe/SfynxCoreBundle/blob/v2.11.0/releases/sfynx-ddd-generator.phar?raw=true > /usr/local/bin/sfynx-ddd-generator"
 sudo chmod +rx /usr/local/bin/sfynx-ddd-generator
 ```
 
@@ -45,39 +45,76 @@ docker run --rm \
 
 ```bash
 sfynx-ddd-generator \
---namespace=MyContext \
---conf-file=./Resources/config/generator/models/sfynx-ddd-generator.yml \
---report-template=default \
---report-dir=build/MyContext
+    sfynx:ddd:generate \
+    --namespace=MyContext \
+    --conf-file=./Resources/config/generator/models/sfynx-ddd-generator.yml \
+    --report-template=default \
+    --report-dir=build
 ```
-
-> b) With multiple configuration files in directory
 
 ```bash
 sfynx-ddd-generator \
---namespace=Sfynx\\AuthBundle \
---conf-dir=./Resources/config/generator/auth \
---report-template=default \
---report-dir=build
-```
-
-> c) Add XMI generator file report
-
-```bash
-sfynx-ddd-generator \
+    sfynx:ddd:generate \
     --namespace=Sfynx\\AuthBundle \
     --conf-file=./Resources/config/generator/auth/authbundle_entity_role_api.yml \
     --report-template=default \
     --report-dir=build
 ```
 
+> b) With multiple configuration files in directory
+
+**from one repository**
 ```bash
 sfynx-ddd-generator \
+    sfynx:ddd:generate \
+    ./Resources/config/generator/auth \
+    --namespace=Sfynx\\AuthBundle \
+    --report-template=default \
+    --report-dir=build
+```
+
+**from multiple repositories**
+```bash
+sfynx-ddd-generator \
+    sfynx:ddd:generate \
+    ./Resources/config/generator/auth,./Resources/config/generator/models \
+    --namespace=Sfynx\\AuthBundle \
+    --report-template=default \
+    --report-dir=build
+```
+
+**from repository with multiple import configuration files**
+```bash
+sfynx-ddd-generator \
+    sfynx:ddd:generate \
+    ./Resources/config/generator/imports \
+    --namespace=MyContext2 \
+    --report-template=default \
+    --report-dir=build
+```
+
+> c) Add XMI generator file report
+
+```bash
+sfynx-ddd-generator \
+    sfynx:ddd:generate \
     --namespace=MyContext \
     --conf-file=./Resources/config/generator/models/sfynx-ddd-generator.yml \
     --report-xmi="--output=build/MyContext.xmi|--autoload=/var/app/vendor|--recursive|build/MyContext" \
     --report-template=default \
     --report-dir=build
+```
+
+**Xmi options register in --report-xmi argument
+```
+--autoload=folder           Folder for the autoload
+--no-private                do not output private methods and attributes
+--no-protected              do not output protected methods and attributes
+--no-public                 do not output public methods and attributes
+--strict                    activate E_STRICT error_reporting
+--help                      shows this help
+--recursive                 look for .php files in specified directories
+--output=<output.xmi>       select xmi output file
 ```
 
 > d) Docker utilisation
@@ -87,6 +124,7 @@ docker run --rm \
 --volume $PWD:/var/www \
 sfynxdevops/generator \
 sfynx-ddd-generator \
+    sfynx:ddd:generate \
     --namespace=Sfynx\\AuthBundle \
     --conf-file=/var/www/Resources/config/generator/auth/authbundle_entity_role_api.yml \
     --report-template=default \
@@ -99,6 +137,7 @@ docker run --rm \
 --volume /var/www/cmf-sfynx/www:/var/app \
 sfynxdevops/generator \
 sfynx-ddd-generator \
+    sfynx:ddd:generate \
     --namespace=MyContext \
     --conf-file=/var/www/Resources/config/generator/models/sfynx-ddd-generator.yml \
     --report-xmi="--output=/var/www/build/MyContext.xmi|--autoload=/var/app/vendor|--recursive|/var/www/build/MyContext" \
@@ -115,6 +154,7 @@ docker run --rm \
 --volume /var/www/cmf-sfynx/www:/var/app \
 sfynxdevops/generator \
 sfynx-ddd-generator \
+    sfynx:ddd:generate \
     --namespace=MyContext \
     --conf-file=/var/www/Resources/config/generator/models/sfynx-ddd-generator.yml \
     --report-xmi="--output=/var/www/build/MyContext.xmi|--autoload=/var/app/vendor|--recursive|/var/www/build/MyContext" \

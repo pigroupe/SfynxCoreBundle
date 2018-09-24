@@ -11,10 +11,14 @@ use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Command\Command;
 
 /**
- *
+ * Class GenerateCommand
+ * @package Sfynx\CoreBundle\Generator\Presentation\Console\Command
  */
 class GenerateCommand extends Command
 {
+    /**
+     * @return void
+     */
     protected function configure() : void
     {
         $this->setName('sfynx:ddd:generate')
@@ -29,14 +33,20 @@ class GenerateCommand extends Command
             ->addOption('conf-autoload', null, InputOption::VALUE_REQUIRED, 'autoload.php file that you want to include')
             ->addOption('report-dir', null, InputOption::VALUE_REQUIRED, 'Folder where artifact will be generated')
             ->addOption('report-template', null, InputOption::VALUE_REQUIRED, 'Folder name where report template files are')
-            ->addOption('report-xmi', null, InputOption::VALUE_REQUIRED, ' XMI options separeted by space')
+            ->addOption('report-xmi', null, InputOption::VALUE_REQUIRED, ' XMI options separeted by |')
         ;
     }
 
+    /**
+     * @param InputInterface $input
+     * @param OutputInterface $output
+     * @return void
+     */
     protected function execute(InputInterface $input, OutputInterface $output) : void
     {
         // start
         $startTime = \microtime(true);
+//        \ini_set('xdebug.max_nesting_level', 3000);
 
         $generateCommand = (new ConsoleCommandAdapter(GenerateConsoleCommand::class, $output))->createCommandFromRequest($input);
 

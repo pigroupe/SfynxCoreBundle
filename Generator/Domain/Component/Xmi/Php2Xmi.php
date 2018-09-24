@@ -59,7 +59,7 @@ class Php2Xmi
         $dir->close();
     }
 
-    public static function php2xmi_main(CliOutput $output, array $argv)
+    public static function php2xmi_main($output, array $argv)
     {
         $files = [];
         $outputFile = '';
