@@ -9,13 +9,11 @@
 
 namespace Sfynx\CoreBundle\Generator\Application\Config\Validation;
 
-use Symfony\Component\Yaml\Yaml;
-
 use Sfynx\CoreBundle\Generator\Application\Config\Generalisation\ValidationInterface;
 use Sfynx\CoreBundle\Generator\Application\Config\Config;
-use Sfynx\CoreBundle\Generator\Application\Config\Exception\ConfigException;
 use Sfynx\CoreBundle\Generator\Domain\Widget\WidgetParser;
 use Sfynx\CoreBundle\Generator\Domain\Component\Config\Loader;
+use Symfony\Component\Console\Output\NullOutput;
 
 /**
  * Config ConfigWidgets
@@ -30,10 +28,24 @@ class ConfigWidgets implements ValidationInterface
      */
     public function validate(Config $config)
     {
+        $conf = false;
+        $config->set('conf-widget', $conf);
+
+        if (!$config->has('conf-array')) {
+            return;
+        }
+
         $array = $config->get('conf-array');
 
-        $conf = false;
-        foreach (WidgetParser::handlerList($config) as $widget) {
+        if (!isset($array['widgets']) || !is_array($array['widgets'])) {
+            return;
+        }
+
+        $output = new NullOutput();
+
+        $widgetParser = new WidgetParser($config, $output);
+
+        foreach ($widgetParser->handlerList() as $widget) {
             if (\array_key_exists($widget->getCategory(), $array['widgets'])
                 && \array_key_exists($widget::TAG, $array['widgets'][$widget->getCategory()])
                 && (null !== $array['widgets'][$widget->getCategory()][$widget::TAG])

@@ -94,7 +94,7 @@ class CreateArtifatcHandler implements HandlerInterface
     {
         if (\file_exists($path)) {
             \file_put_contents($path . '.back' . '.' . \time(), \file_get_contents($path));
-            $this->output->writeln(sprintf('<info>++</info> verioning file: "%s"', $path));
+            $this->output->writeln(sprintf('<info>++</info> versioning file: "%s"', $path));
         }
     }
 }

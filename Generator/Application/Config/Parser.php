@@ -13,38 +13,10 @@ class Parser
      * @param $argv
      * @return Config
      */
-    public function parse($argv): Config
+    public function parse(array $argv): Config
     {
         $config = new Config();
-
-        if (\sizeof($argv) === 0) {
-            return $config;
-        }
-
-        if (\preg_match('!\.php$!', $argv[0])
-            || \preg_match('!sfynx-ddd-generator$!', $argv[0])
-            || \preg_match('!sfynx-ddd-generator.phar$!', $argv[0])
-        ) {
-            \array_shift($argv);
-        }
-
-        // arguments with options
-        foreach ($argv as $k => $arg) {
-            if (\preg_match('!\-\-([\w\-]+)=(.*)!', $arg, $matches)) {
-                list(, $parameter, $value) = $matches;
-                $config->set($parameter, \trim($value, ' "\''));
-                unset($argv[$k]);
-            }
-        }
-
-        // arguments without options
-        foreach ($argv as $k => $arg) {
-            if (\preg_match('!\-\-([\w\-]+)$!', $arg, $matches)) {
-                list(, $parameter) = $matches;
-                $config->set($parameter, true);
-                unset($argv[$k]);
-            }
-        }
+        $config->fromArray($argv);
 
         return $config;
     }
