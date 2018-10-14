@@ -1,8 +1,3 @@
-# php vendor/bin/sfynx-ddd-generator \
-# --namespace=PromotionContext \
-# --conf-file=/var/www/app/config/generator/models/action_go_premise_request.yml \
-# --report-template=default \
-# --report-dir=/var/www/src/generator/FormAction
 default:
     namespace: PromotionContext
     cqrs: Activity\Command

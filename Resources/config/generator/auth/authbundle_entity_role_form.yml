@@ -1,8 +1,3 @@
-# php vendor/bin/sfynx-ddd-generator \
-# --namespace=Sfynx\\AuthBundle \
-# --conf-file=/var/www/app/config/generator/auth/authbundle_entity_role_form.yml \
-# --report-template=default \
-# --report-dir=/var/www/src/generator/authbundle
 default:
     namespace: Sfynx\AuthBundle
     cqrs: Role\Command

@@ -1,8 +1,3 @@
-# php vendor/bin/sfynx-ddd-generator \
-# --namespace=MyContext \
-# --conf-file=/var/www/app/config/generator/models/sfynx-ddd-generator.yml \
-# --report-template=default \
-# --report-dir=/var/www/src/generator/MyContext
 default:
     namespace: MyContext
     cqrs: Movie\Command
