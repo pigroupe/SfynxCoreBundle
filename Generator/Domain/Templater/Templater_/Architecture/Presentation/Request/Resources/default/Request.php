@@ -2,12 +2,14 @@
 use Sfynx\CoreBundle\Generator\Domain\Component\File\ClassHandler;
 
 $options = $templater->getTargetWidget()['options']['methods'] ?? ['GET', 'POST', 'PATCH'];
+$extendsNamespace = $templater->getTargetWidget()['extends'] ?? 'Sfynx\CoreBundle\Layers\Presentation\Request\Generalisation\AbstractFormRequest';
+$extendsName = ClassHandler::getClassNameFromNamespace($extendsNamespace);
 
 ?>
 namespace <?php echo $templater->getTargetNamespace(); ?>;
 
 use Symfony\Component\OptionsResolver\Options;
-use Sfynx\CoreBundle\Layers\Presentation\Request\Generalisation\AbstractFormRequest;
+use <?php echo $extendsNamespace; ?>;
 
 /**
  * Class <?php echo $templater->getTargetClassname(); ?><?php echo PHP_EOL ?>
@@ -20,7 +22,7 @@ use Sfynx\CoreBundle\Layers\Presentation\Request\Generalisation\AbstractFormRequ
  * @link http://www.sfynx.fr
  * @license LGPL (https://opensource.org/licenses/LGPL-3.0)
  */
-class <?php echo $templater->getTargetClassname(); ?> extends AbstractFormRequest
+class <?php echo $templater->getTargetClassname(); ?> extends <?php echo $extendsName; ?><?php echo PHP_EOL ?>
 {
     /**
      * @var array $defaults List of default values for optional parameters.
@@ -40,6 +42,9 @@ class <?php echo $templater->getTargetClassname(); ?> extends AbstractFormReques
 <?php endforeach; ?>
         ],
 <?php endif; ?>
+<?php if (\in_array('PUT', $options)): ?>
+        'PUT' => 'POST',
+<?php endif; ?>
 <?php if (\in_array('PATCH', $options)): ?>
         'PATCH' => 'POST',
 <?php endif; ?>
@@ -52,7 +57,7 @@ class <?php echo $templater->getTargetClassname(); ?> extends AbstractFormReques
 <?php if (\in_array('GET', $options)): ?>
         'GET'  => [
 <?php foreach ($templater->getTargetCommandFields() as $field): ?>
-<?php if ($field->name != 'entityId'): ?>
+<?php if ($field->name != 'entityId' && $field->required): ?>
             '<?php echo lcfirst($field->name) ?>',
 <?php endif; ?>
 <?php endforeach; ?>
@@ -61,12 +66,23 @@ class <?php echo $templater->getTargetClassname(); ?> extends AbstractFormReques
 <?php if (\in_array('POST', $options)): ?>
         'POST'  => [
 <?php foreach ($templater->getTargetCommandFields() as $field): ?>
+<?php if ((!isset($field->primaryKey) || !$field->primaryKey)  && $field->required): ?>
             '<?php echo lcfirst($field->name) ?>',
+<?php endif; ?>
 <?php endforeach; ?>
         ],
 <?php endif; ?>
+<?php if (\in_array('PUT', $options)): ?>
+        'PUT' => [
+<?php foreach ($templater->getTargetCommandFields() as $field): ?>
+<?php if ($field->required || (isset($field->primaryKey) && $field->primaryKey)): ?>
+            '<?php echo lcfirst($field->name) ?>',
+<?php endif; ?>
+<?php endforeach; ?>
+    ],
+<?php endif; ?>
 <?php if (\in_array('PATCH', $options)): ?>
-        'PATCH' => 'POST',
+        'PATCH' => ['entityId'],
 <?php endif; ?>
     ];
 
@@ -77,14 +93,21 @@ class <?php echo $templater->getTargetClassname(); ?> extends AbstractFormReques
 <?php if (\in_array('GET', $options)): ?>
         'GET' => [
 <?php foreach ($templater->getTargetCommandFields() as $field): ?>
-<?php if ($field->name != 'entityId'): ?>
             '<?php echo lcfirst($field->name) ?>' => ['<?php echo ClassHandler::getType($field->type); ?>', 'null'],
-<?php endif; ?>
 <?php endforeach; ?>
         ],
 <?php endif; ?>
 <?php if (\in_array('POST', $options)): ?>
         'POST' => [
+<?php foreach ($templater->getTargetCommandFields() as $field): ?>
+<?php if (!isset($field->primaryKey) || !$field->primaryKey): ?>
+            '<?php echo lcfirst($field->name) ?>' => ['<?php echo ClassHandler::getType($field->type); ?>', 'null'],
+<?php endif; ?>
+<?php endforeach; ?>
+        ],
+<?php endif; ?>
+<?php if (\in_array('PUT', $options)): ?>
+        'PUT' => [
 <?php foreach ($templater->getTargetCommandFields() as $field): ?>
             '<?php echo lcfirst($field->name) ?>' => ['<?php echo ClassHandler::getType($field->type); ?>', 'null'],
 <?php endforeach; ?>
@@ -121,7 +144,7 @@ class <?php echo $templater->getTargetClassname(); ?> extends AbstractFormReques
         /* identifier transformation */
         foreach ([
 <?php foreach ($templater->getTargetCommandFields() as $field): ?>
-<?php if (ClassHandler::isIntType($field->type)) : ?>
+<?php if ('int' == ClassHandler::getType($field->type)) : ?>
             '<?php echo lcfirst($field->name) ?>',
 <?php endif; ?>
 <?php endforeach; ?>

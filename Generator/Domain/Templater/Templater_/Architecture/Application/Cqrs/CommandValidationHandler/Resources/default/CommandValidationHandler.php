@@ -36,11 +36,7 @@ class <?php echo $templater->getTargetClassname(); ?> extends AbstractCommandVal
     {
         $this
 <?php foreach ($templater->getTargetCommandFields() as $field): ?>
-    <?php if ($field->required && ($field->required == true)): ?>
-    ->add('<?php echo lcfirst($field->name) ?>', new Assert\Required([
-    <?php else: ?>
     ->add('<?php echo lcfirst($field->name) ?>', new Assert\Optional([
-    <?php endif; ?>
          new Assert\NotBlank(),
 <?php if ($field->type == ClassHandler::TYPE_ENTITY): ?>             new Assert\Regex('/^[0-9]+$/'),<?php endif; ?>
 <?php if ($field->type == ClassHandler::TYPE_BOOLEAN): ?>             new Assert\Type('boolean'),<?php endif; ?>

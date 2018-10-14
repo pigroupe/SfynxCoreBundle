@@ -35,7 +35,7 @@ default:
                       content: "// 3. Implement decorator to apply the command workflow from the command"
                 - commandHandlerResult:
                       design: 'decorator'
-                      class: Sfynx\CoreBundle\Layers\Application\Command\Handler\FormCommandHandler
+                      class: Sfynx\CoreBundle\Layers\Application\Command\Handler\CommandHandler
                       arguments:
                       - '$commandWorkflow'
                       handlers: [ 'MovieFormCommandValidationHandler', 'MovieFormCommandSpecHandler']

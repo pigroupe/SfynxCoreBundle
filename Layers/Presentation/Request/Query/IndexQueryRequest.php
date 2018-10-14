@@ -4,7 +4,7 @@ namespace Sfynx\CoreBundle\Layers\Presentation\Request\Query;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 use Sfynx\CoreBundle\Layers\Domain\Service\Request\Generalisation\RequestInterface;
-use Sfynx\CoreBundle\Layers\Presentation\Request\Generalisation\Interfaces\QueryRequestInterface;
+use Sfynx\CoreBundle\Layers\Presentation\Request\Generalisation\Interfaces\RequestInterface as PresRequestInterface;
 
 /**
  * Class IndexQueryRequest.
@@ -13,7 +13,7 @@ use Sfynx\CoreBundle\Layers\Presentation\Request\Generalisation\Interfaces\Query
  * @package    Presentation
  * @subpackage Request\Query
  */
-class IndexQueryRequest implements QueryRequestInterface
+class IndexQueryRequest implements PresRequestInterface
 {
     protected $defaults = [];
 

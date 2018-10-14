@@ -4,7 +4,7 @@ namespace Sfynx\CoreBundle\Layers\Presentation\Request\Command;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 use Sfynx\CoreBundle\Layers\Domain\Service\Request\Generalisation\RequestInterface;
-use Sfynx\CoreBundle\Layers\Presentation\Request\Generalisation\Interfaces\CommandRequestInterface;
+use Sfynx\CoreBundle\Layers\Presentation\Request\Generalisation\Interfaces\RequestInterface as PresRequestInterface;
 
 /**
  * Class ArchieveajaxRequest.
@@ -13,7 +13,7 @@ use Sfynx\CoreBundle\Layers\Presentation\Request\Generalisation\Interfaces\Comma
  * @package    Presentation
  * @subpackage Request\Command
  */
-class ArchieveajaxRequest implements CommandRequestInterface
+class ArchieveajaxRequest implements PresRequestInterface
 {
     protected $defaults = [];
 

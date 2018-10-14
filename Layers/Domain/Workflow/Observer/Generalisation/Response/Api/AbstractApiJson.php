@@ -9,11 +9,7 @@ use Sfynx\ToolBundle\Builder\RouteTranslatorFactoryInterface;
 use Sfynx\AuthBundle\Domain\Service\Role\Generalisation\RoleFactoryInterface;
 use Sfynx\CoreBundle\Layers\Domain\Service\Request\Generalisation\RequestInterface;
 use Sfynx\CoreBundle\Layers\Domain\Specification\SpecIsObjectCreatedWithHandlerInterface;
-use Sfynx\CoreBundle\Layers\Domain\Specification\SpecIsHandlerCreatedWithQueryInterface;
-use Sfynx\CoreBundle\Layers\Domain\Specification\SpecIsServerSide;
 use Sfynx\CoreBundle\Layers\Domain\Specification\SpecIsValidRequest;
-use Sfynx\CoreBundle\Layers\Domain\Specification\SpecIsHandlerCreatedWithServerSideQueryInterface;
-use Sfynx\CoreBundle\Layers\Domain\Specification\SpecIsXmlHttpRequest;
 use Sfynx\CoreBundle\Layers\Domain\Specification\SpecIsHandlerCreatedWithNoRedirection;
 use Sfynx\CoreBundle\Layers\Domain\Workflow\Observer\Generalisation\Response\AbstractObserver;
 use Sfynx\CoreBundle\Layers\Infrastructure\Exception\WorkflowException;
@@ -49,19 +45,19 @@ abstract class AbstractApiJson extends AbstractObserver
      * AbstractCreateIndexBodyJson constructor.
      *
      * @param RequestInterface $request
-     * @param RoleFactoryInterface $roleFactory
-     * @param PiToolExtension $toolExtension
-     * @param RouteTranslatorFactoryInterface $routeFactory
-     * @param TranslatorInterface $translator
-     * @param array $param
+     * @param null|RouteTranslatorFactoryInterface $routeFactory
+     * @param null|array $param
+     * @param null|RoleFactoryInterface $roleFactory
+     * @param null|TranslatorInterface $translator
+     * @param null|PiToolExtension $toolExtension
      */
     public function __construct(
         RequestInterface $request,
-        RoleFactoryInterface $roleFactory,
-        PiToolExtension $toolExtension,
-        RouteTranslatorFactoryInterface $routeFactory,
-        TranslatorInterface $translator,
-        ?stdclass $param
+        RouteTranslatorFactoryInterface $routeFactory = null,
+        stdclass $param = null,
+        RoleFactoryInterface $roleFactory = null,
+        TranslatorInterface $translator = null,
+        PiToolExtension $toolExtension = null
     ) {
         $this->request = $request;
         $this->roleFactory = $roleFactory;
@@ -78,7 +74,7 @@ abstract class AbstractApiJson extends AbstractObserver
      */
     protected function getValidMethods(): array
     {
-        return ['GET'];
+        return ['GET', 'POST', 'PUT', 'PATCH', 'DELETE'];
     }
 
     /**
@@ -90,7 +86,6 @@ abstract class AbstractApiJson extends AbstractObserver
         $this->object->validMethod = $this->getValidMethods();
         $this->object->handler = $this->wfHandler;
         $this->object->param = $this->param;
-        $this->object->isXmlHttpRequest = $this->request->isXmlHttpRequest();
     }
 
     /**
@@ -104,11 +99,7 @@ abstract class AbstractApiJson extends AbstractObserver
         $this->prepareObject();
         // we abort if we are not in the create form process
         $specs = (new SpecIsValidRequest())
-            ->AndSpec(new SpecIsXmlHttpRequest())
             ->AndSpec(new SpecIsObjectCreatedWithHandlerInterface())
-            ->AndSpec(new SpecIsHandlerCreatedWithQueryInterface())
-            ->AndSpec(new SpecIsHandlerCreatedWithServerSideQueryInterface())
-            ->AndSpec(new SpecIsServerSide())
             ->AndSpec(new SpecIsHandlerCreatedWithNoRedirection())
         ;
         if (!$specs->isSatisfiedBy($this->object)) {

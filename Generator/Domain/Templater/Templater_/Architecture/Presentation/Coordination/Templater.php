@@ -149,6 +149,7 @@ EOT;
                 }
             }
         }
+
         ClassHandler::addConstructorMethod($namespace, $class);
         ClassHandler::addCoordinationMethod($namespace, $class)->addBody($body);
 

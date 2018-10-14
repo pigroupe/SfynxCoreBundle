@@ -38,7 +38,7 @@ default:
                             - [ attach, [ 'new OBOffer6EntityCreate' ] ]
                     - commandHandlerResult:
                         design: 'decorator'
-                        class: Sfynx\CoreBundle\Layers\Application\Command\Handler\FormCommandHandler
+                        class: Sfynx\CoreBundle\Layers\Application\Command\Handler\CommandHandler
                         arguments:
                             - '$commandWorkflow'
                         handlers: [ 'Offer6FormCommandValidationHandler', 'Offer6FormCommandSpecHandler']

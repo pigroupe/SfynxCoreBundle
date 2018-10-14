@@ -56,7 +56,16 @@ sfynx-ddd-generator \
 sfynx-ddd-generator \
     sfynx:ddd:generate \
     --namespace=Sfynx\\AuthBundle \
-    --conf-file=./Resources/config/generator/auth/authbundle_entity_role_api.yml \
+    --conf-file=./Resources/config/generator/auth/authbundle_entity_role_api_query.yml \
+    --report-template=default \
+    --report-dir=build
+```
+
+```bash
+sfynx-ddd-generator \
+    sfynx:ddd:generate \
+    --namespace=Sfynx\\AuthBundle \
+    --conf-file=./Resources/config/generator/auth/authbundle_entity_user_api_command.yml \
     --report-template=default \
     --report-dir=build
 ```

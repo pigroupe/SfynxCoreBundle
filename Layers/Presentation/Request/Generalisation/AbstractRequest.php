@@ -10,14 +10,14 @@ use Sfynx\CoreBundle\Layers\Domain\Service\Request\Generalisation\RequestInterfa
 use Sfynx\CoreBundle\Layers\Domain\Specification\SpecIsValidRequest;
 
 /**
- * Class AbstractFormRequest
+ * Class AbstractRequest
  *
  * @category   Sfynx\CoreBundle\Layers
  * @package    Presentation
  * @subpackage Request\Generalisation
  * @abstract
  */
-abstract class AbstractFormRequest implements PresRequestInterface
+abstract class AbstractRequest implements PresRequestInterface
 {
     /** @var array */
     protected $defaults = [];
@@ -43,7 +43,7 @@ abstract class AbstractFormRequest implements PresRequestInterface
      * @param RequestInterface $request
      * @param array $parameters
      */
-    public function __construct(RequestInterface $request, array $parameters =[])
+    public function __construct(RequestInterface $request, array $parameters = [])
     {
         $this->request  = $request;
         $this->parameters  = $parameters;
@@ -81,7 +81,7 @@ abstract class AbstractFormRequest implements PresRequestInterface
      *
      * @return AbstractFormRequest
      */
-    protected function execute(): AbstractFormRequest
+    protected function execute(): AbstractRequest
     {
         // preapre object attribut used by specifications
         $this->prepareObject();
@@ -113,9 +113,6 @@ abstract class AbstractFormRequest implements PresRequestInterface
             }
             $this->$attribut = isset($this->$attribut[$mt]) ? $this->$attribut[$mt] : $this->$attribut;
         }
-        /* set default values */
-        $this->defaults['_token'] = null;
-        $this->allowedTypes['_token'] = ['string', 'null'];
 
         /* multidimensional resolver */
         $this->multidimensionalOtionResolver($this->requestParameters, $this->options, $this->defaults, $this->allowedTypes, $this->allowedValues);

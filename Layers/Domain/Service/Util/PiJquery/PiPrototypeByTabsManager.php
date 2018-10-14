@@ -27,10 +27,10 @@ use Sfynx\CoreBundle\Layers\Infrastructure\Exception\ExtensionException;
  */
 class PiPrototypeByTabsManager extends PiJqueryExtension
 {
-   /**
-    * @var RequestInterface
-    */
+   /** @var RequestInterface */
     protected $request;
+    /** @var string */
+    protected $projectWebDir;
 
     /**
      * Constructor.
@@ -46,6 +46,16 @@ class PiPrototypeByTabsManager extends PiJqueryExtension
     ) {
         parent::__construct($container, $translator);
         $this->request = $request;
+    }
+
+    /**
+     * @return string
+     */
+    public function getProjectWebDir()
+    {
+        $this->projectWebDir = $this->projectWebDir ?? $this->request->server->get('DOCUMENT_ROOT') . '/';
+
+        return $this->projectWebDir;
     }
 
     /**
@@ -70,7 +80,7 @@ class PiPrototypeByTabsManager extends PiJqueryExtension
         $this->container->get('sfynx.tool.twig.extension.layouthead')->addJsFile("bundles/sfynxtemplate/js/tiny_mce/jquery.tinymce.js");
         // datepicker region
         $locale = strtolower(substr($this->request->getLocale(), 0, 2));
-        $root_file         = realpath($this->container->getParameter("kernel.root_dir") . "/../web/bundles/sfynxtemplate/js/ui/i18n/jquery.ui.datepicker-{$locale}.js");
+        $root_file = realpath($this->getProjectWebDir() . "bundles/sfynxtemplate/js/ui/i18n/jquery.ui.datepicker-{$locale}.js");
         if (!$root_file) {
             $locale = "en";
         }
@@ -107,11 +117,11 @@ class PiPrototypeByTabsManager extends PiJqueryExtension
         $url_css  = '/css/layout.css';
         $url_root = 'http://'. $this->container->get('request_stack')->getCurrentRequest()->getHttpHost() . $this->container->get('request_stack')->getCurrentRequest()->getBasePath();
         $url_base = $url_root . "/bundles/sfynxtemplate/js/tiny_mce";
-        $root_upload = $this->container->get("kernel")->getRootDir()."/../web/uploads/tinymce/";
+        $root_upload = $this->projectWebDir . "uploads/tinymce/";
         $root_web = $this->container->get("kernel")->getRootDir()."/../web";
         // we set the locale date format of datepicker
         $locale = strtolower(substr($this->request->getLocale(), 0, 2));
-        $root_file         = realpath($this->container->getParameter("kernel.root_dir") . "/../web/bundles/sfynxtemplate/js/ui/i18n/jquery.ui.datepicker-{$locale}.js");
+        $root_file = realpath($this->projectWebDir . "bundles/sfynxtemplate/js/ui/i18n/jquery.ui.datepicker-{$locale}.js");
         if (!$root_file) {
             $locale = "en";
         }

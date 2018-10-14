@@ -22,10 +22,12 @@ class SpecIsEntityEdited extends AbstractSpecification
      */
     public function isSatisfiedBy(stdClass $object): bool
     {
+        $UUIDv4 = '/^[0-9A-F]{8}-[0-9A-F]{4}-4[0-9A-F]{3}-[89AB][0-9A-F]{3}-[0-9A-F]{12}$/i';
+
         return property_exists($object, 'entityId') &&
             null !== $object->entityId &&
             '' !== $object->entityId &&
-            is_int($object->entityId)
+            (is_int($object->entityId) || preg_match($UUIDv4, $object->entityId))
             ;
     }
 }

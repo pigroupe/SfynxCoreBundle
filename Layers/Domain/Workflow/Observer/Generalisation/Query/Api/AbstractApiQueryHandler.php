@@ -8,7 +8,6 @@ use Sfynx\CoreBundle\Layers\Domain\Service\Manager\Generalisation\Interfaces\Man
 use Sfynx\CoreBundle\Layers\Domain\Service\Request\Generalisation\RequestInterface;
 use Sfynx\CoreBundle\Layers\Domain\Workflow\Observer\Generalisation\Query\AbstractObserver;
 use Sfynx\CoreBundle\Layers\Domain\Specification\SpecIsValidRequest;
-use Sfynx\CoreBundle\Layers\Domain\Specification\SpecIsXmlHttpRequest;
 use Sfynx\CoreBundle\Layers\Domain\Specification\SpecIsHandlerCreatedWithQueryInterface;
 
 /**
@@ -60,7 +59,6 @@ abstract class AbstractApiQueryHandler extends AbstractObserver
     {
         $this->object->requestMethod = $this->request->getMethod();
         $this->object->validMethod = $this->getValidMethods();
-        $this->object->isXmlHttpRequest = $this->request->isXmlHttpRequest();
         $this->object->handler = new stdClass();
         $this->object->handler->query = $this->wfQuery;
     }
@@ -75,7 +73,6 @@ abstract class AbstractApiQueryHandler extends AbstractObserver
         $this->prepareObject();
         // we abort if we are not in the edit form process
         $specs = (new SpecIsValidRequest())
-            ->AndSpec(new SpecIsXmlHttpRequest())
             ->AndSpec(new SpecIsHandlerCreatedWithQueryInterface())
         ;
         if (!$specs->isSatisfiedBy($this->object)) {

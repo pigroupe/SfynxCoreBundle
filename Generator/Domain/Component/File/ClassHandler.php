@@ -35,6 +35,7 @@ class ClassHandler implements SplSubject
 
     /** @var string */
     const TYPE_ENTITY = 'id';
+    const TYPE_UUID = 'uuid';
     const TYPE_INTEGER = 'integer';
     const TYPE_NUMBER = 'number';
     const TYPE_BOOLEAN = 'boolean';
@@ -47,6 +48,7 @@ class ClassHandler implements SplSubject
 
     const ALL_TYPES = [
         self::TYPE_ENTITY,
+        self::TYPE_UUID,
         self::TYPE_INTEGER,
         self::TYPE_NUMBER,
         self::TYPE_BOOLEAN,
@@ -841,6 +843,9 @@ class ClassHandler implements SplSubject
         switch ($type) {
             case self::TYPE_ENTITY:
                 $newType = 'int';
+                break;
+            case self::TYPE_UUID:
+                $newType = 'string';
                 break;
             case self::TYPE_INTEGER:
                 $newType = 'int';

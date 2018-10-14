@@ -1,6 +1,8 @@
 <?php
 namespace Sfynx\CoreBundle\Layers\Infrastructure\Exception;
 
+use Sfynx\CoreBundle\Layers\Infrastructure\Exception\Entity;
+
 /**
  * Exception Class EntityException
  *
@@ -42,13 +44,17 @@ class EntityException extends \Exception
      * Returns the <Not Found Entity> Exception.
      *
      * @param string $entityName
+     * @param int|string|null $id
      * @return \Exception
      * @access public
      * @static
      */
-    public static function NotFoundEntity($entityName)
+    public static function NotFoundEntity($entityName, $id = null)
     {
-        return new self(sprintf('Unable to find %s entity.', $entityName));
+        if (null !== $id) {
+            return new Entity\NotFoundEntityException(sprintf('Unable to find %s entity with %s id value', $entityName, (string)$id));
+        }
+        return new Entity\NotFoundEntityException(sprintf('Unable to find %s entity', $entityName));
     }
 
     /**

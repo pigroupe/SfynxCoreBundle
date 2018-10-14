@@ -1,7 +1,7 @@
 <?php
 namespace Sfynx\CoreBundle\Layers\Presentation\Adapter\Generalisation\Interfaces;
 
-use Sfynx\CoreBundle\Layers\Presentation\Request\Generalisation\Interfaces\QueryRequestInterface;
+use Sfynx\CoreBundle\Layers\Presentation\Request\Generalisation\Interfaces\RequestInterface;
 use Sfynx\CoreBundle\Layers\Application\Query\Generalisation\Interfaces\QueryInterface;
 
 /**
@@ -14,8 +14,8 @@ use Sfynx\CoreBundle\Layers\Application\Query\Generalisation\Interfaces\QueryInt
 interface QueryAdapterInterface
 {
     /**
-     * @param QueryRequestInterface $request
+     * @param RequestInterface $request
      * @return QueryInterface
      */
-    public function createQueryFromRequest(QueryRequestInterface $request): QueryInterface;
+    public function createQueryFromRequest(RequestInterface $request): QueryInterface;
 }
