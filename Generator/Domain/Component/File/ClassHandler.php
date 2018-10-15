@@ -220,7 +220,7 @@ class ClassHandler implements SplSubject
         $class->addComment('@subpackage ' . \str_replace($templater->getNamespace() . '\\' . $package . '\\', '', $templater->getTargetNamespace()));
         $class->addComment('');
         $class->addComment('@author SFYNX <sfynx@pi-groupe.net>');
-        $class->addComment('@link http://www.sfynx.fr');
+        $class->addComment('@link http://www.sfynx.org');
         $class->addComment('@license LGPL (https://opensource.org/licenses/LGPL-3.0)');
     }
 
@@ -460,14 +460,15 @@ class ClassHandler implements SplSubject
                                     $defaultValue = ($defaultValue === 'false') ? false : $defaultValue;
                                     $defaultValue = ($defaultValue === 'true') ? true : $defaultValue;
                                     $defaultValue = ($defaultValue === '[]') ? [] : $defaultValue;
+                                    $defaultValue = ($defaultValue === 'null') ? null : $defaultValue;
                                     $defaultValue = \is_numeric($defaultValue) ? \intval($defaultValue) : $defaultValue;
                                     $methodClass->addParameter($arg)->setTypeHint($type)->setDefaultValue($defaultValue);
                                 } else {
                                     $methodClass->addParameter($arg)->setTypeHint($type);
                                 }
                             } else {
-                                $newArgument = \str_replace('$', '', \trim($argument), $countSpace);
-                                if (1 == $countSpace) {
+                                $newArgument = \str_replace('$', '', \trim($argument), $count);
+                                if (1 == $count) {
                                     $methodClass->addParameter($newArgument);
                                 }
                             }

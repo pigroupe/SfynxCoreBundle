@@ -92,5 +92,5 @@ SfynxCoreBundle is a [Project PI-GROUPE Development](https://github.com/pigroupe
 See also the list of [contributors](https://github.com/orgs/pigroupe/people).
 
 **For more information** : 
-* http://www.sfynx.fr
+* http://www.sfynx.org
 * http://www.pi-groupe.net
