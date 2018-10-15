@@ -14,6 +14,9 @@ default:
                     implements: ~
                     uses:
                       - 'Symfony\Component\HttpFoundation\JsonResponse'
+                      - 'Exception'
+                      - 'Sfynx\CoreBundle\Layers\Infrastructure\Exception\Entity\ViolationEntityException'
+                      - 'Sfynx\CoreBundle\Layers\Infrastructure\Exception\Entity\NotFoundEntityException'
                     traits: ~
                 body:
                     - codeComment1:
@@ -70,7 +73,15 @@ default:
                         design: 'code'
                         content:
                           - "$response = $responseHandlerResult->getResponse();"
-                          - '}  catch (\Exception $e) {'
+                          - '}  catch (NotFoundEntityException $e) {'
+                          - '    $response = new JsonResponse();'
+                          - '    $response->setStatusCode(JsonResponse::HTTP_NOT_FOUND);'
+                          - '    $response->setContent($e->getMessage());'
+                          - '}  catch (ViolationEntityException $e) {'
+                          - '    $response = new JsonResponse();'
+                          - '    $response->setStatusCode(JsonResponse::HTTP_CONFLICT);'
+                          - '    $response->setContent($e->getMessage());'
+                          - '}  catch (Exception $e) {'
                           - '    $response = new JsonResponse();'
                           - '    $response->setStatusCode(JsonResponse::HTTP_SERVICE_UNAVAILABLE);'
                           - '    $response->setContent($e->getMessage());'

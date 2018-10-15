@@ -3,7 +3,7 @@ namespace Sfynx\CoreBundle\Layers\Domain\Workflow\Observer\Command;
 
 use Exception;
 use Symfony\Component\Form\Extension\Core\DataTransformer\ValueToDuplicatesTransformer;
-
+use Sfynx\CoreBundle\Layers\Infrastructure\Exception\EntityException;
 
 /**
  * Class TraitProcess
@@ -31,7 +31,7 @@ trait TraitProcess
                 }
             }
         } catch (Exception $e) {
-            $this->wfCommand->errors['success'] = 'errors.entity.save';
+            throw EntityException::ViolationEntity();
         }
         // we add the last entity version
         $this->wfLastData->entity = $entity;
