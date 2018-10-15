@@ -27,10 +27,10 @@ use Sfynx\CoreBundle\Layers\Infrastructure\Exception\ExtensionException;
  */
 class PiFormSimpleManager extends PiJqueryExtension
 {
-    /**
-     * @var RequestInterface
-     */
+    /** @var RequestInterface */
     protected $request;
+    /** @var string */
+    protected $projectWebDir;
 
     /**
      * Constructor.
@@ -45,6 +45,16 @@ class PiFormSimpleManager extends PiJqueryExtension
     ) {
         parent::__construct($container, $translator);
         $this->request = $request;
+    }
+
+    /**
+     * @return string
+     */
+    public function getProjectWebDir()
+    {
+        $this->projectWebDir = $this->projectWebDir ?? $this->request->server->get('DOCUMENT_ROOT') . '/';
+
+        return $this->projectWebDir;
     }
 
     /**
@@ -73,7 +83,7 @@ class PiFormSimpleManager extends PiJqueryExtension
         $this->container->get('sfynx.tool.twig.extension.layouthead')->addJsFile("bundles/sfynxtemplate/js/tiny_mce/jquery.tinymce.js");
         // datepicker region
         $locale = strtolower(substr($this->request->getLocale(), 0, 2));
-        $root_file         = realpath($this->container->getParameter("kernel.root_dir") . "/../web/bundles/sfynxtemplate/js/ui/i18n/jquery.ui.datepicker-{$locale}.js");
+        $root_file = realpath($this->getProjectWebDir() . "bundles/sfynxtemplate/js/ui/i18n/jquery.ui.datepicker-{$locale}.js");
         if (!$root_file) {
         	$locale = "en";
         }

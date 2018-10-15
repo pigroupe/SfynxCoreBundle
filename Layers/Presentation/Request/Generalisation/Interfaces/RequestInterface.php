@@ -2,13 +2,13 @@
 namespace Sfynx\CoreBundle\Layers\Presentation\Request\Generalisation\Interfaces;
 
 /**
- * Interface CommandRequestInterface
+ * Interface RequestInterface
  *
  * @category   Sfynx\CoreBundle\Layers
  * @package    Presentation
  * @subpackage Request\Generalisation\Interfaces
  */
-interface CommandRequestInterface
+interface RequestInterface
 {
     /**
      * @return mixed

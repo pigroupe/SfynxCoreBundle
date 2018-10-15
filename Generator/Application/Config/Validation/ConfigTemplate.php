@@ -26,23 +26,21 @@ class ConfigTemplate implements ValidationInterface
      * @var array
      * @static
      */
-    static $templateType = array('default', 'coincoin');
+    static $templateType = array('default');
 
     /**
      * @inheritdoc
      */
     public function validate(Config $config)
     {
-        if ($config->has('report-template')
-            && \in_array($config->get('report-template'), self::$templateType)
+        if (!$config->has('report-template')
+            || !\in_array($config->get('report-template'), self::$templateType)
         ) {
-            $config->set('report-template', $config->get('report-template'));
+            $config->set('report-template', self::DEFAULT_CONF);
         } elseif (!empty($config->get('conf-array')['template'])
             && \in_array($config->get('conf-array')['template'], self::$templateType)
         ) {
             $config->set('report-template', $config->get('conf-array')['template']);
-        } else {
-            $config->set('report-template', self::DEFAULT_CONF);
         }
     }
 }

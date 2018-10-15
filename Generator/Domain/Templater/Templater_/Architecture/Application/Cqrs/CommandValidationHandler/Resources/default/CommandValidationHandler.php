@@ -18,7 +18,7 @@ use Sfynx\CoreBundle\Layers\Application\Validation\Validator\Constraint\AssocAll
  * @subpackage <?php echo str_replace($templater->getNamespace() . '\Application\\', '', $templater->getTargetNamespace()); ?><?php echo PHP_EOL ?>
  *
  * @author SFYNX <sfynx@pi-groupe.net>
- * @link http://www.sfynx.fr
+ * @link http://www.sfynx.org
  * @license LGPL (https://opensource.org/licenses/LGPL-3.0)
  */
 class <?php echo $templater->getTargetClassname(); ?> extends AbstractCommandValidationHandler
@@ -36,11 +36,7 @@ class <?php echo $templater->getTargetClassname(); ?> extends AbstractCommandVal
     {
         $this
 <?php foreach ($templater->getTargetCommandFields() as $field): ?>
-    <?php if ($field->required && ($field->required == true)): ?>
-    ->add('<?php echo lcfirst($field->name) ?>', new Assert\Required([
-    <?php else: ?>
     ->add('<?php echo lcfirst($field->name) ?>', new Assert\Optional([
-    <?php endif; ?>
          new Assert\NotBlank(),
 <?php if ($field->type == ClassHandler::TYPE_ENTITY): ?>             new Assert\Regex('/^[0-9]+$/'),<?php endif; ?>
 <?php if ($field->type == ClassHandler::TYPE_BOOLEAN): ?>             new Assert\Type('boolean'),<?php endif; ?>

@@ -25,9 +25,11 @@ class OBEntityShowHandler extends AbstractEntityShowHandler
     protected function process(): void
     {
         try {
-            $this->wfLastData->entity = $this->manager->getQueryRepository()->find($this->wfQuery->getEntityId());
+            $this->wfLastData->entity = $this->manager
+                ->getQueryRepository()
+                ->find($this->wfQuery->getEntityId());
         } catch (Exception $e) {
-            throw EntityException::NotFoundEntity($this->entityName);
+            throw EntityException::NotFoundEntity($this->entityName, $this->wfQuery->getEntityId());
         }
     }
 }

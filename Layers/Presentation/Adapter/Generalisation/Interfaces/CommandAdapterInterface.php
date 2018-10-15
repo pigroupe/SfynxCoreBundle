@@ -1,7 +1,7 @@
 <?php
 namespace Sfynx\CoreBundle\Layers\Presentation\Adapter\Generalisation\Interfaces;
 
-use Sfynx\CoreBundle\Layers\Presentation\Request\Generalisation\Interfaces\CommandRequestInterface;
+use Sfynx\CoreBundle\Layers\Presentation\Request\Generalisation\Interfaces\RequestInterface;
 use Sfynx\CoreBundle\Layers\Application\Command\Generalisation\Interfaces\CommandInterface;
 
 /**
@@ -14,8 +14,8 @@ use Sfynx\CoreBundle\Layers\Application\Command\Generalisation\Interfaces\Comman
 interface CommandAdapterInterface
 {
     /**
-     * @param CommandRequestInterface $request
+     * @param RequestInterface $request
      * @return mixed
      */
-    public function createCommandFromRequest(CommandRequestInterface $request): CommandInterface;
+    public function createCommandFromRequest(RequestInterface $request): CommandInterface;
 }

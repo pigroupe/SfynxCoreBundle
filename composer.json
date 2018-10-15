@@ -58,6 +58,6 @@
     }
   },
   "bin": [
-    "Generator/Presentation/Coordination/Command/sfynx-ddd-generator"
+    "bin/sfynx-ddd-generator"
   ]
 }

@@ -31,9 +31,10 @@ class PiGridTableManager extends PiJqueryExtension
 {
     /** @var CsrfTokenManagerInterface $securityManager */
     protected $securityManager;
-
    /** @var RequestInterface */
     protected $request;
+    /** @var string */
+    protected $projectWebDir;
 
     /**
      * @var array
@@ -58,6 +59,16 @@ class PiGridTableManager extends PiJqueryExtension
         $this->request = $request;
 
         parent::__construct($container, $translator);
+    }
+
+    /**
+     * @return string
+     */
+    public function getProjectWebDir()
+    {
+        $this->projectWebDir = $this->projectWebDir ?? $this->request->server->get('DOCUMENT_ROOT') . '/';
+
+        return $this->projectWebDir;
     }
 
     /**
@@ -163,7 +174,7 @@ class PiGridTableManager extends PiJqueryExtension
         $this->container->get('sfynx.tool.twig.extension.layouthead')->addJsFile("bundles/sfynxtemplate/js/jquery/jquery.chained.remote.js");
         // datepicker region
         $locale = strtolower(substr($this->request->getLocale(), 0, 2));
-        $root_file = realpath($this->container->getParameter("kernel.root_dir") . "/../web/bundles/sfynxtemplate/js/ui/i18n/jquery.ui.datepicker-{$locale}.js");
+        $root_file = realpath($this->getProjectWebDir() . "bundles/sfynxtemplate/js/ui/i18n/jquery.ui.datepicker-{$locale}.js");
         if (!$root_file) {
             $locale = "en-GB";
         }
@@ -230,7 +241,7 @@ class PiGridTableManager extends PiJqueryExtension
         $action       = $this->container->get('assets.packages')->getUrl($this->container->getParameter('sfynx.template.theme.layout.admin.grid.img')."action.png");
         // we set the locale date format of datepicker
         $locale = strtolower(substr($this->request->getLocale(), 0, 2));
-        $root_file    = realpath($this->container->getParameter("kernel.root_dir") . "/../web/bundles/sfynxtemplate/js/ui/i18n/jquery.ui.datepicker-{$locale}.js");
+        $root_file    = realpath($this->getProjectWebDir() . "bundles/sfynxtemplate/js/ui/i18n/jquery.ui.datepicker-{$locale}.js");
         if (!$root_file) {
             $locale = "en-GB";
         }

@@ -19,7 +19,7 @@ use Sfynx\CoreBundle\Layers\Application\Validation\Type\AbstractDefaultType;
  * @subpackage <?php echo str_replace($templater->getNamespace() . '\Application\\', '', $templater->getTargetNamespace()); ?><?php echo PHP_EOL ?>
  *
  * @author SFYNX <sfynx@pi-groupe.net>
- * @link http://www.sfynx.fr
+ * @link http://www.sfynx.org
  * @license LGPL (https://opensource.org/licenses/LGPL-3.0)
  */
 class <?php echo $templater->getTargetClassname(); ?> extends AbstractDefaultType

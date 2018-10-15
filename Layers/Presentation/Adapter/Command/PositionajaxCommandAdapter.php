@@ -2,7 +2,7 @@
 namespace Sfynx\CoreBundle\Layers\Presentation\Adapter\Command;
 
 use Sfynx\CoreBundle\Layers\Presentation\Adapter\Generalisation\Interfaces\CommandAdapterInterface;
-use Sfynx\CoreBundle\Layers\Presentation\Request\Generalisation\Interfaces\CommandRequestInterface;
+use Sfynx\CoreBundle\Layers\Presentation\Request\Generalisation\Interfaces\RequestInterface;
 use Sfynx\CoreBundle\Layers\Application\Command\PositionajaxCommand;
 use Sfynx\CoreBundle\Layers\Application\Command\Generalisation\Interfaces\CommandInterface;
 
@@ -16,10 +16,10 @@ use Sfynx\CoreBundle\Layers\Application\Command\Generalisation\Interfaces\Comman
 class PositionajaxCommandAdapter implements CommandAdapterInterface
 {
     /**
-     * @param CommandRequestInterface $request
+     * @param RequestInterface $request
      * @return NewCommand
      */
-    public function createCommandFromRequest(CommandRequestInterface $request): CommandInterface
+    public function createCommandFromRequest(RequestInterface $request): CommandInterface
     {
         $parameters = $request->getRequestParameters();
         return new PositionajaxCommand($parameters);

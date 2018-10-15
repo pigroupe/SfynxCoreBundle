@@ -1,4 +1,5 @@
 CURRENT_TAG=$(shell git tag |tail -n 2 |head -n 1)
+RELEASE_VERSION=$(shell echo ${CURRENT_TAG}|sed -r s/v//)
 PREVIOUS_TAG=$(shell git tag |tail -n 1)
 BUILD_DIR=releases
 
@@ -56,12 +57,12 @@ build-docker:
 
 changelog-deb:
 	@echo "sfynx-ddd-generator ($(RELEASE_VERSION)) unstable; urgency=low" >/tmp/changelog
-	@echo >> artifacts/changelog
+	@echo >> CHANGELOG.md
 	@git log $(CURRENT_TAG)...HEAD --pretty=format:'   * %s ' --reverse >> /tmp/changelog
 	@echo >> /tmp/changelog
 	@echo >> /tmp/changelog
 	@echo  "  -- Etienne de Longeaux <sfynx@pi-groupe.net>  $(shell date --rfc-2822)" >> /tmp/changelog
 	@echo >> /tmp/changelog
 	@# prepend to changelog
-	@cat /tmp/changelog|cat - artifacts/changelog > /tmp/out && mv /tmp/out artifacts/changelog
-	@echo >> artifacts/changelog
+	@cat /tmp/changelog|cat - CHANGELOG.md > /tmp/out && mv /tmp/out CHANGELOG.md
+	@echo >> CHANGELOG.md

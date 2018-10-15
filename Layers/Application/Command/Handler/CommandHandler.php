@@ -15,7 +15,7 @@ use Sfynx\CoreBundle\Layers\Infrastructure\Exception\WorkflowException;
  * @package    Application
  * @subpackage Command\Handler
  */
-class FormCommandHandler implements CommandHandlerInterface
+class CommandHandler implements CommandHandlerInterface
 {
     /** @var CommandInterface */
     public $command;

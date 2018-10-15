@@ -1,8 +1,3 @@
-# php vendor/bin/sfynx-ddd-generator \
-# --namespace=Sfynx\\AuthBundle \
-# --conf-file=/var/www/app/config/generator/auth/authbundle_entity_group_form.yml \
-# --report-template=default \
-# --report-dir=/var/www/src/generator/authbundle
 default:
     namespace: Sfynx\AuthBundle
     cqrs: Group\Command
@@ -44,7 +39,7 @@ default:
                         content: "// 3. Implement decorator to apply the command workflow from the command"
                     - commandHandlerResult:
                         design: 'decorator'
-                        class: Sfynx\CoreBundle\Layers\Application\Command\Handler\FormCommandHandler
+                        class: Sfynx\CoreBundle\Layers\Application\Command\Handler\CommandHandler
                         arguments:
                             - '$commandworkflow'
                         handlers: [ 'GroupFormCommandValidationHandler', 'GroupFormCommandSpecHandler']

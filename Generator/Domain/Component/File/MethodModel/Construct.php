@@ -38,8 +38,7 @@ class Construct
         $arguments = [];
         $fieldContent = '';
         foreach ($fields as $field) {
-            \str_replace('entityid', 'entityid', \strtolower($field->name), $isFieldEntity);
-            if (!$isFieldEntity) {
+            if (!isset($field->primaryKey) || !$field->primaryKey) {
                 $propertyFieldName = \lcfirst($field->name);
                 $fieldContent .= sprintf("\$this->%s = \$%s;", $propertyFieldName, $propertyFieldName) . PHP_EOL;
 
@@ -47,13 +46,12 @@ class Construct
                 $ClassTypeFieldName = ClassHandler::getClassNameFromNamespace($typeFieldName);
                 ClassHandler::addUse($namespace, $field->type, $index);
 
-                array_push($arguments, sprintf('%s $%s', $ClassTypeFieldName, $propertyFieldName));
-            } else {
+                array_push($arguments, sprintf('%s $%s = null', $ClassTypeFieldName, $propertyFieldName));
+            } elseif($field->type == ClassHandler::TYPE_UUID) {
                 $fieldContent .= sprintf("\$this->id = BaseUuid::uuid4();") . PHP_EOL;
+                ClassHandler::addUse($namespace, 'Ramsey\Uuid\Uuid as BaseUuid', $index);
             }
         }
-
-        ClassHandler::addUse($namespace, 'Ramsey\Uuid\Uuid as BaseUuid', $index);
 
         ClassHandler::createMethods(
             $namespace,

@@ -1,8 +1,3 @@
-# php vendor/bin/sfynx-ddd-generator \
-# --namespace=AdminContext \
-# --conf-file=/var/www/app/config/generator/models/entity_admin_date_list.yml \
-# --report-template=default \
-# --report-dir=/var/www/src/generator/FormAdmin
 default:
     namespace: AdminContext
     cqrs: DateList\Command
@@ -44,7 +39,7 @@ default:
                         content: "// 3. Implement decorator to apply the command workflow from the command"
                     - commandHandlerResult:
                         design: 'decorator'
-                        class: Sfynx\CoreBundle\Layers\Application\Command\Handler\FormCommandHandler
+                        class: Sfynx\CoreBundle\Layers\Application\Command\Handler\CommandHandler
                         arguments:
                             - '$commandWorkflow'
                         handlers: [ 'DateListFormCommandValidationHandler', 'DateListFormCommandSpecHandler']

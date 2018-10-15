@@ -75,7 +75,7 @@ abstract class AbstractEntityEditHandler extends AbstractObserver
                 $this->wfCommand = $this->manager->buildFromEntity($this->wfCommand, $this->wfLastData->entity);
             }
         } catch (Exception $e) {
-            throw EntityException::NotFoundEntity($this->entityName);
+            throw EntityException::NotFoundEntity($this->entityName, $this->wfCommand->getEntityId());
         }
     }
 
@@ -93,9 +93,15 @@ abstract class AbstractEntityEditHandler extends AbstractObserver
      */
     protected function onContinue(): void
     {
-        $entity = $this->wfLastData->entity;
-        $entity = $this->manager->buildFromCommand($entity, $this->wfCommand, $this->updateCommand);
-        $this->wfLastData->entity = $entity;
+        if (null === $this->wfLastData->entity) {
+            throw EntityException::NotFoundEntity($this->entityName, $this->wfCommand->getEntityId());
+        }
+
+        $this->wfLastData->entity = $this->manager->buildFromCommand(
+            $this->wfLastData->entity,
+            $this->wfCommand,
+            $this->updateCommand
+        );
     }
 
     /**
