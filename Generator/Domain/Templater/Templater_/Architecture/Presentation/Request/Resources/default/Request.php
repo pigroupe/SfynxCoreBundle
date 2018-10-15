@@ -38,15 +38,26 @@ class <?php echo $templater->getTargetClassname(); ?> extends <?php echo $extend
 <?php if (\in_array('POST', $options)): ?>
         'POST' => [
 <?php foreach ($templater->getTargetCommandFields() as $field): ?>
+<?php if (!isset($field->primaryKey) || !$field->primaryKey): ?>
             '<?php echo lcfirst($field->name) ?>' => <?php echo ClassHandler::getValue($field, 'false'); ?>,
+<?php endif; ?>
 <?php endforeach; ?>
         ],
 <?php endif; ?>
 <?php if (\in_array('PUT', $options)): ?>
-        'PUT' => 'POST',
+        'PUT' => [
+<?php foreach ($templater->getTargetCommandFields() as $field): ?>
+            '<?php echo lcfirst($field->name) ?>' => <?php echo ClassHandler::getValue($field, 'false'); ?>,
+<?php endforeach; ?>
+        ],
 <?php endif; ?>
 <?php if (\in_array('PATCH', $options)): ?>
-        'PATCH' => 'POST',
+        'PATCH' => [
+<?php foreach ($templater->getTargetCommandFields() as $field): ?>
+            '<?php echo lcfirst($field->name) ?>' => null,
+<?php endforeach; ?>
+        ],
+    ],
 <?php endif; ?>
     ];
 
@@ -57,9 +68,7 @@ class <?php echo $templater->getTargetClassname(); ?> extends <?php echo $extend
 <?php if (\in_array('GET', $options)): ?>
         'GET'  => [
 <?php foreach ($templater->getTargetCommandFields() as $field): ?>
-<?php if ($field->name != 'entityId' && $field->required): ?>
             '<?php echo lcfirst($field->name) ?>',
-<?php endif; ?>
 <?php endforeach; ?>
         ],
 <?php endif; ?>

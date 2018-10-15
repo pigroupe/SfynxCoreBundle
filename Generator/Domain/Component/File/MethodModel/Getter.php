@@ -41,11 +41,10 @@ class Getter
         $getterFieldName = 'get' . \ucfirst($field->name);
         $ClassTypeFieldName = ClassHandler::getClassNameFromNamespace($typeFieldName);
 
-        \str_replace('entityid', 'entityid', \strtolower($field->name), $isFieldEntity);
-        if ($isFieldEntity) {
+        if (isset($field->primaryKey) && $field->primaryKey) {
             $propertyFieldName = 'id';
-            $ClassTypeFieldName = 'int';
-            $typeFieldName = 'int';
+            $ClassTypeFieldName = ($field->type == ClassHandler::TYPE_UUID) ? 'UuidInterface' : 'int';
+            $typeFieldName = ($field->type == ClassHandler::TYPE_UUID) ? 'UuidInterface' : 'int';
             $getterFieldName = 'getId';
         }
         $getterFieldBody = sprintf('return $this->%s;', $propertyFieldName);
