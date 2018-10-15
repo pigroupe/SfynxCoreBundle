@@ -26,6 +26,7 @@ class OBCreatedStatusResponseJson extends AbstractCreateResponse
     public function process(): bool
     {
         try {
+            // https://restfulapi.net/http-methods/
             switch ($this->object->requestMethod) {
                 case 'POST':
                     $status = Response::HTTP_CREATED;
@@ -37,7 +38,7 @@ class OBCreatedStatusResponseJson extends AbstractCreateResponse
                     $status = Response::HTTP_OK;
                     break;
                 case 'DELETE':
-                    $status = Response::HTTP_NO_CONTENT;
+                    $status = Response::HTTP_OK;
                     break;
                 case 'GET':
                     $status = Response::HTTP_OK;

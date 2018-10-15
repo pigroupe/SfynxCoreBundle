@@ -93,6 +93,6 @@ class EntityException extends \Exception
      */
     public static function ViolationEntity($entityName = '')
     {
-        return new self(sprintf('Violation appears after the registration of the %s entity.', $entityName));
+        return new Entity\ViolationEntityException(sprintf('Violation appears after the registration of the %s entity.', $entityName));
     }
 }

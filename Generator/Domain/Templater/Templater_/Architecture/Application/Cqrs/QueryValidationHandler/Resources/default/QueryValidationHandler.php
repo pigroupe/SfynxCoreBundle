@@ -36,13 +36,13 @@ class <?php echo $templater->getTargetClassname(); ?> extends AbstractQueryValid
     {
         $this
 <?php foreach ($templater->getTargetCommandFields() as $field): ?>
-    ->add('<?php echo lcfirst($field->name) ?>', new Assert\Optional([
-<?php if ($field->type !== ClassHandler::TYPE_BOOLEAN): ?>         new Assert\NotBlank(),<?php endif; ?>
-<?php if ($field->type == ClassHandler::TYPE_ENTITY): ?>             new Assert\Regex('/^[0-9]+$/'),<?php endif; ?>
-<?php if ($field->type == ClassHandler::TYPE_BOOLEAN): ?>             new Assert\Type('boolean'),<?php endif; ?>
-<?php if ($field->type == ClassHandler::TYPE_DATE): ?>             new Assert\DateTime(['format' => 'yyyy-MM-dd']),<?php endif; ?>
-<?php if ($field->type == ClassHandler::TYPE_ARRAY): ?>             new Assert\Type('array'),<?php endif; ?>
-<?php if ($field->type == ClassHandler::TYPE_EMAIL): ?>             new Assert\Email(),<?php endif; ?><?php echo "\r\n" ?>
+        ->add('<?php echo lcfirst($field->name) ?>', new Assert\Optional([<?php echo PHP_EOL ?>
+<?php if ($field->type !== ClassHandler::TYPE_BOOLEAN): ?>             new Assert\NotBlank(),<?php echo PHP_EOL ?><?php endif; ?>
+<?php if ($field->type == ClassHandler::TYPE_ENTITY): ?>             new Assert\Regex('/^[0-9]+$/'),<?php echo PHP_EOL ?><?php endif; ?>
+<?php if ($field->type == ClassHandler::TYPE_BOOLEAN): ?>             new Assert\Type('boolean'),<?php echo PHP_EOL ?><?php endif; ?>
+<?php if ($field->type == ClassHandler::TYPE_DATE): ?>             new Assert\DateTime(['format' => 'yyyy-MM-dd']),<?php echo PHP_EOL ?><?php endif; ?>
+<?php if ($field->type == ClassHandler::TYPE_ARRAY): ?>             new Assert\Type('array'),<?php echo PHP_EOL ?><?php endif; ?>
+<?php if ($field->type == ClassHandler::TYPE_EMAIL): ?>             new Assert\Email(),<?php echo PHP_EOL ?><?php endif; ?><?php echo "\r\n" ?>
         ]))
 <?php endforeach; ?>
         ->add('_token', new Assert\Optional(new Assert\NotBlank()));
