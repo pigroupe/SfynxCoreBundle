@@ -37,7 +37,7 @@ class <?php echo $templater->getTargetClassname(); ?> extends AbstractQueryValid
         $this
 <?php foreach ($templater->getTargetCommandFields() as $field): ?>
     ->add('<?php echo lcfirst($field->name) ?>', new Assert\Optional([
-         new Assert\NotBlank(),
+<?php if ($field->type !== ClassHandler::TYPE_BOOLEAN): ?>         new Assert\NotBlank(),<?php endif; ?>
 <?php if ($field->type == ClassHandler::TYPE_ENTITY): ?>             new Assert\Regex('/^[0-9]+$/'),<?php endif; ?>
 <?php if ($field->type == ClassHandler::TYPE_BOOLEAN): ?>             new Assert\Type('boolean'),<?php endif; ?>
 <?php if ($field->type == ClassHandler::TYPE_DATE): ?>             new Assert\DateTime(['format' => 'yyyy-MM-dd']),<?php endif; ?>
