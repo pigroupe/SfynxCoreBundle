@@ -78,8 +78,21 @@ class EntityException extends \Exception
      * @access public
      * @static
      */
-    public static function NotSaveEntity($entityName)
+    public static function NotSaveEntity($entityName = '')
     {
         return new self(sprintf('Unable to save %s entity.', $entityName));
+    }
+
+    /**
+     * Returns the <Violation Entity> Exception.
+     *
+     * @param string $entityName
+     * @return \Exception
+     * @access public
+     * @static
+     */
+    public static function ViolationEntity($entityName = '')
+    {
+        return new self(sprintf('Violation appears after the registration of the %s entity.', $entityName));
     }
 }
