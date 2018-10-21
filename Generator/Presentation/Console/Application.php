@@ -51,6 +51,6 @@ class Application extends \Symfony\Component\Console\Application
      */
     public function getVersion()
     {
-        return 'v2.11.0';
+        return 'v2.11.1';
     }
 }

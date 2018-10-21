@@ -12,17 +12,17 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Sfynx\CoreBundle\Test\Form\Validation;
+namespace Tests\Form\Validation;
 
 use Symfony\Component\Validator\Validation;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
 /**
  * This is the base class for testing object validation.
- * 
- * @category   Core
- * @package    Test
- * @subpackage Form
+ *
+ * @category   Tests
+ * @package    Form
+ * @subpackage Validation
  * @abstract
  * @author     Etienne de Longeaux <etienne.delongeaux@gmail.com>
  */

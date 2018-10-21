@@ -11,7 +11,7 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Sfynx\CoreBundle\Test\DependencyInjection;
+namespace Tests\DependencyInjection;
 
 use Sfynx\CoreBundle\DependencyInjection\SfynxCoreExtension;
 use Phake;
@@ -30,7 +30,7 @@ class SfynxCoreExtensionTest extends TestCase
         $extension = new SfynxCoreExtension();
         $builder = Phake::mock('Symfony\Component\DependencyInjection\ContainerBuilder');
 
-        $extension->load(array(), $builder);
+        $extension->load([], $builder);
 
         Phake::verify($builder, Phake::atLeast(1))->addResource(Phake::anyParameters());
     }

@@ -1,5 +1,5 @@
 <?php
-namespace Sfynx\CoreBundle\Test\Presentation\Adapter\Command;
+namespace Tests\Presentation\Adapter\Command;
 
 use Phake;
 use Phake_IMock;
@@ -7,14 +7,14 @@ use PHPUnit\Framework\TestCase;
 
 use Sfynx\CoreBundle\Layers\Presentation\Adapter\Generalisation\Interfaces\QueryAdapterInterface;
 use Sfynx\CoreBundle\Layers\Presentation\Adapter\Query\QueryAdapter;
-use Sfynx\CoreBundle\Layers\Presentation\Request\Generalisation\Interfaces\QueryRequestInterface;
+use Sfynx\CoreBundle\Layers\Presentation\Request\Generalisation\Interfaces\RequestInterface;
 use Sfynx\CoreBundle\Layers\Application\Query\Generalisation\Interfaces\QueryInterface;
 
 /**
  * Class CommandAdapterTest
  * This class permits to test the CommandAdapter class.
  *
- * @category   Sfynx\CoreBundle\Test
+ * @category   Tests
  * @package    Presentation
  * @subpackage Adapter\Command
  *
@@ -44,7 +44,7 @@ class QueryAdapterTest extends TestCase
 
     /**
      * @var Phake_IMock $request Mock instance of QueryRequestInterface.
-     * @see QueryRequestInterface
+     * @see RequestInterface
      */
     protected $request;
 
@@ -56,7 +56,7 @@ class QueryAdapterTest extends TestCase
      */
     public function setUp(): void
     {
-        $this->request = Phake::mock(QueryRequestInterface::class);
+        $this->request = Phake::mock(RequestInterface::class);
         Phake::when($this->request)->getRequestParameters()
             ->thenReturn(self::valuesGame);
 

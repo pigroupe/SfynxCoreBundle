@@ -91,7 +91,8 @@ class Entity extends AbstractHandlerModel
                 $subject->event->namespace,
                 $subject->event->class,
                 $subject->event->index,
-                $fieldAll
+                $fieldAll,
+                array_merge(['toEntity' => true], $this->parameters)
             );
         }
     }

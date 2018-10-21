@@ -58,7 +58,7 @@ EOT;
         return [
             WidgetInterface::KEY_TAG => Templater_\Architecture\Application\Cqrs\Query\Templater::TAG,
             WidgetInterface::KEY_NAMESPACE => $templater->getTargetNamespace(),
-            WidgetInterface::KEY_CLASS => $templater->getTargetClass(),
+            WidgetInterface::KEY_CLASS => $templater->getTargetClassname(),
             WidgetInterface::KEY_CLASSNAME => $templater->getTargetClassname()
         ];
     }

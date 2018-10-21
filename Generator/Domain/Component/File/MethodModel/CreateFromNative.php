@@ -18,8 +18,20 @@ use Sfynx\CoreBundle\Generator\Domain\Report\Generalisation\AbstractGenerator;
  */
 class CreateFromNative
 {
+    const METHOD_ARRAY = 0;
+    const METHOD_NATIVE = 1;
+
     /**
-     * Create __toArray method.
+     * List of concrete handlers that can be built using this factory.
+     * @var string[]
+     */
+    protected static $createMethodList = [
+        self::METHOD_ARRAY => 'createMethodFromArray',
+        self::METHOD_NATIVE => 'createMethodFromNative',
+    ];
+
+    /**
+     * Create CreateFromNative method.
      *
      * @param PhpNamespace $namespace
      * @param ClassType $class
@@ -32,31 +44,11 @@ class CreateFromNative
         PhpNamespace $namespace,
         ClassType $class,
         ?array $index = [],
-        ?array $fields = []
+        ?array $fields = [],
+        ?array $options = null
     ): void {
-        $arguments = [];
-        $fieldContent = 'return new self(';
-        $count = 0;
-        foreach ($fields as $field) {
-            \str_replace('entityid', 'entityid', \strtolower($field->name), $isFieldEntity);
-            if (!$isFieldEntity) {
-                $propertyFieldName = \lcfirst($field->name);
-
-                $prefix = (0 == $count) ? '' : ',';
-                $fieldContent .= $prefix . PHP_EOL . sprintf("  \$%s", $propertyFieldName, $propertyFieldName);
-
-                $typeFieldName = ClassHandler::getType($field->type, $field, true);
-                $ClassTypeFieldName = ClassHandler::getClassNameFromNamespace($typeFieldName);
-                ClassHandler::addUse($namespace, $field->type, $index);
-
-                array_push($arguments, sprintf('%s $%s', $ClassTypeFieldName, $propertyFieldName));
-
-                $count++;
-            }
-        }
-        $fieldContent .= PHP_EOL . ');';
-
-        ClassHandler::addUse($namespace, 'Ramsey\Uuid\Uuid as BaseUuid', $index);
+        $method = !isset($options['createFromNativeType']) ? 1 : $options['createFromNativeType'];
+        $result = self::{self::$createMethodList[$method]}($namespace, $index, $fields, $options);
 
         ClassHandler::createMethods(
             $namespace,
@@ -67,14 +59,104 @@ class CreateFromNative
                         'name' => 'createFromNative',
                         'comments' => [sprintf('%s new instance.', $class->getName())],
                         'visibility' => 'public',
-                        'arguments' => $arguments,
+                        'arguments' => $result['arguments'],
                         'returnType' => 'self',
                         'static' => true,
-                        'body' => [$fieldContent]
+                        'body' => [$result['fieldContent']]
                     ]]
                 ]
             ], false),
             $index
         );
+    }
+
+    /**
+     * @param PhpNamespace $namespace
+     * @param array|null $fields
+     * @param array|null $options
+     * @return array
+     */
+    protected static function createMethodFromNative(
+        PhpNamespace $namespace,
+        ?array $index = [],
+        ?array $fields = [],
+        ?array $options = null
+    ): array {
+        $arguments = [];
+        $count = 0;
+        $fieldContent = 'return new self(';
+        foreach ($fields as $field) {
+            if(!($field->type == ClassHandler::TYPE_UUID
+                && isset($options['toEntity'])
+                && $options['toEntity'])
+            ) {
+                $propertyFieldName = \lcfirst($field->name);
+                $prefix = (0 == $count) ? '' : ',';
+                $fieldContent .= $prefix . PHP_EOL . sprintf("  \$%s", $propertyFieldName);
+                $typeFieldName = ClassHandler::getType($field->type, $field, true);
+                $ClassTypeFieldName = ClassHandler::getClassNameFromNamespace($typeFieldName);
+
+                if (isset($field->primaryKey) && $field->primaryKey) {
+                    $ClassTypeFieldName = 'int';
+                }
+                if (isset($options['toEntity']) && $options['toEntity']
+                    && property_exists($field, 'mapping') && property_exists($field->mapping, 'relationship')
+                    && $field->mapping->relationship == 'ManyToMany'
+                ) {
+                    $ClassTypeFieldName = 'iterable';
+                    ClassHandler::addUse($namespace, 'iterable', $index);
+                }
+
+                ClassHandler::addUse($namespace, $field->type, $index);
+                array_push($arguments, sprintf('%s $%s', $ClassTypeFieldName, $propertyFieldName));
+
+                $count++;
+            }
+        }
+        $fieldContent .= PHP_EOL . ');';
+
+        return [
+            'arguments' => $arguments,
+            'fieldContent' => $fieldContent,
+        ];
+    }
+
+    /**
+     * @param PhpNamespace $namespace
+     * @param array|null $fields
+     * @param array|null $options
+     * @return array
+     */
+    protected static function createMethodFromArray(
+        PhpNamespace $namespace,
+        ?array $index = [],
+        ?array $fields = [],
+        ?array $options = null
+    ): array {
+        $arguments = [];
+        $count = 0;
+        $fieldContent = 'return new self(';
+        foreach ($fields as $field) {
+            if(!($field->type == ClassHandler::TYPE_UUID
+                && isset($options['toEntity'])
+                && $options['toEntity'])
+            ) {
+                $propertyFieldName = \lcfirst($field->name);
+                $prefix = (0 == $count) ? '' : ',';
+                $fieldContent .= $prefix . PHP_EOL . sprintf("  \$arguments['%s']", $propertyFieldName);
+                $typeFieldName = ClassHandler::getType($field->type, $field, true);
+
+                ClassHandler::addUse($namespace, $field->type, $index);
+
+                $count++;
+            }
+        }
+        $fieldContent .= PHP_EOL . ');';
+        array_push($arguments, 'array $arguments');
+
+        return [
+            'arguments' => $arguments,
+            'fieldContent' => $fieldContent,
+        ];
     }
 }

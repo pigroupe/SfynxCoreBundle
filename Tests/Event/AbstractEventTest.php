@@ -11,7 +11,7 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Sfynx\CoreBundle\Test\Event;
+namespace Tests\Event;
 
 use Phake;
 use \PHPUnit\Framework\TestCase;
@@ -22,7 +22,7 @@ use \PHPUnit\Framework\TestCase;
  * @subpackage Event
  * @author     Etienne de Longeaux <etienne.delongeaux@gmail.com>
  */
-abstract class EventTest extends TestCase
+abstract class AbstractEventTest extends TestCase
 {
     protected function createEvent($subject)
     {

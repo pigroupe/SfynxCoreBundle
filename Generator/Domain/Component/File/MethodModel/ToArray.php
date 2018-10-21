@@ -32,7 +32,8 @@ class ToArray
         PhpNamespace $namespace,
         ClassType $class,
         ?array $index = [],
-        ?array $fields = []
+        ?array $fields = [],
+        ?array $options = null
     ): void {
         $args = [];
         foreach ($fields as $field) {

@@ -19,7 +19,7 @@ use Sfynx\CoreBundle\Generator\Domain\Report\Generalisation\AbstractGenerator;
 class Construct
 {
     /**
-     * Create __toArray method.
+     * Create Construct method.
      *
      * @param PhpNamespace $namespace
      * @param ClassType $class
@@ -32,24 +32,41 @@ class Construct
         PhpNamespace $namespace,
         ClassType $class,
         ?array $index = [],
-        ?array $fields = []
+        ?array $fields = [],
+        ?array $options = null
     ): void {
-
         $arguments = [];
         $fieldContent = '';
         foreach ($fields as $field) {
-            if (!isset($field->primaryKey) || !$field->primaryKey) {
-                $propertyFieldName = \lcfirst($field->name);
-                $fieldContent .= sprintf("\$this->%s = \$%s;", $propertyFieldName, $propertyFieldName) . PHP_EOL;
-
-                $typeFieldName = ClassHandler::getType($field->type, $field, true);
-                $ClassTypeFieldName = ClassHandler::getClassNameFromNamespace($typeFieldName);
-                ClassHandler::addUse($namespace, $field->type, $index);
-
-                array_push($arguments, sprintf('%s $%s = null', $ClassTypeFieldName, $propertyFieldName));
-            } elseif($field->type == ClassHandler::TYPE_UUID) {
+            if($field->type == ClassHandler::TYPE_UUID
+                && isset($options['toEntity']) && $options['toEntity']
+            ) {
                 $fieldContent .= sprintf("\$this->id = BaseUuid::uuid4();") . PHP_EOL;
                 ClassHandler::addUse($namespace, 'Ramsey\Uuid\Uuid as BaseUuid', $index);
+            } else {
+                $propertyFieldName = \lcfirst($field->name);
+                $fieldContent .= sprintf("\$this->%s = \$%s;", $propertyFieldName, $propertyFieldName) . PHP_EOL;
+                $typeFieldName = ClassHandler::getType($field->type, $field, true);
+                $ClassTypeFieldName = ClassHandler::getClassNameFromNamespace($typeFieldName);
+
+                if ($field->type == ClassHandler::TYPE_UUID) {
+                    $ClassTypeFieldName = 'string';
+                } elseif (isset($field->primaryKey) && $field->primaryKey) {
+                    $ClassTypeFieldName = 'int';
+                }
+                if ($field->type == 'id' && isset($options['toEntity']) && !$options['toEntity']) {
+                    $ClassTypeFieldName = 'int';
+                }
+                if (isset($options['toEntity']) && $options['toEntity']
+                    && property_exists($field, 'mapping') && property_exists($field->mapping, 'relationship')
+                    && $field->mapping->relationship == 'ManyToMany'
+                ) {
+                    $ClassTypeFieldName = 'iterable';
+                    ClassHandler::addUse($namespace, 'iterable', $index);
+                }
+
+                ClassHandler::addUse($namespace, $field->type, $index);
+                array_push($arguments, sprintf('%s $%s = null', $ClassTypeFieldName, $propertyFieldName));
             }
         }
 

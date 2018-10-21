@@ -32,7 +32,8 @@ class Unserialize
         PhpNamespace $namespace,
         ClassType $class,
         ?array $index = [],
-        ?array $fields = []
+        ?array $fields = [],
+        ?array $options = null
     ): void {
         $fieldContent = '$unserializedData = \unserialize($data);' . PHP_EOL;
         foreach ($fields as $field) {

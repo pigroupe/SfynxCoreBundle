@@ -1,5 +1,5 @@
 <?php
-namespace Sfynx\CoreBundle\Test;
+namespace Tests;
 
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\HttpKernel\Bundle\Bundle;

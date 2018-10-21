@@ -57,7 +57,6 @@ class <?php echo $templater->getTargetClassname(); ?> extends <?php echo $extend
             '<?php echo lcfirst($field->name) ?>' => null,
 <?php endforeach; ?>
         ],
-    ],
 <?php endif; ?>
     ];
 
@@ -88,7 +87,7 @@ class <?php echo $templater->getTargetClassname(); ?> extends <?php echo $extend
             '<?php echo lcfirst($field->name) ?>',
 <?php endif; ?>
 <?php endforeach; ?>
-    ],
+         ],
 <?php endif; ?>
 <?php if (\in_array('PATCH', $options)): ?>
         'PATCH' => ['entityId'],
@@ -145,7 +144,9 @@ class <?php echo $templater->getTargetClassname(); ?> extends <?php echo $extend
 <?php endif; ?>
 <?php endforeach; ?>
         ] as $data) {
-            if (isset($this->options[$data])) {
+            if (isset($this->options[$data])
+                && is_bool($this->options[$data])
+            ) {
                 $this->options[$data] = (boolean)$this->options[$data];
             }
         }
