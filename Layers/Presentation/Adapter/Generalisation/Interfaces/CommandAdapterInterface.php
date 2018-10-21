@@ -17,5 +17,5 @@ interface CommandAdapterInterface
      * @param RequestInterface $request
      * @return mixed
      */
-    public function createCommandFromRequest(RequestInterface $request): CommandInterface;
+    public function createCommandFromRequest(RequestInterface $request, bool $reflexion = true): CommandInterface;
 }

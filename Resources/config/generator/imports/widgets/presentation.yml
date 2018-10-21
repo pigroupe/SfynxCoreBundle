@@ -5,11 +5,11 @@ default:
                 class: FormCoordination
                 arguments:
                 - '$workflowHandler'
-                extends: Sfynx\CoreBundle\Layers\Presentation\Coordination\Generalisation\AbstractFormController
+                extends: ~
                 options:
                     implements: ~
                     uses: ~
-                    traits: ~
+                    traits: ['Sfynx\CoreBundle\Layers\Presentation\Coordination\Generalisation\Traits\TraitParam']
                 body:
                 - codeComment1:
                       design: 'code'

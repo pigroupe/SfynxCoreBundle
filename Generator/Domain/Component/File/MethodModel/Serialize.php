@@ -32,7 +32,8 @@ class Serialize
         PhpNamespace $namespace,
         ClassType $class,
         ?array $index = [],
-        ?array $fields = []
+        ?array $fields = [],
+        ?array $options = null
     ): void {
         $fieldBody = 'return \serialize($this->__toArray());';
 

@@ -1,5 +1,5 @@
 <?php
-namespace Sfynx\CoreBundle\Test\Presentation\Adapter\Command;
+namespace Tests\Application\Cqrs\Validation;
 
 use Phake;
 use Phake_IMock;
@@ -7,22 +7,22 @@ use PHPUnit\Framework\TestCase;
 
 use Sfynx\CoreBundle\Layers\Presentation\Adapter\Generalisation\Interfaces\CommandAdapterInterface;
 use Sfynx\CoreBundle\Layers\Presentation\Adapter\Command\CommandAdapter;
-use Sfynx\CoreBundle\Layers\Presentation\Request\Generalisation\Interfaces\CommandRequestInterface;
+use Sfynx\CoreBundle\Layers\Presentation\Request\Generalisation\Interfaces\RequestInterface;
 use Sfynx\CoreBundle\Layers\Application\Command\Generalisation\Interfaces\CommandInterface;
 
 /**
  * Class CommandAdapterTest
  * This class permits to test the CommandAdapter class.
  *
- * @category   Sfynx\CoreBundle\Test
- * @package    Presentation
- * @subpackage Adapter\Command
+ * @category   Tests
+ * @package    Application
+ * @subpackage Cqrs\Validation
  *
  * @group unit
  * @requires PHP 7.0
  *
  */
-class CommandAdapterTest extends TestCase
+class CommandValidationHandlerTest extends TestCase
 {
     const valuesGame = [
         'field1' => 'value1',
@@ -44,7 +44,7 @@ class CommandAdapterTest extends TestCase
 
     /**
      * @var Phake_IMock $request Mock instance of CommandRequestInterface.
-     * @see CommandRequestInterface
+     * @see RequestInterface
      */
     protected $request;
 
@@ -56,7 +56,7 @@ class CommandAdapterTest extends TestCase
      */
     public function setUp(): void
     {
-        $this->request = Phake::mock(CommandRequestInterface::class);
+        $this->request = Phake::mock(RequestInterface::class);
         Phake::when($this->request)->getRequestParameters()
             ->thenReturn(self::valuesGame);
 

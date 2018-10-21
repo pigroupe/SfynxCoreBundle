@@ -11,15 +11,15 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Sfynx\CoreBundle\Test\Form\Handler;
+namespace Tests\Form\Handler;
 
-use Sfynx\CoreBundle\Tests\Form\Handler\AbstractFormHandlerTestCase;
+use Tests\Form\Handler\AbstractFormHandlerTestCase;
 use Phake;
 
 /**
- * @category   Core
- * @package    Test
- * @subpackage Form
+ * @category   Tests
+ * @package    Form
+ * @subpackage Handler
  * @author     Etienne de Longeaux <etienne.delongeaux@gmail.com>
  */
 class FormHandlerTest extends AbstractFormHandlerTestCase

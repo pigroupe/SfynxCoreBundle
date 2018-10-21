@@ -17,5 +17,5 @@ interface QueryAdapterInterface
      * @param RequestInterface $request
      * @return QueryInterface
      */
-    public function createQueryFromRequest(RequestInterface $request): QueryInterface;
+    public function createQueryFromRequest(RequestInterface $request, bool $reflexion = true): QueryInterface;
 }

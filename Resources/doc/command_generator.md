@@ -26,7 +26,7 @@ export PATH=~/.composer/vendor/bin:$PATH
 > b) Phar
 
 ```bash
-sudo sh -c "curl -L https://github.com/pigroupe/SfynxCoreBundle/blob/v2.11.0/releases/sfynx-ddd-generator.phar?raw=true > /usr/local/bin/sfynx-ddd-generator"
+sudo sh -c "curl -L https://github.com/pigroupe/SfynxCoreBundle/blob/v2.11.1/releases/sfynx-ddd-generator.phar?raw=true > /usr/local/bin/sfynx-ddd-generator"
 sudo chmod +rx /usr/local/bin/sfynx-ddd-generator
 ```
 
@@ -59,6 +59,7 @@ sfynx-ddd-generator \
     --conf-file=./Resources/config/generator/auth/authbundle_entity_role_api_query.yml \
     --report-template=default \
     --report-dir=build
+    -vvv
 ```
 
 ```bash
@@ -68,6 +69,7 @@ sfynx-ddd-generator \
     --conf-file=./Resources/config/generator/auth/authbundle_entity_user_api_command.yml \
     --report-template=default \
     --report-dir=build
+    -vvv
 ```
 
 > b) With multiple configuration files in directory

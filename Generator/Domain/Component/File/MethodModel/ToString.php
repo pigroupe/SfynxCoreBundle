@@ -32,7 +32,8 @@ class ToString
         PhpNamespace $namespace,
         ClassType $class,
         ?array $index = [],
-        ?array $fields = []
+        ?array $fields = [],
+        ?array $options = null
     ): void {
         $fieldContent = "return \implode(' ', \$this->__toArray());";
 

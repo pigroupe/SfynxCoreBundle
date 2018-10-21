@@ -76,8 +76,18 @@ default:
                   - 'Sfynx\CoreBundle\Layers\Domain\Service\Request\Generalisation\RequestInterface'
         application:
             widget_cqrs_command:
-                class: GoPromiseRequestFormCommand
-                arguments: ~
+                - GoPromiseRequestFormCommand:
+                    create: true
+                    class: GoPromiseRequestFormCommand
+                    options:
+                        models:
+                          0:
+                            class: 'Sfynx\CoreBundle\Generator\Domain\Component\File\HandlerModel\Observer\CommandQueryObject'
+                            parameters:
+                              performMethods:
+                                - 'Sfynx\CoreBundle\Generator\Domain\Component\File\MethodModel\Construct'
+                                - 'Sfynx\CoreBundle\Generator\Domain\Component\File\MethodModel\CreateFromNative'
+                              createFromNativeType: false
             widget_cqrs_command_validator_specification:
                 class: Validation\SpecHandler\GoPromiseRequestFormCommandSpecHandler
                 arguments:

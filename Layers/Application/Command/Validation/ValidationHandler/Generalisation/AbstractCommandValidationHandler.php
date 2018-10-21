@@ -51,32 +51,19 @@ abstract class AbstractCommandValidationHandler extends AbstractCommandDecorator
     public function process(CommandInterface $command): CommandHandlerInterface
     {
         $this->initConstraints($command);
-        $this->errors = $this->validator->validate($command->toArray(true, $this->skipArrayValidator), $this->getConstraints());
-        if (!(count($this->errors) === 0)
-            && $this->throwExceptionFromErrors
-        ) {
-            throw new Exception(\json_encode($this->getErrors())) ;
-        }
+        $this->initErrors($command);
+
         // execute next commandHandler
-        $command->errors = $this->getErrors();
         return $this->commandHandler->process($command);
     }
 
     /**
-     * {@inheritdoc}
+     * @return array
      */
-    public function getErrors(): array
+    protected function getConstraints(): array
     {
-        return ValidationErrorHandler::arrayAll($this->errors);
+        return $this->constraints;
     }
-
-    /**
-     * Init array of constraints
-     *
-     * @param CommandInterface $command
-     * @return void
-     */
-    abstract protected function initConstraints(CommandInterface $command): void;
 
     /**
      * @param string $field
@@ -90,10 +77,42 @@ abstract class AbstractCommandValidationHandler extends AbstractCommandDecorator
     }
 
     /**
-     * @return array
+     * Init array of constraints
+     *
+     * @param CommandInterface $command
+     * @return void
      */
-    protected function getConstraints(): array
+    abstract protected function initConstraints(CommandInterface $command): void;
+
+    /**
+     * @param CommandInterface $command
+     * @throws Exception
+     */
+    protected function initErrors(CommandInterface $command)
     {
-        return $this->constraints;
+        $this->errors = $this->validate($command, $this->getConstraints());
+        if (!(count($this->errors) === 0)
+            && $this->throwExceptionFromErrors
+        ) {
+            throw new Exception(\json_encode($this->getErrors())) ;
+        }
+        $command->errors = $this->getErrors();
+    }
+
+    /**
+     * @param CommandInterface $command
+     * @return mixed
+     */
+    protected function validate(CommandInterface $command, array $constraints)
+    {
+        return $this->validator->validate($command->toArray(true, $this->skipArrayValidator), $constraints);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    protected function getErrors(): array
+    {
+        return ValidationErrorHandler::arrayAll($this->errors);
     }
 }

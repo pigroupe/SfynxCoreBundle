@@ -1,10 +1,10 @@
 <?php
-namespace Test\Binary;
+namespace Tests\Binary;
 
 /**
  * @group binary
  */
-class BinFileTest extends \PHPUnit_Framework_TestCase
+class PharTest extends \PHPUnit_Framework_TestCase
 {
     private $phar;
 
@@ -13,7 +13,7 @@ class BinFileTest extends \PHPUnit_Framework_TestCase
         $this->phar = __DIR__ . '/../../releases/sfynx-ddd-generator.phar';
     }
 
-    public function testICanRunBinFile()
+    public function testICanRunPhar()
     {
         $command = sprintf('%s --version', $this->phar);
         $r = shell_exec($command);

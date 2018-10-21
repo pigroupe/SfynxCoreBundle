@@ -9,7 +9,7 @@ default:
                 class: GetOneCoordination
                 arguments:
                     - '$workflowHandler'
-                extends: Sfynx\CoreBundle\Layers\Presentation\Coordination\Generalisation\AbstractApiController
+                extends: ~
                 options:
                     implements: ~
                     uses:
@@ -17,7 +17,9 @@ default:
                       - 'Exception'
                       - 'Sfynx\CoreBundle\Layers\Infrastructure\Exception\Entity\ViolationEntityException'
                       - 'Sfynx\CoreBundle\Layers\Infrastructure\Exception\Entity\NotFoundEntityException'
-                    traits: ~
+                    traits:
+                      - 'Sfynx\CoreBundle\Layers\Presentation\Coordination\Generalisation\Traits\TraitParam'
+                      - 'Sfynx\CoreBundle\Layers\Presentation\Coordination\Generalisation\Traits\TraitMessage'
                 body:
                     - codeComment1:
                         design: 'code'
@@ -75,15 +77,15 @@ default:
                           - '}  catch (NotFoundEntityException $e) {'
                           - '    $response = new JsonResponse();'
                           - '    $response->setStatusCode(JsonResponse::HTTP_NOT_FOUND);'
-                          - '    $response->setContent($e->getMessage());'
+                          - '    $response->setContent(TraitMessage::jsonError($e->getMessage()));'
                           - '}  catch (ViolationEntityException $e) {'
                           - '    $response = new JsonResponse();'
                           - '    $response->setStatusCode(JsonResponse::HTTP_CONFLICT);'
-                          - '    $response->setContent($e->getMessage());'
+                          - '    $response->setContent(TraitMessage::jsonError($e->getMessage()));'
                           - '}  catch (Exception $e) {'
                           - '    $response = new JsonResponse();'
                           - '    $response->setStatusCode(JsonResponse::HTTP_SERVICE_UNAVAILABLE);'
-                          - '    $response->setContent($e->getMessage());'
+                          - '    $response->setContent(TraitMessage::jsonError($e->getMessage()));'
                           - '}'
                           - ''
                           - 'return $response;'
@@ -95,8 +97,18 @@ default:
                     methods: ['GET']
         application:
             widget_cqrs_query:
-                class: GetOneQuery
-                arguments: ~
+                - GetOneQuery:
+                    create: true
+                    class: GetOneQuery
+                    options:
+                        models:
+                          0:
+                            class: 'Sfynx\CoreBundle\Generator\Domain\Component\File\HandlerModel\Observer\CommandQueryObject'
+                            parameters:
+                              performMethods:
+                                - 'Sfynx\CoreBundle\Generator\Domain\Component\File\MethodModel\Construct'
+                                - 'Sfynx\CoreBundle\Generator\Domain\Component\File\MethodModel\CreateFromNative'
+                              createFromNativeType: false
             widget_cqrs_query_validator_specification:
                 class: Validation\SpecHandler\GetQuerySpecHandler
                 arguments:
@@ -241,7 +253,10 @@ default:
                     extends: Sfynx\CoreBundle\Layers\Domain\Workflow\Observer\Generalisation\Response\Api\AbstractApiJson
                     options:
                         implements: ~
-                        uses: ['Sfynx\CoreBundle\Layers\Infrastructure\Exception\WorkflowException', 'Exception', 'Spatie\Fractalistic\Fractal']
+                        uses:
+                          - 'Sfynx\CoreBundle\Layers\Infrastructure\Exception\EntityException'
+                          - 'Exception'
+                          - 'Spatie\Fractalistic\Fractal'
                         traits: ~
                         methods:
                           - name: 'process'
@@ -259,6 +274,7 @@ default:
                               - '} catch (Exception $e) {'
                               - '    throw EntityException::NotFoundEntity("Domain\Entity\Role");'
                               - '}'
+                              - ''
                               - 'return true;'
                 - OBCreateResponseJson:
                     create: false
@@ -334,10 +350,9 @@ default:
                 primaryKey: true
                 mapping:
                   targetEntity: 'Sfynx\AuthBundle\Domain\Entity\Role'
-#                  formData:
-#                      manager: 'Sfynx\AuthBundle\Domain\Service\Role\Manager\EntityManager as RoleManager'
               layout:
                 type: valueObject
+                name: layout
                 voName: IdVO
                 foreignKey: true
                 required: true
@@ -346,11 +361,9 @@ default:
                   relationship: ManyToOne
                   targetEntity: 'Sfynx\AuthBundle\Domain\Entity\Layout'
                   setter: true
-                  formData:
-                      manager: 'Sfynx\AuthBundle\Domain\Service\Layout\Manager\EntityManager as LayoutManager'
-                      queryFunction: { class: 'FindLayoutQueryTransformer', args: ['true', 'false', 1299, {tata: 'tataValue', tutu: 'tutuValue'}] }
               accessControl:
                 type: valueObject
+                name: accessControl
                 voName: IdVO
                 foreignKey: true
                 required: true
@@ -358,9 +371,6 @@ default:
                 mapping:
                   relationship: ManyToOne
                   targetEntity: 'Sfynx\AuthBundle\Domain\Entity\Ressource'
-                  formData:
-                      manager: 'Sfynx\AuthBundle\Domain\Service\Ressource\Manager\EntityManager as RessourceManager'
-                      queryFunction: { class: 'FindRessourceQueryTransformer', args: ['true', 'false', 1299, {tata: 'tataValue', tutu: 'tutuValue'}] }
               role:
                 type: valueObject
                 voName: RoleVO
@@ -377,38 +387,36 @@ default:
             x-fields:
               name:
                 type: string
+                name: name
                 required: true
               label:
                 type: string
+                name: label
                 required: true
               enabled:
                 type: boolean
+                name: enabled
                 defaultValue: true
 #                required: false
               comment:
                 type: textarea
+                name: comment
                 required: false
               heritage:
                 type: array
-                form:
-                  type: array
-                  serviceType: sfynx_security_roles
+                name: heritage
                 required: true
                 multiple: true
                 expanded: false
               routeLogin:
                 type: string
-                form:
-                  type: array
-                  serviceType: sfynx_routes
+                name: routeLogin
                 required: false
                 multiple: false
                 expanded: false
               routeLogout:
                 type: string
-                form:
-                  type: array
-                  serviceType: sfynx_routes
+                name: routeLogout
                 required: false
                 multiple: false
                 expanded: false

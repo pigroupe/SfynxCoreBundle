@@ -115,10 +115,10 @@ abstract class AbstractRequest implements PresRequestInterface
         }
 
         /* multidimensional resolver */
-        $this->multidimensionalOtionResolver($this->requestParameters, $this->options, $this->defaults, $this->allowedTypes, $this->allowedValues);
+        $this->multidimensionalOtionResolver($this->options, $this->defaults, $this->allowedTypes, $this->allowedValues);
 
         /* main resolver */
-        $this->mainOptionResolver($this->requestParameters);
+        $this->mainOptionResolver();
     }
 
     /**
@@ -139,10 +139,12 @@ abstract class AbstractRequest implements PresRequestInterface
     }
 
     /**
-     * @param array $requestParameters
+     * @param array $options
+     * @param array $defaults
+     * @param array $allowedTypes
+     * @param array $allowedValues
      */
     protected function multidimensionalOtionResolver(
-        array &$requestParameters,
         array &$options,
         array &$defaults = [],
         array &$allowedTypes = [],
@@ -153,13 +155,13 @@ abstract class AbstractRequest implements PresRequestInterface
         $multidimensionalAllowedValues = [];
         foreach ($defaults as $field => $optionDefault) {
             if (\is_array($optionDefault)) {
-                $requestParameters[$field] = $requestParameters[$field] ?? [];
+                $this->requestParameters[$field] = $this->requestParameters[$field] ?? [];
                 $options[$field] = $options[$field] ?? [];
                 $defaults[$field] = $defaults[$field] ?? [];
                 $allowedTypes[$field] = $allowedTypes[$field] ?? [];
                 $allowedValues[$field] = $allowedValues[$field] ?? [];
                 $this->multidimensionalOtionResolver(
-                    $requestParameters[$field],
+                    $this->requestParameters[$field],
                     $options[$field],
                     $defaults[$field],
                     $allowedTypes[$field] ,
@@ -195,14 +197,14 @@ abstract class AbstractRequest implements PresRequestInterface
             }
 
             $options[$field] = $options[$field] ?? [];
-            $requestParameters[$field] = $fieldResolver->resolve($options[$field]);
+            $this->requestParameters[$field] = $fieldResolver->resolve($options[$field]);
         }
     }
 
     /**
-     * @param array $requestParameters
+     * @return voids
      */
-    protected function mainOptionResolver(array &$requestParameters): void
+    protected function mainOptionResolver(): void
     {
         $resolver = new OptionsResolver();
         $resolver->setDefaults($this->defaults);
@@ -217,6 +219,6 @@ abstract class AbstractRequest implements PresRequestInterface
         foreach ($this->getNormalizers() as $optionName => $optionValues) {
             $resolver->setNormalizer($optionName, $optionValues);
         }
-        $requestParameters = array_merge($resolver->resolve($this->options), $requestParameters);
+        $this->requestParameters = array_merge($resolver->resolve($this->options), $this->requestParameters);
     }
 }

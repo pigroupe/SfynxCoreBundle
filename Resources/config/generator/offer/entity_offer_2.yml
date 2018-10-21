@@ -9,11 +9,11 @@ default:
                 class: Form2Coordination
                 arguments:
                     - '$workflowHandler'
-                extends: Sfynx\CoreBundle\Layers\Presentation\Coordination\Generalisation\AbstractFormController
+                extends: ~
                 options:
                     implements: ~
                     uses: ~
-                    traits: ~
+                    traits: ['Sfynx\CoreBundle\Layers\Presentation\Coordination\Generalisation\Traits\TraitParam']
                 body:
                     - codeComment1:
                         design: 'code'
@@ -69,8 +69,18 @@ default:
                   - 'Sfynx\CoreBundle\Layers\Domain\Service\Request\Generalisation\RequestInterface'
         application:
             widget_cqrs_command:
-                class: Offer2FormCommand
-                arguments: ~
+                - Offer2FormCommand:
+                    create: true
+                    class: Offer2FormCommand
+                    options:
+                        models:
+                          0:
+                            class: 'Sfynx\CoreBundle\Generator\Domain\Component\File\HandlerModel\Observer\CommandQueryObject'
+                            parameters:
+                              performMethods:
+                                - 'Sfynx\CoreBundle\Generator\Domain\Component\File\MethodModel\Construct'
+                                - 'Sfynx\CoreBundle\Generator\Domain\Component\File\MethodModel\CreateFromNative'
+                              createFromNativeType: false
             widget_cqrs_command_validator_specification:
                 class: Validation\SpecHandler\Offer2FormCommandSpecHandler
                 arguments:
