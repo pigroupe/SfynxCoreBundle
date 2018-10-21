@@ -19,7 +19,7 @@ tag: changelog-deb
 	@sed -i -r "s/([0-9]{4}\-[0-9]{2}\-[0-9]{2})/`date +%Y-%m-%d`/g" artifacts/bintray.json
 
 # Tag git with last release
-release: prepare-build build-phar
+release: #prepare-build build-phar
 	@git add .
 	@git commit -m "releasing `semver tag`"
 	@(git tag --delete `semver tag`) || true
@@ -27,4 +27,4 @@ release: prepare-build build-phar
 	@git tag `semver tag`
 	@git push origin `semver tag`
 	@GIT_CB=$(git symbolic-ref --short HEAD) && git push -u ${RELEASE_REMOTE} $(GIT_CB)
-	@make build-docker
+	@#make build-docker
