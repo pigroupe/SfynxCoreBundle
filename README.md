@@ -1,7 +1,7 @@
 ﻿# Core SFYNX Bundle
 
 [![Latest Stable Version](https://img.shields.io/packagist/v/bartlett/phpunit-loggertestlistener.svg?style=flat-square)](https://packagist.org/packages/bartlett/phpunit-loggertestlistener)
-[![Minimum PHP Version](https://img.shields.io/badge/php-%3E%3D%205.4-8892BF.svg?style=flat-square)](https://php.net/)
+[![Minimum PHP Version](https://img.shields.io/badge/php-%3E%3D%207.2-8892BF.svg?style=flat-square)](https://php.net/)
 [![License](https://img.shields.io/badge/license-LGPL-red.svg?style=flat-square)](LICENSE)
 
 The Symfony provides a flexible framework that allows you to compose with a DDD (Domain-driven design) applicative architecture.
