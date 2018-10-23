@@ -544,7 +544,7 @@ class TreeRepository extends NestedTreeRepository
 
         if (!(null === $entities)){
             $entity = current($entities);
-            if (is_object($entity)){
+            if (\is_object($entity)){
                 $id        = $entity->getObject()->getId();
 
                 $query    = $this->_em->createQuery("SELECT p FROM {$this->_entityTranslationName} p  WHERE p.locale = :locale and p.field = :field and p.object = :objectId");
@@ -602,7 +602,7 @@ class TreeRepository extends NestedTreeRepository
         if (!(null === $entities)){
             $entity = current($entities);
 
-            if (is_object($entity)){
+            if (\is_object($entity)){
                 $id        = $entity->getObject()->getId();
                 return $this->findOneByEntity($locale, $id, $result, $INNER_JOIN);
             }else

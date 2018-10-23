@@ -128,7 +128,7 @@ class TranslationProxy
      */
     public function getTranslatedValue($field)
     {
-        if (is_object($this->coll)) {
+        if (\is_object($this->coll)) {
             return $this->findOrCreateTranslationForProperty($field, $this->getProxyLocale())
                         ->getContent();
         }
@@ -146,7 +146,7 @@ class TranslationProxy
      */
     public function setTranslatedValue($field, $value)
     {
-        if (is_object($this->coll)) {
+        if (\is_object($this->coll)) {
             $this->findOrCreateTranslationForProperty($field, $this->getProxyLocale())
                  ->setContent($value);
         }

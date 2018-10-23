@@ -23,10 +23,10 @@ trait TraitProcess
     {
         $entity = $this->wfLastData->entity;
         try {
-            if (is_object($entity)) {
+            if (\is_object($entity)) {
                 $this->manager->getCommandRepository()->save($entity);
 
-                if (property_exists($this, 'updateCommand') && true === $this->updateCommand) {
+                if (\property_exists($this, 'updateCommand') && true === $this->updateCommand) {
                     $this->wfCommand = $this->manager->buildFromEntity($this->wfCommand, $entity);
                 }
             }

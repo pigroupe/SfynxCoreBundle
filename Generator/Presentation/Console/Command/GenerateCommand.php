@@ -46,10 +46,10 @@ class GenerateCommand extends Command
     {
         // start
         $startTime = \microtime(true);
-        \ini_set('xdebug.max_nesting_level', 3000);
-        \ini_set('xdebug.profiler_enable', 1);
-        \ini_set('xdebug.profiler_output_dir', 'build');
-        \ini_set('xdebug.profiler_output_name', 'xdebug.%p');
+//        \ini_set('xdebug.max_nesting_level', 3000);
+//        \ini_set('xdebug.profiler_enable', 1);
+//        \ini_set('xdebug.profiler_output_dir', 'build');
+//        \ini_set('xdebug.profiler_output_name', 'xdebug.%p');
 
         $generateCommand = (new ConsoleCommandAdapter(GenerateConsoleCommand::class, $output))->createCommandFromRequest($input);
 

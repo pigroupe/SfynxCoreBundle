@@ -23,9 +23,9 @@ class SpecIsHandlerCreatedWithErrors extends AbstractSpecification
      */
     public function isSatisfiedBy(stdClass $object): bool
     {
-        return property_exists($object, 'handler')
+        return \property_exists($object, 'handler')
             && ($object->handler instanceof HandlerInterface)
-            && property_exists($object->handler, 'errors')
-            && is_array($object->handler->errors);
+            && \property_exists($object->handler, 'errors')
+            && \is_array($object->handler->errors);
     }
 }
