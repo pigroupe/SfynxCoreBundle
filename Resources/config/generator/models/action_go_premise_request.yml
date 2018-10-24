@@ -25,8 +25,9 @@ default:
                         class: Sfynx\CoreBundle\Layers\Presentation\Adapter\Command\CommandAdapter
                         arguments:
                             - 'new GoPromiseRequestFormCommand'
+                            - 'GoPromiseRequestFormCommand::class'
                         calls:
-                            - [ createCommandFromRequest, [ 'new GoPromiseRequestFormRequest' ] ]
+                            - [ createCommandFromRequest, [ 'new GoPromiseRequestFormRequest', 'true' ] ]
                     - codeComment2:
                         design: 'code'
                         content: "// 2. Implement the command workflow"
@@ -43,6 +44,7 @@ default:
                         class: Sfynx\CoreBundle\Layers\Application\Command\Handler\CommandHandler
                         arguments:
                             - '$commandWorkflow'
+                            - 'Sfynx\CoreBundle\Layers\Domain\Service\Manager\Generalisation\Interfaces\ManagerInterface'
                         handlers: [ 'GoPromiseRequestFormCommandValidationHandler', 'GoPromiseRequestFormCommandSpecHandler']
                         calls:
                             - [ process, [ '$updateCommand' ] ]

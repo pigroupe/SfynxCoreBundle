@@ -28,9 +28,11 @@ class ConfigNamespace implements ValidationInterface
     public function validate(Config $config)
     {
         if (!$config->has('namespace')) {
-            $config->set('namespace', static::DEFAULT_CONF);
-        } elseif (!empty($config->get('conf-array')['namespace'])) {
-            $config->set('namespace', $config->get('conf-array')['namespace']);
+            if (!empty($config->get('conf-array')['namespace'])) {
+                $config->set('namespace', $config->get('conf-array')['namespace']);
+            } else {
+                $config->set('namespace', static::DEFAULT_CONF);
+            }
         }
     }
 }

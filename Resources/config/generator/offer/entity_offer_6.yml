@@ -23,8 +23,9 @@ default:
                         class: Sfynx\CoreBundle\Layers\Presentation\Adapter\Command\CommandAdapter
                         arguments:
                             - 'new Offer6FormCommand'
+                            - 'Offer6FormCommand::class'
                         calls:
-                            - [ createCommandFromRequest, [ 'new Offer6FormRequest' ] ]
+                            - [ createCommandFromRequest, [ 'new Offer6FormRequest', 'true' ] ]
                     - commandWorkflow:
                         design: 'observer'
                         class: Sfynx\CoreBundle\Layers\Application\Command\Workflow\CommandWorkflow
@@ -36,6 +37,7 @@ default:
                         class: Sfynx\CoreBundle\Layers\Application\Command\Handler\CommandHandler
                         arguments:
                             - '$commandWorkflow'
+                            - 'Sfynx\CoreBundle\Layers\Domain\Service\Manager\Generalisation\Interfaces\ManagerInterface'
                         handlers: [ 'Offer6FormCommandValidationHandler', 'Offer6FormCommandSpecHandler']
                         calls:
                             - [ process, [ '$updateCommand' ] ]

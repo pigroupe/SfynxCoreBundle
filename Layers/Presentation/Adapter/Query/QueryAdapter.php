@@ -33,6 +33,11 @@ class QueryAdapter implements QueryAdapterInterface
         self::METHOD_NATIVE => 'createQueryFromNative',
     ];
 
+    /**
+     * QueryAdapter constructor.
+     * @param QueryInterface $query
+     * @param string|null $queryClass
+     */
     public function __construct(QueryInterface $query, string $queryClass = null)
     {
         $this->query = $query;
@@ -41,6 +46,7 @@ class QueryAdapter implements QueryAdapterInterface
 
     /**
      * @param RequestInterface $request
+     * @param bool $reflexion
      * @return QueryInterface
      */
     public function createQueryFromRequest(RequestInterface $request, bool $reflexion = true): QueryInterface

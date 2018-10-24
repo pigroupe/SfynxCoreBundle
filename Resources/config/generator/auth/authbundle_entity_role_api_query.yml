@@ -31,8 +31,9 @@ default:
                         class: Sfynx\CoreBundle\Layers\Presentation\Adapter\Query\QueryAdapter
                         arguments:
                             - 'new GetOneQuery'
+                            - 'GetOneQuery::class'
                         calls:
-                            - [ createQueryFromRequest, [ 'new QueryRequest' ] ]
+                            - [ createQueryFromRequest, [ 'new QueryRequest', 'true'] ]
                     - codeComment2:
                         design: 'code'
                         content: "// 2. Implement the command workflow"
@@ -181,11 +182,10 @@ default:
                 #
                 # ROLE JSON API
                 #
-                - RoleBookJsonApiTransformer:
+                - RoleBookJsonApi:
                     create: true
-                    class: Domain\Workflow\Observer\Role\Response\JsonApiTransformer\RoleBookJsonApiTransformer
+                    class: Domain\Workflow\Observer\Role\Response\JsonApiBook\RoleBookJsonApi
                     arguments: ~
-                    extends: 'League\Fractal\TransformerAbstract'
                     options:
                         implements: ~
                         uses: ~
@@ -198,22 +198,23 @@ default:
                             returnType: 'void'
                             body:
                               - 'return [];'
-#                - RoleBookJsonApi:
-#                    create: true
-#                    class: Domain\Workflow\Observer\Role\Response\JsonApiBook\RoleBookJsonApi
-#                    arguments: ~
-#                    options:
-#                        implements: ~
-#                        uses: ~
-#                        traits: ~
-#                        methods:
-#                          - name: 'transform'
-#                            comments: ['{@inheritdoc}']
-#                            arguments: ['Domain\Workflow\Observer\Role\Response\JsonApiBook\RoleBookJsonApi']
-#                            visibility: 'public'
-#                            returnType: 'void'
-#                            body:
-#                              - 'return [];'
+                - RoleBookJsonApiTransformer:
+                    create: true
+                    class: Domain\Workflow\Observer\Role\Response\JsonApiTransformer\RoleBookJsonApiTransformer
+                    arguments: ~
+                    extends: 'League\Fractal\TransformerAbstract'
+                    options:
+                        implements: ~
+                        uses: ~
+                        traits: ~
+                        methods:
+                          - name: 'transform'
+                            comments: ~
+                            arguments: ['Sfynx\AuthBundle\Domain\Workflow\Observer\Role\Response\JsonApiBook\RoleBookJsonApi']
+                            visibility: 'public'
+                            returnType: 'void'
+                            body:
+                              - 'return [];'
             #
             # OBSERVER CLASSES
             #
