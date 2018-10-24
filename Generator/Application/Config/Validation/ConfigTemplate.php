@@ -33,14 +33,14 @@ class ConfigTemplate implements ValidationInterface
      */
     public function validate(Config $config)
     {
-        if (!$config->has('report-template')
-            || !\in_array($config->get('report-template'), self::$templateType)
-        ) {
-            $config->set('report-template', self::DEFAULT_CONF);
-        } elseif (!empty($config->get('conf-array')['template'])
-            && \in_array($config->get('conf-array')['template'], self::$templateType)
-        ) {
-            $config->set('report-template', $config->get('conf-array')['template']);
+        if (!$config->has('report-template')) {
+            if (!empty($config->get('conf-array')['template'])
+                && \in_array($config->get('conf-array')['template'], self::$templateType)
+            ) {
+                $config->set('report-template', $config->get('conf-array')['template']);
+            } else {
+                $config->set('report-template', static::DEFAULT_CONF);
+            }
         }
     }
 }

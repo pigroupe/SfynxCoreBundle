@@ -33,6 +33,11 @@ class CommandAdapter implements CommandAdapterInterface
         self::METHOD_NATIVE => 'createCommandFromNative',
     ];
 
+    /**
+     * CommandAdapter constructor.
+     * @param CommandInterface $command
+     * @param string|null $commandClass
+     */
     public function __construct(CommandInterface $command, string $commandClass = null)
     {
         $this->command = $command;
@@ -41,6 +46,7 @@ class CommandAdapter implements CommandAdapterInterface
 
     /**
      * @param RequestInterface $request
+     * @param bool $reflexion
      * @return CommandInterface
      */
     public function createCommandFromRequest(RequestInterface $request, bool $reflexion = true): CommandInterface

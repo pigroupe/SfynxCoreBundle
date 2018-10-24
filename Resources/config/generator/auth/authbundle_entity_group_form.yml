@@ -23,8 +23,9 @@ default:
                         class: Sfynx\CoreBundle\Layers\Presentation\Adapter\Command\CommandAdapter
                         arguments:
                             - 'new GroupFormCommand'
+                            - 'GroupFormCommand::class'
                         calls:
-                            - [ createCommandFromRequest, [ 'new GroupFormRequest' ] ]
+                            - [ createCommandFromRequest, [ 'new GroupFormRequest', 'true' ] ]
                     - codeComment2:
                         design: 'code'
                         content: "// 2. Implement the command workflow"
@@ -42,6 +43,7 @@ default:
                         class: Sfynx\CoreBundle\Layers\Application\Command\Handler\CommandHandler
                         arguments:
                             - '$commandworkflow'
+                            - 'Sfynx\CoreBundle\Layers\Domain\Service\Manager\Generalisation\Interfaces\ManagerInterface'
                         handlers: [ 'GroupFormCommandValidationHandler', 'GroupFormCommandSpecHandler']
                         calls:
                             - [ process, [ '$updateCommand' ] ]

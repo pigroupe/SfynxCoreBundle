@@ -33,20 +33,20 @@ abstract class AbstractEntityCreateHandler extends AbstractObserver
     /** @var stdClass */
     protected $object;
     /** @var bool */
-    protected $updateCommand;
+    protected $isUpdateCommand;
 
     /**
      * AbstractEntityCreateHandler constructor.
      * @param ManagerInterface $manager
      * @param RequestInterface $request
-     * @param bool $updateCommand
+     * @param bool $isUpdateCommand
      */
-    public function __construct(ManagerInterface $manager, RequestInterface $request, bool $updateCommand = false)
+    public function __construct(ManagerInterface $manager, RequestInterface $request, bool $isUpdateCommand = false)
     {
         $this->entityName = $manager->getEntityName();
         $this->manager = $manager;
         $this->request = $request;
-        $this->updateCommand = $updateCommand;
+        $this->isUpdateCommand = $isUpdateCommand;
 
         $this->object = new stdClass();
     }
@@ -70,7 +70,7 @@ abstract class AbstractEntityCreateHandler extends AbstractObserver
             $this->wfLastData->entity = $this->manager->newFromCommand($this->wfCommand);
 
             $specs = new SpecIsValidRequest();
-            if ($this->updateCommand && !$specs->isSatisfiedBy($this->object)) {
+            if ($this->isUpdateCommand && !$specs->isSatisfiedBy($this->object)) {
                 $this->wfCommand = $this->manager->buildFromEntity($this->wfCommand, $this->wfLastData->entity);
             }
         } catch (Exception $e) {

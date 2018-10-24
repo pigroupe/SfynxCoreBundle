@@ -108,7 +108,7 @@ class CreateFromNative
                 }
 
                 ClassHandler::addUse($namespace, $field->type, $index);
-                array_push($arguments, sprintf('%s $%s', $ClassTypeFieldName, $propertyFieldName));
+                array_push($arguments, sprintf('%s $%s = null', $ClassTypeFieldName, $propertyFieldName));
 
                 $count++;
             }
@@ -143,7 +143,7 @@ class CreateFromNative
             ) {
                 $propertyFieldName = \lcfirst($field->name);
                 $prefix = (0 == $count) ? '' : ',';
-                $fieldContent .= $prefix . PHP_EOL . sprintf("  \$arguments['%s']", $propertyFieldName);
+                $fieldContent .= $prefix . PHP_EOL . sprintf("  \$arguments['%s'] ?? null", $propertyFieldName);
                 $typeFieldName = ClassHandler::getType($field->type, $field, true);
 
                 ClassHandler::addUse($namespace, $field->type, $index);

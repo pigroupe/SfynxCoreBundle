@@ -389,8 +389,7 @@ class ClassHandler implements SplSubject
                 self::addUse($namespace, $argument, $index, $context);
                 $info = self::getArgResult($namespace, $argument, [], false);
 
-                if (!is_null($data)
-                    && \property_exists($data, 'construct') && !empty($data->construct)
+                if (\property_exists($data, 'construct') && !empty($data->construct)
                     && \property_exists($data->construct, 'create') && ($data->construct->create == true)
                     && \property_exists($data->construct, 'body')
                     && !empty($data->construct->body)
@@ -399,6 +398,8 @@ class ClassHandler implements SplSubject
                         self::setArgClassResult($namespace, $argument, $index, $info['value'], $info['basename'], $addConstruct);
                     } elseif ($addConstruct && \in_array($info['type'], ['var'])) {
                         self::addConstructorArgument($info['argument'], $info);
+                    } elseif ($addConstruct && \in_array($info['type'], ['bool'])) {
+                        self::setArgClassResult($namespace, $argument, $index, $info['argument'], $info['type'], $addConstruct);
                     }
                 }
             }
@@ -426,13 +427,21 @@ class ClassHandler implements SplSubject
                     // set default values
                     $methodArgs = '';
                     $body = '';
+                    $countInheritdoc = 0;
 
                     // create method
                     $methodClass = $class->addMethod($method->name);
 
                     // set Method values
+                    if (\property_exists($method, 'visibility') && !empty($method->visibility)) {
+                        $methodClass->setVisibility($method->visibility);
+                    }
+                    if (\property_exists($method, 'static') && true == $method->static) {
+                        $methodClass->setStatic($method->static);
+                    }
                     if (\property_exists($method, 'comments') && !empty($method->comments)) {
                         foreach ($method->comments as $comment) {
+                            \str_replace('inheritdoc', 'inheritdoc', $comment, $countInheritdoc);
                             $methodClass->addComment($comment);
                         }
                     }
@@ -443,9 +452,10 @@ class ClassHandler implements SplSubject
                             $info = self::getArgResult($namespace, $argument, [], false);
                             $type = $info['type'];
                             $arg = $info['value'];
+                            $defaultValue = '';
 
                             if ('interface' == $type) {
-                                $methodClass->addParameter($info['value'])->setTypeHint($info['basename']);
+                                $methodClass->addParameter($arg)->setTypeHint($info['basename']);
                             }
 
                             $newArgument = \trim(\str_replace(' $', ' ', \trim($argument), $countSpace));
@@ -473,19 +483,17 @@ class ClassHandler implements SplSubject
                                 }
                             }
                             // add phpdocumentor argument value
-                            $methodClass->addComment(sprintf('@param %s $%s', $type, $arg));
+                            $commentDefaultValue = \is_null($defaultValue) ? '|null' : '';
+                            $methodClass->addComment(sprintf('@param %s%s $%s', $type, $commentDefaultValue, $arg));
                         }
-                    }
-                    if (\property_exists($method, 'visibility') && !empty($method->visibility)) {
-                        $methodClass->setVisibility($method->visibility);
-                    }
-                    if (\property_exists($method, 'static') && true == $method->static) {
-                        $methodClass->setStatic($method->static);
                     }
                     if (\property_exists($method, 'returnType')  && !empty($method->returnType)) {
                         $info = self::getArgResult($namespace, $method->returnType, [], false);
                         $methodClass->setReturnType($info['basename']);
-                        $methodClass->addComment(sprintf('@return %s', $info['basename']));
+
+                        if (0 == $countInheritdoc) {
+                            $methodClass->addComment(sprintf('@return %s', $info['basename']));
+                        }
                     }
 
                     // set Body of the method
@@ -584,7 +592,7 @@ class ClassHandler implements SplSubject
             $body = '';
 
             foreach (self::$constructorArguments as $value => $attribute) {
-                $defaultValue = null;
+                $defaultValue = 'no';
 
                 if (\is_array($attribute) && isset($attribute['basename'])) {
                     $value = \preg_replace('!\s+!', ' ', $attribute['basename']);
@@ -596,22 +604,31 @@ class ClassHandler implements SplSubject
                         $defaultValue = \trim($defaultValue);
                         $defaultValue = ($defaultValue == "false") ? false : $defaultValue;
                         $defaultValue = ($defaultValue == "true") ? true : $defaultValue;
+                        $defaultValue = ($defaultValue === '[]') ? [] : $defaultValue;
+                        $defaultValue = ($defaultValue === 'null') ? null : $defaultValue;
+                        $defaultValue = \is_numeric($defaultValue) ? \intval($defaultValue) : $defaultValue;
                     }
-                } else {
-                    $arg = \lcfirst(str_replace('Interface', '', $value));
-                    $body .= "$attribute = \$$arg;" . PHP_EOL;
+                } elseif ('bool' == $value) {
+                    $arg = \lcfirst(\str_replace('$this->', '', $attribute));
                     $type = $value;
+                    $body .= "$attribute = \$$arg;" . PHP_EOL;
+                } else {
+                    $arg = \lcfirst(\str_replace('Interface', '', $value));
+                    $type = $value;
+                    $body .= "$attribute = \$$arg;" . PHP_EOL;
                 }
                 $type = \trim($type);
                 $value = \trim($value);
                 $arg = \trim(\str_replace('$', '', $arg));
 
                 $Parameter = $method->addParameter($arg)->setTypeHint($type);
-                if (!\is_null($defaultValue)) {
+                if ('no' !== $defaultValue) {
                     $Parameter->setDefaultValue($defaultValue);
                 }
+                // add phpdocumentor argument value
+                $commentDefaultValue = \is_null($defaultValue) ? '|null' : '';
+                $method->addComment(sprintf('@param %s%s $%s', $type, $commentDefaultValue, $arg));
 
-                $method->addComment(sprintf('@param %s $%s', $type, $arg));
                 $class->addProperty($arg)->setComment(sprintf('@var %s', $type))->setVisibility('protected');
             }
             self::$constructorArguments = [];
@@ -787,7 +804,7 @@ class ClassHandler implements SplSubject
     ): string {
         self::addUse($namespace, $argument, $index);
 
-        $value = \lcfirst($value);
+        $value = \lcfirst(str_replace('$', '', $value));
         $attribute = "\$$value";
         if ($addConstruct) {
             $attribute = "\$this->$value";

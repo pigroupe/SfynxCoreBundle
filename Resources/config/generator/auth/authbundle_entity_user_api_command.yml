@@ -31,8 +31,9 @@ default:
                         class: Sfynx\CoreBundle\Layers\Presentation\Adapter\Command\CommandAdapter
                         arguments:
                             - 'new UpdateCommand'
+                            - 'UpdateCommand::class'
                         calls:
-                            - [ createCommandFromRequest, [ 'new UpdateRequest' ] ]
+                            - [ createCommandFromRequest, [ 'new UpdateRequest', 'true'] ]
                     - codeComment2:
                         design: 'code'
                         content: "// 2. Implement the command workflow"
@@ -50,6 +51,7 @@ default:
                         class: Sfynx\CoreBundle\Layers\Application\Command\Handler\CommandHandler
                         arguments:
                             - '$commandWorkflow'
+                            - 'Sfynx\CoreBundle\Layers\Domain\Service\Manager\Generalisation\Interfaces\ManagerInterface'
                         handlers: [ 'UpdateCommandValidationHandler', 'UpdateCommandSpecHandler']
                         calls:
                             - [ process, [ '$updateCommand' ] ]
@@ -197,7 +199,7 @@ default:
                     construct:
                         create: true
                         body:
-                          - 'parent::__construct($manager, $request, $updateCommand, $isUpdateCommand);'
+                          - 'parent::__construct($manager, $request, $isUpdateCommand);'
                     extends: Sfynx\CoreBundle\Layers\Domain\Workflow\Observer\Generalisation\Command\AbstractEntityCreateHandler
                     options:
                         implements: ~
@@ -210,11 +212,11 @@ default:
                       - 'Sfynx\CoreBundle\Layers\Domain\Service\Manager\Generalisation\Interfaces\ManagerInterface'
                       - 'Sfynx\CoreBundle\Layers\Domain\Service\Request\Generalisation\RequestInterface'
                       - 'Symfony\Bundle\FrameworkBundle\Routing\Router'
-                      #- 'bool $updateCommand = false'
+                      - 'bool $isUpdateCommand = false'
                     construct:
                         create: true
                         body:
-                          - 'parent::__construct($manager, $request, $updateCommand);'
+                          - 'parent::__construct($manager, $request, $isUpdateCommand);'
                     extends: Sfynx\CoreBundle\Layers\Domain\Workflow\Observer\Generalisation\Command\AbstractEntityEditHandler
                     options:
                         implements: ~
