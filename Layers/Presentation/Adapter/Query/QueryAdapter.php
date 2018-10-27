@@ -36,12 +36,11 @@ class QueryAdapter implements QueryAdapterInterface
     /**
      * QueryAdapter constructor.
      * @param QueryInterface $query
-     * @param string|null $queryClass
      */
-    public function __construct(QueryInterface $query, string $queryClass = null)
+    public function __construct(QueryInterface $query)
     {
         $this->query = $query;
-        $this->queryClass = $queryClass;
+        $this->queryClass = \get_class($query);
     }
 
     /**

@@ -337,7 +337,7 @@ class TreeNodeRepository extends EntityRepository
     {
         $meta = $this->getClassMetadata();
         $config = $this->getConfiguration();
-        if ($verify && is_array($this->verify())) {
+        if ($verify && \is_array($this->verify())) {
             return false;
         }
                

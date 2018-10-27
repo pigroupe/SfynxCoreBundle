@@ -20,7 +20,7 @@ class AssocAllValidator extends ConstraintValidator
             return;
         }
 
-        if (!is_array($value) && !$value instanceof \Traversable) {
+        if (!\is_array($value) && !$value instanceof \Traversable) {
             throw new UnexpectedTypeException($value, 'array or Traversable');
         }
 

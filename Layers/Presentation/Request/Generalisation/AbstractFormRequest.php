@@ -43,7 +43,7 @@ abstract class AbstractFormRequest implements PresRequestInterface
      * @param RequestInterface $request
      * @param array $parameters
      */
-    public function __construct(RequestInterface $request, array $parameters =[])
+    public function __construct(RequestInterface $request, array $parameters = [])
     {
         $this->request  = $request;
         $this->parameters  = $parameters;
@@ -106,7 +106,7 @@ abstract class AbstractFormRequest implements PresRequestInterface
         $mt = $this->object->requestMethod;
         foreach (['defaults', 'required', 'allowedTypes', 'allowedValues'] as $attribut) {
             if (isset($this->$attribut[$mt])
-                && is_string($this->$attribut[$mt])
+                && \is_string($this->$attribut[$mt])
                 && isset($this->$attribut[$this->$attribut[$mt]])
             ) {
                 $this->$attribut[$mt] = $this->$attribut[$this->$attribut[$mt]];
@@ -137,7 +137,7 @@ abstract class AbstractFormRequest implements PresRequestInterface
      */
     protected function setOptions()
     {
-        $this->options = json_decode($this->request->getContent(), true);
+        $this->options = \json_decode($this->request->getContent(), true);
         $this->options = (null !== $this->options) ? $this->options : [];
     }
 
@@ -163,8 +163,8 @@ abstract class AbstractFormRequest implements PresRequestInterface
                 $defaults[$field] = $defaults[$field] ?? [];
                 $allowedTypes[$field] = $allowedTypes[$field] ?? [];
                 $allowedValues[$field] = $allowedValues[$field] ?? [];
+
                 $this->multidimensionalOtionResolver(
-                    $this->requestParameters[$field],
                     $options[$field],
                     $defaults[$field],
                     $allowedTypes[$field] ,
@@ -184,6 +184,7 @@ abstract class AbstractFormRequest implements PresRequestInterface
                 }
             }
         }
+
         foreach ($multidimensionalDefaults as $field => $optionDefault) {
             $fieldResolver = new OptionsResolver();
             $fieldResolver->setDefaults($optionDefault);
@@ -222,6 +223,7 @@ abstract class AbstractFormRequest implements PresRequestInterface
         foreach ($this->getNormalizers() as $optionName => $optionValues) {
             $resolver->setNormalizer($optionName, $optionValues);
         }
-        $this->requestParameters = array_merge($resolver->resolve($this->options), $this->requestParameters);
+
+        $this->requestParameters = \array_merge($resolver->resolve($this->options), $this->requestParameters);
     }
 }

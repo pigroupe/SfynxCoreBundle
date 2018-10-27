@@ -114,7 +114,7 @@ abstract class AbstractSelectAjaxController extends AbstractAjaxController
         $query->groupBy('a.id');
         // autocompletion
         $array_params = [];
-        if (is_array($keywords) && (count($keywords) >= 1)) {
+        if (\is_array($keywords) && (count($keywords) >= 1)) {
             $i = 0;
             foreach ($keywords as $info) {
                 $is_trans = false;
@@ -179,7 +179,7 @@ abstract class AbstractSelectAjaxController extends AbstractAjaxController
 
         if ((null === $cacheQuery_hash)) {
             $query = $query->getQuery();
-        } elseif (is_array($cacheQuery_hash)) {
+        } elseif (\is_array($cacheQuery_hash)) {
             // we define all options
             if (!isset($cacheQuery_hash['time'])) $cacheQuery_hash['time'] = 3600;
             if (!isset($cacheQuery_hash['mode'])) $cacheQuery_hash['mode'] = 3; // \Doctrine\ORM\Cache::MODE_NORMAL;

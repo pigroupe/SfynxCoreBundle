@@ -62,7 +62,7 @@ trait TraitOptIn
     public static function setGlobalOptIn($v)
     {
         if ($v !== null) {
-            if (is_string($v)) {
+            if (\is_string($v)) {
                 $v = in_array(strtolower($v), array('false', 'off', '-', 'no', 'n', '0', '')) ? false : true;
             } else {
                 $v = (boolean) $v;
@@ -85,7 +85,7 @@ trait TraitOptIn
     public static function setSiteOptIn($v)
     {
         if ($v !== null) {
-            if (is_string($v)) {
+            if (\is_string($v)) {
                 $v = in_array(strtolower($v), array('false', 'off', '-', 'no', 'n', '0', '')) ? false : true;
             } else {
                 $v = (boolean) $v;

@@ -19,7 +19,7 @@ class AssocAll extends Constraint
     {
         parent::__construct($options);
 
-        if (! is_array($this->constraints)) {
+        if (! \is_array($this->constraints)) {
             $this->constraints = array($this->constraints);
         }
 

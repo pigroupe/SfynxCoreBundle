@@ -66,7 +66,7 @@ RUN apk add --no-cache --virtual .packages \
 # ARGS
 #
 ENV TERM xterm
-ENV SFYNX_DDD_GENERATOR 'v2.11.1'
+ENV SFYNX_DDD_GENERATOR 'v2.11.2'
 
 #
 # ADD SFYNX DDD GENERATOR

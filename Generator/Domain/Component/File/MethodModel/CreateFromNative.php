@@ -18,8 +18,8 @@ use Sfynx\CoreBundle\Generator\Domain\Report\Generalisation\AbstractGenerator;
  */
 class CreateFromNative
 {
-    const METHOD_ARRAY = 0;
-    const METHOD_NATIVE = 1;
+    const METHOD_ARRAY = 'general_arg';
+    const METHOD_NATIVE = 'specific_arg';
 
     /**
      * List of concrete handlers that can be built using this factory.
@@ -47,7 +47,7 @@ class CreateFromNative
         ?array $fields = [],
         ?array $options = null
     ): void {
-        $method = !isset($options['createFromNativeType']) ? 1 : $options['createFromNativeType'];
+        $method = !isset($options['createFromNativeType']) ? 'general_arg' : $options['createFromNativeType'];
         $result = self::{self::$createMethodList[$method]}($namespace, $index, $fields, $options);
 
         ClassHandler::createMethods(

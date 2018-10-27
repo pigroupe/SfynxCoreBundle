@@ -27,7 +27,7 @@ class ConsoleCommandAdapter implements ConsoleCommandAdapterInterface
     {
         $this->output = $output;
 
-        if (!in_array(ConsoleCommandInterface::class, class_implements($command))) {
+        if (!\in_array(ConsoleCommandInterface::class, class_implements($command))) {
             throw new \InvalidArgumentException(
                 sprintf('Command %s should implement interface %s', $command, ConsoleCommandInterface::class)
             );

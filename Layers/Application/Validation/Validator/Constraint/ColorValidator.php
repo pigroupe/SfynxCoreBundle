@@ -26,7 +26,7 @@ class ColorValidator extends ConstraintValidator
         self::checkConstraintType($constraint, Color::class);
 
         /** @var Color $constraint */
-        if (!is_string($value) || !preg_match($constraint->getRegex(), $value)) {
+        if (!\is_string($value) || !preg_match($constraint->getRegex(), $value)) {
             $this->context->addViolation($constraint->message, ['%string%' => $value]);
         }
     }

@@ -31,9 +31,8 @@ default:
                         class: Sfynx\CoreBundle\Layers\Presentation\Adapter\Query\QueryAdapter
                         arguments:
                             - 'new GetOneQuery'
-                            - 'GetOneQuery::class'
                         calls:
-                            - [ createQueryFromRequest, [ 'new QueryRequest', 'true'] ]
+                            - [ createQueryFromRequest, [ 'new QueryRequest', 'false'] ]
                     - codeComment2:
                         design: 'code'
                         content: "// 2. Implement the command workflow"
@@ -102,14 +101,17 @@ default:
                     create: true
                     class: GetOneQuery
                     options:
-                        models:
-                          0:
-                            class: 'Sfynx\CoreBundle\Generator\Domain\Component\File\HandlerModel\Observer\CommandQueryObject'
-                            parameters:
-                              performMethods:
-                                - 'Sfynx\CoreBundle\Generator\Domain\Component\File\MethodModel\Construct'
-                                - 'Sfynx\CoreBundle\Generator\Domain\Component\File\MethodModel\CreateFromNative'
-                              createFromNativeType: false
+                        traits:
+                          - 'Sfynx\CoreBundle\Layers\Application\Common\Generalisation\Traits\TraitCreateInstanceFromNative'
+#                        models:
+#                          0:
+#                            class: 'Sfynx\CoreBundle\Generator\Domain\Component\File\HandlerModel\Observer\CommandQueryObject'
+#                            parameters:
+#                              performMethods:
+#                                - 'Sfynx\CoreBundle\Generator\Domain\Component\File\MethodModel\Construct'
+#                                - 'Sfynx\CoreBundle\Generator\Domain\Component\File\MethodModel\CreateFromNative'
+#                              # createFromNativeType = ['general_arg', 'specific_arg']
+#                              createFromNativeType: 'general_arg'
             widget_cqrs_query_validator_specification:
                 class: Validation\SpecHandler\GetQuerySpecHandler
                 arguments:

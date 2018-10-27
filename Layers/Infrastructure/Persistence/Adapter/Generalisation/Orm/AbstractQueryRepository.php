@@ -155,7 +155,7 @@ abstract class AbstractQueryRepository extends EntityRepository implements Query
     public static function addCriteria(QueryBuilder & $qb, $sourceEntity, array $criteria)
     {
         foreach ($criteria as $field => $value) {
-            if (is_array($value)) {
+            if (\is_array($value)) {
                 self::addJoin($qb, $sourceEntity, $field);
                 self::addCriteria($qb, $field, $value);
             } else {

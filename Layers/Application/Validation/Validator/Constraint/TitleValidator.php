@@ -26,7 +26,7 @@ class TitleValidator extends ConstraintValidator
         /** @var Title $constraint */
         self::checkConstraintType($constraint, Title::class);
 
-        if (!is_string($value) || !preg_match($constraint->getRegex(), $value)) {
+        if (!\is_string($value) || !preg_match($constraint->getRegex(), $value)) {
             $this->context->addViolation($constraint->message, ['%string%' => $value]);
         }
     }
