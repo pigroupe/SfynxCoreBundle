@@ -6,14 +6,17 @@ default:
                     create: true
                     class: MovieFormCommand
                     options:
-                        models:
-                          0:
-                            class: 'Sfynx\CoreBundle\Generator\Domain\Component\File\HandlerModel\Observer\CommandQueryObject'
-                            parameters:
-                              performMethods:
-                                - 'Sfynx\CoreBundle\Generator\Domain\Component\File\MethodModel\Construct'
-                                - 'Sfynx\CoreBundle\Generator\Domain\Component\File\MethodModel\CreateFromNative'
-                              createFromNativeType: false
+                        traits:
+                          - 'Sfynx\CoreBundle\Layers\Application\Common\Generalisation\Traits\TraitCreateInstanceFromNative'
+#                        models:
+#                          0:
+#                            class: 'Sfynx\CoreBundle\Generator\Domain\Component\File\HandlerModel\Observer\CommandQueryObject'
+#                            parameters:
+#                              performMethods:
+#                                - 'Sfynx\CoreBundle\Generator\Domain\Component\File\MethodModel\Construct'
+#                                - 'Sfynx\CoreBundle\Generator\Domain\Component\File\MethodModel\CreateFromNative'
+#                              # createFromNativeType = ['general_arg', 'specific_arg']
+#                              createFromNativeType: 'general_arg'
             widget_cqrs_command_validator_specification:
                 class: Validation\SpecHandler\MovieFormCommandSpecHandler
                 arguments:

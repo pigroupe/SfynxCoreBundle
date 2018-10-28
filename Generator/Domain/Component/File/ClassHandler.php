@@ -705,6 +705,27 @@ class ClassHandler implements SplSubject
         $type = 'default';
         $value = $argument;
 
+        \str_replace(',', ',', $argument, $countArray);
+        if (1 <= $countArray) {
+            $type = 'array';
+
+            // obtain all patterns in parentheses delimited with a comma
+            preg_match_all("/[^\s,[\]]*/", $value, $matches, PREG_PATTERN_ORDER);
+            $arguments = array_filter($matches[0]);
+
+            // for all pattern, search the argument value if the pattern is a namespace
+            $argResult = [];
+            foreach ($arguments as $arg) {
+                $info = self::getArgResult($namespace, $arg, $index, $addConstruct, $test);
+                $argResult[] = $info['argument'];
+            }
+
+            // we recreate the value
+            $argResult = '[' . implode(', ', $argResult) . ']';
+
+            return ['argument' => $argResult, 'basename' => $basename, 'type' => $type, 'value' => $value];
+        }
+
         $className = \trim(str_replace('new', '', $argument, $countNew));
         if (1 == $countNew) {
             $argResult = self::setArgNewResult($namespace, $argument, $index, $className, $addConstruct, $test);

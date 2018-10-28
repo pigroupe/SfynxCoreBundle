@@ -206,7 +206,7 @@ abstract class AbstractTreeRepository extends NestedTreeRepository
 
         $result = array();
         $data   = $query->getQuery()->getArrayResult();
-        if ($data && is_array($data) && count($data)) {
+        if ($data && \is_array($data) && count($data)) {
             foreach ($data as $row) {
                 if (isset($row[$field]) && !empty($row[$field])) {
                     $result[ $row[$field] ] = $row[$field];
@@ -959,7 +959,7 @@ abstract class AbstractTreeRepository extends NestedTreeRepository
             if ( method_exists($node, 'getPage') && ($node->getPage() InstanceOf \PiApp\AdminBundle\Entity\Page) ) {
                 $routesnames[]     = $node->getPage()->getRouteName();
             }
-            if (is_array($childs)){
+            if (\is_array($childs)){
                 foreach($childs as $key => $child){
                     if (method_exists($child, 'getPage')  && ($child->getPage() instanceof \PiApp\AdminBundle\Entity\Page) ){
                         $routesnames[]  = $child->getPage()->getRouteName();

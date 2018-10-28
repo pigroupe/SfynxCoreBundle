@@ -12,20 +12,25 @@ default:
                 extends: ~
                 options:
                     implements: ~
-                    uses: ~
+                    uses:
+                      - 'Symfony\Component\HttpFoundation\Response'
+                      - 'Exception'
+                      - 'Sfynx\CoreBundle\Layers\Infrastructure\Exception\Entity\ViolationEntityException'
+                      - 'Sfynx\CoreBundle\Layers\Infrastructure\Exception\Entity\NotFoundEntityException'
                     traits: ['Sfynx\CoreBundle\Layers\Presentation\Coordination\Generalisation\Traits\TraitParam']
                 body:
                     - codeComment1:
                         design: 'code'
-                        content: "// 1. Transform options to Command."
+                        content:
+                          - 'try {'
+                          - "// 1. Transform options to Command."
                     - updateCommand:
                         design: 'adapter'
                         class: Sfynx\CoreBundle\Layers\Presentation\Adapter\Command\CommandAdapter
                         arguments:
                             - 'new Offer4FormCommand'
-                            - 'Offer4FormCommand::class'
                         calls:
-                            - [ createCommandFromRequest, [ 'new Offer4FormRequest', 'true' ] ]
+                            - [ createCommandFromRequest, [ 'new Offer4FormRequest', 'false' ] ]
                     - commandWorkflow:
                         design: 'observer'
                         class: Sfynx\CoreBundle\Layers\Application\Command\Workflow\CommandWorkflow
@@ -64,7 +69,23 @@ default:
                             - [ process, [ '$commandHandlerResult' ] ]
                     - codeln2:
                         design: 'code'
-                        content: "return $responseHandlerResult->getResponse();"
+                        content:
+                          - "$response = $responseHandlerResult->getResponse();"
+                          - '}  catch (NotFoundEntityException $e) {'
+                          - '    $response = new Response();'
+                          - '    $response->setStatusCode(Response::HTTP_NOT_FOUND);'
+                          - '    $response->setContent($e->getMessage());'
+                          - '}  catch (ViolationEntityException $e) {'
+                          - '    $response = new Response();'
+                          - '    $response->setStatusCode(Response::HTTP_CONFLICT);'
+                          - '    $response->setContent($e->getMessage());'
+                          - '}  catch (Exception $e) {'
+                          - '    $response = new Response();'
+                          - '    $response->setStatusCode(Response::HTTP_SERVICE_UNAVAILABLE);'
+                          - '    $response->setContent($e->getMessage());'
+                          - '}'
+                          - ''
+                          - 'return $response;'
             widget_request:
                 class: Offer4FormRequest
                 arguments:
@@ -75,14 +96,17 @@ default:
                     create: true
                     class: Offer4FormCommand
                     options:
-                        models:
-                          0:
-                            class: 'Sfynx\CoreBundle\Generator\Domain\Component\File\HandlerModel\Observer\CommandQueryObject'
-                            parameters:
-                              performMethods:
-                                - 'Sfynx\CoreBundle\Generator\Domain\Component\File\MethodModel\Construct'
-                                - 'Sfynx\CoreBundle\Generator\Domain\Component\File\MethodModel\CreateFromNative'
-                              createFromNativeType: false
+                        traits:
+                          - 'Sfynx\CoreBundle\Layers\Application\Common\Generalisation\Traits\TraitCreateInstanceFromNative'
+#                        models:
+#                          0:
+#                            class: 'Sfynx\CoreBundle\Generator\Domain\Component\File\HandlerModel\Observer\CommandQueryObject'
+#                            parameters:
+#                              performMethods:
+#                                - 'Sfynx\CoreBundle\Generator\Domain\Component\File\MethodModel\Construct'
+#                                - 'Sfynx\CoreBundle\Generator\Domain\Component\File\MethodModel\CreateFromNative'
+#                              # createFromNativeType = ['general_arg', 'specific_arg']
+#                              createFromNativeType: 'general_arg'
             widget_cqrs_command_validator_specification:
                 class: Validation\SpecHandler\Offer4FormCommandSpecHandler
                 arguments:

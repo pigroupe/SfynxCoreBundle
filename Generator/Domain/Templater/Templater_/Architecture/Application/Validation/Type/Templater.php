@@ -4,7 +4,6 @@ namespace Sfynx\CoreBundle\Generator\Domain\Templater\Templater_\Architecture\Ap
 use stdClass;
 use Exception;
 use Sfynx\CoreBundle\Generator\Domain\Component\File\ClassHandler;
-use Sfynx\CoreBundle\Generator\Domain\Component\Table\Table;
 use Sfynx\CoreBundle\Generator\Domain\Templater\Templater_\Architecture\Application\Validation\Type\Extension;
 use Sfynx\CoreBundle\Generator\Domain\Widget\Generalisation\Interfaces\WidgetInterface;
 use Sfynx\CoreBundle\Generator\Domain\Templater\Generalisation\Interfaces\ExtensionInterface;
@@ -140,7 +139,7 @@ EOT;
             $instanceValue = self::$extensionList[$type];
         }
 
-        $resolverParametersOption = array_merge($options, ['templater' => $this]);
+        $resolverParametersOption = \array_merge($options, ['templater' => $this]);
 
         // we delete all attributes that are not used by extensions
         foreach (self::$excludeAttributs as $attribut) {
@@ -164,15 +163,15 @@ EOT;
                 $v = ($v === true) ? 'true' : $v;
                 $v = ($v === false) ? 'false' : $v;
                 $content .= "            '$k' => $v," . PHP_EOL;
-            } elseif (!is_array($v)
+            } elseif (!\is_array($v)
                 && (
-                    strpos($v, 'function') !== false
-                    || strpos($v, 'List') !== false
-                    || strpos($v, '::class') !== false
+                    \strpos($v, 'function') !== false
+                    || \strpos($v, 'List') !== false
+                    || \strpos($v, '::class') !== false
                 )
             ) {
                 $content .= "            '$k' => $v," . PHP_EOL;
-            } elseif (is_array($v)) {
+            } elseif (\is_array($v)) {
                 $content .= "            '$k' => []," . PHP_EOL;
             } else {
                 $content .= "            '$k' => '$v'," . PHP_EOL;

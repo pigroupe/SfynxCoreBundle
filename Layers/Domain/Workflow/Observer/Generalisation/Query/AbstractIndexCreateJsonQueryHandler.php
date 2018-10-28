@@ -122,7 +122,7 @@ abstract class AbstractIndexCreateJsonQueryHandler extends AbstractObserver
         /**
          * Date
          */
-        if (!(null === $dateSearch) && is_array($dateSearch)) {
+        if (!(null === $dateSearch) && \is_array($dateSearch)) {
             foreach ($dateSearch as $k => $columnSearch) {
                 $idMin = "date-{$columnSearch['idMin']}";
                 $idMax = "date-{$columnSearch['idMax']}";
@@ -226,7 +226,7 @@ abstract class AbstractIndexCreateJsonQueryHandler extends AbstractObserver
 //        exit;
         if ((null === $cacheQuery_hash)) {
             $qb = $qb->getQuery();
-        } elseif (is_array($cacheQuery_hash)) {
+        } elseif (\is_array($cacheQuery_hash)) {
             // we define all options
             if (!isset($cacheQuery_hash['time'])) $cacheQuery_hash['time'] = 3600;
             if (!isset($cacheQuery_hash['mode'])) $cacheQuery_hash['mode'] = \Doctrine\ORM\Cache::MODE_NORMAL;

@@ -31,9 +31,8 @@ default:
                         class: Sfynx\CoreBundle\Layers\Presentation\Adapter\Command\CommandAdapter
                         arguments:
                             - 'new UpdateCommand'
-                            - 'UpdateCommand::class'
                         calls:
-                            - [ createCommandFromRequest, [ 'new UpdateRequest', 'true'] ]
+                            - [ createCommandFromRequest, [ 'new UpdateRequest', 'false'] ]
                     - codeComment2:
                         design: 'code'
                         content: "// 2. Implement the command workflow"
@@ -105,14 +104,17 @@ default:
                     create: true
                     class: UpdateCommand
                     options:
-                        models:
-                          0:
-                            class: 'Sfynx\CoreBundle\Generator\Domain\Component\File\HandlerModel\Observer\CommandQueryObject'
-                            parameters:
-                              performMethods:
-                                - 'Sfynx\CoreBundle\Generator\Domain\Component\File\MethodModel\Construct'
-                                - 'Sfynx\CoreBundle\Generator\Domain\Component\File\MethodModel\CreateFromNative'
-                              createFromNativeType: false
+                        traits:
+                          - 'Sfynx\CoreBundle\Layers\Application\Common\Generalisation\Traits\TraitCreateInstanceFromNative'
+#                        models:
+#                          0:
+#                            class: 'Sfynx\CoreBundle\Generator\Domain\Component\File\HandlerModel\Observer\CommandQueryObject'
+#                            parameters:
+#                              performMethods:
+#                                - 'Sfynx\CoreBundle\Generator\Domain\Component\File\MethodModel\Construct'
+#                                - 'Sfynx\CoreBundle\Generator\Domain\Component\File\MethodModel\CreateFromNative'
+#                              # createFromNativeType = ['general_arg', 'specific_arg']
+#                              createFromNativeType: 'general_arg'
             widget_cqrs_command_validator_specification:
                 class: Validation\SpecHandler\UpdateCommandSpecHandler
                 arguments:
@@ -250,7 +252,7 @@ default:
                               - "           'username' => $this->wfHandler->entity->getUsername(),"
                               - "           'email' => $this->wfHandler->entity->getEmail(),"
                               - "           'roles' => $this->wfHandler->entity->getRoles(),"
-                              - "           'enabled' => $this->wfHandler->entity->getEnabled(),"
+                              - "           'is_active' => $this->wfHandler->entity->isActive(),"
                               - "        ],"
                               - "    ];"
                               - "    "
@@ -315,10 +317,25 @@ default:
             x-fields:
               id:
                 name: entityId
-                type: uuid
+                type: valueObject
+                voName: IdVO
                 primaryKey: true
                 mapping:
                   targetEntity: 'Sfynx\AuthBundle\Domain\Entity\User'
+              user:
+                type: valueObject
+                voName: UserVO
+        x-valueObjects:
+          IdVO:
+            type: 'Sfynx\CoreBundle\Layers\Domain\ValueObject\IdVO'
+            create: false
+            x-fields:
+              id:
+                type: uuid
+          UserVO:
+            type: 'Domain\ValueObject\UserVO'
+            create: true
+            x-fields:
               username:
                 name: username
                 type: string
@@ -337,11 +354,6 @@ default:
                 mapping:
                   type: Doctrine\DBAL\Types\JsonType
                 required: true
-              enabled:
-                name: enabled
-                type: boolean
-                defaultValue: true
-                required: false
               isActive:
                 name: is_active
                 type: boolean

@@ -106,7 +106,7 @@ abstract class AbstractRequest implements PresRequestInterface
         $mt = $this->object->requestMethod;
         foreach (['defaults', 'required', 'allowedTypes', 'allowedValues'] as $attribut) {
             if (isset($this->$attribut[$mt])
-                && is_string($this->$attribut[$mt])
+                && \is_string($this->$attribut[$mt])
                 && isset($this->$attribut[$this->$attribut[$mt]])
             ) {
                 $this->$attribut[$mt] = $this->$attribut[$this->$attribut[$mt]];
@@ -134,7 +134,7 @@ abstract class AbstractRequest implements PresRequestInterface
      */
     protected function setOptions()
     {
-        $this->options = json_decode($this->request->getContent(), true);
+        $this->options = \json_decode($this->request->getContent(), true);
         $this->options = (null !== $this->options) ? $this->options : [];
     }
 
@@ -160,8 +160,8 @@ abstract class AbstractRequest implements PresRequestInterface
                 $defaults[$field] = $defaults[$field] ?? [];
                 $allowedTypes[$field] = $allowedTypes[$field] ?? [];
                 $allowedValues[$field] = $allowedValues[$field] ?? [];
+
                 $this->multidimensionalOtionResolver(
-                    $this->requestParameters[$field],
                     $options[$field],
                     $defaults[$field],
                     $allowedTypes[$field] ,
@@ -219,6 +219,6 @@ abstract class AbstractRequest implements PresRequestInterface
         foreach ($this->getNormalizers() as $optionName => $optionValues) {
             $resolver->setNormalizer($optionName, $optionValues);
         }
-        $this->requestParameters = array_merge($resolver->resolve($this->options), $this->requestParameters);
+        $this->requestParameters = \array_merge($resolver->resolve($this->options), $this->requestParameters);
     }
 }

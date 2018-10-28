@@ -22,8 +22,6 @@
 
 namespace Sfynx\CoreBundle\Generator\Domain\Component\Xmi;
 
-use Sfynx\CoreBundle\Generator\Domain\Component\Output\CliOutput;
-
 if (!defined('T_NAMESPACE'))
 {
     /**

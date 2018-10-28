@@ -113,7 +113,7 @@ class TreeRepository extends NestedTreeRepository
         ){
             $entity_name = $this->_entityName;
             if (isset($GLOBALS['ENTITIES']['RESTRICTION_BY_ROLES']) && isset($GLOBALS['ENTITIES']['RESTRICTION_BY_ROLES'][$entity_name]) ){
-                if (is_array($GLOBALS['ENTITIES']['RESTRICTION_BY_ROLES'][$entity_name])){
+                if (\is_array($GLOBALS['ENTITIES']['RESTRICTION_BY_ROLES'][$entity_name])){
                     $route = $this->_container->get('request_stack')->getCurrentRequest()->get('_route');
                     if ((empty($route) || ($route == "_internal")))
                         $route = $this->_container->get('sfynx.tool.route.factory')->getMatchParamOfRoute('_route', $this->_container->get('request_stack')->getCurrentRequest()->getLocale());
@@ -400,7 +400,7 @@ class TreeRepository extends NestedTreeRepository
 
         $result = array();
         $data    = $query->getQuery()->getArrayResult();
-        if ($data && is_array($data) && count($data)) {
+        if ($data && \is_array($data) && count($data)) {
             foreach ($data as $row) {
                 if (isset($row[$field]) && !empty($row[$field]))
                     $result[ $row[$field] ] = $row[$field];

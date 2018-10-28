@@ -22,12 +22,8 @@ class GenerateConsoleCommand implements ConsoleCommandInterface
 {
     /** @var array  */
     protected $arguments;
-
     /** @var OutputInterface */
     protected $output;
-
-    /** @var Config */
-    protected $config;
 
     /**
      * GenerateConsoleCommand constructor.
@@ -50,40 +46,29 @@ class GenerateConsoleCommand implements ConsoleCommandInterface
         $confFile = null;
         $confFiles = [];
         $confDir = $this->arguments['conf-dir'];
-
-        // initialize Config instance
-        $this->config = (new Parser())->parse($this->arguments);
+        $configDirectories = \array_map('realpath', \explode(',', $confDir));
 
         if (empty($confDir)) {
             // use only a single file
-            $confFile = realpath($this->arguments['conf-file']);
+            $confFile = \realpath($this->arguments['conf-file']);
 
-            if (!file_exists($confFile)) {
+            if (!\file_exists($confFile)) {
                 throw new \InvalidArgumentException(
                     sprintf('Configuration file %s does not exists.', $confFile)
                 );
             }
 
-            $confDir = dirname($confFile);
+            $confDir = \dirname($confFile);
             $isFolderScan = false;
         }
-
-        // initialize directories path to parse
-        $configDirectories = array_map('realpath', explode(',', $confDir));
-        $this->config->set('conf-directories', $configDirectories);
 
         // run parse file for all directories
         foreach ($configDirectories as $confDir) {
             foreach ($this->fileProvider($confDir, $confFile) as $yamlFile) {
                 $confFiles[] = $yamlFile;
 
-                $this->run($yamlFile);
+                $this->run($configDirectories, $yamlFile);
             }
-        }
-
-        // generate xmi if wanted
-        if ($this->config->has('report-xmi')) {
-            Php2Xmi::php2xmi_main($this->output, $this->config->get('report-xmi'));
         }
 
         return $confFiles;
@@ -115,17 +100,23 @@ class GenerateConsoleCommand implements ConsoleCommandInterface
     }
 
     /**
+     * @param string $configDirectories
      * @param string $file
-     * @return void
      */
-    protected function run(string $file): void
+    protected function run($configDirectories, string $file): void
     {
+        // initialize Config instance
+        $config = (new Parser())->parse($this->arguments);
+
+        // initialize directories path to parse
+        $config->set('conf-directories', $configDirectories);
+
         // initialize conf-file
-        $this->config->set('conf-file', $file);
+        $config->set('conf-file', $file);
 
         // parse validators
         try {
-            (new Validator())->validate($this->config);
+            (new Validator())->validate($config);
         } catch (ConfigException $e) {
             $this->output->writeln(\sprintf("<error>%s</error>", $e->getMessage()));
             exit(1);
@@ -133,7 +124,7 @@ class GenerateConsoleCommand implements ConsoleCommandInterface
 
         // parse widgets
         try {
-            $reporter = (new WidgetParser($this->config, $this->output))->run();
+            $reporter = (new WidgetParser($config, $this->output))->run();
         } catch (WidgetException $e) {
             $this->output->writeln(\sprintf('<error>%s</error>', $e->getMessage()));
             exit(1);
@@ -146,6 +137,11 @@ class GenerateConsoleCommand implements ConsoleCommandInterface
         } catch (ReportException $e) {
             $this->output->writeln(\sprintf('<error>%s</error>', $e->getMessage()));
             exit(1);
+        }
+
+        // generate xmi if wanted
+        if ($config->has('report-xmi')) {
+            Php2Xmi::php2xmi_main($this->output, $this->config->get('report-xmi'));
         }
     }
 }

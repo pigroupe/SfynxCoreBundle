@@ -16,7 +16,7 @@ class CommandAdapter implements CommandAdapterInterface
 {
     /** @var  CommandInterface */
     protected $command;
-    /** @var  string|null */
+    /** @var  string */
     protected $commandClass;
     /** @var  array */
     protected $parameters;
@@ -36,12 +36,11 @@ class CommandAdapter implements CommandAdapterInterface
     /**
      * CommandAdapter constructor.
      * @param CommandInterface $command
-     * @param string|null $commandClass
      */
-    public function __construct(CommandInterface $command, string $commandClass = null)
+    public function __construct(CommandInterface $command)
     {
         $this->command = $command;
-        $this->commandClass = $commandClass;
+        $this->commandClass = \get_class($command);
     }
 
     /**

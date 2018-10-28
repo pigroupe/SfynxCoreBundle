@@ -56,7 +56,7 @@ class SfynxCoreExtension extends Extension
 
         // we load config
         $configuration = new Configuration();
-        $config        = $this->processConfiguration($configuration, $config);
+        $config = $this->processConfiguration($configuration, $config);
         
         /**
          * Cookies config parameter
@@ -106,7 +106,7 @@ class SfynxCoreExtension extends Extension
         	if (isset($config['permission']['prohibition']) && isset($config['permission']['prohibition']['preremove'])) {
         		$container->setParameter('sfynx.core.permission.prohibition.preremove', $config['permission']['prohibition']['preremove']);
         	}
-        }          
+        }
     }
 
     /**

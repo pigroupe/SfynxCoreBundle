@@ -78,7 +78,7 @@ class ResponseHandler implements ResponseHandlerInterface
      */
     public function getResponse(): Response
     {
-        if (!is_null($this->url)) {
+        if (!empty($this->url)) {
             $this->response = new RedirectResponse($this->url);
         } elseif ('json' == $this->getFormat()) {
             $this->response = new JsonResponse();
@@ -118,7 +118,7 @@ class ResponseHandler implements ResponseHandlerInterface
     protected function setUrl(string $url = null): ResponseHandler
     {
         $this->url = $url;
-        if (null !== $url) {
+        if (!empty($url)) {
             $this->setStatus(Response::HTTP_FOUND);
         }
         return $this;

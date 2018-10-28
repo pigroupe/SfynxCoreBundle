@@ -665,7 +665,7 @@ class PiGridTableManager extends PiJqueryExtension
                     } );
                     */
 
-                    <?php if (isset($options['grid-actions']) && !empty($options['grid-actions']) && is_array($options['grid-actions'])): ?>
+                    <?php if (isset($options['grid-actions']) && !empty($options['grid-actions']) && \is_array($options['grid-actions'])): ?>
                         <?php foreach($options['grid-actions'] as $actionName => $params): ?>
                             <?php if ( ($actionName == "rows_enabled") && isset($params['route']) && !empty($params['route']) ) : ?>
                             // Set up enabled row
@@ -805,7 +805,7 @@ class PiGridTableManager extends PiJqueryExtension
                         },
                         <?php endif; ?>
 
-                        <?php if (isset($options['grid-sorting']) && !empty($options['grid-sorting']) && is_array($options['grid-sorting'])): ?>
+                        <?php if (isset($options['grid-sorting']) && !empty($options['grid-sorting']) && \is_array($options['grid-sorting'])): ?>
                         "aaSorting":
                             [
                                 <?php foreach($options['grid-sorting'] as $id => $odrer): ?>
@@ -814,7 +814,7 @@ class PiGridTableManager extends PiJqueryExtension
                             ],
                         <?php endif; ?>
 
-                        <?php if (isset($options['grid-columns']) && !empty($options['grid-columns']) && is_array($options['grid-columns'])): ?>
+                        <?php if (isset($options['grid-columns']) && !empty($options['grid-columns']) && \is_array($options['grid-columns'])): ?>
                         "aoColumns":
                             [
                                <?php foreach($options['grid-columns'] as $key => $value): ?>
@@ -876,7 +876,7 @@ class PiGridTableManager extends PiJqueryExtension
                             "sSwfPath": "<?php echo $Urlpath; ?>",
                             "sRowSelect": "<?php if (isset($options['grid-row-select']) && !empty($options['grid-row-select'])): ?><?php echo $options['grid-row-select']; ?><?php else: ?>multi<?php endif; ?>",       //  ['single', 'multi']
                             "aButtons": [
-                        <?php if (isset($options['grid-actions']) && !empty($options['grid-actions']) && is_array($options['grid-actions'])): ?>
+                        <?php if (isset($options['grid-actions']) && !empty($options['grid-actions']) && \is_array($options['grid-actions'])): ?>
                             <?php foreach($options['grid-actions'] as $actionName => $params): ?>
                                     <?php if ($actionName == "rows_enabled"): ?>
                                             <?php if (!isset($params['sButtonText']) || empty($params['sButtonText']) ) $params['sButtonText'] = 'pi.grid.action.rows_enabled'; ?>
@@ -1237,13 +1237,13 @@ class PiGridTableManager extends PiJqueryExtension
                             "sAlign": "right"
                         },
                         "aoColumnDefs": [
-                <?php if (isset($options['grid-visible']) && !empty($options['grid-visible']) && is_array($options['grid-visible'])): ?>
+                <?php if (isset($options['grid-visible']) && !empty($options['grid-visible']) && \is_array($options['grid-visible'])): ?>
                     <?php foreach($options['grid-visible'] as $idColumn => $boolean): ?>
                             { "bVisible": <?php echo ((int) $boolean || ($boolean === 'true')) ? "true" : "false"; ?>, "aTargets": [ <?php echo $idColumn; ?> ] },
                     <?php endforeach; ?>
                 <?php else: ?>
                             { "bVisible": false, "aTargets": [ 0 ] },
-                    <?php if (isset($options['grid-actions']) && !empty($options['grid-actions']) && is_array($options['grid-actions'])): ?>
+                    <?php if (isset($options['grid-actions']) && !empty($options['grid-actions']) && \is_array($options['grid-actions'])): ?>
                         <?php foreach($options['grid-actions'] as $actionName => $params): ?>
                             <?php if ( ($actionName == "rows_position") && isset($params['route']) && !empty($params['route']) ) : ?>
                                 { "bVisible": false, "aTargets": [ 1 ] },
@@ -1257,7 +1257,7 @@ class PiGridTableManager extends PiJqueryExtension
                         "oColumnFilterWidgets": {
                             "sSeparator": "\\s*/+\\s*",
                             "aiExclude": [
-                <?php if (isset($options['grid-filters-select']) && !empty($options['grid-filters-select']) && is_array($options['grid-filters-select'])): ?>
+                <?php if (isset($options['grid-filters-select']) && !empty($options['grid-filters-select']) && \is_array($options['grid-filters-select'])): ?>
                     <?php foreach($options['grid-filters-select'] as $idColumn => $boolean): ?>
                             <?php echo $boolean; ?>,
                     <?php endforeach; ?>
@@ -1269,7 +1269,7 @@ class PiGridTableManager extends PiJqueryExtension
 
                     });
 
-                <?php if (isset($options['grid-actions']) && !empty($options['grid-actions']) && is_array($options['grid-actions'])): ?>
+                <?php if (isset($options['grid-actions']) && !empty($options['grid-actions']) && \is_array($options['grid-actions'])): ?>
                     <?php foreach($options['grid-actions'] as $actionName => $params): ?>
 
                         <?php if ( ($actionName == "rows_position") && isset($params['route']) && !empty($params['route']) ) : ?>
@@ -1374,7 +1374,7 @@ class PiGridTableManager extends PiJqueryExtension
                     $("#<?php echo $options['grid-name']; ?>_global_regex").click( fnFilterGlobal );
                     $("#<?php echo $options['grid-name']; ?>_global_smart").click( fnFilterGlobal );
 
-                    <?php if (isset($options['grid-filters']) && !empty($options['grid-filters']) && is_array($options['grid-filters'])) { ?>
+                    <?php if (isset($options['grid-filters']) && !empty($options['grid-filters']) && \is_array($options['grid-filters'])) { ?>
                         <?php foreach ($options['grid-filters'] as $id => $colName) { ?>
 
                     $("#<?php echo $options['grid-name']; ?>_col<?php echo $id; ?>_filter").keyup( function() { fnFilterColumn( <?php echo $id-1; ?> ); } );
@@ -1494,7 +1494,7 @@ class PiGridTableManager extends PiJqueryExtension
                                 <td><input type="checkbox" name="<?php echo $options['grid-name']; ?>_global_regex"  id="global_regex" ></td>
                                 <td><input type="checkbox" name="<?php echo $options['grid-name']; ?>_global_smart"  id="global_smart"  checked></td>
                             </tr>
-                            <?php if (isset($options['grid-filters']) && !empty($options['grid-filters']) && is_array($options['grid-filters'])) { ?>
+                            <?php if (isset($options['grid-filters']) && !empty($options['grid-filters']) && \is_array($options['grid-filters'])) { ?>
                                 <?php foreach ($options['grid-filters'] as $id => $colName) { ?>
                                     <tr id="filter_col<?php echo $id; ?>">
                                         <td><?php echo $colName; ?></td>

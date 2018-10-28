@@ -101,7 +101,7 @@ trait TraitTranslation
             );
 
             if ($data
-                    && is_array($data)
+                    && \is_array($data)
                     && count($data)
             ) {
                 foreach ($data as $row) {
@@ -134,7 +134,7 @@ trait TraitTranslation
             );
 
             if ($data
-                    && is_array($data)
+                    && \is_array($data)
                     && count($data)
              ) {
                 foreach ($data as $row) {
@@ -248,7 +248,7 @@ trait TraitTranslation
 
         $result = array();
         $data   = $query->getQuery()->getArrayResult();
-        if ($data && is_array($data) && count($data)) {
+        if ($data && \is_array($data) && count($data)) {
             foreach ($data as $row) {
                 if (isset($row[$field]) && !empty($row[$field])) {
                     $result[ $row[$field] ] = $row[$field];

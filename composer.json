@@ -25,7 +25,6 @@
     "symfony/config": "^3.4",
     "symfony/finder": "*",
     "symfony/options-resolver": "*",
-    "sensio/generator-bundle": "~3.1.2",
     "nette/php-generator": "^3.1",
     "sfynx-project/tool-trigger-bundle": "^2.8",
     "sfynx-project/tool-utils-bundle": "^2.8",

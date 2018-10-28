@@ -21,6 +21,13 @@ use Sfynx\TriggerBundle\EventListener\abstractTriggerListener;
  */
 abstract class abstractListener  extends abstractTriggerListener
 {
+    protected $is_permission_restriction_by_roles = false;
+    protected $is_permission_authorization_prepersist_authorized = false;
+    protected $is_permission_authorization_preupdate_authorized = false;
+    protected $is_permission_authorization_preremove_authorized = false;
+    protected $is_permission_prohibition_preupdate_authorized = false;
+    protected $is_permission_prohibition_preremove_authorized = false;
+
     /**
      * Constructor
      *
@@ -43,36 +50,24 @@ abstract class abstractListener  extends abstractTriggerListener
      */
     protected function setParams()
     {
-    	if ($this->container->hasParameter('sfynx.core.permission.restriction_by_roles')) {
+        if ($this->container->hasParameter('sfynx.core.permission.restriction_by_roles')) {
             $this->is_permission_restriction_by_roles = $this->container->getParameter('sfynx.core.permission.restriction_by_roles');
-    	} else {
-            $this->is_permission_restriction_by_roles = false;
-    	}
-    	if ($this->container->hasParameter('sfynx.core.permission.authorization.prepersist')) {
-            $this->is_permission_authorization_prepersist_authorized  = $this->container->getParameter('sfynx.core.permission.authorization.prepersist');
-    	} else {
-            $this->is_permission_authorization_prepersist_authorized  = false;
-    	}
-    	if ($this->container->hasParameter('sfynx.core.permission.authorization.preupdate')) {
-            $this->is_permission_authorization_preupdate_authorized   = $this->container->getParameter('sfynx.core.permission.authorization.preupdate');
-    	} else {
-            $this->is_permission_authorization_preupdate_authorized   = false;
-    	}
-    	if ($this->container->hasParameter('sfynx.core.permission.authorization.preremove')) {
-            $this->is_permission_authorization_preremove_authorized   = $this->container->getParameter('sfynx.core.permission.authorization.preremove');
-    	} else {
-            $this->is_permission_authorization_preremove_authorized   = false;
-    	}
-    	if ($this->container->hasParameter('sfynx.core.permission.prohibition.preupdate')) {
-            $this->is_permission_prohibition_preupdate_authorized     = $this->container->getParameter('sfynx.core.permission.prohibition.preupdate');
-    	} else {
-            $this->is_permission_prohibition_preupdate_authorized     = false;
-    	}
-    	if ($this->container->hasParameter('sfynx.core.permission.prohibition.preremove')) {
-            $this->is_permission_prohibition_preremove_authorized     = $this->container->getParameter('sfynx.core.permission.prohibition.preremove');
-    	} else {
-            $this->is_permission_prohibition_preremove_authorized     = false;
-    	}
+        }
+        if ($this->container->hasParameter('sfynx.core.permission.authorization.prepersist')) {
+            $this->is_permission_authorization_prepersist_authorized = $this->container->getParameter('sfynx.core.permission.authorization.prepersist');
+        }
+        if ($this->container->hasParameter('sfynx.core.permission.authorization.preupdate')) {
+            $this->is_permission_authorization_preupdate_authorized = $this->container->getParameter('sfynx.core.permission.authorization.preupdate');
+        }
+        if ($this->container->hasParameter('sfynx.core.permission.authorization.preremove')) {
+            $this->is_permission_authorization_preremove_authorized = $this->container->getParameter('sfynx.core.permission.authorization.preremove');
+        }
+        if ($this->container->hasParameter('sfynx.core.permission.prohibition.preupdate')) {
+            $this->is_permission_prohibition_preupdate_authorized = $this->container->getParameter('sfynx.core.permission.prohibition.preupdate');
+        }
+        if ($this->container->hasParameter('sfynx.core.permission.prohibition.preremove')) {
+            $this->is_permission_prohibition_preremove_authorized = $this->container->getParameter('sfynx.core.permission.prohibition.preremove');
+        }
     }
 
     /**
@@ -93,7 +88,7 @@ abstract class abstractListener  extends abstractTriggerListener
     {
         $entity         = $eventArgs->getEntity();
         $entityManager  = $eventArgs->getEntityManager();
-        $entity_name    = get_class($entity);
+        $entity_name    = \get_class($entity);
         //update created_at field when method setCreatedAt exists in entity object
         if (method_exists($entity, 'setCreatedAt')) {
             // we modify the Updated_at value
@@ -129,7 +124,7 @@ abstract class abstractListener  extends abstractTriggerListener
             && !empty($_SERVER['REQUEST_URI'])
         ) {
             if (isset($GLOBALS['ENTITIES']['AUTHORIZATION_PREPERSIST']) && isset($GLOBALS['ENTITIES']['AUTHORIZATION_PREPERSIST'][$entity_name])) {
-                if (is_array($GLOBALS['ENTITIES']['AUTHORIZATION_PREPERSIST'][$entity_name])) {
+                if (\is_array($GLOBALS['ENTITIES']['AUTHORIZATION_PREPERSIST'][$entity_name])) {
                     $route = $this->container->get('request_stack')->getCurrentRequest()->get('_route');
                     if ((empty($route) || ($route == "_internal"))) {
                         $route = $this->container->get('sfynx.tool.route.factory')->getMatchParamOfRoute('_route', $this->container->get('request_stack')->getCurrentRequest()->getLocale());
@@ -209,7 +204,7 @@ abstract class abstractListener  extends abstractTriggerListener
             && isset($GLOBALS['ENTITIES']['PROHIBITION_PREUPDATE'])
             && isset($GLOBALS['ENTITIES']['PROHIBITION_PREUPDATE'][$entity_name])
         ) {
-            if (is_array($GLOBALS['ENTITIES']['PROHIBITION_PREUPDATE'][$entity_name])) {
+            if (\is_array($GLOBALS['ENTITIES']['PROHIBITION_PREUPDATE'][$entity_name])) {
                 $id_entity = $entity->getId();
                 if (in_array($id_entity, $GLOBALS['ENTITIES']['PROHIBITION_PREUPDATE'][$entity_name])) {
                     // just for register in data the change do in this class listener :
@@ -240,7 +235,7 @@ abstract class abstractListener  extends abstractTriggerListener
         ) {
             // we give the right of update if the entity is in the AUTHORIZATION_PREPERSIST container
             if (isset($GLOBALS['ENTITIES']['AUTHORIZATION_PREUPDATE']) && isset($GLOBALS['ENTITIES']['AUTHORIZATION_PREUPDATE'][$entity_name])) {
-                if (is_array($GLOBALS['ENTITIES']['AUTHORIZATION_PREUPDATE'][$entity_name])) {
+                if (\is_array($GLOBALS['ENTITIES']['AUTHORIZATION_PREUPDATE'][$entity_name])) {
                     $route = $this->container->get('request_stack')->getCurrentRequest()->get('_route');
                     if ((empty($route) || ($route == "_internal"))) {
                         $route = $this->container->get('sfynx.tool.route.factory')
@@ -335,7 +330,7 @@ abstract class abstractListener  extends abstractTriggerListener
             && isset($GLOBALS['ENTITIES']['PROHIBITION_PREREMOVE'])
             && isset($GLOBALS['ENTITIES']['PROHIBITION_PREREMOVE'][$entity_name])
         ) {
-            if (is_array($GLOBALS['ENTITIES']['PROHIBITION_PREREMOVE'][$entity_name])) {
+            if (\is_array($GLOBALS['ENTITIES']['PROHIBITION_PREREMOVE'][$entity_name])) {
                 $id_entity = $entity->getId();
                 if (in_array($id_entity, $GLOBALS['ENTITIES']['AUTHORIZATION_PREREMOVE'][$entity_name])) {
                     // we stop the remove method.
@@ -361,7 +356,7 @@ abstract class abstractListener  extends abstractTriggerListener
         ) {
             // we give the right of remove if the entity is in the AUTHORIZATION_PREREMOVE container
             if (isset($GLOBALS['ENTITIES']['AUTHORIZATION_PREREMOVE']) && isset($GLOBALS['ENTITIES']['AUTHORIZATION_PREREMOVE'][$entity_name])) {
-                if (is_array($GLOBALS['ENTITIES']['AUTHORIZATION_PREREMOVE'][$entity_name])) {
+                if (\is_array($GLOBALS['ENTITIES']['AUTHORIZATION_PREREMOVE'][$entity_name])) {
                     $route = $this->container->get('request_stack')->getCurrentRequest()->get('_route');
                     if ((empty($route) || ($route == "_internal"))) {
                         $route = $this->container->get('sfynx.tool.route.factory')->getMatchParamOfRoute('_route', $this->container->get('request_stack')->getCurrentRequest()->getLocale());
@@ -444,7 +439,7 @@ abstract class abstractListener  extends abstractTriggerListener
     protected function isRestrictionByRole($entity)
     {
         $right       = true;
-        $entity_name = get_class($entity);
+        $entity_name = \get_class($entity);
 
         if (
             $this->is_permission_restriction_by_roles
@@ -452,7 +447,7 @@ abstract class abstractListener  extends abstractTriggerListener
             && isset($GLOBALS['ENTITIES']['RESTRICTION_BY_ROLES'])
             && isset($GLOBALS['ENTITIES']['RESTRICTION_BY_ROLES'][$entity_name])
         ) {
-               if (is_array($GLOBALS['ENTITIES']['RESTRICTION_BY_ROLES'][$entity_name])){
+               if (\is_array($GLOBALS['ENTITIES']['RESTRICTION_BY_ROLES'][$entity_name])){
                    $route = $this->container->get('request_stack')->getCurrentRequest()->get('_route');
                    if ((empty($route) || ($route == "_internal"))) {
                        $route = $this->container->get('sfynx.tool.route.factory')->getMatchParamOfRoute('_route', $this->container->get('request_stack')->getCurrentRequest()->getLocale());
