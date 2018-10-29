@@ -222,6 +222,7 @@ default:
                     create: true
                     class: OBDateListEntityCreate
                     arguments:
+                      - 'Psr\Log\LoggerInterface'
                       - 'Sfynx\CoreBundle\Layers\Domain\Service\Manager\Generalisation\Interfaces\ManagerInterface'
                       - 'Sfynx\CoreBundle\Layers\Domain\Service\Request\Generalisation\RequestInterface'
                       - 'Symfony\Bundle\FrameworkBundle\Routing\Router'
@@ -239,6 +240,7 @@ default:
                     create: true
                     class: OBDateListEntityEdit
                     arguments:
+                      - 'Psr\Log\LoggerInterface'
                       - 'Sfynx\CoreBundle\Layers\Domain\Service\Manager\Generalisation\Interfaces\ManagerInterface'
                       - 'Sfynx\CoreBundle\Layers\Domain\Service\Request\Generalisation\RequestInterface'
                       - 'Symfony\Bundle\FrameworkBundle\Routing\Router'

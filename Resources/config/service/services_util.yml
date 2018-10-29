@@ -1,6 +1,4 @@
 parameters:
-    sfynx.core.monolog.handler.socket.class: sfynx\CoreBundle\Layers\Infrastructure\Monolog\Handler\SocketHandler
-
     sfynx.core.manager.jquery.gridtable.class: Sfynx\CoreBundle\Layers\Domain\Service\Util\PiJquery\PiGridTableManager
     sfynx.core.manager.jquery.formsimple.class: Sfynx\CoreBundle\Layers\Domain\Service\Util\PiJquery\PiFormSimpleManager
     sfynx.core.manager.jquery.prototypebytabs.class: Sfynx\CoreBundle\Layers\Domain\Service\Util\PiJquery\PiPrototypeByTabsManager
@@ -11,13 +9,6 @@ parameters:
       date_interval: '%sfynx.core.cookies.date_interval%'
 
 services:
-    #
-    # MONOLOG:::configuration of the socket monolog processor
-    #
-    sfynx.core.monolog.handler.socket:
-        class: '%sfynx.core.monolog.handler.socket.class%'
-
-
     #
     # configuration of the JQUERY Util classes
     #

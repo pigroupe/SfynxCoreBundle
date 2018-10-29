@@ -1,0 +1,24 @@
+parameters:
+    sfynx.core.monolog.handler.socket.class: sfynx\CoreBundle\Layers\Infrastructure\Monolog\Handler\SocketHandler
+    sfynx.core.monolog.processor.command.class: Sfynx\CoreBundle\Infrastructure\Monolog\Processor\CommandProcessor
+    sfynx.core.monolog.processor.query.class: Sfynx\CoreBundle\Infrastructure\Monolog\Processor\QueryProcessor
+
+services:
+    #
+    # MONOLOG:::configuration of the socket monolog handler
+    #
+    sfynx.core.monolog.handler.socket:
+        class: '%sfynx.core.monolog.handler.socket.class%'
+
+    #
+    # MONOLOG:::configuration of the command monolog processor
+    #
+    sfynx.core.monolog.processor.command:
+        class: '%sfynx.core.monolog.processor.command.class%'
+        tags:
+            - { name: monolog.processor, channel: presentation, method: processRecord }
+
+    sfynx.core.monolog.processor.query:
+        class: '%sfynx.core.monolog.processor.query.class%'
+        tags:
+            - { name: monolog.processor, channel: presentation, method: processRecord }

@@ -7,8 +7,6 @@ default:
         presentation:
             widget_coordination:
                 class: OneCoordination
-                arguments:
-                    - '$workflowHandler'
                 extends: ~
                 options:
                     implements: ~
@@ -194,6 +192,7 @@ default:
                     create: true
                     class: OBUserEntityCreate
                     arguments:
+                      - 'Psr\Log\LoggerInterface'
                       - 'Sfynx\CoreBundle\Layers\Domain\Service\Manager\Generalisation\Interfaces\ManagerInterface'
                       - 'Sfynx\CoreBundle\Layers\Domain\Service\Request\Generalisation\RequestInterface'
                       - 'Symfony\Bundle\FrameworkBundle\Routing\Router'
@@ -211,6 +210,7 @@ default:
                     create: true
                     class: OBUserEntityEdit
                     arguments:
+                      - 'Psr\Log\LoggerInterface'
                       - 'Sfynx\CoreBundle\Layers\Domain\Service\Manager\Generalisation\Interfaces\ManagerInterface'
                       - 'Sfynx\CoreBundle\Layers\Domain\Service\Request\Generalisation\RequestInterface'
                       - 'Symfony\Bundle\FrameworkBundle\Routing\Router'

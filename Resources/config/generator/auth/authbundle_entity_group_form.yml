@@ -198,6 +198,7 @@ default:
                     create: true
                     class: OBGroupEntityCreate
                     arguments:
+                      - 'Psr\Log\LoggerInterface'
                       - 'Sfynx\CoreBundle\Layers\Domain\Service\Manager\Generalisation\Interfaces\ManagerInterface'
                       - 'Sfynx\CoreBundle\Layers\Domain\Service\Request\Generalisation\RequestInterface'
                       - 'Symfony\Bundle\FrameworkBundle\Routing\Router'
@@ -215,6 +216,7 @@ default:
                     create: true
                     class: OBGroupEntityEdit
                     arguments:
+                      - 'Psr\Log\LoggerInterface'
                       - 'Sfynx\CoreBundle\Layers\Domain\Service\Manager\Generalisation\Interfaces\ManagerInterface'
                       - 'Sfynx\CoreBundle\Layers\Domain\Service\Request\Generalisation\RequestInterface'
                       - 'Symfony\Bundle\FrameworkBundle\Routing\Router'

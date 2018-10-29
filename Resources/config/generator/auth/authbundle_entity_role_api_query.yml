@@ -228,6 +228,7 @@ default:
                     create: true
                     class: Domain\Workflow\Observer\Role\Query\Api\OBApiHandler
                     arguments:
+                      - 'Psr\Log\LoggerInterface'
                       - 'Sfynx\CoreBundle\Layers\Domain\Service\Manager\Generalisation\Interfaces\ManagerInterface'
                       - 'Sfynx\CoreBundle\Layers\Domain\Service\Request\Generalisation\RequestInterface'
                     extends: Sfynx\CoreBundle\Layers\Domain\Workflow\Observer\Generalisation\Query\Api\AbstractApiQueryHandler

@@ -159,11 +159,9 @@ class <?php echo $templater->getTargetClassname(); ?> extends <?php echo $extend
 <?php endif; ?>
 <?php endforeach; ?>
         ] as $data) {
-            //$$data = $this->request->get($data, '');
-            //$this->options[$data] = ('' !== $$data) ? (int)$$data : null;
-            if (isset($this->options[$data])) {
-                $this->options[$data] = (int)$this->options[$data];
-            }
+            //$data = $this->request->get($data, '');
+            //$this->options[$data] = ('' !== $data) ? (int)$data : null;
+            $this->options[$data] = !empty($this->options[$data]) ? (int)$this->options[$data] : null;
         }
 
         /* datetime transformation */
