@@ -177,6 +177,7 @@ default:
                     create: true
                     class: OBOffer1EntityCreate
                     arguments:
+                      - 'Psr\Log\LoggerInterface'
                       - 'Sfynx\CoreBundle\Layers\Domain\Service\Manager\Generalisation\Interfaces\ManagerInterface'
                       - 'Sfynx\CoreBundle\Layers\Domain\Service\Request\Generalisation\RequestInterface'
                       - 'Symfony\Bundle\FrameworkBundle\Routing\Router'
@@ -194,6 +195,7 @@ default:
                     create: true
                     class: OBOffer1EntityEdit
                     arguments:
+                      - 'Psr\Log\LoggerInterface'
                       - 'Sfynx\CoreBundle\Layers\Domain\Service\Manager\Generalisation\Interfaces\ManagerInterface'
                       - 'Sfynx\CoreBundle\Layers\Domain\Service\Request\Generalisation\RequestInterface'
                       - 'Symfony\Bundle\FrameworkBundle\Routing\Router'

@@ -66,7 +66,7 @@ class PiGridTableManager extends PiJqueryExtension
      */
     public function getProjectWebDir()
     {
-        $this->projectWebDir = $this->projectWebDir ?? $this->request->server->get('DOCUMENT_ROOT') . '/';
+        $this->projectWebDir = ($this->projectWebDir && $this->request->server) ?? $this->request->server->get('DOCUMENT_ROOT') . '/';
 
         return $this->projectWebDir;
     }
