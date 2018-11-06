@@ -196,7 +196,7 @@ class PiGridTableManager extends PiJqueryExtension
         if (!isset($options['grid-name']) || empty($options['grid-name'])) {
             throw ExtensionException::optionValueNotSpecified('grid-name', __CLASS__);
         }
-        if (!isset($options['grid-type']) || empty($options['grid-type']) || (isset($options['grid-type']) && !in_array($options['grid-type'], self::$types))) {
+        if (!isset($options['grid-type']) || empty($options['grid-type']) || (isset($options['grid-type']) && !\in_array($options['grid-type'], self::$types))) {
             throw ExtensionException::optionValueNotSpecified('grid-type', __CLASS__);
         }
         if (!isset($options['grid-paginate']) || empty($options['grid-paginate'])) {
@@ -1286,42 +1286,42 @@ class PiGridTableManager extends PiJqueryExtension
 
                         <?php if ( $actionName == "rows_grouping" ) : ?>
                             <?php echo $options['grid-name']; ?>oTable.rowGrouping({
-                                <?php if ( isset($params['columnIndex']) && is_integer($params['columnIndex'])) : ?>
+                                <?php if ( isset($params['columnIndex']) && \is_integer($params['columnIndex'])) : ?>
                                 iGroupingColumnIndex: <?php echo $params['columnIndex']; ?>,
                                 <?php endif; ?>
-                                <?php if ( isset($params['SortDirection']) && in_array($params['SortDirection'], array('asc', 'desc') )) : ?>
+                                <?php if ( isset($params['SortDirection']) && \in_array($params['SortDirection'], array('asc', 'desc') )) : ?>
                                 sGroupingColumnSortDirection: "<?php echo $params['SortDirection']; ?>",
                                 <?php endif; ?>
-                                <?php if ( isset($params['OrderByColumnIndex']) && is_integer($params['OrderByColumnIndex'])) : ?>
+                                <?php if ( isset($params['OrderByColumnIndex']) && \is_integer($params['OrderByColumnIndex'])) : ?>
                                 iGroupingOrderByColumnIndex: <?php echo $params['OrderByColumnIndex']; ?>,
                                 <?php endif; ?>
-                                <?php if ( isset($params['HideColumn']) && in_array($params['HideColumn'], array('true', 'false', true, false) )) : ?>
+                                <?php if ( isset($params['HideColumn']) && \in_array($params['HideColumn'], array('true', 'false', true, false) )) : ?>
                                 bHideGroupingColumn: <?php echo ((int) $params['HideColumn'] || ($params['HideColumn'] === 'true')) ? "true" : "false"; ?>,
                                 <?php endif; ?>
-                                <?php if ( isset($params['HideOrderByColumn']) && in_array($params['HideOrderByColumn'], array('true', 'false', true, false) )) : ?>
+                                <?php if ( isset($params['HideOrderByColumn']) && \in_array($params['HideOrderByColumn'], array('true', 'false', true, false) )) : ?>
                                 bHideGroupingColumn: <?php echo ((int) $params['HideOrderByColumn'] || ($params['HideOrderByColumn'] === 'true')) ? "true" : "false"; ?>,
                                 <?php endif; ?>
-                                <?php if ( isset($params['GroupBy']) && in_array($params['GroupBy'], array('name', 'year', 'letter', 'month') )) : ?>
+                                <?php if ( isset($params['GroupBy']) && \in_array($params['GroupBy'], array('name', 'year', 'letter', 'month') )) : ?>
                                 sGroupBy: "<?php echo $params['GroupBy']; ?>",
                                 <?php endif; ?>
 
 
-                                <?php if ( isset($params['columnIndex2']) && is_integer($params['columnIndex2'])) : ?>
+                                <?php if ( isset($params['columnIndex2']) && \is_integer($params['columnIndex2'])) : ?>
                                 iGroupingColumnIndex2: <?php echo $params['columnIndex2']; ?>,
                                 <?php endif; ?>
-                                <?php if ( isset($params['SortDirection2']) && in_array($params['SortDirection2'], array('asc', 'desc') )) : ?>
+                                <?php if ( isset($params['SortDirection2']) && \in_array($params['SortDirection2'], array('asc', 'desc') )) : ?>
                                 sGroupingColumnSortDirection2: "<?php echo $params['SortDirection2']; ?>",
                                 <?php endif; ?>
-                                <?php if ( isset($params['OrderByColumnIndex2']) && is_integer($params['OrderByColumnIndex2'])) : ?>
+                                <?php if ( isset($params['OrderByColumnIndex2']) && \is_integer($params['OrderByColumnIndex2'])) : ?>
                                 iGroupingOrderByColumnIndex2: <?php echo $params['OrderByColumnIndex2']; ?>,
                                 <?php endif; ?>
-                                <?php if ( isset($params['HideColumn2']) && in_array($params['HideColumn2'], array('true', 'false', true, false) )) : ?>
+                                <?php if ( isset($params['HideColumn2']) && \in_array($params['HideColumn2'], array('true', 'false', true, false) )) : ?>
                                 bHideGroupingColumn2: <?php echo ((int) $params['HideColumn2'] || ($params['HideColumn2'] === 'true')) ? "true" : "false"; ?>,
                                 <?php endif; ?>
-                                <?php if ( isset($params['HideOrderByColumn2']) && in_array($params['HideOrderByColumn2'], array('true', 'false', true, false) )) : ?>
+                                <?php if ( isset($params['HideOrderByColumn2']) && \in_array($params['HideOrderByColumn2'], array('true', 'false', true, false) )) : ?>
                                 bHideGroupingColumn2: <?php echo ((int) $params['HideOrderByColumn2'] || ($params['HideOrderByColumn2'] === 'true')) ? "true" : "false"; ?>,
                                 <?php endif; ?>
-                                <?php if ( isset($params['GroupBy2']) && in_array($params['GroupBy2'], array('name', 'year', 'letter', 'month') )) : ?>
+                                <?php if ( isset($params['GroupBy2']) && \in_array($params['GroupBy2'], array('name', 'year', 'letter', 'month') )) : ?>
                                 sGroupBy2:"<?php echo $params['GroupBy2']; ?>",
                                 <?php endif; ?>
 

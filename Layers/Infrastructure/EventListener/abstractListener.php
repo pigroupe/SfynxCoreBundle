@@ -129,7 +129,7 @@ abstract class abstractListener  extends abstractTriggerListener
                     if ((empty($route) || ($route == "_internal"))) {
                         $route = $this->container->get('sfynx.tool.route.factory')->getMatchParamOfRoute('_route', $this->container->get('request_stack')->getCurrentRequest()->getLocale());
                     }
-                    if (in_array($route, $GLOBALS['ENTITIES']['AUTHORIZATION_PREPERSIST'][$entity_name])) {
+                    if (\in_array($route, $GLOBALS['ENTITIES']['AUTHORIZATION_PREPERSIST'][$entity_name])) {
                         $entityManager->initializeObject($entity);
 
                         return true;
@@ -157,8 +157,8 @@ abstract class abstractListener  extends abstractTriggerListener
         // If  autentication user
         if ($isUsernamePasswordToken && $this->tokenStorage->isUsernamePasswordToken()) {
             // if user have the create right
-            if ( in_array('CREATE', $this->tokenStorage->getUserPermissions())
-                || in_array('ROLE_SUPER_ADMIN', $this->tokenStorage->getUserRoles())
+            if ( \in_array('CREATE', $this->tokenStorage->getUserPermissions())
+                || \in_array('ROLE_SUPER_ADMIN', $this->tokenStorage->getUserRoles())
                 || $isAllPermissions
             ) {
                 $entityManager->initializeObject($entity);
@@ -198,7 +198,7 @@ abstract class abstractListener  extends abstractTriggerListener
     {
         $entity         = $eventArgs->getEntity();
         $entityManager  = $eventArgs->getEntityManager();
-        $entity_name    = get_class($entity);
+        $entity_name    = \get_class($entity);
         // we given't the right of remove if the entity is in the PROHIBITION_PREUPDATE container
         if ($this->is_permission_prohibition_preupdate_authorized
             && isset($GLOBALS['ENTITIES']['PROHIBITION_PREUPDATE'])
@@ -206,9 +206,9 @@ abstract class abstractListener  extends abstractTriggerListener
         ) {
             if (\is_array($GLOBALS['ENTITIES']['PROHIBITION_PREUPDATE'][$entity_name])) {
                 $id_entity = $entity->getId();
-                if (in_array($id_entity, $GLOBALS['ENTITIES']['PROHIBITION_PREUPDATE'][$entity_name])) {
+                if (\in_array($id_entity, $GLOBALS['ENTITIES']['PROHIBITION_PREUPDATE'][$entity_name])) {
                     // just for register in data the change do in this class listener :
-                    $class = $entityManager->getClassMetadata(get_class($entity));
+                    $class = $entityManager->getClassMetadata(\get_class($entity));
                     $entityManager->getUnitOfWork()->computeChangeSet($class, $entity);
                     // we throw the message.
                     $this->setFlash('pi.session.flash.right.anonymous');
@@ -217,7 +217,7 @@ abstract class abstractListener  extends abstractTriggerListener
                 }
             } elseif ($GLOBALS['ENTITIES']['PROHIBITION_PREUPDATE'][$entity_name] == true) {
                 // just for register in data the change do in this class listener :
-                $class = $entityManager->getClassMetadata(get_class($entity));
+                $class = $entityManager->getClassMetadata(\get_class($entity));
                 $entityManager->getUnitOfWork()->computeChangeSet($class, $entity);
                 // we throw the message.
                 $this->setFlash('pi.session.flash.right.anonymous');
@@ -241,21 +241,21 @@ abstract class abstractListener  extends abstractTriggerListener
                         $route = $this->container->get('sfynx.tool.route.factory')
                             ->getMatchParamOfRoute('_route', $this->container->get('request_stack')->getCurrentRequest()->getLocale());
                     }
-                    if (in_array($route, $GLOBALS['ENTITIES']['AUTHORIZATION_PREUPDATE'][$entity_name])) {
-                        $class = $entityManager->getClassMetadata(get_class($entity));
+                    if (\in_array($route, $GLOBALS['ENTITIES']['AUTHORIZATION_PREUPDATE'][$entity_name])) {
+                        $class = $entityManager->getClassMetadata(\get_class($entity));
                         $entityManager->getUnitOfWork()->recomputeSingleEntityChangeSet($class, $entity);
 
                         return true;
                     }
                 } elseif ($GLOBALS['ENTITIES']['AUTHORIZATION_PREUPDATE'][$entity_name] == true) {
-                    $class = $entityManager->getClassMetadata(get_class($entity));
+                    $class = $entityManager->getClassMetadata(\get_class($entity));
                     $entityManager->getUnitOfWork()->recomputeSingleEntityChangeSet($class, $entity);
 
                     return true;
                 }
             }
         } else {
-            $class = $entityManager->getClassMetadata(get_class($entity));
+            $class = $entityManager->getClassMetadata(\get_class($entity));
             $entityManager->getUnitOfWork()->recomputeSingleEntityChangeSet($class, $entity);
 
             return true;
@@ -263,7 +263,7 @@ abstract class abstractListener  extends abstractTriggerListener
         // If AnonymousToken user,
         if ($isAnonymousToken && $this->tokenStorage->isAnonymousToken()) {
             // just for register in data the change do in this class listener :
-            $class = $entityManager->getClassMetadata(get_class($entity));
+            $class = $entityManager->getClassMetadata(\get_class($entity));
             $entityManager->getUnitOfWork()->computeChangeSet($class, $entity);
             // we throw the message.
             $this->setFlash('pi.session.flash.right.anonymous');
@@ -274,7 +274,7 @@ abstract class abstractListener  extends abstractTriggerListener
         if ($isUsernamePasswordToken && $this->tokenStorage->isUsernamePasswordToken()) {
             if ($this->isRestrictionByRole($entity)) {
                 // just for register in data the change do in this class listener :
-                $class = $entityManager->getClassMetadata(get_class($entity));
+                $class = $entityManager->getClassMetadata(\get_class($entity));
                 $entityManager->getUnitOfWork()->computeChangeSet($class, $entity);
                 // we throw the message.
                 $this->setFlash('pi.session.flash.right.unupdate');
@@ -282,12 +282,12 @@ abstract class abstractListener  extends abstractTriggerListener
                 return false;
             }
             // if user have the edit right
-            if ( in_array('EDIT', $this->tokenStorage->getUserPermissions())
-                || in_array('ROLE_SUPER_ADMIN', $this->tokenStorage->getUserRoles())
+            if ( \in_array('EDIT', $this->tokenStorage->getUserPermissions())
+                || \in_array('ROLE_SUPER_ADMIN', $this->tokenStorage->getUserRoles())
                 || $isAllPermissions
             ) {
                 // we persist the values of the entity
-                $class = $entityManager->getClassMetadata(get_class($entity));
+                $class = $entityManager->getClassMetadata(\get_class($entity));
                 $entityManager->getUnitOfWork()->recomputeSingleEntityChangeSet($class, $entity);
                 // we throw the message.
                 $this->setFlash('pi.session.flash.right.update');
@@ -295,7 +295,7 @@ abstract class abstractListener  extends abstractTriggerListener
                 return true;
             } else {
                 // just for register in data the change do in this class listener :
-                $class = $entityManager->getClassMetadata(get_class($entity));
+                $class = $entityManager->getClassMetadata(\get_class($entity));
                 $entityManager->getUnitOfWork()->computeChangeSet($class, $entity);
                 // we throw the message.
                 $this->setFlash('pi.session.flash.right.unupdate');
@@ -324,7 +324,7 @@ abstract class abstractListener  extends abstractTriggerListener
         // get the order entity
         $entity         = $eventArgs->getEntity();
         $entityManager  = $eventArgs->getEntityManager();
-        $entity_name    = get_class($entity);
+        $entity_name    = \get_class($entity);
         // we given't the right of remove if the entity is in the PROHIBITION_PREREMOVE container
         if ($this->is_permission_prohibition_preremove_authorized
             && isset($GLOBALS['ENTITIES']['PROHIBITION_PREREMOVE'])
@@ -332,7 +332,7 @@ abstract class abstractListener  extends abstractTriggerListener
         ) {
             if (\is_array($GLOBALS['ENTITIES']['PROHIBITION_PREREMOVE'][$entity_name])) {
                 $id_entity = $entity->getId();
-                if (in_array($id_entity, $GLOBALS['ENTITIES']['AUTHORIZATION_PREREMOVE'][$entity_name])) {
+                if (\in_array($id_entity, $GLOBALS['ENTITIES']['AUTHORIZATION_PREREMOVE'][$entity_name])) {
                     // we stop the remove method.
                     $entityManager->getUnitOfWork()->detach($entity);
                     // we throw the message.
@@ -361,7 +361,7 @@ abstract class abstractListener  extends abstractTriggerListener
                     if ((empty($route) || ($route == "_internal"))) {
                         $route = $this->container->get('sfynx.tool.route.factory')->getMatchParamOfRoute('_route', $this->container->get('request_stack')->getCurrentRequest()->getLocale());
                     }
-                    if (in_array($route, $GLOBALS['ENTITIES']['AUTHORIZATION_PREREMOVE'][$entity_name])) {
+                    if (\in_array($route, $GLOBALS['ENTITIES']['AUTHORIZATION_PREREMOVE'][$entity_name])) {
                         return true;
                     }
                 } elseif ($GLOBALS['ENTITIES']['AUTHORIZATION_PREREMOVE'][$entity_name] == true) {
@@ -391,8 +391,8 @@ abstract class abstractListener  extends abstractTriggerListener
                 return false;
             }
             // if user have the delete right
-            if ( in_array('DELETE', $this->tokenStorage->getUserPermissions())
-                || in_array('ROLE_SUPER_ADMIN', $this->tokenStorage->getUserRoles())
+            if ( \in_array('DELETE', $this->tokenStorage->getUserPermissions())
+                || \in_array('ROLE_SUPER_ADMIN', $this->tokenStorage->getUserRoles())
                 || $isAllPermissions
             ) {
                 // we throw the message.
@@ -409,13 +409,13 @@ abstract class abstractListener  extends abstractTriggerListener
             }
         }
         // we persist the values of the entity
-        //$class = $entityManager->getClassMetadata(get_class($entity));
+        //$class = $entityManager->getClassMetadata(\get_class($entity));
         //$entityManager->getUnitOfWork()->recomputeSingleEntityChangeSet($class, $entity);
 
         /*
 
         just for register in data the change do in this class listener :
-        $class = $entityManager->getClassMetadata(get_class($entity));
+        $class = $entityManager->getClassMetadata(\get_class($entity));
         $entityManager->getUnitOfWork()->computeChangeSet($class, $entity);
 
         To get a field value:
@@ -452,7 +452,7 @@ abstract class abstractListener  extends abstractTriggerListener
                    if ((empty($route) || ($route == "_internal"))) {
                        $route = $this->container->get('sfynx.tool.route.factory')->getMatchParamOfRoute('_route', $this->container->get('request_stack')->getCurrentRequest()->getLocale());
                    }
-                   if (!in_array($route, $GLOBALS['ENTITIES']['RESTRICTION_BY_ROLES'][$entity_name])) {
+                   if (!\in_array($route, $GLOBALS['ENTITIES']['RESTRICTION_BY_ROLES'][$entity_name])) {
                        return false;
                    }
                }
@@ -465,7 +465,7 @@ abstract class abstractListener  extends abstractTriggerListener
                    $right = true;
                } else {
                    foreach ($authorized_page_roles as $key=>$role_page) {
-                       if (in_array($role_page, $user_roles)) {
+                       if (\in_array($role_page, $user_roles)) {
                            $right = true;
                        }
                    }

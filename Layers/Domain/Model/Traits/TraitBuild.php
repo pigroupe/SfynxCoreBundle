@@ -25,7 +25,7 @@ trait TraitBuild
     {
         $oEntity = new static();
         foreach ($arr as $propertyName => $value) {
-            if (!in_array($propertyName, $excluded)) {
+            if (!\in_array($propertyName, $excluded)) {
                 $oEntity->{$propertyName} = $value;
             }
         }
@@ -64,7 +64,7 @@ trait TraitBuild
             if ($updateCommand ||
                 (!$updateCommand && '' !== $valueCommand && null !== $valueCommand)
             ) {
-                if (!in_array($oProperty->getName(), $excluded)) {
+                if (!\in_array($oProperty->getName(), $excluded)) {
                     $entity->{$oProperty->getName()} = $oProperty->getValue($command);
                 }
             }
@@ -82,7 +82,7 @@ trait TraitBuild
     final public static function buildFromArray(object $entity, array $arr, array $excluded = []): object
     {
         foreach ($arr as $key => $value) {
-            if (!in_array($key, $excluded)) {
+            if (!\in_array($key, $excluded)) {
                 $entity->{$key} = $value;
             }
         }

@@ -24,6 +24,6 @@ class SpecIsHandlerCreatedWithNoLayoutQueryInterface extends AbstractSpecificati
     public function isSatisfiedBy(stdClass $object): bool
     {
         return property_exists($object->handler->query, 'noLayout') &&
-            is_bool($object->handler->query->getNoLayout());
+            \is_bool($object->handler->query->getNoLayout());
     }
 }

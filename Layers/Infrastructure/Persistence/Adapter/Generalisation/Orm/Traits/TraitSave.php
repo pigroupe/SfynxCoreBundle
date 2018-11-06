@@ -18,7 +18,7 @@ trait TraitSave
     {
         // Check for merging, if requested (trying to persist a detached object without merging will result in a new INSERT).
         if ($mergeCheck) {
-            $id = $this->_em->getClassMetadata(get_class($entity))->getIdentifierValues($entity);
+            $id = $this->_em->getClassMetadata(\get_class($entity))->getIdentifierValues($entity);
             if ($id) {
                 $entity = $this->merge($entity);
             } // May also merge cascaded associations.

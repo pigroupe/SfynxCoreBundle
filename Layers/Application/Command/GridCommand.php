@@ -71,6 +71,6 @@ class GridCommand implements CommandInterface, Countable
      */
     public function count(): int
     {
-        return count($this->commands);
+        return \count($this->commands);
     }
 }

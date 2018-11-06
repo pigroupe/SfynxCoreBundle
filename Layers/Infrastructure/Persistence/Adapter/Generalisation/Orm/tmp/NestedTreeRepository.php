@@ -235,7 +235,7 @@ class NestedTreeRepository extends AbstractTreeRepository
             $fields = rtrim($fields, ',');
             $qb->orderBy($fields, $direction);
         } else {
-            if ($meta->hasField($sortByField) && in_array(strtolower($direction), array('asc', 'desc'))) {
+            if ($meta->hasField($sortByField) && \in_array(strtolower($direction), array('asc', 'desc'))) {
                 $qb->orderBy('node.' . $sortByField, $direction);
             } else {
                 throw new InvalidArgumentException("Invalid sort options specified: field - {$sortByField}, direction - {$direction}");
@@ -323,7 +323,7 @@ class NestedTreeRepository extends AbstractTreeRepository
             }
             $qb->addOrderBy('node.' . $config['left'], 'ASC', true);
         } else {
-            if ($meta->hasField($sortByField) && in_array(strtolower($direction), array('asc', 'desc'))) {
+            if ($meta->hasField($sortByField) && \in_array(strtolower($direction), array('asc', 'desc'))) {
                 $qb->orderBy('node.' . $sortByField, $direction);
             } else {
                 throw new InvalidArgumentException("Invalid sort options specified: field - {$sortByField}, direction - {$direction}");
@@ -500,7 +500,7 @@ class NestedTreeRepository extends AbstractTreeRepository
         $meta = $this->getClassMetadata();
         if ($node instanceof $meta->name) {
             $nextSiblings = $this->getNextSiblings($node);
-            if ($numSiblings = count($nextSiblings)) {
+            if ($numSiblings = \count($nextSiblings)) {
                 $result = true;
                 if ($number === true) {
                     $number = $numSiblings;
@@ -532,7 +532,7 @@ class NestedTreeRepository extends AbstractTreeRepository
         $meta = $this->getClassMetadata();
         if ($node instanceof $meta->name) {
             $prevSiblings = array_reverse($this->getPrevSiblings($node));
-            if ($numSiblings = count($prevSiblings)) {
+            if ($numSiblings = \count($prevSiblings)) {
                 $result = true;
                 if ($number === true) {
                     $number = $numSiblings;
@@ -883,7 +883,7 @@ class NestedTreeRepository extends AbstractTreeRepository
             );
         }
         $nodes = $qb->getQuery()->getArrayResult();
-        if (count($nodes)) {
+        if (\count($nodes)) {
             foreach ($nodes as $node) {
                 $errors[] = "node [{$node[$identifier]}] has missing parent" . ($root ? ' on tree root: ' . $rootId : '');
             }
@@ -903,7 +903,7 @@ class NestedTreeRepository extends AbstractTreeRepository
         $result = $qb->getQuery()
             ->setMaxResults(1)
             ->getResult(Query::HYDRATE_ARRAY);
-        $node = count($result) ? array_shift($result) : null;
+        $node = \count($result) ? array_shift($result) : null;
         if ($node) {
             $id = $node[$identifier];
             $errors[] = "node [{$id}], left is greater than right" . ($root ? ' on tree root: ' . $rootId : '');

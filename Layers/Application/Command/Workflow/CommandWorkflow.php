@@ -87,7 +87,7 @@ class CommandWorkflow implements CommandWorkflowInterface
     public function detach(SplObserver $observer)
     {
         $key = array_search($observer,$this->observers, true);
-        if ($key){
+        if ($key) {
             unset($this->observers[$key]);
         }
         return $this;

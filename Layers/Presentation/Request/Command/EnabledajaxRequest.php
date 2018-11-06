@@ -70,7 +70,7 @@ class EnabledajaxRequest implements PresRequestInterface
     {
         $this->setOptions();
 
-        if(count($this->options) == 0) {
+        if(\count($this->options) == 0) {
             throw new \Exception('count = 0');
         }
 

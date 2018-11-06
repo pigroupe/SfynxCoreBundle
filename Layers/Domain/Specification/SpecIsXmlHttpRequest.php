@@ -23,7 +23,7 @@ class SpecIsXmlHttpRequest extends AbstractSpecification
     public function isSatisfiedBy(stdClass $object): bool
     {
         return property_exists($object, 'isXmlHttpRequest') &&
-            is_bool($object->isXmlHttpRequest) &&
+            \is_bool($object->isXmlHttpRequest) &&
             $object->isXmlHttpRequest
             ;
     }

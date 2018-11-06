@@ -76,7 +76,7 @@ trait TraitGeneral
             && isset($GLOBALS['ENTITIES']['RESTRICTION_BY_ROLES'][$entity_name])
         ) {
             if (\is_array($GLOBALS['ENTITIES']['RESTRICTION_BY_ROLES'][$entity_name])){
-                if (!in_array($route, $GLOBALS['ENTITIES']['RESTRICTION_BY_ROLES'][$entity_name])){
+                if (!\in_array($route, $GLOBALS['ENTITIES']['RESTRICTION_BY_ROLES'][$entity_name])){
                     return $query;
                 }
             }

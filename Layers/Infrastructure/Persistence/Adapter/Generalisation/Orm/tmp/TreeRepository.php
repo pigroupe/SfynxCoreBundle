@@ -110,20 +110,20 @@ class TreeRepository extends NestedTreeRepository
         if ( ($this->_container instanceof \Symfony\Component\DependencyInjection\ContainerInterface)
             && (true === $this->_container->get('security.authorization_checker')->isGranted('IS_AUTHENTICATED_FULLY'))
             && !($this->_container->get('security.authorization_checker')->isGranted('ROLE_ADMIN'))
-        ){
+        ) {
             $entity_name = $this->_entityName;
-            if (isset($GLOBALS['ENTITIES']['RESTRICTION_BY_ROLES']) && isset($GLOBALS['ENTITIES']['RESTRICTION_BY_ROLES'][$entity_name]) ){
-                if (\is_array($GLOBALS['ENTITIES']['RESTRICTION_BY_ROLES'][$entity_name])){
+            if (isset($GLOBALS['ENTITIES']['RESTRICTION_BY_ROLES']) && isset($GLOBALS['ENTITIES']['RESTRICTION_BY_ROLES'][$entity_name]) ) {
+                if (\is_array($GLOBALS['ENTITIES']['RESTRICTION_BY_ROLES'][$entity_name])) {
                     $route = $this->_container->get('request_stack')->getCurrentRequest()->get('_route');
                     if ((empty($route) || ($route == "_internal")))
                         $route = $this->_container->get('sfynx.tool.route.factory')->getMatchParamOfRoute('_route', $this->_container->get('request_stack')->getCurrentRequest()->getLocale());
-                    if (!in_array($route, $GLOBALS['ENTITIES']['RESTRICTION_BY_ROLES'][$entity_name])){
+                    if (!\in_array($route, $GLOBALS['ENTITIES']['RESTRICTION_BY_ROLES'][$entity_name])) {
                         return $query;
                     }
                 }
                 $user_roles    = $this->_container->get('sfynx.auth.role.factory')->getAllUserRoles();
                 $orModule = $query->expr()->orx();
-                foreach($user_roles as $key => $role){
+                foreach ($user_roles as $key => $role) {
                     $orModule->add($query->expr()->like('node.heritage', $query->expr()->literal('%"'.$role.'"%')));
                 }
                 $query->andWhere($orModule);
@@ -400,7 +400,7 @@ class TreeRepository extends NestedTreeRepository
 
         $result = array();
         $data    = $query->getQuery()->getArrayResult();
-        if ($data && \is_array($data) && count($data)) {
+        if ($data && \is_array($data) && \count($data)) {
             foreach ($data as $row) {
                 if (isset($row[$field]) && !empty($row[$field]))
                     $result[ $row[$field] ] = $row[$field];
@@ -425,7 +425,7 @@ class TreeRepository extends NestedTreeRepository
         ->where('node.enabled = :enabled')
         ->andWhere('node.archived = :archived');
 
-        if ($rootOnly && in_array($rootOnly, array('ASC', 'DESC'))){
+        if ($rootOnly && \in_array($rootOnly, array('ASC', 'DESC'))) {
             $config = $this->getConfiguration();
             $query->andWhere('node.' . $config['parent'] . " IS NULL")
             ->orderBy('node.' . $config['root'], $rootOnly);
@@ -535,33 +535,33 @@ class TreeRepository extends NestedTreeRepository
      */
     public function getContentByField($locale, array $fields, $INNER_JOIN = false)
     {
-        $query    = $this->_em->createQuery("SELECT p FROM {$this->_entityTranslationName} p  WHERE p.locale = :locale and p.field = :field and p.content = :content ");
+        $query = $this->_em->createQuery("SELECT p FROM {$this->_entityTranslationName} p  WHERE p.locale = :locale and p.field = :field and p.content = :content ");
         $query->setParameter('locale', $locale);
         $query->setParameter('field', array_keys($fields['content_search']));
         $query->setParameter('content', array_values($fields['content_search']));
         $query->setMaxResults(1);
         $entities = $query->getResult();
 
-        if (!(null === $entities)){
+        if (!(null === $entities)) {
             $entity = current($entities);
-            if (\is_object($entity)){
-                $id        = $entity->getObject()->getId();
+            if (\is_object($entity)) {
+                $id = $entity->getObject()->getId();
 
-                $query    = $this->_em->createQuery("SELECT p FROM {$this->_entityTranslationName} p  WHERE p.locale = :locale and p.field = :field and p.object = :objectId");
+                $query = $this->_em->createQuery("SELECT p FROM {$this->_entityTranslationName} p  WHERE p.locale = :locale and p.field = :field and p.object = :objectId");
                 $query->setParameter('locale', $locale);
                 $query->setParameter('objectId', $id);
                 $query->setParameter('field', $fields['field_result']);
                 $query->setMaxResults(1);
                 $entities = $query->getResult();
 
-                if (!(null === $entities) && (count($entities)>=1) ){
+                if (!(null === $entities) && (\count($entities)>=1) ){
                     return current($entities);
-                }else
-                    return null;
-            }else
+                }
                 return null;
-        }else
+            }
             return null;
+        }
+        return null;
 
         //         $dql = <<<___SQL
         //   SELECT a
@@ -573,7 +573,7 @@ class TreeRepository extends NestedTreeRepository
         //         $result = $this->findTranslationsByQuery($locale, $query, $result, $INNER_JOIN);
 
 
-        //         print_r(count($result));exit;
+        //         print_r(\count($result));exit;
 
         //         return current($result);
     }
@@ -592,23 +592,23 @@ class TreeRepository extends NestedTreeRepository
      */
     public function getEntityByField($locale, array $fields, $result = "object", $INNER_JOIN = false)
     {
-        $query    = $this->_em->createQuery("SELECT p FROM {$this->_entityTranslationName} p  WHERE p.locale = :locale and p.field = :field and p.content = :content ");
+        $query = $this->_em->createQuery("SELECT p FROM {$this->_entityTranslationName} p  WHERE p.locale = :locale and p.field = :field and p.content = :content ");
         $query->setParameter('locale', $locale);
         $query->setParameter('field', array_keys($fields['content_search']));
         $query->setParameter('content', array_values($fields['content_search']));
         $query->setMaxResults(1);
         $entities = $query->getResult();
 
-        if (!(null === $entities)){
+        if (!(null === $entities)) {
             $entity = current($entities);
 
-            if (\is_object($entity)){
-                $id        = $entity->getObject()->getId();
+            if (\is_object($entity)) {
+                $id = $entity->getObject()->getId();
                 return $this->findOneByEntity($locale, $id, $result, $INNER_JOIN);
-            }else
-                return null;
-        }else
+            }
             return null;
+        }
+        return null;
     }
 
 //    /**
@@ -703,7 +703,7 @@ class TreeRepository extends NestedTreeRepository
 //        if (!$sortByField) {
 //            $qb->orderBy('node.' . $config['left'], 'ASC');
 //        } else {
-//            if ($meta->hasField($sortByField) && in_array(strtolower($direction), array('asc', 'desc'))) {
+//            if ($meta->hasField($sortByField) && \in_array(strtolower($direction), array('asc', 'desc'))) {
 //                $qb->orderBy('node.' . $sortByField, $direction);
 //            } else {
 //                throw new \RuntimeException("Invalid sort options specified: field - {$sortByField}, direction - {$direction}");
@@ -805,7 +805,7 @@ class TreeRepository extends NestedTreeRepository
 //                ->set('node.' . $rightField, $parentRightValue + 1);
 //                $entityIdentifiers = $meta->getIdentifierValues($node);
 //                foreach ($entityIdentifiers as $field => $value) {
-//                    if (strlen($value)) {
+//                    if (\strlen($value)) {
 //                        $qb->where('node.' . $field . ' = ' . $value);
 //                    }
 //                }
@@ -949,7 +949,7 @@ class TreeRepository extends NestedTreeRepository
 ////         if (!$sortByField) {
 ////             $qb->orderBy('node.' . $config['left'], 'ASC');
 ////         } else {
-////             if ($meta->hasField($sortByField) && in_array(strtolower($direction), array('asc', 'desc'))) {
+////             if ($meta->hasField($sortByField) && \in_array(strtolower($direction), array('asc', 'desc'))) {
 ////                 $qb->orderBy('node.' . $sortByField, $direction);
 ////             } else {
 ////                 throw new \RuntimeException("Invalid sort options specified: field - {$sortByField}, direction - {$direction}");
@@ -990,7 +990,7 @@ class TreeRepository extends NestedTreeRepository
 //        $q = $this->_em->createQuery($dql);
 //        $q->setMaxResults(1);
 //        $result = $q->getResult(Query::HYDRATE_OBJECT);
-//        $previousSiblingNode = count($result) ? array_shift($result) : null;
+//        $previousSiblingNode = \count($result) ? array_shift($result) : null;
 //
 //        if (!$previousSiblingNode) {
 //            return false;
@@ -1015,7 +1015,7 @@ class TreeRepository extends NestedTreeRepository
 //            $this->_em->getConnection()->rollback();
 //            throw $e;
 //        }
-//        if (is_int($number)) {
+//        if (\is_int($number)) {
 //            $number--;
 //        }
 //        if ($number) {
@@ -1059,7 +1059,7 @@ class TreeRepository extends NestedTreeRepository
 //        $q = $this->_em->createQuery($dql);
 //        $q->setMaxResults(1);
 //        $result = $q->getResult(Query::HYDRATE_OBJECT);
-//        $nextSiblingNode = count($result) ? array_shift($result) : null;
+//        $nextSiblingNode = \count($result) ? array_shift($result) : null;
 ////         if (!$nextSiblingNode) {
 ////             return false;
 ////         }
@@ -1082,7 +1082,7 @@ class TreeRepository extends NestedTreeRepository
 //            $this->_em->getConnection()->rollback();
 //            throw $e;
 //        }
-//        if (is_int($number)) {
+//        if (\is_int($number)) {
 //            $number--;
 //        }
 //        if ($number) {

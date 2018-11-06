@@ -30,7 +30,7 @@ class InvalidArgumentException extends Exception
      */
     public static function invalidType($value, string $expectedType): ValidationException
     {
-        $valueType = is_object($value) ? get_class($value) : gettype($value);
+        $valueType = \is_object($value) ? \get_class($value) : \gettype($value);
         return new static(sprintf('Expected argument of type "%s", "%s" given', $expectedType, $valueType));
     }
 

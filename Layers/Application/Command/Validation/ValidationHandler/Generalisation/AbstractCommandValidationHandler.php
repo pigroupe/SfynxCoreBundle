@@ -91,7 +91,7 @@ abstract class AbstractCommandValidationHandler extends AbstractCommandDecorator
     protected function initErrors(CommandInterface $command)
     {
         $this->errors = $this->validate($command, $this->getConstraints());
-        if (!(count($this->errors) === 0)
+        if (!(\count($this->errors) === 0)
             && $this->throwExceptionFromErrors
         ) {
             throw new Exception(\json_encode($this->getErrors())) ;

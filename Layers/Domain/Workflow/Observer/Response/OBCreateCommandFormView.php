@@ -46,7 +46,7 @@ class OBCreateCommandFormView extends AbstractCreateFormView
             && (Kernel::MINOR_VERSION >= 3)
             && $this->formType instanceof FormTypeInterface
         ) {
-            return $this->formFactory->create(get_class($this->formType), $this->wfHandler->command);
+            return $this->formFactory->create(\get_class($this->formType), $this->wfHandler->command);
         }
         return $this->formFactory->create($this->formType, $this->wfHandler->command);
     }

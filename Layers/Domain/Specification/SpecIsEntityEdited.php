@@ -27,7 +27,7 @@ class SpecIsEntityEdited extends AbstractSpecification
         return property_exists($object, 'entityId') &&
             null !== $object->entityId &&
             '' !== $object->entityId &&
-            (is_int($object->entityId) || preg_match($UUIDv4, $object->entityId))
+            (\is_int($object->entityId) || preg_match($UUIDv4, $object->entityId))
             ;
     }
 }

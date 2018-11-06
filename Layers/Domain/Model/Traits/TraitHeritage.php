@@ -60,7 +60,7 @@ trait TraitHeritage
     public function addRoleInHeritage($role)
     {
         $role = strtoupper($role);
-        if (!in_array($role, $this->heritage, true)) {
+        if (!\in_array($role, $this->heritage, true)) {
             $this->heritage[] = $role;
         }
         return $this;
