@@ -18,8 +18,8 @@ default:
                 - codeComment1:
                       design: 'code'
                       content:
-                        - 'try {'
-                        - "// 1. Transform options to Command."
+                      - 'try {'
+                      - "   // 1. Transform options to Command."
                 - updateCommand:
                       design: 'adapter'
                       class: Sfynx\CoreBundle\Layers\Presentation\Adapter\Command\CommandAdapter
@@ -73,22 +73,27 @@ default:
                 - codeln2:
                       design: 'code'
                       content:
-                        - "$response = $responseHandlerResult->getResponse();"
-                        - '}  catch (NotFoundEntityException $e) {'
-                        - '    $response = new Response();'
-                        - '    $response->setStatusCode(Response::HTTP_NOT_FOUND);'
-                        - '    $response->setContent($e->getMessage());'
-                        - '}  catch (ViolationEntityException $e) {'
-                        - '    $response = new Response();'
-                        - '    $response->setStatusCode(Response::HTTP_CONFLICT);'
-                        - '    $response->setContent($e->getMessage());'
-                        - '}  catch (Exception $e) {'
-                        - '    $response = new Response();'
-                        - '    $response->setStatusCode(Response::HTTP_SERVICE_UNAVAILABLE);'
-                        - '    $response->setContent($e->getMessage());'
-                        - '}'
-                        - ''
-                        - 'return $response;'
+                      - "    $response = $responseHandlerResult->getResponse();"
+                      - ""
+                      - "    $this->logger->info('Request has been sent from this Command', ['command' => $updateCommand]);"
+                      - '}  catch (NotFoundEntityException $e) {'
+                      - "    $this->logger->error('Request has failed with NotFoundEntityException exception', ['command' => $updateCommand]);"
+                      - '    $response = new Response();'
+                      - '    $response->setStatusCode(Response::HTTP_NOT_FOUND);'
+                      - '    $response->setContent($e->getMessage());'
+                      - '}  catch (ViolationEntityException $e) {'
+                      - "    $this->logger->error('Request has failed with ViolationEntityException exception', ['command' => $updateCommand]);"
+                      - '    $response = new Response();'
+                      - '    $response->setStatusCode(Response::HTTP_CONFLICT);'
+                      - '    $response->setContent($e->getMessage());'
+                      - '}  catch (Exception $e) {'
+                      - "    $this->logger->error('Request has failed with HTTP_SERVICE_UNAVAILABLE exception', ['command' => $updateCommand]);"
+                      - '    $response = new Response();'
+                      - '    $response->setStatusCode(Response::HTTP_SERVICE_UNAVAILABLE);'
+                      - '    $response->setContent($e->getMessage());'
+                      - '}'
+                      - ''
+                      - 'return $response;'
             widget_request:
                 class: MovieFormRequest
                 arguments:

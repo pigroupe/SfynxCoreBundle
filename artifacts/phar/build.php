@@ -39,7 +39,7 @@ declare(strict_types=1);
 * This source file is subject to the LGPL license that is bundled
 * with this source code in the file LICENSE.
 * 
-* version: v2.11.2
+* version: v2.11.3
 */
 
 Phar::mapPhar('sfynx-ddd-generator.phar');
@@ -56,7 +56,7 @@ function includeIfExists(\$file)
 }
 \$loader = includeIfExists('/var/www-app/vendor/autoload.php');
 
-\$application = new \Sfynx\CoreBundle\Generator\Presentation\Console\Application('DDD Generator', 'v2.11.2');
+\$application = new \Sfynx\CoreBundle\Generator\Presentation\Console\Application('DDD Generator', 'v2.11.3');
 \$application->run();
 
 __HALT_COMPILER();

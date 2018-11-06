@@ -25,7 +25,7 @@ default:
                         design: 'code'
                         content:
                           - 'try {'
-                          - '// 1. Transform options to Query.'
+                          - '   // 1. Transform options to Query.'
                     - getQuery:
                         design: 'adapter'
                         class: Sfynx\CoreBundle\Layers\Presentation\Adapter\Query\QueryAdapter
@@ -46,7 +46,7 @@ default:
                         content: "// 3. Implement decorator to apply the command workflow from the query"
                     - queryHandlerResult:
                         design: 'decorator'
-                        class: Sfynx\CoreBundle\Layers\Application\Query\Handler\ApiQueryHandler
+                        class: Sfynx\CoreBundle\Layers\Application\Query\Handler\QueryHandler
                         arguments:
                             - '$queryworkflow'
                         handlers: [ 'GetQueryValidationHandler', 'GetQuerySpecHandler']
@@ -73,16 +73,21 @@ default:
                     - codeln2:
                         design: 'code'
                         content:
-                          - "$response = $responseHandlerResult->getResponse();"
+                          - "    $response = $responseHandlerResult->getResponse();"
+                          - ""
+                          - "    $this->logger->info('Request has been sent from this Query', ['command' => $getQuery]);"
                           - '}  catch (NotFoundEntityException $e) {'
+                          - "    $this->logger->error('Request has failed with NotFoundEntityException exception', ['command' => $getQuery]);"
                           - '    $response = new JsonResponse();'
                           - '    $response->setStatusCode(JsonResponse::HTTP_NOT_FOUND);'
                           - '    $response->setContent(TraitMessage::jsonError($e->getMessage()));'
                           - '}  catch (ViolationEntityException $e) {'
+                          - "    $this->logger->error('Request has failed with ViolationEntityException exception', ['command' => $getQuery]);"
                           - '    $response = new JsonResponse();'
                           - '    $response->setStatusCode(JsonResponse::HTTP_CONFLICT);'
                           - '    $response->setContent(TraitMessage::jsonError($e->getMessage()));'
                           - '}  catch (Exception $e) {'
+                          - "    $this->logger->error('Request has failed with HTTP_SERVICE_UNAVAILABLE exception', ['command' => $getQuery]);"
                           - '    $response = new JsonResponse();'
                           - '    $response->setStatusCode(JsonResponse::HTTP_SERVICE_UNAVAILABLE);'
                           - '    $response->setContent(TraitMessage::jsonError($e->getMessage()));'
