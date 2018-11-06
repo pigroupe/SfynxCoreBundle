@@ -136,6 +136,7 @@ abstract class AbstractRequest implements PresRequestInterface
     {
         $this->options = \json_decode($this->request->getContent(), true);
         $this->options = (null !== $this->options) ? $this->options : [];
+        $this->options = \array_merge($this->options, $this->parameters);
     }
 
     /**

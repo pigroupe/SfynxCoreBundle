@@ -88,7 +88,7 @@ sfynx-ddd-generator \
 ```bash
 sfynx-ddd-generator \
     sfynx:ddd:generate \
-    ./Resources/config/generator/auth,./Resources/config/generator/models \
+    ./Resources/config/generator/auth,./Resources/config/generator/models,./Resources/config/generator/offer \
     --report-template=default \
     --report-dir=build
 ```

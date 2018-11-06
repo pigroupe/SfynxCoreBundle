@@ -131,10 +131,11 @@ class <?php echo $templater->getTargetClassname(); ?> extends <?php echo $extend
      */
     protected function setOptions()
     {
-        $this->options = \array_merge(
+        /* $this->options = \array_merge(
             $this->request->getRequest()->get('<?php echo strtolower($templater->getNamespace()); ?>_<?php if (property_exists($templater, 'targetCqrs')) echo str_replace('\\', '_', strtolower($templater->getTargetCqrs())); else strtolower($templater->getTargetClassname()); ?>', []),
             $this->parameters
-        );
+        ); */
+        parent::setOptions();
 
         /* boolean transformation */
         foreach ([
@@ -145,7 +146,7 @@ class <?php echo $templater->getTargetClassname(); ?> extends <?php echo $extend
 <?php endforeach; ?>
         ] as $data) {
             if (isset($this->options[$data])
-                && (is_bool($this->options[$data]) || \in_array($this->options[$data], [0, 1], true))
+                && (\is_bool($this->options[$data]) || \in_array($this->options[$data], [0, 1], true))
             ) {
                 $this->options[$data] = (boolean)$this->options[$data];
             }
@@ -174,7 +175,5 @@ class <?php echo $templater->getTargetClassname(); ?> extends <?php echo $extend
         ] as $data) {
             $this->options[$data] = !empty($this->options[$data]) ? new \DateTime($this->options[$data]) : new \DateTime();
         }
-
-        $this->options = (null !== $this->options) ? $this->options : [];
     }
 }

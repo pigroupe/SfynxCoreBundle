@@ -25,7 +25,7 @@ default:
                         design: 'code'
                         content:
                           - 'try {'
-                          - "   // 1. Transform options to Command."
+                          - "    // 1. Transform options to Command."
                     - updateCommand:
                         design: 'adapter'
                         class: Sfynx\CoreBundle\Layers\Presentation\Adapter\Command\CommandAdapter
