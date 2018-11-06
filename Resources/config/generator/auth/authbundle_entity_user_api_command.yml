@@ -23,7 +23,7 @@ default:
                         design: 'code'
                         content:
                           - 'try {'
-                          - "// 1. Transform options to Command."
+                          - "    // 1. Transform options to Command."
                     - updateCommand:
                         design: 'adapter'
                         class: Sfynx\CoreBundle\Layers\Presentation\Adapter\Command\CommandAdapter
@@ -73,16 +73,21 @@ default:
                     - codeln2:
                         design: 'code'
                         content:
-                          - "$response = $responseHandlerResult->getResponse();"
+                          - "    $response = $responseHandlerResult->getResponse();"
+                          - ""
+                          - "    $this->logger->info('Request has been sent from this Command', ['command' => $updateCommand]);"
                           - '}  catch (NotFoundEntityException $e) {'
+                          - "    $this->logger->error('Request has failed with NotFoundEntityException exception', ['command' => $updateCommand]);"
                           - '    $response = new JsonResponse();'
                           - '    $response->setStatusCode(JsonResponse::HTTP_NOT_FOUND);'
                           - '    $response->setContent(TraitMessage::jsonError($e->getMessage()));'
                           - '}  catch (ViolationEntityException $e) {'
+                          - "    $this->logger->error('Request has failed with ViolationEntityException exception', ['command' => $updateCommand]);"
                           - '    $response = new JsonResponse();'
                           - '    $response->setStatusCode(JsonResponse::HTTP_CONFLICT);'
                           - '    $response->setContent(TraitMessage::jsonError($e->getMessage()));'
                           - '}  catch (Exception $e) {'
+                          - "    $this->logger->error('Request has failed with HTTP_SERVICE_UNAVAILABLE exception', ['command' => $updateCommand]);"
                           - '    $response = new JsonResponse();'
                           - '    $response->setStatusCode(JsonResponse::HTTP_SERVICE_UNAVAILABLE);'
                           - '    $response->setContent(TraitMessage::jsonError($e->getMessage()));'

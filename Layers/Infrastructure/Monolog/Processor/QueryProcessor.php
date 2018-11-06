@@ -16,7 +16,7 @@ class QueryProcessor
         if (isset($record['context']['query'])) {
             $query = $record['context']['query'];
             if ($query instanceof QueryInterface ) {
-                $record['extra']['query'] = $query;
+                $record['extra']['query'] = $query->toArray();
             }
         }
 

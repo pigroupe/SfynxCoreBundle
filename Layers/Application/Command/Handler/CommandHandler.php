@@ -24,18 +24,20 @@ class CommandHandler extends AbstractCommandDecoratorHandler
     public $command;
     /** @var CommandWorkflowInterface */
     protected $commandWorkflow;
+    /** @var CommandHandlerInterface */
+    protected $commandHandler;
     /** @var null|ManagerInterface[] */
     protected $manager;
 
     /**
-     * @param CommandWorkflowInterface $workflowCommand
+     * @param CommandWorkflowInterface $commandWorkflow
      * @param string|ManagerInterface[] $manager
      * @param null|CommandHandlerInterface $commandHandler
      */
-    public function __construct(CommandWorkflowInterface $workflowCommand, $manager = null, CommandHandlerInterface $commandHandler = null)
+    public function __construct(CommandWorkflowInterface $commandWorkflow, $manager = null, CommandHandlerInterface $commandHandler = null)
     {
         $this->commandHandler = $commandHandler;
-        $this->commandWorkflow = $workflowCommand;
+        $this->commandWorkflow = $commandWorkflow;
         $this->manager = $manager;
 
         if(\is_string($manager)) {
@@ -53,8 +55,7 @@ class CommandHandler extends AbstractCommandDecoratorHandler
     {
         /* we dispatch the command workflow */
         $this->dispatch($command);
-
-        // get last version of entity and errors objects
+        /* get last version of public attributes of commandWorkflow and Command objects */
         foreach (\get_object_vars($this->commandWorkflow->getData()) as $property => $value) {
             $this->$property = end($this->commandWorkflow->getData()->$property);
             $this->setCommandHandlerProperty($property);
@@ -63,8 +64,7 @@ class CommandHandler extends AbstractCommandDecoratorHandler
             $this->$property = $this->commandWorkflow->getCommand()->$property;
             $this->setCommandHandlerProperty($property);
         }
-
-        // execute next commandHandler
+        /* execute next commandHandler */
         if (null !== $this->commandHandler) {
             return $this->commandHandler->process($command);
         }

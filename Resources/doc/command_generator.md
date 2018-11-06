@@ -26,7 +26,7 @@ export PATH=~/.composer/vendor/bin:$PATH
 > b) Phar
 
 ```bash
-sudo sh -c "curl -L https://github.com/pigroupe/SfynxCoreBundle/blob/v2.11.2/releases/sfynx-ddd-generator.phar?raw=true > /usr/local/bin/sfynx-ddd-generator"
+sudo sh -c "curl -L https://github.com/pigroupe/SfynxCoreBundle/blob/v2.11.3/releases/sfynx-ddd-generator.phar?raw=true > /usr/local/bin/sfynx-ddd-generator"
 sudo chmod +rx /usr/local/bin/sfynx-ddd-generator
 ```
 
@@ -88,7 +88,7 @@ sfynx-ddd-generator \
 ```bash
 sfynx-ddd-generator \
     sfynx:ddd:generate \
-    ./Resources/config/generator/auth,./Resources/config/generator/models \
+    ./Resources/config/generator/auth,./Resources/config/generator/models,./Resources/config/generator/offer \
     --report-template=default \
     --report-dir=build
 ```

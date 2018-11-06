@@ -16,7 +16,7 @@ class CommandProcessor
         if (isset($record['context']['command'])) {
             $command = $record['context']['command'];
             if ($command instanceof CommandInterface ) {
-                $record['extra']['command'] = $command;
+                $record['extra']['command'] = $command->toArray();
             }
         }
 
