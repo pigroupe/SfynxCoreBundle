@@ -79,7 +79,7 @@ default:
                         content:
                           - "    $response = $responseHandlerResult->getResponse();"
                           - ""
-                          - "    $this->logger->info('Request has been sent from this Command', ['command' => $updateCommand]);"
+                          - "    // $this->logger->info('Request has been sent from this Command', ['command' => $updateCommand]);"
                           - '}  catch (NotFoundEntityException $e) {'
                           - "    $this->logger->error('Request has failed with NotFoundEntityException exception', ['command' => $updateCommand]);"
                           - '    $response = new Response();'

@@ -34,7 +34,7 @@ class RoleManager
      */
     public static function getNoAuthorizeRolesFromUser(array $heritage, array $allRoles): array
     {
-        if ( (null === $heritage) || (\count($heritage) === 0) ) {
+        if ((null === $heritage) || (\count($heritage) === 0)) {
             return null;
         }
         if (($key = \array_search('ROLE_ALLOWED_TO_SWITCH', $allRoles)) !== false) {
@@ -43,7 +43,7 @@ class RoleManager
         $allRoles_authorized = \array_merge($heritage, self::getAllHeritageByRoles($allRoles, $heritage));
         $allRoles_no_authorized = \array_diff($allRoles, $allRoles_authorized);
 
-        if ( (\count($allRoles_authorized) == 0)
+        if ((\count($allRoles_authorized) == 0)
             && (\count($allRoles_no_authorized) == 0)
         ) {
             return null;
@@ -125,7 +125,7 @@ class RoleManager
         // we get the map of all roles.
         $roleMap = self::buildRoleMap($hierarchy);
         foreach ($roleMap as $role => $heritage) {
-            if (\in_array($role, $roles)){
+            if (\in_array($role, $roles)) {
                 $intersect = \array_intersect($heritage, $roles);
                 $roles = \array_diff($roles, $intersect);  // =  $roles -  $intersect
             }

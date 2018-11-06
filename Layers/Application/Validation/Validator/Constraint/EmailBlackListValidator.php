@@ -29,10 +29,10 @@ class EmailBlackListValidator extends ConstraintValidator
     public function validate($value, Constraint $constraint)
     {
         $domainArray = preg_split("/@/", $value);
-        if (count($domainArray) > 1) {
+        if (\count($domainArray) > 1) {
             $domain = $domainArray[1];
             if (!(null === $this->blackList)
-                && in_array($domain, $this->blackList)
+                && \in_array($domain, $this->blackList)
             ) {
                 $this->context->addViolation($constraint->message);
             }

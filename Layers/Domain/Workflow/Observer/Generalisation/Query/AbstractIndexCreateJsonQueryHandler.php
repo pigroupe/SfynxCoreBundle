@@ -148,7 +148,7 @@ abstract class AbstractIndexCreateJsonQueryHandler extends AbstractObserver
          */
         $array_params = [];
         $and = $qb->expr()->andx();
-        for ( $i=0 ; $i<count($aColumns) ; $i++ ) {
+        for ( $i=0 ; $i < \count($aColumns) ; $i++ ) {
             if ( $this->request->get('bSearchable_'.$i) == "true" && $this->request->get('sSearch_'.$i) != '' ) {
                 $search_tab = explode("|", $this->request->get('sSearch_'.$i));
                 $or = $qb->expr()->orx();
@@ -169,7 +169,7 @@ abstract class AbstractIndexCreateJsonQueryHandler extends AbstractObserver
 //        SELECT f0_.id AS id_0, f0_.name AS name_1, f0_.salt AS salt_2, f0_.password AS password_3, f0_.last_login AS last_login_4, f0_.confirmation_token AS confirmation_token_5, f0_.password_requested_at AS password_requested_at_6, f0_.username AS username_7, f0_.username_canonical AS username_canonical_8, f0_.nickname AS nickname_9, f0_.email AS email_10, f0_.email_canonical AS email_canonical_11, f0_.birthday AS birthday_12, f0_.address AS address_13, f0_.country AS country_14, f0_.city AS city_15, f0_.zip_code AS zip_code_16, f0_.created_at AS created_at_17, f0_.updated_at AS updated_at_18, f0_.published_at AS published_at_19, f0_.archive_at AS archive_at_20, f0_.archived AS archived_21, f0_.expired AS expired_22, f0_.expires_at AS expires_at_23, f0_.locked AS locked_24, f0_.credentials_expired AS credentials_expired_25, f0_.credentials_expire_at AS credentials_expire_at_26, f0_.global_opt_in AS global_opt_in_27, f0_.site_opt_in AS site_opt_in_28, f0_.enabled AS enabled_29, f0_.roles AS roles_30, f0_.permissions AS permissions_31, f0_.application_tokens AS application_tokens_32, f0_.lang_code AS lang_code_33 FROM fos_user f0_ LEFT JOIN fos_user_group f2_ ON f0_.id = f2_.user_id LEFT JOIN fos_group f1_ ON f1_.id = f2_.group_id WHERE f0_.roles NOT LIKE '%ROLE_SUBSCRIBER%' AND f0_.roles NOT LIKE '%ROLE_MEMBER%' AND f0_.roles NOT LIKE '%ROLE_PROVIDER%' AND f0_.roles NOT LIKE '%ROLE_CUSTOMER%' AND ((LOWER(CASE WHEN f0_.roles LIKE '%ROLE_SUPER_ADMIN%' OR f1_.roles LIKE '%ROLE_SUPER_ADMIN%' THEN 'ROLE_SUPER_ADMIN' WHEN f0_.roles LIKE '%ROLE_ADMIN%' OR f1_.roles LIKE '%ROLE_ADMIN%' THEN 'ROLE_ADMIN' WHEN f0_.roles LIKE '%ROLE_USER%' OR f1_.roles LIKE '%ROLE_USER%' THEN 'ROLE_USER' ELSE 'OTHER' END) LIKE '%role_user%') OR (LOWER(CASE WHEN f0_.roles LIKE '%ROLE_SUPER_ADMIN%' OR f1_.roles LIKE '%ROLE_SUPER_ADMIN%' THEN 'ROLE_SUPER_ADMIN' WHEN f0_.roles LIKE '%ROLE_ADMIN%' OR f1_.roles LIKE '%ROLE_ADMIN%' THEN 'ROLE_ADMIN' WHEN f0_.roles LIKE '%ROLE_USER%' OR f1_.roles LIKE '%ROLE_USER%' THEN 'ROLE_USER' ELSE 'OTHER' END) LIKE '%role_admin%')) GROUP BY f0_.id ORDER BY f0_.id ASC LIMIT 20 OFFSET 0
 
         $or = $qb->expr()->orx();
-        for ( $i=0 ; $i<count($aColumns) ; $i++ ) {
+        for ( $i=0 ; $i < \count($aColumns) ; $i++ ) {
             if ( $this->request->get('bSearchable_'.$i) == "true" && $this->request->get('sSearch') != '' ) {
                 $search_tab = explode("|", $this->request->get('sSearch'));
                 foreach ($search_tab as $s) {
@@ -218,7 +218,7 @@ abstract class AbstractIndexCreateJsonQueryHandler extends AbstractObserver
             $qb->setFirstResult($iDisplayStart);
             $qb->setMaxResults($iDisplayLength);
         }
-        if (count($array_params) > 0) {
+        if (\count($array_params) > 0) {
             $qb->setParameters($array_params);
         }
 //        $query_sql = $qb->getQuery()->getSql();
@@ -246,7 +246,7 @@ abstract class AbstractIndexCreateJsonQueryHandler extends AbstractObserver
 
         $result = $this->manager->getQueryRepository()->findTranslationsByQuery($locale, $qb, 'object', false, true);
         if ($type == 'count') {
-            $result = count($result);
+            $result = \count($result);
         }
 
         return $result;

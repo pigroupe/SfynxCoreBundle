@@ -23,7 +23,7 @@ class SpecIsHandlerCreatedWithEntityInterface extends AbstractSpecification
      */
     public function isSatisfiedBy(stdClass $object): bool
     {
-        return property_exists($object->handler, 'entity')
-            && is_object($object->handler->entity);
+        return \property_exists($object->handler, 'entity')
+            && \is_object($object->handler->entity);
     }
 }

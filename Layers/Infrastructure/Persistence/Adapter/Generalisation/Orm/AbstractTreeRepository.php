@@ -206,7 +206,7 @@ abstract class AbstractTreeRepository extends NestedTreeRepository
 
         $result = array();
         $data   = $query->getQuery()->getArrayResult();
-        if ($data && \is_array($data) && count($data)) {
+        if ($data && \is_array($data) && \count($data)) {
             foreach ($data as $row) {
                 if (isset($row[$field]) && !empty($row[$field])) {
                     $result[ $row[$field] ] = $row[$field];
@@ -234,7 +234,7 @@ abstract class AbstractTreeRepository extends NestedTreeRepository
         ->select('a')
         ->where('a.enabled = :enabled')
         ->andWhere('a.archived = :archived');
-        if ($rootOnly && in_array($rootOnly, array('ASC', 'DESC'))) {
+        if ($rootOnly && \in_array($rootOnly, array('ASC', 'DESC'))) {
             $config = $this->getConfiguration();
             $query->andWhere('a.' . $config['parent'] . " IS NULL")
             ->orderBy('a.' . $config['root'], $rootOnly);
@@ -355,9 +355,9 @@ abstract class AbstractTreeRepository extends NestedTreeRepository
         $query->setParameter('content', array_values($fields['content_search']));
         $query->setMaxResults(1);
         $entities = $query->getResult();
-        if (!(null === $entities)){
+        if (!(null === $entities)) {
             $entity = current($entities);
-            if (\is_object($entity)){
+            if (\is_object($entity)) {
                 $id    = $entity->getObject()->getId();
                 $query = $this->_em->createQuery("SELECT p FROM {$this->_entityTranslationName} p  WHERE p.locale = :locale and p.field = :field and p.object = :objectId");
                 $query->setParameter('locale', $locale);
@@ -365,7 +365,7 @@ abstract class AbstractTreeRepository extends NestedTreeRepository
                 $query->setParameter('field', $fields['field_result']);
                 $query->setMaxResults(1);
                 $entities = $query->getResult();
-                if (!(null === $entities) && (count($entities)>=1) ){
+                if (!(null === $entities) && (\count($entities)>=1) ) {
                     return current($entities);
                 }
                 return null;
@@ -384,7 +384,7 @@ abstract class AbstractTreeRepository extends NestedTreeRepository
         //         $result = $this->findTranslationsByQuery($locale, $query, $result, $INNER_JOIN);
 
 
-        //         print_r(count($result));exit;
+        //         print_r(\count($result));exit;
 
         //         return current($result);
     }
@@ -409,10 +409,10 @@ abstract class AbstractTreeRepository extends NestedTreeRepository
         $query->setParameter('content', array_values($fields['content_search']));
         $query->setMaxResults(1);
         $entities = $query->getResult();
-        if (!(null === $entities)){
+        if (!(null === $entities)) {
             $entity = current($entities);
-            if (\is_object($entity)){
-                $id        = $entity->getObject()->getId();
+            if (\is_object($entity)) {
+                $id = $entity->getObject()->getId();
                 return $this->findOneByEntity($locale, $id, $result, $INNER_JOIN);
             }
             return null;
@@ -514,7 +514,7 @@ abstract class AbstractTreeRepository extends NestedTreeRepository
         if (!$sortByField) {
             $qb->orderBy('a.' . $config['left'], 'ASC');
         } else {
-            if ($meta->hasField($sortByField) && in_array(strtolower($direction), array('asc', 'desc'))) {
+            if ($meta->hasField($sortByField) && \in_array(strtolower($direction), array('asc', 'desc'))) {
                 $qb->orderBy('a.' . $sortByField, $direction);
             } else {
                 throw new \RuntimeException("Invalid sort options specified: field - {$sortByField}, direction - {$direction}");
@@ -616,7 +616,7 @@ abstract class AbstractTreeRepository extends NestedTreeRepository
                     ->set('a.' . $rightField, $parentRightValue + 1);
                 $entityIdentifiers = $meta->getIdentifierValues($node);
                 foreach ($entityIdentifiers as $field => $value) {
-                    if (strlen($value)) {
+                    if (\strlen($value)) {
                         $qb->where('a.' . $field . ' = ' . $value);
                     }
                 }
@@ -760,7 +760,7 @@ abstract class AbstractTreeRepository extends NestedTreeRepository
 //         if (!$sortByField) {
 //             $qb->orderBy('a.' . $config['left'], 'ASC');
 //         } else {
-//             if ($meta->hasField($sortByField) && in_array(strtolower($direction), array('asc', 'desc'))) {
+//             if ($meta->hasField($sortByField) && \in_array(strtolower($direction), array('asc', 'desc'))) {
 //                 $qb->orderBy('a.' . $sortByField, $direction);
 //             } else {
 //                 throw new \RuntimeException("Invalid sort options specified: field - {$sortByField}, direction - {$direction}");
@@ -803,7 +803,7 @@ abstract class AbstractTreeRepository extends NestedTreeRepository
         $q = $this->_em->createQuery($dql);
         $q->setMaxResults(1);
         $result = $q->getResult(Query::HYDRATE_OBJECT);
-        $previousSiblingNode = count($result) ? array_shift($result) : null;
+        $previousSiblingNode = \count($result) ? array_shift($result) : null;
 
         if (!$previousSiblingNode) {
             return false;
@@ -828,7 +828,7 @@ abstract class AbstractTreeRepository extends NestedTreeRepository
             $this->_em->getConnection()->rollback();
             throw $e;
         }
-        if (is_int($number)) {
+        if (\is_int($number)) {
             $number--;
         }
         if ($number) {
@@ -871,7 +871,7 @@ abstract class AbstractTreeRepository extends NestedTreeRepository
         $q = $this->_em->createQuery($dql);
         $q->setMaxResults(1);
         $result = $q->getResult(Query::HYDRATE_OBJECT);
-        $nextSiblingNode = count($result) ? array_shift($result) : null;
+        $nextSiblingNode = \count($result) ? array_shift($result) : null;
 
 //         if (!$nextSiblingNode) {
 //             return false;
@@ -897,7 +897,7 @@ abstract class AbstractTreeRepository extends NestedTreeRepository
             $this->_em->getConnection()->rollback();
             throw $e;
         }
-        if (is_int($number)) {
+        if (\is_int($number)) {
             $number--;
         }
         if ($number) {
@@ -951,7 +951,7 @@ abstract class AbstractTreeRepository extends NestedTreeRepository
     public function findChildsRouteByParentId($id, $locale, $type = 'array')
     {
         $routesnames = null;
-        if (!empty($id)){
+        if (!empty($id)) {
             $node   = $this->findNodeOr404($id, $locale,'object');
             $query  = $this->childrenQuery($node);
             $childs = $query->getResult();
@@ -959,14 +959,14 @@ abstract class AbstractTreeRepository extends NestedTreeRepository
             if ( method_exists($node, 'getPage') && ($node->getPage() InstanceOf \PiApp\AdminBundle\Entity\Page) ) {
                 $routesnames[]     = $node->getPage()->getRouteName();
             }
-            if (\is_array($childs)){
-                foreach($childs as $key => $child){
-                    if (method_exists($child, 'getPage')  && ($child->getPage() instanceof \PiApp\AdminBundle\Entity\Page) ){
+            if (\is_array($childs)) {
+                foreach($childs as $key => $child) {
+                    if (method_exists($child, 'getPage')  && ($child->getPage() instanceof \PiApp\AdminBundle\Entity\Page) ) {
                         $routesnames[]  = $child->getPage()->getRouteName();
                     }
                 }
             }
-            if ($type == 'string'){
+            if ($type == 'string') {
                 if (!is_null($routesnames))
                     $routesnames = implode(':', $routesnames);
             }

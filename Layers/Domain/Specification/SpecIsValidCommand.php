@@ -22,8 +22,8 @@ class SpecIsValidCommand extends AbstractSpecification
      */
     public function isSatisfiedBy(stdClass $object): bool
     {
-        return property_exists($object, 'errors') && (
-                null === $object->errors || count($object->errors) == 0
+        return \property_exists($object, 'errors') && (
+                null === $object->errors || \count($object->errors) == 0
             );
     }
 }

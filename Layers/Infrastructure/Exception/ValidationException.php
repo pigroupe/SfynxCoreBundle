@@ -48,7 +48,7 @@ class ValidationException extends Exception
      */
     public static function unexpectedConstraint(Constraint $constraint, string $expectedClass): ValidationException
     {
-        $message = sprintf('Expected constraint of type "%s", "%s" given', $expectedClass, get_class($constraint));
+        $message = sprintf('Expected constraint of type "%s", "%s" given', $expectedClass, \get_class($constraint));
         return new static($message);
     }
 

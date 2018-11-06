@@ -114,7 +114,7 @@ abstract class AbstractSelectAjaxController extends AbstractAjaxController
         $query->groupBy('a.id');
         // autocompletion
         $array_params = [];
-        if (\is_array($keywords) && (count($keywords) >= 1)) {
+        if (\is_array($keywords) && (\count($keywords) >= 1)) {
             $i = 0;
             foreach ($keywords as $info) {
                 $is_trans = false;

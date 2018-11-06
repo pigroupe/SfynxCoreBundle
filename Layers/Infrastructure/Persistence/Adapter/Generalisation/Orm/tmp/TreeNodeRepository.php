@@ -145,7 +145,7 @@ class TreeNodeRepository extends EntityRepository
         if (!$sortByField) {
             $qb->orderBy('node.' . $config['left'], 'ASC');
         } else {
-            if ($meta->hasField($sortByField) && in_array(strtolower($direction), array('asc', 'desc'))) {
+            if ($meta->hasField($sortByField) && \in_array(strtolower($direction), array('asc', 'desc'))) {
                 $qb->orderBy('node.' . $sortByField, $direction);
             } else {
                 throw new \RuntimeException("Invalid sort options specified: field - {$sortByField}, direction - {$direction}");
@@ -176,7 +176,7 @@ class TreeNodeRepository extends EntityRepository
         if (!$sortByField) {
             $qb->orderBy('node.' . $config['left'], 'ASC');
         } else {
-            if ($meta->hasField($sortByField) && in_array(strtolower($direction), array('asc', 'desc'))) {
+            if ($meta->hasField($sortByField) && \in_array(strtolower($direction), array('asc', 'desc'))) {
                 $qb->orderBy('node.' . $sortByField, $direction);
             } else {
                 throw new \RuntimeException("Invalid sort options specified: field - {$sortByField}, direction - {$direction}");
@@ -219,7 +219,7 @@ class TreeNodeRepository extends EntityRepository
         $q = $this->_em->createQuery($dql);
         $q->setMaxResults(1);
         $result = $q->getResult(Query::HYDRATE_OBJECT);
-        $nextSiblingNode = count($result) ? array_shift($result) : null;
+        $nextSiblingNode = \count($result) ? array_shift($result) : null;
         
         if (!$nextSiblingNode) {
             return false;
@@ -245,7 +245,7 @@ class TreeNodeRepository extends EntityRepository
             $this->_em->getConnection()->rollback();
             throw $e;
         }
-        if (is_int($number)) {
+        if (\is_int($number)) {
             $number--;
         }
         if ($number) {
@@ -288,7 +288,7 @@ class TreeNodeRepository extends EntityRepository
         $q = $this->_em->createQuery($dql);
         $q->setMaxResults(1);
         $result = $q->getResult(Query::HYDRATE_OBJECT);
-        $previousSiblingNode = count($result) ? array_shift($result) : null;
+        $previousSiblingNode = \count($result) ? array_shift($result) : null;
         
         if (!$previousSiblingNode) {
             return false;
@@ -313,7 +313,7 @@ class TreeNodeRepository extends EntityRepository
             $this->_em->getConnection()->rollback();
             throw $e;
         }
-        if (is_int($number)) {
+        if (\is_int($number)) {
             $number--;
         }
         if ($number) {
@@ -458,7 +458,7 @@ class TreeNodeRepository extends EntityRepository
         $dql .= " AND p.{$identifier} IS NULL";
         $q = $this->_em->createQuery($dql);
         $nodes = $q->getArrayResult();
-        if (count($nodes)) {
+        if (\count($nodes)) {
             foreach ($nodes as $node) {
                 $errors[] = "node [{$node[$identifier]}] has missing parent";
             }
@@ -470,7 +470,7 @@ class TreeNodeRepository extends EntityRepository
         $q = $this->_em->createQuery($dql);
         $q->setMaxResults(1);
         $result = $q->getResult(Query::HYDRATE_OBJECT);
-        $node = count($result) ? array_shift($result) : null; 
+        $node = \count($result) ? array_shift($result) : null;
         
         if ($node) {
             $id = $meta->getReflectionProperty($identifier)->getValue($node);
@@ -665,7 +665,7 @@ class TreeNodeRepository extends EntityRepository
                     ->set('node.' . $rightField, $parentRightValue + 1);
                 $entityIdentifiers = $meta->getIdentifierValues($node);
                 foreach ($entityIdentifiers as $field => $value) {
-                    if (strlen($value)) {
+                    if (\strlen($value)) {
                         $qb->where('node.' . $field . ' = ' . $value);
                     }
                 }

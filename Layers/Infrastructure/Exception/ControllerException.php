@@ -23,7 +23,7 @@ class ControllerException extends Exception
      * @static
      */
     public static function NotFoundObject($object) {
-    	return new static(sprintf('Unable to find %s.', get_class($object)));
+    	return new static(sprintf('Unable to find %s.', \get_class($object)));
     }
 
     /**

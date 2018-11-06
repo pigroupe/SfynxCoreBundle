@@ -102,7 +102,7 @@ trait TraitTranslation
 
             if ($data
                     && \is_array($data)
-                    && count($data)
+                    && \count($data)
             ) {
                 foreach ($data as $row) {
                     $result[$row['locale']][$row['field']][] = $row['content'];
@@ -135,7 +135,7 @@ trait TraitTranslation
 
             if ($data
                     && \is_array($data)
-                    && count($data)
+                    && \count($data)
              ) {
                 foreach ($data as $row) {
                     $result[$row['locale']][$row['field']] = $row['content'];
@@ -151,13 +151,13 @@ trait TraitTranslation
      */
     public function translate($entity, $field, $locale, $value)
     {
-        $meta = $this->_em->getClassMetadata(get_class($entity));
+        $meta = $this->_em->getClassMetadata(\get_class($entity));
         $listener = new \Gedmo\Translatable\TranslatableListener; //$this->getTranslatableListener();
         $config = $listener->getConfiguration($this->_em, $meta->name);
-        if (!isset($config['fields']) || !in_array($field, $config['fields'])) {
+        if (!isset($config['fields']) || !\in_array($field, $config['fields'])) {
             throw new \Gedmo\Exception\InvalidArgumentException("Entity: {$meta->name} does not translate field - {$field}");
         }
-        if (in_array($locale, array($listener->getDefaultLocale(), $listener->getTranslatableLocale($entity, $meta)))) {
+        if (\in_array($locale, array($listener->getDefaultLocale(), $listener->getTranslatableLocale($entity, $meta)))) {
             $meta->getReflectionProperty($field)->setValue($entity, $value);
             $this->persist($entity, false);
         } else {
@@ -185,11 +185,11 @@ trait TraitTranslation
         }
         return $this;
 
-//         $meta         = $this->_em->getClassMetadata(get_class($entity));
+//         $meta         = $this->_em->getClassMetadata(\get_class($entity));
 //         $listener     = $this->getTranslatableListener();
 //         $config     = $listener->getConfiguration($this->_em, $meta->name);
 
-//         if (!isset($config['fields']) || !in_array($field, $config['fields'])) {
+//         if (!isset($config['fields']) || !\in_array($field, $config['fields'])) {
 //             throw new \Gedmo\Exception\InvalidArgumentException("Entity: {$meta->name} does not translate field - {$field}");
 //         }
 
@@ -223,7 +223,7 @@ trait TraitTranslation
 //             $q->setParameters(compact('class', 'field', 'value'));
 //             $q->setMaxResults(1);
 //             $result = $q->getArrayResult();
-//             $id = count($result) ? $result[0]['foreignKey'] : null;
+//             $id = \count($result) ? $result[0]['foreignKey'] : null;
 
 //             if ($id) {
 //                 $entity = $this->_em->find($class, $id);
@@ -248,7 +248,7 @@ trait TraitTranslation
 
         $result = array();
         $data   = $query->getQuery()->getArrayResult();
-        if ($data && \is_array($data) && count($data)) {
+        if ($data && \is_array($data) && \count($data)) {
             foreach ($data as $row) {
                 if (isset($row[$field]) && !empty($row[$field])) {
                     $result[ $row[$field] ] = $row[$field];
@@ -328,7 +328,7 @@ trait TraitTranslation
             ->orderBy('a.position', $ORDER_Position);
         }
         foreach ($fields as $key => $value) {
-            if (is_int($value)) {
+            if (\is_int($value)) {
                 $query->andWhere("a.{$key} = $value");
             } else {
                 $query->andWhere("a.{$key} LIKE '{$value}'");
@@ -526,7 +526,7 @@ trait TraitTranslation
                 $query->setParameter('field', $fields['field_result']);
                 $query->setMaxResults(1);
                 $entities = $query->getResult();
-                if (!(null === $entities) && (count($entities)>=1) ) {
+                if (!(null === $entities) && (\count($entities)>=1) ) {
                     return current($entities);
                 }
                 return null;
@@ -545,7 +545,7 @@ trait TraitTranslation
         //         $result = $this->findTranslationsByQuery($locale, $query, $result, $INNER_JOIN);
 
 
-        //         print_r(count($result));exit;
+        //         print_r(\count($result));exit;
 
         //         return current($result);
     }
