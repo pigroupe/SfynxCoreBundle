@@ -1,5 +1,5 @@
 <?php
-namespace Sfynx\DddBundle\Layer\Domain\ValueObject;
+namespace Sfynx\CoreBundle\Layers\Domain\ValueObject;
 
 use Sfynx\CoreBundle\Layers\Domain\ValueObject\Generalisation\AbstractVO;
 use Sfynx\CoreBundle\Layers\Infrastructure\Exception\DomainException;
@@ -9,7 +9,7 @@ use JMS\Serializer\Annotation\Since;
 /**
  * Abstract Class AbstractVO
  *
- * @category Sfynx\DddBundle\Layer
+ * @category Sfynx\CoreBundle\Layers
  * @package Domain
  * @subpackage ValueObject
  * @abstract
@@ -39,7 +39,17 @@ class IdVO extends AbstractVO
         $this->id = \strval($uuid_str);
     }
 
-
+    /**
+     * Return all properties of the class in array.
+     * @return array
+     */
+    public function __toArray(): array
+    {
+        return [
+            'id' => $this->id,
+        ];
+    }
+    
     /**
      * @param $id
      */

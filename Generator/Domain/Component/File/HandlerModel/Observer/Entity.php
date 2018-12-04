@@ -18,6 +18,9 @@ use Sfynx\CoreBundle\Generator\Domain\Report\Generalisation\AbstractGenerator;
  */
 class Entity extends AbstractHandlerModel
 {
+    const ENTITY_TYPE_DEFAULT = 'default';
+    const ENTITY_TYPE_VO = 'valueObjectAggregator';
+
     /** @var array */
     protected static $defaultMethod = [MethodModel\Getter::class];
     /** @var array */
@@ -53,30 +56,47 @@ class Entity extends AbstractHandlerModel
      */
     protected function createBody(SplSubject $subject)
     {
-        $fieldAll = [];
-        $fieldsEntityOption = '';
+        $this->fieldAll = [];
+        $entityName = '';
         $templater = $subject->event->template;
+        $entityType = !isset($templater->getTargetOptions()['entityType']) ?
+            self::ENTITY_TYPE_DEFAULT : $templater->getTargetOptions()['entityType'];
 
-        if ($templater->has('targetOptions') && !empty($templater->getTargetOptions())) {
-            if (!empty($templater->getTargetOptions()['mapping'])) {
-                $fieldsEntityOption = $templater->getTargetOptions()['mapping'];
-            }
+        if (!$templater->has('targetOptions') || empty($templater->getTargetOptions())) {
+            throw new \LogicException('targetOptions option is not define !');
+        }
+        if (!empty($templater->getTargetOptions()['mapping'])) {
+            $entityName = $templater->getTargetOptions()['mapping'];
         }
 
-        foreach ($templater->getTargetCommandFields() as $field) {
+        if ($entityType == self::ENTITY_TYPE_DEFAULT) {
+            $fields = $templater->getTargetCommandFields();
+        } elseif ($entityType == self::ENTITY_TYPE_VO) {
+            $fields = AbstractGenerator::transform($templater->getTargetEntities()[$entityName]['x-fields'], false);
+        } else {
+            throw new \LogicException(sprintf(
+                'method option is not define correctly from following values ["%s", "%s"] !',
+                self::ENTITY_TYPE_DEFAULT, self::ENTITY_TYPE_VO
+            ));
+        }
+
+        foreach ($fields as $fieldName => $field) {
+            $field->name = !isset($field->name) ? $fieldName : $field->name;
+            $field->name = isset($field->prefix) ? $field->prefix : $field->name;
+
             $propertyFieldName = \lcfirst($field->name);
             $typeFieldName =  ClassHandler::getType($field->type, $field, true);
 
             if (($field->type == ClassHandler::TYPE_ENTITY
-                || $field->type == ClassHandler::TYPE_ARRAY)
+                    || $field->type == ClassHandler::TYPE_ARRAY)
                 && \property_exists($field, 'mapping')
                 && \property_exists($field->mapping, 'relationship')
-                && (empty($fieldsEntityOption) || $field->entityName == $fieldsEntityOption)
+                && (empty($entityName) || ($entityType == self::ENTITY_TYPE_DEFAULT && $field->entityName == $entityName))
             ) {
-                $fieldAll[] = $field;
                 $this->createRelationshipMethods($subject, $field, $typeFieldName, $propertyFieldName);
-            } elseif(empty($fieldsEntityOption) || $field->entityName == $fieldsEntityOption) {
-                $fieldAll[] = $field;
+            } elseif(($entityType == self::ENTITY_TYPE_VO)
+                || (empty($entityName) || $field->entityName == $entityName)
+            ) {
                 $this->createDefaultMethods($subject, $field, $typeFieldName, $propertyFieldName);
             }
         }
@@ -85,14 +105,16 @@ class Entity extends AbstractHandlerModel
         if (!empty($this->parameters['performMethods'])) {
             $performMethods = $this->parameters['performMethods'];
         }
-        $performMethods = array_reverse($performMethods);
+
+        $performMethods = \array_reverse($performMethods);
         foreach ($performMethods as $method) {
             $method::handle(
                 $subject->event->namespace,
                 $subject->event->class,
                 $subject->event->index,
-                $fieldAll,
-                array_merge(['toEntity' => true], $this->parameters)
+                $this->fieldAll,
+                \array_merge(['toEntity' => true, 'templater' => $templater], $this->parameters),
+                $entityType
             );
         }
     }
@@ -108,6 +130,7 @@ class Entity extends AbstractHandlerModel
      */
     protected function createDefaultMethods(SplSubject $subject, stdClass $field, string $typeFieldName, string $propertyFieldName): void
     {
+        $this->fieldAll[] = $field;
         foreach (self::$defaultMethod as $method) {
             $method::handle(
                 $subject->event->namespace,
@@ -131,6 +154,7 @@ class Entity extends AbstractHandlerModel
      */
     protected function createRelationshipMethods(SplSubject $subject, stdClass $field, string $typeFieldName, string $propertyFieldName): void
     {
+        $this->fieldAll[] = $field;
         $relationship = $field->mapping->relationship;
         $methods = self::$relationshipMethods[$relationship];
 

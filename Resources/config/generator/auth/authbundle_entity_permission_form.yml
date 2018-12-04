@@ -1,3 +1,6 @@
+imports:
+    - { resource: widgets/permission_mapping.yml }
+
 default:
     namespace: Sfynx\AuthBundle
     cqrs: Permission\Command
@@ -170,7 +173,17 @@ default:
                     extends: 'Sfynx\CoreBundle\Layers\Domain\ValueObject\Generalisation\AbstractVO'
                     options:
                         models:
-                          - { class: 'Sfynx\CoreBundle\Generator\Domain\Component\File\HandlerModel\Observer\ValueObject', parameters: []}
+                          0:
+                            class: 'Sfynx\CoreBundle\Generator\Domain\Component\File\HandlerModel\Observer\ValueObject'
+                            parameters:
+                              mapping: 'PermissionVO'
+                              performMethods:
+                                - 'Sfynx\CoreBundle\Generator\Domain\Component\File\MethodModel\Construct'
+                                - 'Sfynx\CoreBundle\Generator\Domain\Component\File\MethodModel\CreateFromNative'
+                                - 'Sfynx\CoreBundle\Generator\Domain\Component\File\MethodModel\ToString'
+                                - 'Sfynx\CoreBundle\Generator\Domain\Component\File\MethodModel\ToArray'
+                                - 'Sfynx\CoreBundle\Generator\Domain\Component\File\MethodModel\Serialize'
+                                - 'Sfynx\CoreBundle\Generator\Domain\Component\File\MethodModel\Unserialize'
             #
             # MANAGER CLASSES
             #
@@ -328,40 +341,3 @@ default:
                         implements: ['Domain\Repository\Query\PermissionQueryRepositoryInterface']
                         uses: ~
                         traits: ~
-    mapping:
-        x-providers: [orm, couchdb]
-        x-entities:
-          Permission:
-            x-fields:
-              id:
-                name: entityId
-                type: valueObject
-                voName: IdVO
-                primaryKey: true
-                mapping:
-                  targetEntity: Sfynx\AuthBundle\Domain\Entity\Permission
-#                  formData:
-#                      manager: 'Sfynx\AuthBundle\Domain\Service\Permission\Manager\EntityManager as PermissionManager'
-              permission:
-                type: valueObject
-                voName: PermissionVO
-        x-valueObjects:
-          IdVO:
-            type: Sfynx\CoreBundle\Layers\Domain\ValueObject\IdVO
-            x-fields:
-              id:
-                type: id
-          PermissionVO:
-            type: Domain\ValueObject\PermissionVO
-            x-fields:
-              name:
-                type: string
-                required: true
-              enabled:
-                type: boolean
-                defaultValue: true
-                required: false
-              comment:
-                type: textarea
-                required: false
-                defaultValue: 'put yout comment'

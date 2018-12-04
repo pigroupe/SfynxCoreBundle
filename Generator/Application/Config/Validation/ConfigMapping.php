@@ -94,9 +94,11 @@ class ConfigMapping implements ValidationInterface
      * @param array|null $entities
      * @param array|null $vo
      * @param array $tree
+     * @param string $nameEntityOverload
+     * @param string $prefix
      * @return array
      */
-    protected function buildTree(array $entities = null, array $vo = null, array $tree = [], string $nameEntityOverload = ''): array
+    protected function buildTree(array $entities = null, array $vo = null, array $tree = [], string $nameEntityOverload = '', string $prefix = ''): array
     {
         foreach ($entities as $nameEntity => $data) {
             foreach ($data['x-fields'] as $nameField => $field) {
@@ -106,7 +108,11 @@ class ConfigMapping implements ValidationInterface
                 }
 
                 if (\strtolower($field['type']) == 'valueobject') {
-                    $tree[$nameEntity][$nameField] = $this->buildTree([$vo[$field['voName']]], $vo, [], $field['entityName']);
+                    if (!empty($field['prefix'])) {
+                        $prefix = $field['prefix'];
+                    }
+
+                    $tree[$nameEntity][$nameField] = $this->buildTree([$vo[$field['voName']]], $vo, [], $field['entityName'], $prefix);
 
                     foreach($field as $j => $p) {
                         if (\in_array($j, self::$includeKeys)) {
@@ -120,20 +126,20 @@ class ConfigMapping implements ValidationInterface
                     }
 
                     if (isset($field['name'])) {
-                        $this->addCommandFields($tree[$nameEntity][$nameField], $field['name'], '');
+                        $this->addCommandFields($tree[$nameEntity][$nameField], $field['name'], '', $prefix);
                     } else {
-                        $this->addCommandFields($tree[$nameEntity][$nameField], $nameEntity, $nameField);
+                        $this->addCommandFields($tree[$nameEntity][$nameField], $nameEntity, $nameField, $prefix);
                     }
 
                     unset($field['type']); unset($field['voName']);
-                    $tree[$nameEntity][$nameField] = array_merge($field, $tree[$nameEntity][$nameField]);
+                    $tree[$nameEntity][$nameField] = \array_merge($field, $tree[$nameEntity][$nameField]);
                 } else {
                     if (!isset($field['required'])) {
                         $field['required'] = false;
                     }
                     $tree[$nameEntity][$nameField] = $field;
 
-                    $this->addCommandFields([$nameField => $field], $nameEntity);
+                    $this->addCommandFields([$nameField => $field], $nameEntity, '', $prefix);
                 }
             }
         }
@@ -151,7 +157,7 @@ class ConfigMapping implements ValidationInterface
      * @param string $suffix
      * @return bool
      */
-    protected function addCommandFields(array $fields, string $name, string $suffix = ''): bool
+    protected function addCommandFields(array $fields, string $name, string $suffix = '', string $prefix = ''): bool
     {
         if (\is_numeric($name)) {
             return false;
@@ -164,6 +170,9 @@ class ConfigMapping implements ValidationInterface
             }
 
             if (isset($field['name'])) {
+                if (!empty($prefix)) {
+                    $field['name'] = $prefix . \ucfirst($field['name']);
+                }
                 $this->commandFields[] = $field;
             } elseif (isset($field['type'])) {
                 \str_replace(\ucfirst($attribut), '', $name_, $count);

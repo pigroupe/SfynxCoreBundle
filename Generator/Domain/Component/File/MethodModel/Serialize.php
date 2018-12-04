@@ -24,7 +24,8 @@ class Serialize
      * @param PhpNamespace $namespace
      * @param ClassType $class
      * @param array|null $index
-     * @param array|null $fields
+     * @param array|null $options
+     * @param string|null $method
      * @static
      * @return void
      */
@@ -33,7 +34,8 @@ class Serialize
         ClassType $class,
         ?array $index = [],
         ?array $fields = [],
-        ?array $options = null
+        ?array $options = null,
+        string $method = ''
     ): void {
         $fieldBody = 'return \serialize($this->__toArray());';
 

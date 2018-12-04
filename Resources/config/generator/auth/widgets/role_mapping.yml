@@ -1,0 +1,91 @@
+default:
+    mapping:
+        x-providers: [orm, couchdb]
+        x-entities:
+          Role:
+            x-fields:
+              id:
+                name: entityId
+                type: valueObject
+                voName: IdVO
+                primaryKey: true
+#                mapping:
+#                  targetEntity: 'Sfynx\AuthBundle\Domain\Entity\Role'
+#                  formData:
+#                      manager: 'Sfynx\AuthBundle\Domain\Service\Role\Manager\EntityManager as RoleManager'
+              layout:
+                type: valueObject
+                voName: IdVO
+                foreignKey: true
+                required: true
+                choice_label: Layout
+                mapping:
+                  relationship: ManyToOne
+                  targetEntity: 'Sfynx\AuthBundle\Domain\Entity\Layout'
+                  setter: true
+                  formData:
+                      manager: 'Sfynx\AuthBundle\Domain\Service\Layout\Manager\EntityManager as LayoutManager'
+                      queryFunction: { class: 'FindLayoutQueryTransformer', args: ['true', 'false', 1299, {tata: 'tataValue', tutu: 'tutuValue'}] }
+              accessControl:
+                type: valueObject
+                voName: IdVO
+                foreignKey: true
+                required: true
+                choice_label: Ressource
+                mapping:
+                  relationship: ManyToOne
+                  targetEntity: 'Sfynx\AuthBundle\Domain\Entity\Ressource'
+                  formData:
+                      manager: 'Sfynx\AuthBundle\Domain\Service\Ressource\Manager\EntityManager as RessourceManager'
+                      queryFunction: { class: 'FindRessourceQueryTransformer', args: ['true', 'false', 1299, {tata: 'tataValue', tutu: 'tutuValue'}] }
+              role:
+                type: valueObject
+                voName: RoleVO
+        x-valueObjects:
+          IdVO:
+            type: 'Sfynx\CoreBundle\Layers\Domain\ValueObject\IdVO'
+            create: false
+            x-fields:
+              id:
+                type: id
+          RoleVO:
+            type: 'Domain\ValueObject\RoleVO'
+            create: true
+            x-fields:
+              name:
+                type: string
+                required: true
+              label:
+                type: string
+                required: true
+              enabled:
+                type: boolean
+                defaultValue: true
+#                required: false
+              comment:
+                type: textarea
+                required: false
+              heritage:
+                type: array
+                form:
+                  type: array
+                  serviceType: sfynx_security_roles
+                required: true
+                multiple: true
+                expanded: false
+              routeLogin:
+                type: string
+                form:
+                  type: array
+                  serviceType: sfynx_routes
+                required: false
+                multiple: false
+                expanded: false
+              routeLogout:
+                type: string
+                form:
+                  type: array
+                  serviceType: sfynx_routes
+                required: false
+                multiple: false
+                expanded: false

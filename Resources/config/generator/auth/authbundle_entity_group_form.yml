@@ -1,3 +1,6 @@
+imports:
+    - { resource: widgets/group_mapping.yml }
+
 default:
     namespace: Sfynx\AuthBundle
     cqrs: Group\Command
@@ -172,7 +175,17 @@ default:
                     extends: 'Sfynx\CoreBundle\Layers\Domain\ValueObject\Generalisation\AbstractVO'
                     options:
                         models:
-                          - { class: 'Sfynx\CoreBundle\Generator\Domain\Component\File\HandlerModel\Observer\ValueObject', parameters: []}
+                          0:
+                            class: 'Sfynx\CoreBundle\Generator\Domain\Component\File\HandlerModel\Observer\ValueObject'
+                            parameters:
+                              mapping: 'GroupVO'
+                              performMethods:
+                                - 'Sfynx\CoreBundle\Generator\Domain\Component\File\MethodModel\Construct'
+                                - 'Sfynx\CoreBundle\Generator\Domain\Component\File\MethodModel\CreateFromNative'
+                                - 'Sfynx\CoreBundle\Generator\Domain\Component\File\MethodModel\ToString'
+                                - 'Sfynx\CoreBundle\Generator\Domain\Component\File\MethodModel\ToArray'
+                                - 'Sfynx\CoreBundle\Generator\Domain\Component\File\MethodModel\Serialize'
+                                - 'Sfynx\CoreBundle\Generator\Domain\Component\File\MethodModel\Unserialize'
             #
             # MANAGER CLASSES
             #
@@ -330,52 +343,3 @@ default:
                         implements: ['Domain\Repository\Query\GroupQueryRepositoryInterface']
                         uses: ~
                         traits: ~
-    mapping:
-        x-providers: [orm, couchdb]
-        x-entities:
-          Group:
-            x-fields:
-              id:
-                name: entityId
-                type: valueObject
-                voName: IdVO
-                primaryKey: true
-                mapping:
-                  targetEntity: Sfynx\AuthBundle\Domain\Entity\Group
-#                  formData:
-#                      manager: 'Sfynx\AuthBundle\Domain\Service\Group\Manager\EntityManager as GroupManager'
-              group:
-                type: valueObject
-                voName: GroupVO
-        x-valueObjects:
-          IdVO:
-            type: Sfynx\CoreBundle\Layers\Domain\ValueObject\IdVO
-            x-fields:
-              id:
-                type: id
-          GroupVO:
-            type: Domain\ValueObject\GroupVO
-            x-fields:
-              name:
-                type: string
-                required: true
-              enabled:
-                type: boolean
-                defaultValue: true
-#                required: false
-              roles:
-                type: array
-                form:
-                  type: array
-                  serviceType: sfynx_security_roles
-                required: true
-                multiple: true
-                expanded: false
-              permissions:
-                type: array
-                form:
-                  type: array
-                  serviceType: sfynx_security_permissions
-                required: true
-                multiple: true
-                expanded: false

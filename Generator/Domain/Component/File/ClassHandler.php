@@ -35,6 +35,7 @@ class ClassHandler implements SplSubject
 
     /** @var string */
     const TYPE_ENTITY = 'id';
+    const TYPE_VO = 'valueObject';
     const TYPE_UUID = 'uuid';
     const TYPE_INTEGER = 'integer';
     const TYPE_NUMBER = 'number';
@@ -391,8 +392,8 @@ class ClassHandler implements SplSubject
 
                 if (\property_exists($data, 'construct') && !empty($data->construct)
                     && \property_exists($data->construct, 'create') && ($data->construct->create == true)
-                    && \property_exists($data->construct, 'body')
-                    && !empty($data->construct->body)
+//                    && \property_exists($data->construct, 'body')
+//                    && !empty($data->construct->body)
                 ) {
                     if (\in_array($info['type'], ['interface', 'class'])) {
                         self::setArgClassResult($namespace, $argument, $index, $info['value'], $info['basename'], $addConstruct);
@@ -678,6 +679,7 @@ class ClassHandler implements SplSubject
     public static function setArgs(PhpNamespace $namespace, array $arguments, ?array $index = [], bool $addConstruct = true, string $infoKey = 'argument', int $test = 0): string
     {
         $result = [];
+
         if (!empty($arguments)) {
             foreach ($arguments as $argument) {
                 $info = self::getArgResult($namespace, $argument, $index, $addConstruct, $test);
@@ -880,6 +882,9 @@ class ClassHandler implements SplSubject
         }
 
         switch ($type) {
+            case self::TYPE_VO:
+                $newType = 'Sfynx\CoreBundle\Layers\Domain\ValueObject\Generalisation\Interfaces\ValueObjectInterface';
+                break;
             case self::TYPE_ENTITY:
                 $newType = 'int';
                 break;

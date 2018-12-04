@@ -86,8 +86,14 @@ abstract class AbstractTemplater implements TemplaterInterface
                 $this->$attributName = $this->widget->getConfig()->get($attribut);
             } elseif ($this->widget->getConfig()->has($source)) {
                 $this->$attributName = $this->widget->getConfig()->get($source);
-                if (\array_key_exists($attribut, $this->widget->getConfig()->get($source))) {
-                    $this->$attributName = $this->widget->getConfig()->get($source)[$attribut];
+
+                if (\array_key_exists($attribut, $this->$attributName)) {
+                    $this->$attributName = $this->$attributName[$attribut];
+                } elseif ('all' == $attribut) {
+                    foreach ($this->$attributName as $k => $v) {
+                        $attributName = "target" . ucfirst($k);
+                        $this->$attributName = $v;
+                    }
                 }
             }
         }

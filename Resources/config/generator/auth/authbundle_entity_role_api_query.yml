@@ -1,3 +1,6 @@
+imports:
+    - { resource: widgets/role_mapping.yml }
+
 default:
     namespace: Sfynx\AuthBundle
     cqrs: Role\Query
@@ -60,7 +63,7 @@ default:
                         design: 'observer'
                         class: Sfynx\CoreBundle\Layers\Application\Common\Handler\WorkflowHandler
                         calls:
-                            - [ attach, [ 'new OBRoleApiJson' ] ]
+                            - [ attach, [ 'new OBGetOneApiJson' ] ]
                             - [ attach, [ 'new OBCreateResponseJson' ] ]
                             - [ attach, [ 'new OBCreatedStatusResponseJson' ] ]
                     - responseHandlerResult:
@@ -138,7 +141,7 @@ default:
             #
             widget_entity_class:
                 - RoleEntity:
-                    create: true
+                    create: false
                     class: Domain\Entity\Role
                     options:
                         mapping: 'Role'
@@ -186,42 +189,6 @@ default:
                     create: true
                     class: Domain\Repository\Query\RoleQueryRepositoryInterface
                     type: interface
-                #
-                # ROLE JSON API
-                #
-                - RoleBookJsonApi:
-                    create: true
-                    class: Domain\Workflow\Observer\Role\Response\JsonApiBook\RoleBookJsonApi
-                    arguments: ~
-                    options:
-                        implements: ~
-                        uses: ~
-                        traits: ~
-                        methods:
-                          - name: 'transform'
-                            comments: ['{@inheritdoc}']
-                            arguments: ['Domain\Workflow\Observer\Role\Response\JsonApiBook\RoleBookJsonApi']
-                            visibility: 'public'
-                            returnType: 'void'
-                            body:
-                              - 'return [];'
-                - RoleBookJsonApiTransformer:
-                    create: true
-                    class: Domain\Workflow\Observer\Role\Response\JsonApiTransformer\RoleBookJsonApiTransformer
-                    arguments: ~
-                    extends: 'League\Fractal\TransformerAbstract'
-                    options:
-                        implements: ~
-                        uses: ~
-                        traits: ~
-                        methods:
-                          - name: 'transform'
-                            comments: ~
-                            arguments: ['Sfynx\AuthBundle\Domain\Workflow\Observer\Role\Response\JsonApiBook\RoleBookJsonApi']
-                            visibility: 'public'
-                            returnType: 'void'
-                            body:
-                              - 'return [];'
             #
             # OBSERVER CLASSES
             #
@@ -248,25 +215,24 @@ default:
                             returnType: 'bool'
                             body:
                               - 'try {'
-                              - "    $this->wfLastData->books = $this->manager->getQueryRepository('FindGetQueryTransformer', []);"
+                              - "    $this->wfLastData->entity = $this->manager->getQueryRepository('FindGetOneQueryTransformer', []);"
                               - '} catch (Exception $e) {'
                               - '    throw WorkflowException::noCreatedViewForm();'
                               - '}'
                               - 'return true;'
-                - OBRoleApiJson:
+                - OBGetOneApiJson:
                     create: true
-                    class: Domain\Workflow\Observer\Role\Response\Api\OBRoleApiJson
+                    class: Domain\Workflow\Observer\Role\Response\Api\Query\OBGetOneApiJson
                     arguments:
                       - 'Sfynx\CoreBundle\Layers\Domain\Service\Request\Generalisation\RequestInterface'
                       - 'RoleBookJsonApiTransformer'
                     extends: Sfynx\CoreBundle\Layers\Domain\Workflow\Observer\Generalisation\Response\Api\AbstractApiJson
                     options:
-                        implements: ~
                         uses:
                           - 'Sfynx\CoreBundle\Layers\Infrastructure\Exception\EntityException'
                           - 'Exception'
                           - 'Spatie\Fractalistic\Fractal'
-                        traits: ~
+                          - 'Spatie\Fractalistic\ArraySerializer'
                         methods:
                           - name: 'process'
                             comments: ['{@inheritdoc}']
@@ -274,14 +240,30 @@ default:
                             returnType: 'bool'
                             body:
                               - 'try {'
+                              - "    $item = ["
+                              - "       'status' => 'success',"
+                              - "       'results' => ["
+                              - "           'data' => $this->wfHandler->entity,"
+                              - "        ],"
+                              - "    ];"
+                              - "    "
+                              - "    if (!empty($this->wfHandler->errors)) {"
+                              - "       $item = ["
+                              - "           'status' => 'errors',"
+                              - "           'results' => $this->wfHandler->errors,"
+                              - "       ];"
+                              - "    }"
+                              - "    "
                               - "    $this->wfLastData->rows = Fractal::create()"
-                              - "               ->collection($this->wfHandler->books, new RoleBookJsonApiTransformer())"
-                              - "               ->serializeWith(new JsonApiSerializer())"
-                              - "               ->paginateWith(new IlluminatePaginatorAdapter($paginator))"
+                              - "               ->item($item)"
+                              - "               ->transformWith(function($body) {"
+                              - "                   -return $body;"
+                              - "               })"
+                              - "               ->serializeWith(new ArraySerializer())"
                               - "               ->toArray();"
                               - "               "
                               - '} catch (Exception $e) {'
-                              - '    throw EntityException::NotFoundEntity("Domain\Entity\Role");'
+                              - '    throw EntityException::NotFoundEntity(\get_class($this->wfHandler->entity));'
                               - '}'
                               - ''
                               - 'return true;'
@@ -328,104 +310,21 @@ default:
                 #
                 # RESSOURCE TRANSFORMER/QUERY BUILDER
                 #
-                - FindGetQueryBuilder:
+                - FindGetOneQueryBuilder:
                     create: true
-                    class: Infrastructure\Persistence\Adapter\Query\Orm\Role\QueryBuilder\FindGetQueryBuilder
+                    class: Infrastructure\Persistence\Adapter\Query\Orm\Role\QueryBuilder\FindGetOneQueryBuilder
                     arguments: ~
                     extends: Sfynx\CoreBundle\Layers\Infrastructure\Persistence\QueryBuilder\Generalisation\Orm\AbstractQueryBuilder
                     options:
                         uses: ['Doctrine\ORM\QueryBuilder']
                         models:
                           - { class: 'Sfynx\CoreBundle\Generator\Domain\Component\File\HandlerModel\Observer\QueryBuilder', parameters: ['bool $var1 = false', 'bool $var2 = true', 'int $var3 = 0', 'array $var4 = []'] }
-                - FindGetQueryTransformer:
+                - FindGetOneQueryTransformer:
                     create: true
-                    class: Infrastructure\Persistence\Adapter\Query\Orm\Role\QueryTransformer\FindGetQueryTransformer
+                    class: Infrastructure\Persistence\Adapter\Query\Orm\Role\QueryTransformer\FindGetOneQueryTransformer
                     arguments: ~
                     extends: Sfynx\CoreBundle\Layers\Infrastructure\Persistence\QueryBuilder\Generalisation\Orm\AbstractQueryBuilder
                     options:
-                        uses: ['Sfynx\AuthBundle\Infrastructure\Persistence\Adapter\Query\Orm\Role\QueryBuilder\FindGetQueryBuilder']
+                        uses: ['Sfynx\AuthBundle\Infrastructure\Persistence\Adapter\Query\Orm\Role\QueryBuilder\FindGetOneQueryBuilder']
                         models:
-                          - { class: 'Sfynx\CoreBundle\Generator\Domain\Component\File\HandlerModel\Observer\QueryTransformer', parameters: ['FindGetQueryBuilder', ['bool $var1 = false', 'bool $var2 = true', 'int $var3 = 0', 'array $var4 = []']]}
-
-    mapping:
-        x-providers: [orm, couchdb]
-        x-entities:
-          Role:
-            x-fields:
-              id:
-                name: entityId
-                type: valueObject
-                voName: IdVO
-                primaryKey: true
-                mapping:
-                  targetEntity: 'Sfynx\AuthBundle\Domain\Entity\Role'
-              layout:
-                type: valueObject
-                name: layout
-                voName: IdVO
-                foreignKey: true
-                required: true
-                choice_label: Layout
-                mapping:
-                  relationship: ManyToOne
-                  targetEntity: 'Sfynx\AuthBundle\Domain\Entity\Layout'
-                  setter: true
-              accessControl:
-                type: valueObject
-                name: accessControl
-                voName: IdVO
-                foreignKey: true
-                required: true
-                choice_label: Ressource
-                mapping:
-                  relationship: ManyToOne
-                  targetEntity: 'Sfynx\AuthBundle\Domain\Entity\Ressource'
-              role:
-                type: valueObject
-                voName: RoleVO
-        x-valueObjects:
-          IdVO:
-            type: 'Sfynx\CoreBundle\Layers\Domain\ValueObject\IdVO'
-            create: false
-            x-fields:
-              id:
-                type: id
-          RoleVO:
-            type: 'Domain\ValueObject\RoleVO'
-            create: true
-            x-fields:
-              name:
-                type: string
-                name: name
-                required: true
-              label:
-                type: string
-                name: label
-                required: true
-              enabled:
-                type: boolean
-                name: enabled
-                defaultValue: true
-#                required: false
-              comment:
-                type: textarea
-                name: comment
-                required: false
-              heritage:
-                type: array
-                name: heritage
-                required: true
-                multiple: true
-                expanded: false
-              routeLogin:
-                type: string
-                name: routeLogin
-                required: false
-                multiple: false
-                expanded: false
-              routeLogout:
-                type: string
-                name: routeLogout
-                required: false
-                multiple: false
-                expanded: false
+                          - { class: 'Sfynx\CoreBundle\Generator\Domain\Component\File\HandlerModel\Observer\QueryTransformer', parameters: ['FindGetOneQueryBuilder', ['bool $var1 = false', 'bool $var2 = true', 'int $var3 = 0', 'array $var4 = []']]}

@@ -86,8 +86,8 @@ default:
                 type: valueObject
                 voName: IdVO
                 primaryKey: true
-                mapping:
-                  targetEntity: 'MyContext\Domain\Entity\Movie'
+#                mapping:
+#                  targetEntity: 'MyContext\Domain\Entity\Movie'
 #                  formData:
 #                      manager: 'MyContext\Domain\Service\Entity\Movie\Manager\MovieManager'
               documents:

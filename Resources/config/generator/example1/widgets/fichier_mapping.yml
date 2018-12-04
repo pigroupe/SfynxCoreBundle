@@ -1,0 +1,35 @@
+default:
+    mapping:
+        x-providers: [orm, couchdb]
+        x-entities:
+          Fichier:
+            x-fields:
+              id:
+                name: entityId
+                type: valueObject
+                voName: IdVO
+                primaryKey: true
+#                mapping:
+#                  targetEntity: 'CoreContext\Domain\Entity\Fichier'
+              fichier:
+                prefix: fichier
+                type: valueObject
+                voName: FichierVO
+        x-valueObjects:
+          IdVO:
+            type: 'Sfynx\CoreBundle\Layers\Domain\ValueObject\IdVO'
+            x-fields:
+              id:
+                type: id
+          FichierVO:
+            type: 'Domain\ValueObject\FichierVO'
+            x-fields:
+              enabled:
+                name: enabled
+                type: boolean
+                required: true
+                defaultValue: true
+              nomFichier:
+                name: nomFichier
+                type: string
+                required: false

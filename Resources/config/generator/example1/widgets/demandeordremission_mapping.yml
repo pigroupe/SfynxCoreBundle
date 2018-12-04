@@ -1,0 +1,160 @@
+default:
+    mapping:
+        x-providers: [orm, couchdb]
+        x-entities:
+          DemandeOrdreMission:
+            x-fields:
+              id:
+                name: entityId
+                type: valueObject
+                voName: IdVO
+                primaryKey: true
+#                mapping:
+#                  targetEntity: 'CoreContext\Domain\Entity\DemandeOrdreMission'
+              soutenu:
+                type: valueObject
+                name: soutenu
+                voName: IdVO
+                foreignKey: true
+                required: true
+                choice_label: Utilisateur
+                mapping:
+                  relationship: ManyToOne
+                  targetEntity: 'CoreContext\Domain\Entity\Utilisateur'
+                  setter: true
+              destinataire:
+                type: valueObject
+                name: destinataire
+                voName: IdVO
+                foreignKey: true
+                required: true
+                choice_label: Destinataire
+                mapping:
+                  relationship: ManyToOne
+                  targetEntity: 'CoreContext\Domain\Entity\Administrateur'
+                  setter: true
+              piecesJustificatives:
+                name: piecesJustificatives
+                type: array
+                required: true
+                multiple: true
+                properties: ['nomFichier']
+                mapping:
+                  relationship: ManyToMany
+                  targetEntity: 'CoreContext\Domain\Entity\Fichier'
+                  formData:
+                      manager: 'CoreContext\Domain\Service\Fichier\Manager\EntityManager as FichierManager'
+                      queryFunction: { class: 'FindFichierQueryTransformer', args: ['true', 'false', 1299, {tata: 'tataValue', tutu: 'tutuValue'}] }
+              demandeordremission:
+                prefix: transport
+                type: valueObject
+                voName: DemandeOrdreMissionVO
+              demandePrestation:
+                prefix: demandePrestation
+                type: valueObject
+                voName: DemandePrestationVO
+              avanceFrais:
+                prefix: avanceFrais
+                type: valueObject
+                voName: AvanceFraisVO
+        x-valueObjects:
+          IdVO:
+            type: 'Sfynx\CoreBundle\Layers\Domain\ValueObject\IdVO'
+            x-fields:
+              id:
+                type: id
+          DemandeOrdreMissionVO:
+            type: 'Domain\ValueObject\DemandeOrdreMissionVO'
+            x-fields:
+              enabled:
+                name: enabled
+                type: boolean
+                required: true
+                defaultValue: true
+              object:
+                name: object
+                type: string
+                required: true
+              execution:
+                name: execution
+                type: string
+                required: true
+              remarque:
+                name: remarque
+                type: string
+                required: false
+          DemandePrestationVO:
+            type: 'Domain\ValueObject\DemandePrestationVO'
+            x-fields:
+              trajet:
+                name: trajet
+                type: array
+                form:
+                  type: array
+                required: true
+                multiple: true
+                properties: ['nomFichier']
+                mapping:
+                  relationship: ManyToMany
+                  targetEntity: 'CoreContext\Domain\Entity\Transport'
+                  formData:
+                      manager: 'CoreContext\Domain\Service\Transport\Manager\EntityManager as TransportManager'
+                      queryFunction: { class: 'FindTransportQueryTransformer', args: ['true', 'false', 1299, {tata: 'tataValue', tutu: 'tutuValue'}] }
+              transportsSecondaires:
+                name: transportsSecondaires
+                type: string
+                required: true
+              typeHotel:
+                name: typeHotel
+                type: string
+                required: true
+                multiple: false
+                expanded: false
+                form:
+                  type: array
+              typeRestauration:
+                name: typeRestauration
+                type: string
+                required: true
+                multiple: false
+                expanded: false
+                form:
+                  type: array
+          AvanceFraisVO:
+            type: 'Domain\ValueObject\AvanceFraisVO'
+            x-fields:
+              demandeAvance:
+                name: TranportCommun
+                type: boolean
+                required: true
+                defaultValue: false
+              TranportCommun:
+                name: TranportCommun
+                type: boolean
+                required: true
+                defaultValue: false
+              LocationVehicule:
+                name: LocationVehicule
+                type: boolean
+                required: true
+                defaultValue: false
+              Taxi:
+                name: Taxi
+                type: boolean
+                required: true
+                defaultValue: false
+              Peage:
+                name: Peage
+                type: boolean
+                required: true
+                defaultValue: false
+              Stationnement:
+                name: Stationnement
+                type: boolean
+                required: true
+                defaultValue: false
+              TaxesDiverses:
+                name: TaxesDiverses
+                type: boolean
+                required: true
+                defaultValue: false

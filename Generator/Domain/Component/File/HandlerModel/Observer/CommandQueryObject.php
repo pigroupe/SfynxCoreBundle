@@ -58,7 +58,7 @@ class CommandQueryObject extends AbstractHandlerModel
                 $subject->event->class,
                 $subject->event->index,
                 $fieldAll,
-                array_merge(['toEntity' => false], $this->parameters)
+                \array_merge(['toEntity' => false], $this->parameters)
             );
         }
     }
