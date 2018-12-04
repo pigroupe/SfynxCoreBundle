@@ -25,17 +25,20 @@ abstract class AbstractVO implements ValueObjectInterface
 
     /**
      * Build and return a new instance of child VO.
-     * @param \stdClass $arguments
+     * @param array $arguments
+     * @param array $excluded
      * @return ValueObjectInterface
      */
-    final public static function createFromNative(array $arguments): ValueObjectInterface
+    public static function createFromNative(array $arguments, array $excluded = []): self
     {
         $oVO = new static();
 
         foreach ((new \ReflectionObject($oVO))->getProperties() as $oProperty) {
-            $oProperty->setAccessible(true);
-            $value = isset($arguments[$oProperty->getName()]) ? $arguments[$oProperty->getName()] : $oProperty->getValue($oVO);
-            $oProperty->setValue($oVO, $value);
+            if (!\in_array($oProperty->getName(), $excluded)) {
+                $oProperty->setAccessible(true);
+                $value = isset($arguments[$oProperty->getName()]) ? $arguments[$oProperty->getName()] : $oProperty->getValue($oVO);
+                $oProperty->setValue($oVO, $value);
+            }
         }
         $oVO->transform();
 
@@ -53,7 +56,7 @@ abstract class AbstractVO implements ValueObjectInterface
     /**
      * {@inheritdoc}
      */
-    final public function isEqual(ValueObjectInterface $vo): bool
+    public function isEqual(ValueObjectInterface $vo): bool
     {
         //Specific use of simple equality operator to compare object properties.
         //With the use of strict equality operator, objects references will be different: it will always return false.
@@ -65,7 +68,7 @@ abstract class AbstractVO implements ValueObjectInterface
     /**
      * {@inheritdoc}
      */
-    final public function isEmpty(): bool
+    public function isEmpty(): bool
     {
         foreach ($this as $value) {
             if (null !== $value) {
@@ -76,11 +79,23 @@ abstract class AbstractVO implements ValueObjectInterface
     }
 
     /**
-     * Return a serialized string value of the Vo .
-     * @return string
+     * {@inheritdoc}
+     */
+    public function serialize(): string
+    {
+        return \serialize($this->__toArray());
+    }
+
+    /**
+     * {@inheritdoc}
      */
     public function __toString(): string
     {
-        return serialize($this);
+        return \implode(' ', $this->__toArray());
     }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function __toArray(): array;
 }

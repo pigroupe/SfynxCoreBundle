@@ -1,0 +1,345 @@
+imports:
+    - { resource: widgets/demandeordremission_mapping.yml }
+
+default:
+    namespace: CoreContext
+    cqrs: DemandeOrdreMission\Command
+    template: default
+    indentation: 4
+    widgets:
+        presentation:
+            widget_coordination:
+                class: OneCoordination
+                options:
+                    uses:
+                      - 'Symfony\Component\HttpFoundation\JsonResponse'
+                      - 'Exception'
+                      - 'Sfynx\CoreBundle\Layers\Infrastructure\Exception\Entity\ViolationEntityException'
+                      - 'Sfynx\CoreBundle\Layers\Infrastructure\Exception\Entity\NotFoundEntityException'
+                    traits:
+                      - 'Sfynx\CoreBundle\Layers\Presentation\Coordination\Generalisation\Traits\TraitParam'
+                      - 'Sfynx\CoreBundle\Layers\Presentation\Coordination\Generalisation\Traits\TraitMessage'
+                body:
+                    - codeComment1:
+                        design: 'code'
+                        content:
+                          - 'try {'
+                          - "    // 1. Transform options to Command."
+                    - updateCommand:
+                        design: 'adapter'
+                        class: Sfynx\CoreBundle\Layers\Presentation\Adapter\Command\CommandAdapter
+                        arguments:
+                            - 'new UpdateCommand'
+                        calls:
+                            - [ createCommandFromRequest, [ 'new UpdateRequest', 'false'] ]
+                    - codeComment2:
+                        design: 'code'
+                        content: "// 2. Implement the command workflow"
+                    - commandWorkflow:
+                        design: 'observer'
+                        class: Sfynx\CoreBundle\Layers\Application\Command\Workflow\CommandWorkflow
+                        calls:
+                            - [ attach, [ 'new OBDemandeOrdreMissionEntityEdit' ] ]
+                            - [ attach, [ 'new OBDemandeOrdreMissionEntityCreate' ] ]
+                    - codeComment3:
+                        design: 'code'
+                        content: "// 3. Implement decorator to apply the command workflow from the command"
+                    - commandHandlerResult:
+                        design: 'decorator'
+                        class: Sfynx\CoreBundle\Layers\Application\Command\Handler\CommandHandler
+                        arguments:
+                            - '$commandWorkflow'
+                            - 'Sfynx\CoreBundle\Layers\Domain\Service\Manager\Generalisation\Interfaces\ManagerInterface'
+                        handlers: [ 'UpdateCommandValidationHandler', 'UpdateCommandSpecHandler']
+                        calls:
+                            - [ process, [ '$updateCommand' ] ]
+                    - codeln1:
+                        design: 'code'
+                        content:
+                          - "// 4. Implement the Response workflow"
+                    - workflowHandler:
+                        design: 'observer'
+                        class: Sfynx\CoreBundle\Layers\Application\Common\Handler\WorkflowHandler
+                        calls:
+                            - [ attach, [ 'new OBOneApiJson' ] ]
+                            - [ attach, [ 'new OBCreateResponseJson' ] ]
+                            - [ attach, [ 'new OBCreatedStatusResponseJson' ] ]
+                    - responseHandlerResult:
+                        design: 'handler'
+                        class: Sfynx\CoreBundle\Layers\Application\Response\Handler\ResponseHandler
+                        arguments:
+                            - '$workflowHandler'
+                        calls:
+                            - [ process, [ '$commandHandlerResult' ] ]
+                    - codeln2:
+                        design: 'code'
+                        content:
+                          - "    $response = $responseHandlerResult->getResponse();"
+                          - ""
+                          - "    // $this->logger->info('Request has been sent from this Command', ['command' => $updateCommand]);"
+                          - '}  catch (NotFoundEntityException $e) {'
+                          - "    $this->logger->error('Request has failed with NotFoundEntityException exception', ['command' => $updateCommand]);"
+                          - '    $response = new JsonResponse();'
+                          - '    $response->setStatusCode(JsonResponse::HTTP_NOT_FOUND);'
+                          - '    $response->setContent(TraitMessage::jsonError($e->getMessage()));'
+                          - '}  catch (ViolationEntityException $e) {'
+                          - "    $this->logger->error('Request has failed with ViolationEntityException exception', ['command' => $updateCommand]);"
+                          - '    $response = new JsonResponse();'
+                          - '    $response->setStatusCode(JsonResponse::HTTP_CONFLICT);'
+                          - '    $response->setContent(TraitMessage::jsonError($e->getMessage()));'
+                          - '}  catch (Exception $e) {'
+                          - "    $this->logger->error('Request has failed with HTTP_SERVICE_UNAVAILABLE exception', ['command' => $updateCommand]);"
+                          - '    $response = new JsonResponse();'
+                          - '    $response->setStatusCode(JsonResponse::HTTP_SERVICE_UNAVAILABLE);'
+                          - '    $response->setContent(TraitMessage::jsonError($e->getMessage()));'
+                          - '}'
+                          - ''
+                          - 'return $response;'
+            widget_request:
+                class: UpdateRequest
+                arguments:
+                  - 'Sfynx\CoreBundle\Layers\Domain\Service\Request\Generalisation\RequestInterface'
+                extends: Sfynx\CoreBundle\Layers\Presentation\Request\Generalisation\AbstractRequest
+                options:
+                    methods: ['POST', 'PUT', 'PATCH']
+        application:
+            widget_cqrs_command:
+                - UpdateCommand:
+                    create: true
+                    class: UpdateCommand
+                    options:
+                        traits:
+                          - 'Sfynx\CoreBundle\Layers\Application\Common\Generalisation\Traits\TraitCreateInstanceFromNative'
+            widget_cqrs_command_validator_specification:
+                class: Validation\SpecHandler\UpdateCommandSpecHandler
+                arguments:
+                  - '$commandHandlerResult'
+            widget_cqrs_command_validator_validation:
+                class: Validation\ValidationHandler\UpdateCommandValidationHandler
+                arguments:
+                  - '$commandHandlerResult'
+                  - 'new SymfonyValidatorStrategy'
+                  - 'false'
+            widget_service_app_class:
+                - SymfonyValidatorStrategy:
+                    create: false
+                    class: 'Sfynx\CoreBundle\Layers\Application\Validation\Validator\SymfonyValidatorStrategy'
+                    arguments: ['Symfony\Component\Validator\Validator\ValidatorInterface']
+        domain:
+            #
+            # ENTITY CLASSES
+            #
+            widget_entity_class:
+                - DemandeOrdreMissionVO:
+                    create: true
+                    class: Domain\ValueObject\DemandeOrdreMissionVO
+                    extends: 'Sfynx\CoreBundle\Layers\Domain\ValueObject\Generalisation\AbstractVO'
+                    options:
+                        models:
+                          0:
+                            class: 'Sfynx\CoreBundle\Generator\Domain\Component\File\HandlerModel\Observer\ValueObject'
+                            parameters:
+                              mapping: 'DemandeOrdreMissionVO'
+                              performMethods:
+                                - 'Sfynx\CoreBundle\Generator\Domain\Component\File\MethodModel\Construct'
+                                - 'Sfynx\CoreBundle\Generator\Domain\Component\File\MethodModel\CreateFromNative'
+                                - 'Sfynx\CoreBundle\Generator\Domain\Component\File\MethodModel\ToArray'
+                - DemandePrestationVO:
+                    create: true
+                    class: Domain\ValueObject\DemandePrestationVO
+                    extends: 'Sfynx\CoreBundle\Layers\Domain\ValueObject\Generalisation\AbstractVO'
+                    options:
+                        models:
+                          0:
+                            class: 'Sfynx\CoreBundle\Generator\Domain\Component\File\HandlerModel\Observer\ValueObject'
+                            parameters:
+                              mapping: 'DemandePrestationVO'
+                              performMethods:
+                                - 'Sfynx\CoreBundle\Generator\Domain\Component\File\MethodModel\Construct'
+                                - 'Sfynx\CoreBundle\Generator\Domain\Component\File\MethodModel\CreateFromNative'
+                                - 'Sfynx\CoreBundle\Generator\Domain\Component\File\MethodModel\ToArray'
+                - AvanceFraisVO:
+                    create: true
+                    class: Domain\ValueObject\AvanceFraisVO
+                    extends: 'Sfynx\CoreBundle\Layers\Domain\ValueObject\Generalisation\AbstractVO'
+                    options:
+                        models:
+                          0:
+                            class: 'Sfynx\CoreBundle\Generator\Domain\Component\File\HandlerModel\Observer\ValueObject'
+                            parameters:
+                              mapping: 'AvanceFraisVO'
+                              performMethods:
+                                - 'Sfynx\CoreBundle\Generator\Domain\Component\File\MethodModel\Construct'
+                                - 'Sfynx\CoreBundle\Generator\Domain\Component\File\MethodModel\CreateFromNative'
+                                - 'Sfynx\CoreBundle\Generator\Domain\Component\File\MethodModel\ToArray'
+                - DemandeOrdreMissionEntity:
+                    create: true
+                    class: Domain\Entity\DemandeOrdreMission
+                    options:
+                        mapping: 'DemandeOrdreMission'
+                        entityType: 'valueObjectAggregator' #  ['default', 'valueObjectAggregator']
+                        uses:
+                          - Doctrine\DBAL\Types\JsonType
+                          - Doctrine\ORM\Mapping as ORM
+                          - Ramsey\Uuid\UuidInterface
+                        traits:
+                          - 'Sfynx\CoreBundle\Layers\Domain\Model\Traits\TraitBuild'
+                          - 'Sfynx\CoreBundle\Layers\Domain\Model\Traits\TraitEnabled'
+                        models:
+                          0:
+                            class: 'Sfynx\CoreBundle\Generator\Domain\Component\File\HandlerModel\Observer\Entity'
+                            parameters:
+#                              createFromNativeType: 'valueObjectAggregator' #  ['general_arg', 'specific_arg', 'valueObjectAggregator']
+                              performMethods:
+                                - 'Sfynx\CoreBundle\Generator\Domain\Component\File\MethodModel\Construct'
+                                - 'Sfynx\CoreBundle\Generator\Domain\Component\File\MethodModel\CreateFromNative'
+                                - 'Sfynx\CoreBundle\Generator\Domain\Component\File\MethodModel\ToString'
+                                - 'Sfynx\CoreBundle\Generator\Domain\Component\File\MethodModel\ToArray'
+                                - 'Sfynx\CoreBundle\Generator\Domain\Component\File\MethodModel\Serialize'
+                                - 'Sfynx\CoreBundle\Generator\Domain\Component\File\MethodModel\Unserialize'
+            #
+            # MANAGER CLASSES
+            #
+            widget_service_manager_class:
+                - DemandeOrdreMissionEntityManager:
+                    create: true
+                    class: Entity\DemandeOrdreMission\Manager\DemandeOrdreMissionManager
+                    options:
+                        mapping: 'DemandeOrdreMission'
+            #
+            # SERVICES CLASSES
+            #
+            widget_service_class:
+                #
+                # REPOSITORY INTERFACES
+                #
+                - DemandeOrdreMissionCommandRepositoryInterface:
+                    create: true
+                    class: Domain\Repository\Command\DemandeOrdreMissionCommandRepositoryInterface
+                    type: interface
+                - DemandeOrdreMissionQueryRepositoryInterface:
+                    create: true
+                    class: Domain\Repository\Query\DemandeOrdreMissionQueryRepositoryInterface
+                    type: interface
+            #
+            # OBSERVER CLASSES
+            #
+            widget_workflow_observer_class:
+                - OBDemandeOrdreMissionEntityCreate:
+                    create: true
+                    class: OBDemandeOrdreMissionEntityCreate
+                    arguments:
+                      - 'Psr\Log\LoggerInterface'
+                      - 'Sfynx\CoreBundle\Layers\Domain\Service\Manager\Generalisation\Interfaces\ManagerInterface'
+                      - 'Sfynx\CoreBundle\Layers\Domain\Service\Request\Generalisation\RequestInterface'
+                      - 'Symfony\Bundle\FrameworkBundle\Routing\Router'
+                      - 'bool $isUpdateCommand = false'
+                    construct:
+                        create: true
+                        body:
+                          - 'parent::__construct($manager, $request, $isUpdateCommand);'
+                    extends: Sfynx\CoreBundle\Layers\Domain\Workflow\Observer\Generalisation\Command\AbstractEntityCreateHandler
+                    options:
+                        traits: [Sfynx\CoreBundle\Layers\Domain\Workflow\Observer\Command\TraitProcess]
+                - OBDemandeOrdreMissionEntityEdit:
+                    create: true
+                    class: OBDemandeOrdreMissionEntityEdit
+                    arguments:
+                      - 'Psr\Log\LoggerInterface'
+                      - 'Sfynx\CoreBundle\Layers\Domain\Service\Manager\Generalisation\Interfaces\ManagerInterface'
+                      - 'Sfynx\CoreBundle\Layers\Domain\Service\Request\Generalisation\RequestInterface'
+                      - 'Symfony\Bundle\FrameworkBundle\Routing\Router'
+                      - 'bool $isUpdateCommand = false'
+                    construct:
+                        create: true
+                        body:
+                          - 'parent::__construct($manager, $request, $isUpdateCommand);'
+                    extends: Sfynx\CoreBundle\Layers\Domain\Workflow\Observer\Generalisation\Command\AbstractEntityEditHandler
+                    options:
+                        traits: [Sfynx\CoreBundle\Layers\Domain\Workflow\Observer\Command\TraitProcess]
+                - OBOneApiJson:
+                    create: true
+                    class: Domain\Workflow\Observer\DemandeOrdreMission\Response\Api\Command\OBOneApiJson
+                    arguments:
+                      - 'Sfynx\CoreBundle\Layers\Domain\Service\Request\Generalisation\RequestInterface'
+                    extends: Sfynx\CoreBundle\Layers\Domain\Workflow\Observer\Generalisation\Response\Api\AbstractApiJson
+                    options:
+                        uses:
+                          - 'Sfynx\CoreBundle\Layers\Infrastructure\Exception\EntityException'
+                          - 'Exception'
+                          - 'Spatie\Fractalistic\Fractal'
+                          - 'Spatie\Fractalistic\ArraySerializer'
+                        methods:
+                          - name: 'process'
+                            comments: ['{@inheritdoc}']
+                            visibility: 'protected'
+                            returnType: 'bool'
+                            body:
+                              - 'try {'
+                              - "    $item = ["
+                              - "       'status' => 'success',"
+                              - "       'results' => ["
+                              - "           'id' => $this->wfHandler->entity->getId()->toString(),"
+                              - "           'demandeordremission' => $this->wfHandler->entity->getDemandeordremission()->__toArray(),"
+                              - "           'demandePrestation' => $this->wfHandler->entity->getDemandeprestation()->__toArray(),"
+                              - "           'avanceFrais' => $this->wfHandler->entity->getAvancefrais()->__toArray(),"
+                              - "           'piecesJustificatives' => $this->wfHandler->entity->getPiecesJustificativesIds(),"
+                              - "           'destinataire' => $this->wfHandler->entity->getDestinataire()->getId(),"
+                              - "           'soutenu' => $this->wfHandler->entity->getSoutenu()->getId(),"
+                              - "        ],"
+                              - "    ];"
+                              - "    "
+                              - "    if (!empty($this->wfHandler->errors)) {"
+                              - "       $item = ["
+                              - "           'status' => 'errors',"
+                              - "           'results' => $this->wfHandler->errors,"
+                              - "       ];"
+                              - "    }"
+                              - "    "
+                              - "    $this->wfLastData->rows = Fractal::create()"
+                              - "               ->item($item)"
+                              - "               ->transformWith(function($body) {"
+                              - "                   -return $body;"
+                              - "               })"
+                              - "               ->serializeWith(new ArraySerializer())"
+                              - "               ->toArray();"
+                              - "               "
+                              - '} catch (Exception $e) {'
+                              - '    throw EntityException::NotFoundEntity(\get_class($this->wfHandler->entity));'
+                              - '}'
+                              - ''
+                              - 'return true;'
+                - OBCreateResponseJson:
+                    create: false
+                    class: Sfynx\CoreBundle\Layers\Domain\Workflow\Observer\Response\Api\OBCreateResponseJson
+                    arguments:
+                      - 'Sfynx\CoreBundle\Layers\Domain\Service\Request\Generalisation\RequestInterface'
+                - OBCreatedStatusResponseJson:
+                    create: false
+                    class: Sfynx\CoreBundle\Layers\Domain\Workflow\Observer\Response\Api\OBCreatedStatusResponseJson
+                    arguments:
+                      - 'Sfynx\CoreBundle\Layers\Domain\Service\Request\Generalisation\RequestInterface'
+        infrastructure:
+            widget_security_parse: true
+            widget_infra_class:
+                #
+                # REPOSITORIES
+                #
+                - CommandDemandeOrdreMissionRepository:
+                    create: true
+                    class: Infrastructure\Persistence\Adapter\Command\Orm\DemandeOrdreMissionRepository
+                    comments:
+                      - 'This class was generated by the Doctrine ORM. Add your own custom'
+                      - 'repository methods below.'
+                    extends: Sfynx\CoreBundle\Layers\Infrastructure\Persistence\Adapter\Generalisation\Orm\AbstractCommandRepository
+                    options:
+                        implements: ['Domain\Repository\Command\DemandeOrdreMissionCommandRepositoryInterface']
+                - QueryDemandeOrdreMissionRepository:
+                    create: true
+                    class: Infrastructure\Persistence\Adapter\Query\Orm\DemandeOrdreMissionRepository
+                    comments:
+                      - 'This class was generated by the Doctrine ORM. Add your own custom'
+                      - 'repository methods below.'
+                    extends: Sfynx\CoreBundle\Layers\Infrastructure\Persistence\Adapter\Generalisation\Orm\AbstractQueryRepository
+                    options:
+                        implements: ['Domain\Repository\Query\DemandeOrdreMissionQueryRepositoryInterface']

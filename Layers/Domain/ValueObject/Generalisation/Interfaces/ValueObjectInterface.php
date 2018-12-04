@@ -21,11 +21,6 @@ interface ValueObjectInterface
     public static function fromNative(): ValueObjectInterface;
 
     /**
-     * @return string
-     */
-    public function __toString(): string;
-
-    /**
      * Check the equality of the current Vo with another Vo passed by argument.
      * @param ValueObjectInterface $vo
      * @return bool
@@ -37,4 +32,21 @@ interface ValueObjectInterface
      * @return bool
      */
     public function isEmpty(): bool;
+
+    /**
+     * Return the serialized properties of the class.
+     * @return string
+     */
+    public function serialize(): string;
+
+    /**
+     * @return string
+     */
+    public function __toString(): string;
+
+    /**
+     * Return all properties of the class in array.
+     * @return array
+     */
+    public function __toArray(): array;
 }

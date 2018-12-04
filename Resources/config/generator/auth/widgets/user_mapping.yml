@@ -1,0 +1,49 @@
+default:
+    mapping:
+        x-providers: [orm, couchdb]
+        x-entities:
+          User:
+            x-fields:
+              id:
+                name: entityId
+                type: valueObject
+                voName: IdVO
+                primaryKey: true
+#                mapping:
+#                  targetEntity: 'Sfynx\AuthBundle\Domain\Entity\User'
+              user:
+                type: valueObject
+                voName: UserVO
+        x-valueObjects:
+          IdVO:
+            type: 'Sfynx\CoreBundle\Layers\Domain\ValueObject\IdVO'
+            create: false
+            x-fields:
+              id:
+                type: uuid
+          UserVO:
+            type: 'Domain\ValueObject\UserVO'
+            create: true
+            x-fields:
+              username:
+                name: username
+                type: string
+                required: true
+              password:
+                name: password
+                type: string
+                required: true
+              email:
+                name: email
+                type: email
+                required: true
+              roles:
+                name: roles
+                type: array
+                mapping:
+                  type: Doctrine\DBAL\Types\JsonType
+                required: true
+              isActive:
+                name: is_active
+                type: boolean
+                required: true

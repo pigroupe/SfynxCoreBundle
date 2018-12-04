@@ -1,0 +1,154 @@
+default:
+    mapping:
+        x-providers: [orm, couchdb]
+        x-entities:
+          CompteRendu:
+            x-fields:
+              id:
+                name: entityId
+                type: valueObject
+                voName: IdVO
+                primaryKey: true
+#                mapping:
+#                  targetEntity: 'CoreContext\Domain\Entity\CompteRendu'
+              soutenu:
+                type: valueObject
+                name: soutenu
+                voName: IdVO
+                foreignKey: true
+                required: true
+                choice_label: Utilisateur
+                mapping:
+                  relationship: ManyToOne
+                  targetEntity: 'CoreContext\Domain\Entity\Utilisateur'
+                  setter: true
+              destinataire:
+                type: valueObject
+                name: destinataire
+                voName: IdVO
+                foreignKey: true
+                required: true
+                choice_label: Destinataire
+                mapping:
+                  relationship: ManyToOne
+                  targetEntity: 'CoreContext\Domain\Entity\Administrateur'
+                  setter: true
+              piecesJustificatives:
+                name: piecesJustificatives
+                type: array
+                required: true
+                multiple: true
+                properties: ['nomFichier']
+                mapping:
+                  relationship: ManyToMany
+                  targetEntity: 'CoreContext\Domain\Entity\Fichier'
+                  formData:
+                      manager: 'CoreContext\Domain\Service\Fichier\Manager\EntityManager as FichierManager'
+                      queryFunction: { class: 'FindFichierQueryTransformer', args: ['true', 'false', 1299, {tata: 'tataValue', tutu: 'tutuValue'}] }
+              compterendu:
+                prefix: compterendu
+                type: valueObject
+                voName: CompteRenduVO
+              prestation:
+                prefix: prestation
+                type: valueObject
+                voName: PrestationVO
+              frais:
+                prefix: frais
+                type: valueObject
+                voName: DeclarationFraisVO
+        x-valueObjects:
+          IdVO:
+            type: 'Sfynx\CoreBundle\Layers\Domain\ValueObject\IdVO'
+            x-fields:
+              id:
+                type: id
+          CompteRenduVO:
+            type: 'Domain\ValueObject\CompteRenduVO'
+            x-fields:
+              enabled:
+                name: enabled
+                type: boolean
+                required: true
+                defaultValue: true
+              perteTitreTransport:
+                name: perteTitreTransport
+                type: boolean
+                required: true
+                defaultValue: false
+              remarque:
+                name: remarque
+                type: string
+                required: false
+          PrestationVO:
+            type: 'Domain\ValueObject\PrestationVO'
+            x-fields:
+              trajet:
+                name: trajet
+                type: array
+                form:
+                  type: array
+                required: true
+                multiple: true
+                properties: ['nomFichier']
+                mapping:
+                  relationship: ManyToMany
+                  targetEntity: 'CoreContext\Domain\Entity\Transport'
+                  formData:
+                      manager: 'CoreContext\Domain\Service\Transport\Manager\EntityManager as TransportManager'
+                      queryFunction: { class: 'FindTransportQueryTransformer', args: ['true', 'false', 1299, {tata: 'tataValue', tutu: 'tutuValue'}] }
+              typeHotel:
+                name: typeHotel
+                type: string
+                required: true
+                multiple: false
+                expanded: false
+                form:
+                  type: array
+              typeRestauration:
+                name: typeRestauration
+                type: string
+                required: true
+                multiple: false
+                expanded: false
+                form:
+                  type: array
+          DeclarationFraisVO:
+            type: 'Domain\ValueObject\DeclarationFraisVO'
+            x-fields:
+              montantTranportCommun:
+                name: montantTranportCommun
+                type: float
+                required: true
+                nullable: false
+                defaultValue: 0
+              montantLocationVehicule:
+                name: montantLocationVehicule
+                type: float
+                required: true
+                nullable: false
+                defaultValue: 0
+              montantTaxi:
+                name: montantTaxi
+                type: float
+                required: true
+                nullable: false
+                defaultValue: 0
+              montantPeage:
+                name: montantPeage
+                type: float
+                required: true
+                nullable: false
+                defaultValue: 0
+              montantStationnement:
+                name: montantStationnement
+                type: float
+                required: true
+                nullable: false
+                defaultValue: 0
+              montantTaxesDiverses:
+                name: montantTaxesDiverses
+                type: float
+                required: true
+                nullable: false
+                defaultValue: 0

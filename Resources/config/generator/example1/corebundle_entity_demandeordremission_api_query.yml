@@ -1,0 +1,298 @@
+imports:
+    - { resource: widgets/demandeordremission_mapping.yml }
+
+default:
+    namespace: CoreContext
+    cqrs: DemandeOrdreMission\Query
+    template: default
+    indentation: 4
+    widgets:
+        presentation:
+            widget_coordination:
+                class: GetOneCoordination
+                arguments:
+                    - '$workflowHandler'
+                options:
+                    uses:
+                      - 'Symfony\Component\HttpFoundation\JsonResponse'
+                      - 'Exception'
+                      - 'Sfynx\CoreBundle\Layers\Infrastructure\Exception\Entity\ViolationEntityException'
+                      - 'Sfynx\CoreBundle\Layers\Infrastructure\Exception\Entity\NotFoundEntityException'
+                    traits:
+                      - 'Sfynx\CoreBundle\Layers\Presentation\Coordination\Generalisation\Traits\TraitParam'
+                      - 'Sfynx\CoreBundle\Layers\Presentation\Coordination\Generalisation\Traits\TraitMessage'
+                body:
+                    - codeComment1:
+                        design: 'code'
+                        content:
+                          - 'try {'
+                          - '    // 1. Transform options to Query.'
+                    - getQuery:
+                        design: 'adapter'
+                        class: Sfynx\CoreBundle\Layers\Presentation\Adapter\Query\QueryAdapter
+                        arguments:
+                            - 'new GetOneQuery'
+                        calls:
+                            - [ createQueryFromRequest, [ 'new QueryRequest', 'false'] ]
+                    - codeComment2:
+                        design: 'code'
+                        content: "// 2. Implement the command workflow"
+                    - queryWorkflow:
+                        design: 'observer'
+                        class: Sfynx\CoreBundle\Layers\Application\Query\Workflow\QueryWorkflow
+                        calls:
+                            - [ attach, [ 'new OBOneApiHandler' ] ]
+                    - codeComment3:
+                        design: 'code'
+                        content: "// 3. Implement decorator to apply the command workflow from the query"
+                    - queryHandlerResult:
+                        design: 'decorator'
+                        class: Sfynx\CoreBundle\Layers\Application\Query\Handler\QueryHandler
+                        arguments:
+                            - '$queryWorkflow'
+                        handlers: [ 'GetQueryValidationHandler', 'GetQuerySpecHandler']
+                        calls:
+                            - [ process, [ '$getQuery' ] ]
+                    - codeln1:
+                        design: 'code'
+                        content:
+                          - "// 4. Implement the Response workflow"
+                    - workflowHandler:
+                        design: 'observer'
+                        class: Sfynx\CoreBundle\Layers\Application\Common\Handler\WorkflowHandler
+                        calls:
+                            - [ attach, [ 'new OBGetOneApiJson' ] ]
+                            - [ attach, [ 'new OBCreateResponseJson' ] ]
+                            - [ attach, [ 'new OBCreatedStatusResponseJson' ] ]
+                    - responseHandlerResult:
+                        design: 'handler'
+                        class: Sfynx\CoreBundle\Layers\Application\Response\Handler\ResponseHandler
+                        arguments:
+                            - '$Workflowhandler'
+                        calls:
+                            - [ process, [ '$queryHandlerResult' ] ]
+                    - codeln2:
+                        design: 'code'
+                        content:
+                          - "    $response = $responseHandlerResult->getResponse();"
+                          - ""
+                          - "    $this->logger->info('Request has been sent from this Query', ['command' => $getQuery]);"
+                          - '}  catch (NotFoundEntityException $e) {'
+                          - "    $this->logger->error('Request has failed with NotFoundEntityException exception', ['command' => $getQuery]);"
+                          - '    $response = new JsonResponse();'
+                          - '    $response->setStatusCode(JsonResponse::HTTP_NOT_FOUND);'
+                          - '    $response->setContent(TraitMessage::jsonError($e->getMessage()));'
+                          - '}  catch (ViolationEntityException $e) {'
+                          - "    $this->logger->error('Request has failed with ViolationEntityException exception', ['command' => $getQuery]);"
+                          - '    $response = new JsonResponse();'
+                          - '    $response->setStatusCode(JsonResponse::HTTP_CONFLICT);'
+                          - '    $response->setContent(TraitMessage::jsonError($e->getMessage()));'
+                          - '}  catch (Exception $e) {'
+                          - "    $this->logger->error('Request has failed with HTTP_SERVICE_UNAVAILABLE exception', ['command' => $getQuery]);"
+                          - '    $response = new JsonResponse();'
+                          - '    $response->setStatusCode(JsonResponse::HTTP_SERVICE_UNAVAILABLE);'
+                          - '    $response->setContent(TraitMessage::jsonError($e->getMessage()));'
+                          - '}'
+                          - ''
+                          - 'return $response;'
+            widget_request:
+                class: QueryRequest
+                arguments:
+                  - 'Sfynx\CoreBundle\Layers\Domain\Service\Request\Generalisation\RequestInterface'
+                options:
+                    methods: ['GET']
+        application:
+            widget_cqrs_query:
+                - GetOneQuery:
+                    create: true
+                    class: GetOneQuery
+                    options:
+                        traits:
+                          - 'Sfynx\CoreBundle\Layers\Application\Common\Generalisation\Traits\TraitCreateInstanceFromNative'
+#                        models:
+#                          0:
+#                            class: 'Sfynx\CoreBundle\Generator\Domain\Component\File\HandlerModel\Observer\CommandQueryObject'
+#                            parameters:
+#                              performMethods:
+#                                - 'Sfynx\CoreBundle\Generator\Domain\Component\File\MethodModel\Construct'
+#                                - 'Sfynx\CoreBundle\Generator\Domain\Component\File\MethodModel\CreateFromNative'
+#                              # createFromNativeType = ['general_arg', 'specific_arg']
+#                              createFromNativeType: 'general_arg'
+            widget_cqrs_query_validator_specification:
+                class: Validation\SpecHandler\GetQuerySpecHandler
+                arguments:
+                  - '$queryHandlerResult'
+            widget_cqrs_query_validator_validation:
+                class: Validation\ValidationHandler\GetQueryValidationHandler
+                arguments:
+                  - '$queryHandlerResult'
+                  - 'new SymfonyValidatorStrategy'
+                  - 'false'
+            widget_service_app_class:
+                - SymfonyValidatorStrategy:
+                    create: false
+                    class: 'Sfynx\CoreBundle\Layers\Application\Validation\Validator\SymfonyValidatorStrategy'
+                    arguments: ['Symfony\Component\Validator\Validator\ValidatorInterface']
+        domain:
+            #
+            # SERVICES CLASSES
+            #
+#            widget_service_class:
+            #
+            # OBSERVER CLASSES
+            #
+            widget_workflow_observer_class:
+                #
+                # LOGICAL RESPONSE HANDLER
+                #
+                - OBOneApiHandler:
+                    create: true
+                    class: Domain\Workflow\Observer\DemandeOrdreMission\Query\Api\OBOneApiHandler
+                    arguments:
+                      - 'Psr\Log\LoggerInterface'
+                      - 'Sfynx\CoreBundle\Layers\Domain\Service\Manager\Generalisation\Interfaces\ManagerInterface'
+                      - 'Sfynx\CoreBundle\Layers\Domain\Service\Request\Generalisation\RequestInterface'
+#                      - 'CoreContext\Domain\Service\Entity\Fichier\Manager\FichierEntityManager as FichierManager'
+                    extends: Sfynx\CoreBundle\Layers\Domain\Workflow\Observer\Generalisation\Query\Api\AbstractApiQueryHandler
+                    options:
+                        implements: ~
+                        uses: ['Sfynx\CoreBundle\Layers\Infrastructure\Exception\WorkflowException', 'Exception']
+                        traits: ~
+                        methods:
+                          - name: 'process'
+                            comments: ['{@inheritdoc}']
+                            visibility: 'protected'
+                            returnType: 'bool'
+                            body:
+                              - 'try {'
+                              - "    $this->wfLastData->entity = $this->manager->getQueryRepository('FindGetOneQueryTransformer', []);"
+                              - '} catch (Exception $e) {'
+                              - '    throw WorkflowException::noCreatedViewForm();'
+                              - '}'
+                              - 'return true;'
+                - OBGetOneApiJson:
+                    create: true
+                    class: Domain\Workflow\Observer\DemandeOrdreMission\Response\Api\Query\OBGetOneApiJson
+                    arguments:
+                      - 'Sfynx\CoreBundle\Layers\Domain\Service\Request\Generalisation\RequestInterface'
+                    extends: Sfynx\CoreBundle\Layers\Domain\Workflow\Observer\Generalisation\Response\Api\AbstractApiJson
+                    options:
+                        uses:
+                          - 'Sfynx\CoreBundle\Layers\Infrastructure\Exception\EntityException'
+                          - 'Exception'
+                          - 'Spatie\Fractalistic\Fractal'
+                          - 'Spatie\Fractalistic\ArraySerializer'
+                        methods:
+                          - name: 'process'
+                            comments: ['{@inheritdoc}']
+                            visibility: 'protected'
+                            returnType: 'bool'
+                            body:
+                              - 'try {'
+                              - "    $item = ["
+                              - "       'status' => 'success',"
+                              - "       'results' => ["
+                              - "           'data' => $this->wfHandler->entity,"
+                              - "        ],"
+                              - "    ];"
+                              - "    "
+                              - "    if (!empty($this->wfHandler->errors)) {"
+                              - "       $item = ["
+                              - "           'status' => 'errors',"
+                              - "           'results' => $this->wfHandler->errors,"
+                              - "       ];"
+                              - "    }"
+                              - "    "
+                              - "    $this->wfLastData->rows = Fractal::create()"
+                              - "               ->item($item)"
+                              - "               ->transformWith(function($body) {"
+                              - "                   -return $body;"
+                              - "               })"
+                              - "               ->serializeWith(new ArraySerializer())"
+                              - "               ->toArray();"
+                              - "               "
+                              - '} catch (Exception $e) {'
+                              - '    throw EntityException::NotFoundEntity(\get_class($this->wfHandler->entity));'
+                              - '}'
+                              - ''
+                              - 'return true;'
+                - OBCreateResponseJson:
+                    create: false
+                    class: Sfynx\CoreBundle\Layers\Domain\Workflow\Observer\Response\OBCreateResponseJson
+                    arguments:
+                      - 'Sfynx\CoreBundle\Layers\Domain\Service\Request\Generalisation\RequestInterface'
+                - OBCreatedStatusResponseJson:
+                    create: false
+                    class: Sfynx\CoreBundle\Layers\Domain\Workflow\Observer\Response\Api\OBCreatedStatusResponseJson
+                    arguments:
+                      - 'Sfynx\CoreBundle\Layers\Domain\Service\Request\Generalisation\RequestInterface'
+        infrastructure:
+            widget_security_parse: true
+            widget_infra_class:
+                #
+                # RESSOURCE TRANSFORMER/QUERY BUILDER
+                #
+                - FindGetOneQueryBuilder:
+                    create: true
+                    class: Infrastructure\Persistence\Adapter\Query\Orm\DemandeOrdreMission\QueryBuilder\FindGetOneQueryBuilder
+                    arguments: ~
+                    extends: Sfynx\CoreBundle\Layers\Infrastructure\Persistence\QueryBuilder\Generalisation\Orm\AbstractQueryBuilder
+                    options:
+                        uses: ['Doctrine\ORM\QueryBuilder']
+                        models:
+                          - { class: 'Sfynx\CoreBundle\Generator\Domain\Component\File\HandlerModel\Observer\QueryBuilder', parameters: ['bool $var1 = false', 'bool $var2 = true', 'int $var3 = 0', 'array $var4 = []'] }
+                - FindGetOneQueryTransformer:
+                    create: true
+                    class: Infrastructure\Persistence\Adapter\Query\Orm\DemandeOrdreMission\QueryTransformer\FindGetOneQueryTransformer
+                    arguments:
+                      - 'Doctrine\ORM\EntityRepository as DemandeOrdreMissionRepository'
+                      - 'Doctrine\ORM\EntityRepository as FichierRepository'
+                    construct:
+                        create: true
+                    options:
+                        uses: ['CoreContext\Infrastructure\Persistence\Adapter\Query\Orm\DemandeOrdreMission\QueryBuilder\FindGetOneQueryBuilder']
+                        models:
+                          - { class: 'Sfynx\CoreBundle\Generator\Domain\Component\File\HandlerModel\Observer\QueryTransformer', parameters: ['FindGetOneQueryBuilder', ['bool $var1 = false', 'bool $var2 = true', 'int $var3 = 0', 'array $var4 = []']]}
+                #
+                # FICHIER TRANSFORMER/QUERY BUILDER
+                #
+                - FindFichierQueryBuilder:
+                    create: true
+                    class: Infrastructure\Persistence\Adapter\Query\Orm\Fichier\QueryBuilder\FindFichierQueryBuilder
+                    arguments: ~
+                    extends: Sfynx\CoreBundle\Layers\Infrastructure\Persistence\QueryBuilder\Generalisation\Orm\AbstractQueryBuilder
+                    options:
+                        uses: ['Doctrine\ORM\QueryBuilder']
+                        models:
+                          - { class: 'Sfynx\CoreBundle\Generator\Domain\Component\File\HandlerModel\Observer\QueryBuilder', parameters: ['bool $var1 = false', 'bool $var2 = true', 'int $var3 = 0', 'array $var4 = []'] }
+                - FindFichierQueryTransformer:
+                    create: true
+                    class: Infrastructure\Persistence\Adapter\Query\Orm\Fichier\QueryTransformer\FindFichierQueryTransformer
+                    arguments: ~
+                    extends: Sfynx\CoreBundle\Layers\Infrastructure\Persistence\QueryBuilder\Generalisation\Orm\AbstractQueryBuilder
+                    options:
+                        uses: ['MyContext\Infrastructure\Persistence\Adapter\Query\Orm\Fichier\QueryBuilder\FindFichierQueryBuilder']
+                        models:
+                          - { class: 'Sfynx\CoreBundle\Generator\Domain\Component\File\HandlerModel\Observer\QueryTransformer', parameters: ['FindMovieQueryBuilder', ['bool $var1 = false', 'bool $var2 = true', 'int $var3 = 0', 'array $var4 = []']]}
+                #
+                # FICHIER TRANSFORMER/QUERY BUILDER
+                #
+                - FindTransportQueryBuilder:
+                    create: true
+                    class: Infrastructure\Persistence\Adapter\Query\Orm\Transport\QueryBuilder\FindTransportQueryBuilder
+                    arguments: ~
+                    extends: Sfynx\CoreBundle\Layers\Infrastructure\Persistence\QueryBuilder\Generalisation\Orm\AbstractQueryBuilder
+                    options:
+                        uses: ['Doctrine\ORM\QueryBuilder']
+                        models:
+                          - { class: 'Sfynx\CoreBundle\Generator\Domain\Component\File\HandlerModel\Observer\QueryBuilder', parameters: ['bool $var1 = false', 'bool $var2 = true', 'int $var3 = 0', 'array $var4 = []'] }
+                - FindTransportQueryTransformer:
+                    create: true
+                    class: Infrastructure\Persistence\Adapter\Query\Orm\Transport\QueryTransformer\FindTransportQueryTransformer
+                    arguments: ~
+                    extends: Sfynx\CoreBundle\Layers\Infrastructure\Persistence\QueryBuilder\Generalisation\Orm\AbstractQueryBuilder
+                    options:
+                        uses: ['MyContext\Infrastructure\Persistence\Adapter\Query\Orm\Transport\QueryBuilder\FindTransportQueryBuilder']
+                        models:
+                          - { class: 'Sfynx\CoreBundle\Generator\Domain\Component\File\HandlerModel\Observer\QueryTransformer', parameters: ['FindMovieQueryBuilder', ['bool $var1 = false', 'bool $var2 = true', 'int $var3 = 0', 'array $var4 = []']]}
+

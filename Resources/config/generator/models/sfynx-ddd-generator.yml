@@ -142,6 +142,34 @@ default:
             # MOVIE ENTITY CLASSES
             #
             widget_entity_class:
+                - TitleVO:
+                    create: true
+                    class: Domain\ValueObject\TitleVO
+                    extends: 'Sfynx\CoreBundle\Layers\Domain\ValueObject\Generalisation\AbstractVO'
+                    options:
+                        models:
+                          0:
+                            class: 'Sfynx\CoreBundle\Generator\Domain\Component\File\HandlerModel\Observer\ValueObject'
+                            parameters:
+                              mapping: 'TitleVO'
+                              performMethods:
+                                - 'Sfynx\CoreBundle\Generator\Domain\Component\File\MethodModel\Construct'
+                                - 'Sfynx\CoreBundle\Generator\Domain\Component\File\MethodModel\CreateFromNative'
+                                - 'Sfynx\CoreBundle\Generator\Domain\Component\File\MethodModel\ToArray'
+                - MovieVO:
+                    create: true
+                    class: Domain\ValueObject\MovieVO
+                    extends: 'Sfynx\CoreBundle\Layers\Domain\ValueObject\Generalisation\AbstractVO'
+                    options:
+                        models:
+                          0:
+                            class: 'Sfynx\CoreBundle\Generator\Domain\Component\File\HandlerModel\Observer\ValueObject'
+                            parameters:
+                              mapping: 'MovieVO'
+                              performMethods:
+                                - 'Sfynx\CoreBundle\Generator\Domain\Component\File\MethodModel\Construct'
+                                - 'Sfynx\CoreBundle\Generator\Domain\Component\File\MethodModel\CreateFromNative'
+                                - 'Sfynx\CoreBundle\Generator\Domain\Component\File\MethodModel\ToArray'
                 - MovieEntity:
                     create: true
                     class: Domain\Entity\Movie
@@ -163,16 +191,23 @@ default:
                                 - 'Sfynx\CoreBundle\Generator\Domain\Component\File\MethodModel\ToArray'
                                 - 'Sfynx\CoreBundle\Generator\Domain\Component\File\MethodModel\Serialize'
                                 - 'Sfynx\CoreBundle\Generator\Domain\Component\File\MethodModel\Unserialize'
-                - MovieVO:
-                    create: true
-                    class: Domain\ValueObject\MovieVO
-                    extends: 'Sfynx\CoreBundle\Layers\Domain\ValueObject\Generalisation\AbstractVO'
-                    options:
-                        models:
-                          - { class: 'Sfynx\CoreBundle\Generator\Domain\Component\File\HandlerModel\Observer\ValueObject', parameters: []}
             #
             # PRICE ENTITY CLASSES
             #
+                - PriceVO:
+                    create: true
+                    class: Domain\ValueObject\PriceVO
+                    extends: 'Sfynx\CoreBundle\Layers\Domain\ValueObject\Generalisation\AbstractVO'
+                    options:
+                        models:
+                          0:
+                            class: 'Sfynx\CoreBundle\Generator\Domain\Component\File\HandlerModel\Observer\ValueObject'
+                            parameters:
+                              mapping: 'PriceVO'
+                              performMethods:
+                                - 'Sfynx\CoreBundle\Generator\Domain\Component\File\MethodModel\Construct'
+                                - 'Sfynx\CoreBundle\Generator\Domain\Component\File\MethodModel\CreateFromNative'
+                                - 'Sfynx\CoreBundle\Generator\Domain\Component\File\MethodModel\ToArray'
                 - PriceEntity:
                     create: true
                     class: Domain\Entity\Price
@@ -194,13 +229,6 @@ default:
                                 - 'Sfynx\CoreBundle\Generator\Domain\Component\File\MethodModel\ToArray'
                                 - 'Sfynx\CoreBundle\Generator\Domain\Component\File\MethodModel\Serialize'
                                 - 'Sfynx\CoreBundle\Generator\Domain\Component\File\MethodModel\Unserialize'
-                - PriceVO:
-                    create: true
-                    class: Domain\ValueObject\PriceVO
-                    extends: 'Sfynx\CoreBundle\Layers\Domain\ValueObject\Generalisation\AbstractVO'
-                    options:
-                        models:
-                          - { class: 'Sfynx\CoreBundle\Generator\Domain\Component\File\HandlerModel\Observer\ValueObject', parameters: []}
             #
             # GENRE ENTITY CLASSES
             #
@@ -210,6 +238,7 @@ default:
 #                    arguments: ['Sfynx\AuthBundle\Domain\ValueObject\GenreVO']
                     options:
                         mapping: 'Genre'
+                        entityType: 'valueObjectAggregator' #  ['default', 'valueObjectAggregator']
                         traits:
                           - 'Sfynx\CoreBundle\Layers\Domain\Model\Traits\TraitBuild'
                           - 'Sfynx\CoreBundle\Layers\Domain\Model\Traits\TraitEnabled'
@@ -225,13 +254,6 @@ default:
                                 - 'Sfynx\CoreBundle\Generator\Domain\Component\File\MethodModel\ToArray'
                                 - 'Sfynx\CoreBundle\Generator\Domain\Component\File\MethodModel\Serialize'
                                 - 'Sfynx\CoreBundle\Generator\Domain\Component\File\MethodModel\Unserialize'
-                - GenreVO:
-                    create: true
-                    class: Domain\ValueObject\GenreVO
-                    extends: 'Sfynx\CoreBundle\Layers\Domain\ValueObject\Generalisation\AbstractVO'
-                    options:
-                        models:
-                          - { class: 'Sfynx\CoreBundle\Generator\Domain\Component\File\HandlerModel\Observer\ValueObject', parameters: []}
             #
             # MANAGER CLASSES
             #
@@ -631,8 +653,8 @@ default:
                 type: valueObject
                 voName: IdVO
                 primaryKey: true
-                mapping:
-                  targetEntity: 'MyContext\Domain\Entity\Movie'
+#                mapping:
+#                  targetEntity: 'MyContext\Domain\Entity\Movie'
 #                  formData:
 #                      manager: 'MyContext\Domain\Service\Entity\Movie\Manager\MovieManager'
               documents:
@@ -646,13 +668,6 @@ default:
                   formData:
                       manager: 'Sfynx\MediaBundle\Layers\Domain\Service\Mediatheque\Manager\EntityManager as MediathequeManager'
                       queryFunction: { class: 'FindDocumentQueryTransformer', args: ['true', 'false', 1299, {tata: 'tataValue', tutu: 'tutuValue'}] }
-              comments:
-                type: array
-                required: true
-                multiple: true
-              movie:
-                type: valueObject
-                voName: MovieVO
               genre:
                 type: valueObject
                 voName: IdVO
@@ -665,6 +680,9 @@ default:
                   formData:
                       manager: 'MyContext\Domain\Service\Entity\Genre\Manager\GenreManager'
                       queryFunction: { class: 'FindGenreQueryTransformer', args: ['true', 'false', 1299, {tata: 'tataValue', tutu: 'tutuValue'}] }
+              movie:
+                type: valueObject
+                voName: MovieVO
           Price:
             x-fields:
               id:
@@ -672,13 +690,10 @@ default:
                 type: valueObject
                 voName: IdVO
                 primaryKey: true
-                mapping:
-                  targetEntity: 'MyContext\Domain\Entity\Price'
+#                mapping:
+#                  targetEntity: 'MyContext\Domain\Entity\Price'
 #                  formData:
 #                      manager: 'MyContext\Domain\Service\Entity\Price\Manager\PriceManager'
-              price:
-                type: valueObject
-                voName: PriceVO
               movie:
                 type: valueObject
                 voName: IdVO
@@ -691,6 +706,9 @@ default:
                   formData:
                       manager: 'MyContext\Domain\Service\Entity\Movie\Manager\MovieManager'
                       queryFunction: { class: 'FindMovieQueryTransformer', args: ['true', 'false', 1299, {tata: 'tataValue', tutu: 'tutuValue'}] }
+              price:
+                type: valueObject
+                voName: PriceVO
           Genre:
             x-fields:
               id:
@@ -698,22 +716,32 @@ default:
                 type: valueObject
                 voName: IdVO
                 primaryKey: true
-                mapping:
-                  targetEntity: 'MyContext\Domain\Entity\Genre'
+#                mapping:
+#                  targetEntity: 'MyContext\Domain\Entity\Genre'
 #                  formData:
 #                      manager: 'MyContext\Domain\Service\Entity\Genre\Manager\GenreManager'
-              label:
-                type: string
-                required: true
+              genre:
+                type: valueObject
+                voName: GenreVO
         x-valueObjects:
           IdVO:
             type: Sfynx\CoreBundle\Layers\Domain\ValueObject\IdVO
             x-fields:
               id:
                 type: id
+          GenreVO:
+            type: \Domain\ValueObject\GenreVO
+            x-fields:
+              label:
+                type: string
+                required: true
           MovieVO:
             type: \Domain\ValueObject\MovieVO
             x-fields:
+              comments:
+                type: array
+                required: true
+                multiple: true
               title:
                 type: valueObject
                 voName: TitleVO

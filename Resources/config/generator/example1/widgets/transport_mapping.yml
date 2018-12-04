@@ -1,0 +1,87 @@
+default:
+    mapping:
+        x-providers: [orm, couchdb]
+        x-entities:
+          Transport:
+            x-fields:
+              id:
+                name: entityId
+                type: valueObject
+                voName: IdVO
+                primaryKey: true
+#                mapping:
+#                  targetEntity: 'CoreContext\Domain\Entity\Transport'
+              transport:
+                prefix: transport
+                type: valueObject
+                voName: TransportVO
+              depart:
+                prefix: depart
+                type: valueObject
+                voName: Etape1VO
+              arrive:
+                prefix: arrive
+                type: valueObject
+                voName: Etape2VO
+        x-valueObjects:
+          IdVO:
+            type: 'Sfynx\CoreBundle\Layers\Domain\ValueObject\IdVO'
+            x-fields:
+              id:
+                type: id
+          TransportVO:
+            type: 'Domain\ValueObject\TransportVO'
+            x-fields:
+              enabled:
+                name: enabled
+                type: boolean
+                required: true
+                defaultValue: true
+              type:
+                name: type
+                type: string
+                required: false
+                multiple: false
+                expanded: false
+                form:
+                  type: array
+          Etape1VO:
+            type: 'Domain\ValueObject\Etape1VO'
+            x-fields:
+              pays:
+                name: pays
+                type: string
+                required: true
+              cp:
+                name: cp
+                type: string
+                required: true
+              ville:
+                name: ville
+                type: string
+                required: true
+              date:
+                name: date
+                type: datetime
+                required: true
+                label: Objectif de date
+          Etape2VO:
+            type: 'Domain\ValueObject\Etape2VO'
+            x-fields:
+              pays:
+                name: pays
+                type: string
+                required: true
+              cp:
+                name: cp
+                type: string
+                required: true
+              ville:
+                name: ville
+                type: string
+                required: true
+              date:
+                name: date
+                type: datetime
+                required: true
+                label: Objectif de date

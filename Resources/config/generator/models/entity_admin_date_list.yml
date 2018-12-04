@@ -141,6 +141,20 @@ default:
             # ACTIVITY ENTITY CLASSES
             #
             widget_entity_class:
+                - DateListVO:
+                    create: true
+                    class: Domain\ValueObject\DateListVO
+                    extends: 'Sfynx\CoreBundle\Layers\Domain\ValueObject\Generalisation\AbstractVO'
+                    options:
+                        models:
+                          0:
+                            class: 'Sfynx\CoreBundle\Generator\Domain\Component\File\HandlerModel\Observer\ValueObject'
+                            parameters:
+                              mapping: 'DateListVO'
+                              performMethods:
+                                - 'Sfynx\CoreBundle\Generator\Domain\Component\File\MethodModel\Construct'
+                                - 'Sfynx\CoreBundle\Generator\Domain\Component\File\MethodModel\CreateFromNative'
+                                - 'Sfynx\CoreBundle\Generator\Domain\Component\File\MethodModel\ToArray'
                 - DateListEntity:
                     create: true
                     class: Domain\Entity\DateList
@@ -161,13 +175,6 @@ default:
                                 - 'Sfynx\CoreBundle\Generator\Domain\Component\File\MethodModel\ToArray'
                                 - 'Sfynx\CoreBundle\Generator\Domain\Component\File\MethodModel\Serialize'
                                 - 'Sfynx\CoreBundle\Generator\Domain\Component\File\MethodModel\Unserialize'
-                - DateListVO:
-                    create: true
-                    class: Domain\ValueObject\DateListVO
-                    extends: 'Sfynx\CoreBundle\Layers\Domain\ValueObject\Generalisation\AbstractVO'
-                    options:
-                        models:
-                          - { class: 'Sfynx\CoreBundle\Generator\Domain\Component\File\HandlerModel\Observer\ValueObject', parameters: []}
             #
             # MANAGER CLASSES
             #
@@ -360,7 +367,8 @@ default:
             x-fields:
               id:
                 name: entityId
-                type: id
+                type: valueObject
+                voName: IdVO
                 primaryKey: true
               phase:
                 type: id
@@ -418,6 +426,19 @@ default:
                 mapping:
                   relationship: ManyToOne
                   targetEntity: PromotionCOntext\Domain\Entity\DateList
+              datelist:
+                prefix: datelist
+                type: valueObject
+                voName: DateListVO
+        x-valueObjects:
+          IdVO:
+            type: Sfynx\CoreBundle\Layers\Domain\ValueObject\IdVO
+            x-fields:
+              id:
+                type: id
+          DateListVO:
+            type: Domain\ValueObject\DateListVO
+            x-fields:
               name:
                 type: string
                 required: true
@@ -511,42 +532,3 @@ default:
                 type: datetime
                 nullable: true
                 required: false
-#          DateList:
-#            x-fields:
-#              id:
-#                name: entityId
-#                type: valueObject
-#                voName: IdVO
-#                primaryKey: true
-#              offer:
-#                type: valueObject
-#                voName: DateListVO
-#              business:
-#                type: valueObject
-#                voName: IdVO
-#                foreignKey: true
-#                required: true
-#                mapping:
-#                  relationship: ManyToOne
-#                  targetEntity: PromotionContext\Domain\Entity\Business
-#        x-valueObjects:
-#          IdVO:
-#            type: Sfynx\CoreBundle\Layers\Domain\ValueObject\IdVO
-#            x-fields:
-#              id:
-#                type: id
-#          DateListVO:
-#            type: Domain\ValueObject\DateListVO
-#            x-fields:
-#              title:
-#                type: valueObject
-#                voName: TitleVO
-#                required: true
-#              priceTTC:
-#                type: string
-#                required: true
-#          TitleVO:
-#            type: Domain\ValueObject\TitleVO
-#            x-fields:
-#              title:
-#                type: string

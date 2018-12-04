@@ -354,23 +354,6 @@ default:
     mapping:
         x-providers: [orm, couchdb]
         x-entities:
-#          Activity:
-#            x-fields:
-#              documents:
-#                type: array
-#                required: true
-#                multiple: true
-#                properties: ['name', 'date']
-#                mapping:
-#                  relationship: ManyToMany
-#                  targetEntity: DocContext\Domain\Entity\Media
-#              applicantProfil:
-#                type: id
-#                foreignKey: true
-#                required: true
-#                mapping:
-#                  relationship: ManyToOne
-#                  targetEntity: UserContext\Domain\Entity\User
           Activity:
             x-fields:
               documents:
@@ -447,6 +430,16 @@ default:
                   formData:
                       manager: 'UserContext\Domain\Service\User\Manager\UserManager'
                       queryFunction: { class: 'FindUserQueryTransformer', args: ['true', 'false', 1303, {tata: 'tataValue', tutu: 'tutuValue'}] }
+
+        x-valueObjects:
+          IdVO:
+            type: Sfynx\CoreBundle\Layers\Domain\ValueObject\IdVO
+            x-fields:
+              id:
+                type: id
+          GoPromiseVO:
+            type: Domain\ValueObject\DateListVO
+            x-fields:
               businessTypeName:
                 name: businessTypeName
                 type: string
@@ -460,9 +453,3 @@ default:
                 name: comment
                 type: textarea
                 required: false
-        x-valueObjects:
-          IdVO:
-            type: Sfynx\CoreBundle\Layers\Domain\ValueObject\IdVO
-            x-fields:
-              id:
-                type: id

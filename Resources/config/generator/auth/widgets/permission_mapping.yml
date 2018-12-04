@@ -1,0 +1,38 @@
+default:
+    mapping:
+        x-providers: [orm, couchdb]
+        x-entities:
+          Permission:
+            x-fields:
+              id:
+                name: entityId
+                type: valueObject
+                voName: IdVO
+                primaryKey: true
+#                mapping:
+#                  targetEntity: Sfynx\AuthBundle\Domain\Entity\Permission
+#                  formData:
+#                      manager: 'Sfynx\AuthBundle\Domain\Service\Permission\Manager\EntityManager as PermissionManager'
+              permission:
+                type: valueObject
+                voName: PermissionVO
+        x-valueObjects:
+          IdVO:
+            type: Sfynx\CoreBundle\Layers\Domain\ValueObject\IdVO
+            x-fields:
+              id:
+                type: id
+          PermissionVO:
+            type: Domain\ValueObject\PermissionVO
+            x-fields:
+              name:
+                type: string
+                required: true
+              enabled:
+                type: boolean
+                defaultValue: true
+                required: false
+              comment:
+                type: textarea
+                required: false
+                defaultValue: 'put yout comment'
